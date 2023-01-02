@@ -7,7 +7,8 @@ OSINT Toolkit is a web application designed to make the life of security analyst
 OSINT Toolkit is currently in the development stage and is expected to be published in Q1 2023. The toolkit will undergo tasks such as code refactoring, bug fixing, and error handling before the first stable version is released.
 
 > **Warning**
-> This reposirory is just a placeholder until an initial release is ready.
+> This reposirory is just a placeholder until an initial release is ready. 
+> OSINT Toolkit is currently in the development stage and is expected to be published in Q1 2023. The toolkit will undergo tasks such as code refactoring, bug fixing, and error handling before the first stable version is released.
 
 ## Features
 ### Newsfeed
