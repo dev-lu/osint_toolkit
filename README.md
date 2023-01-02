@@ -32,11 +32,11 @@ Domain Monitoring is a tool that helps you protect your organization from phishi
 ## Deploy from source
 ### Backend
 #### Windows
-py -m uvicorn main:app --reload
+```py -m uvicorn main:app --reload```
 
 ### Frontend
 #### Linux
-uvicorn main:app --reload
+```uvicorn main:app --reload```
 
 #### frontend
-npm start
+```npm start```
