@@ -4,7 +4,7 @@
 > **Warning**
 > This reposirory is just a placeholder until an initial release is ready. 
 > OSINT Toolkit is currently in the development stage and is expected to be published in Q1 2023. It will undergo tasks such as code refactoring, bug fixing, and error handling before the first stable version is released.
-## A fullstack web application for security analysts
+## A fullstack web application built for security analysts
 OSINT Toolkit is a web application designed to make the life of security analysts easier by combining many functions and services into a single tool. Written in React and FastAPI, the toolkit provides a range of features to help you identify potential threats and stay informed about the latest developments in the field of cyber security. With OSINT Toolkit, you can analyze indicators of compromise (IOCs) such as IP addresses, hashes, email addresses, domains, and URLs using services like VirusTotal, AlienVault, and AbuseIPDB, as well as social media platforms like Twitter. You can also search for recently registered domains that match a specific pattern, view screenshots of websites to see what is behind them, check domains and IPs against threat intelligence services, extract and organize IOCs from unstructured files, and stay up to date on the latest cyber security news. All of these features are designed to help you save time and effort while protecting your organization from potential threats and staying informed about the latest developments in the field of cyber security.
 
 ## Features
