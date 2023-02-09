@@ -28,6 +28,18 @@ IOC Extractor is a module that allows you to extract and organize indicators of 
 Domain Monitoring is a module that helps you protect your organization from phishing attacks by allowing you to search for recently registered domains that match a specific pattern. This can help you identify potential threats before they occur. Using the URLScan.io API, the module allows you to view screenshots of websites to see what is behind a domain without the need to visit the site and potentially expose yourself to danger. Additionally, with just a single click, you can check each domain and the IP it resolves to against multiple threat intelligence services to further protect your organization. For example, you can use the module to search for domains that start with "google-" by using the search pattern "google-*".
 ![ost_domain-monitoring](https://user-images.githubusercontent.com/44299200/210261015-78bd8ccf-7797-45b5-98b4-faee76997477.png)
 
+### AI Assistant
+The AI Assistant module in a software for cyber security experts provides a powerful and efficient solution for log data analysis, email text analysis, and source code explanation, leveraging the advanced AI algorithms of OpenAI API. This feature can help security experts to quickly and effectively respond to potential security threats, protect their networks, and maintain the security and integrity of their systems.
+- Log Data Analysis: This feature uses the advanced AI algorithms of OpenAI to analyze log data and identify any potential security threats. The AI can process large amounts of data in real-time and provide a detailed analysis of the logs, including identifying suspicious activity, potential breaches, and other security incidents. The log data analysis can also provide valuable insights into network behavior, helping security experts to understand the root cause of a security issue and to take appropriate action.
+- Email Text Analysis: The AI Assistant can analyze email texts with the AI from OpenAI to identify potential security threats. This feature uses natural language processing to understand the context and intent behind emails and detect any suspicious content, such as phishing attempts, malware, and other malicious activities. This can help security experts to quickly respond to potential threats and protect their networks from potential harm.
+- Source Code Explanation: The AI Assistant can use the AI of OpenAI to explain source code to you, making it easier for security experts to understand complex code and identify potential security risks. The AI can provide a detailed analysis of the code, including identifying potential vulnerabilities, security loopholes, and other security issues. This feature can also provide suggestions for remediation, helping security experts to quickly address any security threats.
+<img width="1215" alt="AIAssistant" src="https://user-images.githubusercontent.com/44299200/217822329-ac54d8e5-81af-4ad3-8f04-3cad575900e9.png">
+
+### Customizable
+It is possible to customize the descriptions of every module with your own texts in markdown formatting. If you don't need a single module, you can just disable it and it won't be shown to you.
+<img width="1190" alt="Settings" src="https://user-images.githubusercontent.com/44299200/217823102-8d35dd00-091a-42b1-b998-0601d569b28a.png">
+
+
 ## Planned features for later versions
 - Metadata viewer
 - Generate hashes of files to analyse them in a privacy-friendly way.
