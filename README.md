@@ -27,7 +27,7 @@ IOC Extractor is a module that allows you to extract and organize indicators of 
 
 ### Domain monitoring
 Domain Monitoring is a module that helps you protect your organization from phishing attacks by allowing you to search for recently registered domains that match a specific pattern. This can help you identify potential threats before they occur. Using the URLScan.io API, the module allows you to view screenshots of websites to see what is behind a domain without the need to visit the site and potentially expose yourself to danger. Additionally, with just a single click, you can check each domain and the IP it resolves to against multiple threat intelligence services to further protect your organization. For example, you can use the module to search for domains that start with "google-" by using the search pattern "google-*".
-![ost_domain-monitoring](https://user-images.githubusercontent.com/44299200/210261015-78bd8ccf-7797-45b5-98b4-faee76997477.png)
+![DomainMonitoring](https://user-images.githubusercontent.com/44299200/218256274-2d63de3e-8a92-45cb-ae3d-5e66220d5513.png)
 
 ### AI Assistant
 The AI Assistant module in a software for cyber security experts provides a powerful and efficient solution for log data analysis, email text analysis, and source code explanation, leveraging the advanced AI algorithms of OpenAI API. This feature can help security experts to quickly and effectively respond to potential security threats, protect their networks, and maintain the security and integrity of their systems.
