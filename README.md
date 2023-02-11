@@ -19,7 +19,7 @@ Email Analyzer is a module that allows you to analyze .eml files for potential t
 
 ### IOC Analyzer
 IOC Analyzer is a module that helps you analyze various types of indicators of compromise (IOCs), including IP addresses, hashes, email addresses, domains, and URLs. It uses a variety of services, such as VirusTotal, AlienVault, and AbuseIPDB, as well as social media platforms like Twitter, to gather information about the IOCs you are interested in. The tool is able to automatically detect the type of IOC you are analyzing and uses the appropriate services to gather the most relevant information. This can help you identify potential threats and take the necessary steps to protect your organization from cyber attacks.
-![otk_ioc-analyzer](https://user-images.githubusercontent.com/44299200/210260634-290b961e-d56a-40de-b2b5-c901d4aadd8c.png)
+![IOCAnalyzer](https://user-images.githubusercontent.com/44299200/218255943-b77dc7c5-6d83-4fd9-8450-b44c8953d8db.png)
 
 ### IOC Extractor
 IOC Extractor is a module that allows you to extract and organize indicators of compromise (IOCs) from unstructured files using regular expressions (Regex). The module automatically removes any duplicates, so you don't have to worry about sorting through the same IOCs multiple times. There are no complicated settings or features to worry about – just drop your file containing the IOCs into the tool and let it do the work for you. With a single click, you can analyze every detected IOC, saving you the time and effort of building Excel sheets to extract IOCs from files manually. Whether you are an experienced security professional or new to the field, IOC Extractor can help you quickly and easily identify potential threats to your organization.
