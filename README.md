@@ -48,14 +48,20 @@ It is possible to customize the descriptions of every module with your own texts
 - Export reports
 - Save history and generate statistics
 
+## Deploy with docker
+1. Download the repository and extract the files
+2. Navigate to the directory where the `docker-compose.yaml` file is located
+3. Run the following command: `docker-compose up -d`
+4. Once the container is running, you can access the app in your browser at http://localhost:3000
+
 ## Deploy from source
 ### Backend
 #### Windows
-```py -m uvicorn main:app --reload```
+`py -m uvicorn main:app --reload`
 
 ### Frontend
 #### Linux
-```uvicorn main:app --reload```
+`uvicorn main:app --reload`
 
 #### frontend
-```npm start```
+`npm start`
