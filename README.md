@@ -46,9 +46,10 @@ It is possible to customize the descriptions of every module with your own texts
 | AbuseIPDB      | Alienvault | Alienvault           | Emailrep.io | Alienvault |
 | Alienvault     | Maltiverse | Google Safe Browsing | Hunter.io   | Maltiverse |
 | IPQualityScore | Pulsedive  | Maltiverse           | Twitter     | Pulsedive  |
-| Maltiverse     | Shodan     | Pulsedive            |             | Twitter    |
-| Pulsedive      | Twitter    | Shodan               |             | Virustotal |
-| Shodan         | URLScan    | Twitter              |             |            |
+| Maltiverse     | Shodan     | Pulsedive            |             | ThreatFox  |
+| Pulsedive      | ThreatFox  | Shodan               |             | Twitter    |
+| Shodan         | Twitter    | ThreatFox            |             | Virustotal |
+| ThreatFox      | URLScan    | Twitter              |             |            |
 | Twitter        | Virustotal | URLScan              |             |            |
 | Virustotal     |            | Virustotal           |             |            |
 
