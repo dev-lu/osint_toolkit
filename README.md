@@ -40,6 +40,17 @@ The AI Assistant module in a software for cyber security experts provides a powe
 It is possible to customize the descriptions of every module with your own texts in markdown formatting. If you don't need a single module, you can just disable it and it won't be shown to you.
 <img width="1190" alt="Settings" src="https://user-images.githubusercontent.com/44299200/217823102-8d35dd00-091a-42b1-b998-0601d569b28a.png">
 
+## Integrated services
+| IPs            | Domains    | URLs                 | Emails      | Hashes     |
+|----------------|------------|----------------------|-------------|------------|
+| AbuseIPDB      | Alienvault | Alienvault           | Emailrep.io | Alienvault |
+| Alienvault     | Maltiverse | Google Safe Browsing | Hunter.io   | Maltiverse |
+| IPQualityScore | Pulsedive  | Maltiverse           | Twitter     | Pulsedive  |
+| Maltiverse     | Shodan     | Pulsedive            |             | Twitter    |
+| Pulsedive      | Twitter    | Shodan               |             | Virustotal |
+| Shodan         | URLScan    | Twitter              |             |            |
+| Twitter        | Virustotal | URLScan              |             |            |
+| Virustotal     |            | Virustotal           |             |            |
 
 ## Planned features for later versions
 - Metadata viewer
