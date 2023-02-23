@@ -59,6 +59,7 @@ It is possible to customize the descriptions of every module with your own texts
 - View and analyse PCAP files
 - Export reports
 - Save history and generate statistics
+- CVSS calculator
 
 ## Deploy with docker
 1. Download the repository and extract the files
