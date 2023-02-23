@@ -7,6 +7,20 @@
 ## A fullstack web application built for security analysts
 OSINT Toolkit is a web application designed to make the life of security analysts easier by combining many functions and services into a single tool. Written in React and FastAPI, the toolkit provides a range of features to help you identify potential threats and stay informed about the latest developments in the field of cyber security. With OSINT Toolkit, you can analyze indicators of compromise (IOCs) such as IP addresses, hashes, email addresses, domains, and URLs using services like VirusTotal, AlienVault, and AbuseIPDB, as well as social media platforms like Twitter. You can also search for recently registered domains that match a specific pattern, view screenshots of websites to see what is behind them, check domains and IPs against threat intelligence services, extract and organize IOCs from unstructured files, and stay up to date on the latest cyber security news. All of these features are designed to help you save time and effort while protecting your organization from potential threats and staying informed about the latest developments in the field of cyber security.
 
+* [Features](#features)
+  * [Newsfeed](#features)
+  * [Email Analyzer](#features)
+  * [IOC Analyzer](#ioc-analyzer)
+  * [IOC Extractor](#ioc-extractor)
+  * [Domain Monitoring](#domain-monitoring)
+  * [AI Assistant](#ai-assistant)
+  * [Customizability](#customizable)
+* [Integrated services](#integrated-services)
+* [Planned features](#planned-features-for-later-versions)
+* [Deploy with Docker](#deploy-with-docker)
+* [Deploy from source](#deploy-from-source)
+
+
 ## Features
 ### Newsfeed
 Newsfeed is a module that keeps you up to date on the latest cyber security news by aggregating articles from trusted sources such as Wired, The Hacker News, Security Magazine, Threatpost, TechCrunch Security, and Dark Reading. With Newsfeed, you can stay informed about the latest developments in the world of cyber security without having to visit multiple websites or subscribe to multiple newsletters. Whether you are a security professional looking to stay current on industry trends or just want to stay informed about potential threats to your personal online security, Newsfeed is a valuable resource.
