@@ -7,6 +7,7 @@
 ## A fullstack web application built for security analysts
 OSINT Toolkit is a web application designed to make the life of security analysts easier by combining many functions and services into a single tool. Written in React and FastAPI, the toolkit provides a range of features to help you identify potential threats and stay informed about the latest developments in the field of cyber security. With OSINT Toolkit, you can analyze indicators of compromise (IOCs) such as IP addresses, hashes, email addresses, domains, and URLs using services like VirusTotal, AlienVault, and AbuseIPDB, as well as social media platforms like Twitter. You can also search for recently registered domains that match a specific pattern, view screenshots of websites to see what is behind them, check domains and IPs against threat intelligence services, extract and organize IOCs from unstructured files, and stay up to date on the latest cyber security news. All of these features are designed to help you save time and effort while protecting your organization from potential threats and staying informed about the latest developments in the field of cyber security.
 
+* [Integrated services](#integrated-services)
 * [Features](#features)
   * [Newsfeed](#features)
   * [Email Analyzer](#features)
@@ -15,11 +16,23 @@ OSINT Toolkit is a web application designed to make the life of security analyst
   * [Domain Monitoring](#domain-monitoring)
   * [AI Assistant](#ai-assistant)
   * [Customizability](#customizable)
-* [Integrated services](#integrated-services)
 * [Planned features](#planned-features-for-later-versions)
 * [Deploy with Docker](#deploy-with-docker)
 * [Deploy from source](#deploy-from-source)
 
+## Integrated services
+| IPs            | Domains    | URLs                 | Emails             | Hashes     |
+|----------------|------------|----------------------|--------------------|------------|
+| AbuseIPDB      | Alienvault | Alienvault           | Emailrep.io        | Alienvault |
+| Alienvault     | Maltiverse | Google Safe Browsing | Hunter.io          | Maltiverse |
+| IPQualityScore | Pulsedive  | Maltiverse           | Have I Been Pwnd   | Pulsedive  |
+| Maltiverse     | Shodan     | Pulsedive            | Reddit             | Reddit     |
+| Pulsedive      | ThreatFox  | Shodan               | Twitter            | ThreatFox  |
+| Shodan         | Reddit     | ThreatFox            |                    | Twitter    |
+| Reddit         | Twitter    | Reddit               |                    | Virustotal |
+| ThreatFox      | URLScan    | Twitter              |                    |            |
+| Twitter        | Virustotal | URLScan              |                    |            |
+| Virustotal     |            | Virustotal           |                    |            |
 
 ## Features
 ### Newsfeed
@@ -53,19 +66,6 @@ The AI Assistant module in a software for cyber security experts provides a powe
 ### Customizable
 It is possible to customize the descriptions of every module with your own texts in markdown formatting. If you don't need a single module, you can just disable it and it won't be shown to you.
 <img width="1190" alt="Settings" src="https://user-images.githubusercontent.com/44299200/217823102-8d35dd00-091a-42b1-b998-0601d569b28a.png">
-
-## Integrated services
-| IPs            | Domains    | URLs                 | Emails      | Hashes     |
-|----------------|------------|----------------------|-------------|------------|
-| AbuseIPDB      | Alienvault | Alienvault           | Emailrep.io | Alienvault |
-| Alienvault     | Maltiverse | Google Safe Browsing | Hunter.io   | Maltiverse |
-| IPQualityScore | Pulsedive  | Maltiverse           | Twitter     | Pulsedive  |
-| Maltiverse     | Shodan     | Pulsedive            |             | ThreatFox  |
-| Pulsedive      | ThreatFox  | Shodan               |             | Twitter    |
-| Shodan         | Twitter    | ThreatFox            |             | Virustotal |
-| ThreatFox      | URLScan    | Twitter              |             |            |
-| Twitter        | Virustotal | URLScan              |             |            |
-| Virustotal     |            | Virustotal           |             |            |
 
 ## Planned features for later versions
 - Metadata viewer
