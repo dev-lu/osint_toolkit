@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+
+
+
+@font-face {
+  font-family: 'Poppins_local';
+  src: url('./fonts/Poppins/Poppins-Light.ttf') format('truetype') 300,
+       url('./fonts/Poppins/Poppins-Regular.ttf') format('truetype') 400;
+}
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color:#ebebeb ;
+}
+
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.MuiTableCell-head {
+  background-color: whitesmoke;
+}
+

@@ -1,0 +1,11 @@
+**/*.db
+__pycache__
+database/__pycache__
+**/*.pyc
+pip-log.txt
+.cache
+**/*.log
+.git
+.mypy_cache
+.pytest_cache
+.gitignore

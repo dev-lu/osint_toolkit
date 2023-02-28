@@ -1,0 +1,54 @@
+{
+  "name": "osint-toolkit",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
+    "@mui/icons-material": "^5.10.2",
+    "@mui/material": "^5.10.2",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.27.2",
+    "date-fns": "^2.29.3",
+    "dompurify": "^3.0.0",
+    "html-to-text": "^9.0.3",
+    "react": "^18.2.0",
+    "react-circle-progress-bar": "^0.1.4",
+    "react-country-flag": "^3.0.2",
+    "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.2",
+    "react-gauge-chart": "^0.4.1",
+    "react-icons": "^4.4.0",
+    "react-markdown": "^8.0.5",
+    "react-scripts": "^5.0.1",
+    "react-syntax-highlighter": "^15.5.0",
+    "recoil": "^0.7.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts --openssl-legacy-provider build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
