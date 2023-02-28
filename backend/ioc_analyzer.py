@@ -2,7 +2,6 @@ import requests
 import json
 import regex as re
 from collections import OrderedDict
-import asyncpraw
 from datetime import datetime
 from time import sleep
 
