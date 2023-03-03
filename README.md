@@ -2,14 +2,13 @@
 
 # OSINT Toolkit
 > **Warning**
-> This repository is just a placeholder until an initial release is ready. 
-> OSINT Toolkit is currently in the development stage and is expected to be published in Q1 2023. It will undergo tasks such as code refactoring, bug fixing, and error handling before the first stable version is released.
+> OSINT Toolkit is not production ready yet. This is an early preview, that still needs some work before it goes out of beta. 
+> The code still needs some refactoring, bug fixing, and error handling before the first stable version is released.
 ## A fullstack web application built for security analysts
 OSINT Toolkit is a web application designed to make the life of security analysts easier by combining many functions and services into a single tool. Written in React and FastAPI, the toolkit provides a range of features to help you identify potential threats and stay informed about the latest developments in the field of cyber security. With OSINT Toolkit, you can analyze indicators of compromise (IOCs) such as IP addresses, hashes, email addresses, domains, and URLs using services like VirusTotal, AlienVault, and AbuseIPDB, as well as social media platforms like Twitter. You can also search for recently registered domains that match a specific pattern, view screenshots of websites to see what is behind them, check domains and IPs against threat intelligence services, extract and organize IOCs from unstructured files, and stay up to date on the latest cyber security news. All of these features are designed to help you save time and effort while protecting your organization from potential threats and staying informed about the latest developments in the field of cyber security.
 
 
 ![Walkthrough video](https://user-images.githubusercontent.com/44299200/222213168-eb32a66f-7f3d-41de-ad0a-a5a55e798920.mov)
-
 
 
 * [Integrated services](#integrated-services)
@@ -73,12 +72,13 @@ It is possible to customize the descriptions of every module with your own texts
 <img width="1190" alt="Settings" src="https://user-images.githubusercontent.com/44299200/217823102-8d35dd00-091a-42b1-b998-0601d569b28a.png">
 
 ## Planned features for later versions
-- Metadata viewer
-- Generate hashes of files to analyse them in a privacy-friendly way.
-- View and analyse PCAP files
+- Add more OSINT services
+- Generate hashes from files to analyse them in a privacy-friendly way.
 - Export reports
 - Save history and generate statistics
 - CVSS calculator
+- Metadata viewer
+- View and analyze PCAP files
 
 ## Deploy with docker
 1. Download the repository and extract the files

@@ -12,7 +12,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
     "date-fns": "^2.29.3",
-    "dompurify": "^3.0.0",
+    "dompurify": "^3.0.1",
     "html-to-text": "^9.0.3",
     "react": "^18.2.0",
     "react-circle-progress-bar": "^0.1.4",
@@ -29,7 +29,8 @@
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts --openssl-legacy-provider build",
+    "build": "GENERATE_SOURCEMAP=false react-scripts --openssl-legacy-provider build",
+    "winBuild": "set \"GENERATE_SOURCEMAP=false\" && react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

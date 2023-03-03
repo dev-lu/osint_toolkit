@@ -16,7 +16,6 @@ import Skeleton from '@mui/material/Skeleton';
 
 
 export default function Newsfeed() {
-    // Recoil state for newsfeed data
     const newsfeed = useRecoilValue(newsfeedState);
     const setNewsfeed = useSetRecoilState(newsfeedState);
 
@@ -24,7 +23,7 @@ export default function Newsfeed() {
     const [loading, setLoading] = useState(true);
 
     const [page, setPage] = React.useState(1);
-    const pageSize = 5; // number of items per page
+    const pageSize = 5;
     const handlePageChange = (event, value) => {
         scrollToTop();
         setPage(value);

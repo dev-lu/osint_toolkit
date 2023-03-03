@@ -26,7 +26,6 @@ import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 
 
 export default function Main(props) {
-  // Recoil state for module settings
   const modules = useRecoilValue(modulesState);
 
   function getLowestTabIndex() {

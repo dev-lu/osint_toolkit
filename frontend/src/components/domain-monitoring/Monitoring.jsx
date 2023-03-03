@@ -18,7 +18,6 @@ export default function Monitoring() {
 
   const [key, setKey] = useState(" ");
 
-  // show or hide result table
   const [showTable, setshowTable] = useState(false);
   const handleShowTable = (event) => {
     setKey(domain);

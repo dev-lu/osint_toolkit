@@ -118,6 +118,7 @@ export default function ResultRow(props) {
               {props.result["error"] ? (
                 <Grid
                   xs
+                  item={true}
                   display="flex"
                   justifyContent="center"
                   alignItems="center"

@@ -31,7 +31,6 @@ export default function Modules() {
     boxShadow: 0,
   };
 
-  // Enable or disable a module
   function handleModuleChange(moduleName) {
     if (modules[moduleName].enabled === false) {
       axios.post(
@@ -77,7 +76,7 @@ export default function Modules() {
     const newState = { ...newsfeedList };
       newState[feedName] = { ...newState[feedName], enabled: false };
       setNewsfeedList(newState);
-  }
+    }
   }
   return (
     <>
@@ -452,6 +451,39 @@ export default function Modules() {
               handleModuleDescriptionChange(
                 "AI Assistant CE",
                 document.getElementById("aiassistat-ce-description-textfield")
+                  .value
+              )
+            }
+          >
+            <SaveIcon />
+            Save
+          </Button>
+          <TextField
+            id="aiassistat-cdo-description-textfield"
+            label="Custom code expert description"
+            disabled={modules["AI Assistant"].enabled === false}
+            fullWidth
+            multiline
+            rows={4}
+            sx={{ mt: 2 }}
+            defaultValue={
+              modules["AI Assistant CDO"]
+                ? modules["AI Assistant CDO"].description
+                : ""
+            }
+          />
+          <Button
+            variant="contained"
+            color="success"
+            disableElevation
+            disabled={modules["AI Assistant"].enabled === false}
+            size="large"
+            type="submit"
+            sx={{ borderRadius: 5, mt: 2, ml: 1 }}
+            onClick={() =>
+              handleModuleDescriptionChange(
+                "AI Assistant CDO",
+                document.getElementById("aiassistat-cdo-description-textfield")
                   .value
               )
             }

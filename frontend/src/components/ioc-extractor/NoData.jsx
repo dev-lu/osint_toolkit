@@ -28,11 +28,11 @@ export default function NoData() {
         }}
       >
         <Grid container>
-          <Grid xs display="flex" justifyContent="center" alignItems="center">
+          <Grid xs item={true} display="flex" justifyContent="center" alignItems="center">
             <NotInterestedIcon sx={{ fontSize: 80, color: "lightgrey" }} />
           </Grid>
           <Divider orientation="vertical" flexItem></Divider>
-          <Grid xs sx={{ p: 2 }}>
+          <Grid xs item={true} sx={{ p: 2 }}>
             <h2>No IOCs available</h2>
             <p>There are no items for this IOC type.</p>
           </Grid>

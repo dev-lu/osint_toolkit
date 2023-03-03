@@ -8,7 +8,7 @@ def ask_prompt(input: str, apikey: str, prompt: str, proxies:dict):
         'loganalysis': "Explain the following log data first and then Analyze it for any malicious activity: " + str(input),
         'emailanalysis': "Analyze the content of this email to identify red flags and warning signs that indicate it is a phishing attempt: " + str(input),
         'codeexpert': "Explain the following source code: " + str(input),
-        'deobfuscater': "Simplify this code, make it human readable and extract possible indicators of compromise: " + str(input),
+        'deobfuscater': "Give me a simplified version of the code below and extract possible indicators of compromise. Give me the answer in form of a code snippet and additional bulletpoints. " + str(input),
     }
 
     # Model to use

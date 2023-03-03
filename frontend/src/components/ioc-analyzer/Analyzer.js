@@ -30,7 +30,7 @@ export default function Analyzer() {
     const domainRegex = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/;
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
-    // check if input is a valid IOC and if true, show results
+
     function validateIoc(ioc) 
     {
         if (ipv4Regex.test(ioc)) {
@@ -88,7 +88,6 @@ export default function Analyzer() {
       }
     }
 
-  // show or hide result table
   const [showTable, setshowTable] = useState(false);
   const handleShowTable = event => {
     setshowTable(true);  

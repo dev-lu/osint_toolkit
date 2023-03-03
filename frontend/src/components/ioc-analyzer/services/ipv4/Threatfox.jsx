@@ -32,10 +32,10 @@ export default function Threatfox(props) {
         <>
             {result ? (
                 <Box sx={{ margin: 1 }}>
-                {Array.isArray(result['data']) ? <><h3>Details</h3>
-                <br /></> : null}
-                
-                { Array.isArray(result['data']) ?
+                    {Array.isArray(result['data']) ? <><h3>Details</h3>
+                        <br /></> : null}
+
+                    {Array.isArray(result['data']) ?
                         result['data'].map((data, index) => {
                             return (
                                 <>
@@ -64,48 +64,48 @@ export default function Threatfox(props) {
                                     <p>Reporter: {data['reporter']}</p>
                                     <br />
                                     <b>Tags</b>
-                                    { Array.isArray(data['tags']) ?
+                                    {Array.isArray(data['tags']) ?
                                         data['tags'].map((tags) => {
                                             return (
                                                 <>
                                                     <li key={tags} >{tags}</li>
                                                 </>
                                             );
-                                        }) : <><li key={"none" }>None</li></>
+                                        }) : <><li key={"none"}>None</li></>
                                     }
-                                    
+
                                     <br />
                                     <hr />
                                     <br />
                                 </>
                             );
                         }) : <Grid display="flex" justifyContent="center" alignItems="center">
-                        <NoDetails />
-                    </Grid>
+                            <NoDetails />
+                        </Grid>
                     }
-            </Box>
-            ): null}
+                </Box>
+            ) : null}
         </>
     )
 
-  return (
-    <>
-      <ResultRow
-        name="ThreatFox (abuse.ch)"
-        id="threatfox"
-        icon="threatfox_logo_small"
-        loading={loading}
-        result={result}
-        summary={
-            result && result['query_status'] === 'ok' ? "Malicious" : "Not Malicious"
-        }
-        summary_color={{ color: null }}
-        color={
-            result && result['query_status'] === 'ok' ? 'red' : 'green'
-        }
-        error={error}
-        details={details}
-      />
-    </>
-  )
+    return (
+        <>
+            <ResultRow
+                name="ThreatFox (abuse.ch)"
+                id="threatfox"
+                icon="threatfox_logo_small"
+                loading={loading}
+                result={result}
+                summary={
+                    result && result['query_status'] === 'ok' ? "Malicious" : "Not Malicious"
+                }
+                summary_color={{ color: null }}
+                color={
+                    result && result['query_status'] === 'ok' ? 'red' : 'green'
+                }
+                error={error}
+                details={details}
+            />
+        </>
+    )
 }

@@ -50,8 +50,21 @@ export default function Result(props) {
 
   const result = props.result;
 
-  const [showHashAnalyse, setShowHashAnalyse] = React.useState(false);
-  function hashAnalyse(props) {
+  const [showHashAnalysisAttachements, setShowHashAnalysisAttachements] = React.useState(false);
+  function hashAnalysis(props) {
+    const ioc = props;
+    return (
+      <>
+        <br />
+        <br />
+        <Hash ioc={ioc} />
+        <br />
+      </>
+    );
+  }
+
+  const [showHashAnalysisEml, setShowHashAnalysisEml] = React.useState(false);
+  function hashAnalysisEml(props) {
     const ioc = props;
     return (
       <>
@@ -134,7 +147,7 @@ export default function Result(props) {
                     variant="outlined"
                     disableElevation
                     size="small"
-                    onClick={() => setShowHashAnalyse(!showHashAnalyse)}
+                    onClick={() => setShowHashAnalysisAttachements(!showHashAnalysisAttachements)}
                     sx={{ float: "right" }}
                   >
                     Analyze
@@ -155,7 +168,7 @@ export default function Result(props) {
                     variant="outlined"
                     disableElevation
                     size="small"
-                    onClick={() => setShowHashAnalyse(!showHashAnalyse)}
+                    onClick={() => setShowHashAnalysisAttachements(!showHashAnalysisAttachements)}
                     sx={{ float: "right" }}
                   >
                     Analyze
@@ -176,7 +189,7 @@ export default function Result(props) {
                     variant="outlined"
                     disableElevation
                     size="small"
-                    onClick={() => setShowHashAnalyse(!showHashAnalyse)}
+                    onClick={() => setShowHashAnalysisAttachements(!showHashAnalysisAttachements)}
                     sx={{ float: "right" }}
                   >
                     Analyze
@@ -185,7 +198,7 @@ export default function Result(props) {
               </TableRow>
             </Table>
           </TableContainer>
-          {showHashAnalyse ? hashAnalyse(row.md5) : <></>}
+          {showHashAnalysisAttachements ? hashAnalysis(row.md5) : <></>}
         </>
       ));
     } else {
@@ -199,6 +212,7 @@ export default function Result(props) {
         <>
           {result["warnings"].map((row) => (
             <Alert
+            key={"ema_warnings_"+row["warning_title"]}
               severity={
                 row["warning_tlp"] === "red"
                   ? "error"
@@ -371,7 +385,7 @@ export default function Result(props) {
     <>
       {/* General information card */}
       <Grow in={true}>
-        <Card sx={card_style}>
+        <Card key={"ema_general_info"} sx={card_style}>
           <h2>
             <InfoIcon /> General information
           </h2>
@@ -406,7 +420,7 @@ export default function Result(props) {
           variant="outlined"
           disableElevation
           size="small"
-          onClick={() => setShowHashAnalyse(!showHashAnalyse)}
+          onClick={() => setShowHashAnalysisEml(!showHashAnalysisEml)}
           sx={{ float: "left" }}
         >
           Analyze .eml hash
@@ -420,7 +434,7 @@ export default function Result(props) {
         >
           Analyze sender address
         </Button>
-        {showHashAnalyse ? hashAnalyse(result["eml_hashes"]["md5"]) : null}
+        {showHashAnalysisEml ? hashAnalysisEml(result["eml_hashes"]["md5"]) : null}
         {showEmailAnalyse && emailAnalyse(extractEmailAddress(result["basic_info"]["from"])) != null ? emailAnalyse(extractEmailAddress(result["basic_info"]["from"])) : null}
         </Card>
         
@@ -428,7 +442,7 @@ export default function Result(props) {
 
       {/* Basic security checks card */}
       <Grow in={true}>
-        <Card sx={card_style}>
+        <Card key={"ema_basic_checks"} sx={card_style}>
           <h2>
             <VerifiedUserIcon /> Basic security checks
           </h2>
@@ -438,7 +452,7 @@ export default function Result(props) {
 
       {/* Attachements card */}
       <Grow in={true}>
-        <Card sx={card_style}>
+        <Card key={"ema_attachements"} sx={card_style}>
           <h2>
             <AttachFileIcon /> Attachments ({result["attachments"].length})
           </h2>
@@ -448,7 +462,7 @@ export default function Result(props) {
 
       {/* URLs card */}
       <Grow in={true}>
-        <Card sx={card_style}>
+        <Card key={"ema_urls"} sx={card_style}>
           <h2>
             <LinkIcon /> URLs in body ({result["urls"].length})
           </h2>
@@ -458,7 +472,7 @@ export default function Result(props) {
 
       {/* Hops card */}
       <Grow in={true}>
-        <Card sx={card_style}>
+        <Card key={"ema_hops"} sx={card_style}>
           <h2>
             <RouteIcon /> Hops ({result["hops"].length})
           </h2>
@@ -468,7 +482,7 @@ export default function Result(props) {
 
       {/* Full header card */}
       <Grow in={true}>
-        <Card sx={card_style}>
+        <Card key={"ema_file_header"} sx={card_style}>
           <h2>
             <HorizontalSplitIcon /> Full Header ({result["headers"].length})
           </h2>
@@ -478,7 +492,7 @@ export default function Result(props) {
 
       {/* Message text card */}
       <Grow in={true}>
-        <Card sx={card_style}>
+        <Card key={"ema_message_text"} sx={card_style}>
           <h2>
             <ChatIcon /> Message body (HTML sanitized)
           </h2>

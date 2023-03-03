@@ -46,6 +46,17 @@ int main() {
     """
 )
 
+ai_assistant_cdo = dict(
+    description="""### Code Deobfuscator uses OpenAI to deobfuscate source code and extraxt possible IOCs for you.
+\
+Example:
+```javascript
+eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0("1, 2!");',3,3,'console|log|Hello|OSINT'.split('|'),0,{}));
+
+```
+    """
+)
+
 domain_monitoring = dict(
     description="""### Domain Monitoring is a module that helps you protect your organization from phishing attacks by allowing you to search for recently registered domains that match a specific pattern. This can help you identify potential threats before they occur. Using the URLScan.io API, the module allows you to view screenshots of websites to see what is behind a domain without the need to visit the site and potentially expose yourself to danger. Additionally, with just a single click, you can check each domain and the IP it resolves to against multiple threat intelligence services to further protect your organization. 
 

@@ -18,7 +18,6 @@ import Tab from "@mui/material/Tab";
 import TextField from "@mui/material/TextField";
 
 
-// Recoil state for tab index
 export const aiassistantTabIndex = atom({
   key: "AiassistantTabIndexState",
   default: 0,
@@ -132,6 +131,7 @@ export default function AiAssistant() {
         <Tab label="Log Analyzer" />
         <Tab label="Phishing Analyzer" />
         <Tab label="Code Expert" />
+        <Tab label="Code Deobfuscator" />
       </Tabs>
       <AiassistantTabPanel value={tabIndex} index={0}>
         <Stack>
@@ -256,6 +256,48 @@ export default function AiAssistant() {
             showResult(result)
           ) : (
             <Introduction moduleName="AI Assistant CE" />
+          )}
+        </Stack>
+      </AiassistantTabPanel>
+      <AiassistantTabPanel value={tabIndex} index={3}>
+        <Stack>
+          <Card sx={cardStyle}>
+            <TextField
+              id="aiassistant_cdo-input-textfield"
+              label="Paste code snippet here"
+              fullWidth
+              multiline
+              rows={10}
+            />
+            <Stack spacing={2} justifyContent="center">
+              <Button
+                variant="contained"
+                color="primary"
+                align="center"
+                disableElevation
+                size="large"
+                type="submit"
+                sx={{ borderRadius: 5, mt: 2, ml: 1 }}
+                onClick={() =>
+                  callOpenAI(
+                    document.getElementById("aiassistant_cdo-input-textfield")
+                      .value,
+                    "codeexpert"
+                  )
+                }
+              >
+                <Stack spacing={2} justifyContent="center">
+                  Send code snippet to OpenAI
+                  {loading ? <LinearProgress color="inherit" /> : null}
+                </Stack>
+              </Button>
+            </Stack>
+          </Card>
+
+          {result ? (
+            showResult(result)
+          ) : (
+            <Introduction moduleName="AI Assistant CDO" />
           )}
         </Stack>
       </AiassistantTabPanel>

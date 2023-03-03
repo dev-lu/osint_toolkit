@@ -22,11 +22,11 @@ export default function NoApikeys() {
         <Grow in={true}>
             <Card variant="outlined" elevation={0} sx={{ maxWidth: 800, m: 2, p: 2, borderRadius: 5 }}>
                 <Grid container>
-                    <Grid xs display="flex" justifyContent="center" alignItems="center">
+                    <Grid xs item={true} display="flex" justifyContent="center" alignItems="center">
                         <KeyIcon sx={{ fontSize: 100, color: 'lightgrey'}} />
                     </Grid>
                     <Divider orientation="vertical" flexItem></Divider>
-                    <Grid xs sx={{p: 2}}>
+                    <Grid xs item={true} sx={{p: 2}}>
                         <h2>No API keys available for this action</h2>
                         <p>You need to add API keys in the settings tab, to use this function.</p>
                     </Grid>

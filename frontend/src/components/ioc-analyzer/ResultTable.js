@@ -8,7 +8,6 @@ import Ipv6 from './Ipv6';
 import Url from './Url';
 
 
-
 function ResultTable(props) {
   if (props.iocType === 'IPv4') {
     return (
@@ -59,7 +58,6 @@ function ResultTable(props) {
       </>
     )
   }
-  
 }
 
 export default ResultTable

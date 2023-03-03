@@ -70,10 +70,8 @@ export default function FileUpload(props) {
         isDragReject
       ]);
 
-    // Receive file data
     const [file, setFile] = useState(" ");
 
-    // show or hide result table
     const [showResult, setShowResult] = useState(false);
     const handleShowResult = event => {
         setShowResult(true);  

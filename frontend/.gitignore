@@ -4,6 +4,7 @@ package-lock.json
 logs
 **/*.backup.*
 **/*.back.*
+build
 
 bower_components
 

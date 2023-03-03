@@ -9,6 +9,7 @@ import Grid from "@mui/material/Grid";
 import NoDetails from "../NoDetails";
 import ResultRow from "../../ResultRow";
 
+
 export default function Hunterio(props) {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
@@ -37,7 +38,7 @@ export default function Hunterio(props) {
   const details = (
     <>
       {result && result.data ? (
-          <Box sx={{ margin: 1 }}>
+        <Box sx={{ margin: 1 }}>
           <Card
             variant="outlined"
             sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
@@ -110,10 +111,10 @@ export default function Hunterio(props) {
             ))
           ) : (
             <Card
-                variant="outlined"
-                key="no_sources"
-                sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
-              >No sources found</Card>
+              variant="outlined"
+              key="no_sources"
+              sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
+            >No sources found</Card>
           )}
         </Box>
       ) : (
@@ -155,7 +156,7 @@ export default function Hunterio(props) {
     }
   }
 
-  
+
 
   return (
     <>
@@ -175,8 +176,8 @@ export default function Hunterio(props) {
         summary_color={{ color: null }}
         color={
           mailStatus === "invalid"
-              ? "red"
-              : mailStatus === "disposable"
+            ? "red"
+            : mailStatus === "disposable"
               ? "orange"
               : "green"
         }

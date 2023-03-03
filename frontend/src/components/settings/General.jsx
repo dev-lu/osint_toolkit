@@ -28,7 +28,6 @@ export default function General() {
     borderRadius: 5,
   };
 
-  // Activate or deactivate darkmode
   function handleDarkmodeChange() {
     try {
       if (!generalSettings.darkmode) {
@@ -63,7 +62,6 @@ export default function General() {
     }
   }
 
-  // Activate or deactivate proxy
   function handleProxyStringEnabledChange() {
     try {
       if (!generalSettings.proxy_enabled) {

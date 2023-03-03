@@ -90,10 +90,8 @@ export default function Extractor(props) {
     setShowModal(false);
   };
 
-  // Receive file data
   const [file, setFile] = useState(" ");
 
-  // show or hide result table
   const [showTable, setshowTable] = useState(false);
   const handleShowTable = (event) => {
     setshowTable(true);
@@ -621,7 +619,7 @@ export default function Extractor(props) {
                   }}
                 >
                   <Stack spacing={2} sx={{ width: "100%" }}>
-                    <p><b>Anaylsis for: </b>{selectedData}</p>
+                    <p><b>Analysis for: </b>{selectedData}</p>
                     {selectedType === "ipv6" ? (
                       <Ipv4 ioc={selectedData} />
                     ) : null}

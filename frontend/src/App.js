@@ -24,35 +24,25 @@ export const generalSettingsState = atom({
   default: [],
 });
 
-// Recoil state for newsfeed news data
 export const newsfeedState = atom({
   key: "NewsfeedState",
   default: [],
 });
 
-// Recoil state for newsfeed RSS feeds list
 export const newsfeedListState = atom({
   key: "NewsfeedListState",
   default: [],
 });
 
 function App() {
-  // Check if settings are loaded
   const [apikeyLoaded, setApikeyLoaded] = useState(false);
   const [modulesLoaded, setModulesLoaded] = useState(false);
   const [generalSettingsLoaded, setGeneralSettingsLoaded] = useState(false);
   const [newsfeedListLoaded, setNewsfeedListLoaded] = useState(false);
 
-  // Recoil state for API keys
   const setApiKeys = useSetRecoilState(apiKeysState);
-
-  // Recoil state for general settings
   const setGeneralSettings = useSetRecoilState(generalSettingsState);
-
-  // Recoil state for module settings
   const setModules = useSetRecoilState(modulesState);
-
-  // Recoil state for newsfeed RSS feeds list
   const setNewsfeedList = useSetRecoilState(newsfeedListState);
 
   useEffect(() => {

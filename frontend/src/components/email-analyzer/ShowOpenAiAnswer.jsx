@@ -9,6 +9,7 @@ import Card from "@mui/material/Card";
 import { LinearProgress } from "@mui/material";
 import Grow from "@mui/material/Grow";
 import Stack from "@mui/material/Stack";
+import NoApikeys from '../ioc-analyzer/NoApikeys';
 
 
 export default function ShowOpenAiAnswer(props) {
@@ -74,18 +75,18 @@ export default function ShowOpenAiAnswer(props) {
 
   return (
     <>
-    <Button
-          variant="contained"
-          disableElevation
-          size="small"
-          onClick={() => callOpenAI(props.input, "mailanalysis")}
-        >
-            <Stack spacing={2} justifyContent="center">
-                Analyze message body with OpenAI
-                {loading ? <LinearProgress color="inherit" /> : null}
-            </Stack>
-        </Button>
-        {result ? (showResult(result)) : null}
+      <Button
+        variant="contained"
+        disableElevation
+        size="small"
+        onClick={() => callOpenAI(props.input, "mailanalysis")}
+      >
+        <Stack spacing={2} justifyContent="left">
+          Analyze message body with OpenAI
+          {loading ? <LinearProgress color="inherit" /> : null}
+        </Stack>
+      </Button>
+      {result ? (showResult(result)) : null}
     </>
   )
 }
