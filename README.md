@@ -2,13 +2,13 @@
 
 # OSINT Toolkit
 > **Warning**
-> OSINT Toolkit is not production ready yet. This is an early preview, that still needs some work before it goes out of beta. 
-> The code still needs some refactoring, bug fixing, and error handling before the first stable version is released.
+> OSINT Toolkit is not production ready yet. This is an early prototype, that still needs some work before it goes out of beta. 
+> The code needs some refactoring, bug fixing, and error handling before the first stable version can be released.
 ## A fullstack web application built for security analysts
-OSINT Toolkit is a web application designed to make the life of security analysts easier by combining many functions and services into a single tool. Written in React and FastAPI, the toolkit provides a range of features to help you identify potential threats and stay informed about the latest developments in the field of cyber security. With OSINT Toolkit, you can analyze indicators of compromise (IOCs) such as IP addresses, hashes, email addresses, domains, and URLs using services like VirusTotal, AlienVault, and AbuseIPDB, as well as social media platforms like Twitter. You can also search for recently registered domains that match a specific pattern, view screenshots of websites to see what is behind them, check domains and IPs against threat intelligence services, extract and organize IOCs from unstructured files, and stay up to date on the latest cyber security news. All of these features are designed to help you save time and effort while protecting your organization from potential threats and staying informed about the latest developments in the field of cyber security.
-
 
 ![Walkthrough video](https://user-images.githubusercontent.com/44299200/222213168-eb32a66f-7f3d-41de-ad0a-a5a55e798920.mov)
+
+OSINT Toolkit is a web application designed to make the life of security analysts easier by combining many functions and services into a single tool. Written in React and FastAPI, the toolkit provides a range of features to help you identify potential threats and stay informed about the latest developments in the field of cyber security. With OSINT Toolkit, you can analyze indicators of compromise (IOCs) such as IP addresses, hashes, email addresses, domains, and URLs using services like VirusTotal, AlienVault, and AbuseIPDB, as well as social media platforms like Twitter. You can also search for recently registered domains that match a specific pattern, view screenshots of websites to see what is behind them, check domains and IPs against threat intelligence services, extract and organize IOCs from unstructured files, and stay up to date on the latest cyber security news. All of these features are designed to help you save time and effort while protecting your organization from potential threats and staying informed about the latest developments in the field of cyber security.
 
 
 * [Integrated services](#integrated-services)
