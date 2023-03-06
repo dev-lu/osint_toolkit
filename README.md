@@ -45,7 +45,7 @@ Newsfeed is a module that keeps you up to date on the latest cyber security news
 
 ### Email Analyzer
 Email Analyzer is a module that allows you to analyze .eml files for potential threats. To use the module, simply drag an .eml file into it. The module will then parse the file and perform basic security checks to identify any potential risks. It also extracts all indicators of compromise (IOCs) from the file and makes it possible to analyze them using various open source intelligence (OSINT) services. In addition, Email Analyzer generates hash values for every attachment in the file, allowing you to perform a privacy-friendly analysis of these files. This can help you protect your organization from cyber attacks and other threats that may come through email.
-![emailanalyzer](https://user-images.githubusercontent.com/44299200/223217647-b59d769b-6c2a-4bb8-9812-e0b99b9f18da.png)
+![ema](https://user-images.githubusercontent.com/44299200/223221309-f45a9644-b965-4f00-9261-0209f74a0a72.png)
 
 ### IOC Analyzer
 IOC Analyzer is a module that helps you analyze various types of indicators of compromise (IOCs), including IP addresses, hashes, email addresses, domains, and URLs. It uses a variety of services, such as VirusTotal, AlienVault, and AbuseIPDB, as well as social media platforms like Twitter, to gather information about the IOCs you are interested in. The tool is able to automatically detect the type of IOC you are analyzing and uses the appropriate services to gather the most relevant information. This can help you identify potential threats and take the necessary steps to protect your organization from cyber attacks.
