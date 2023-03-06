@@ -13,16 +13,19 @@ def get_news():
     
     for entry in feeds:
         if entry['enabled'] == True:
-            feed = feedparser.parse(entry['url'])
-            for post in feed.entries:
-                news.append({
-                    'feedname': entry['name'],
-                    'icon': entry['icon'],
-                    'title': post.title,
-                    'summary': re.compile(r'<[^>]+>').sub('', post.summary),  # Remove HTML tags
-                    'date': time.strftime("%A, %B %d, %Y - %H:%M", post.published_parsed),  # Format date
-                    'link': post.link
-                    })
+            try:
+                feed = feedparser.parse(entry['url'])
+                for post in feed.entries:
+                    news.append({
+                        'feedname': entry['name'],
+                        'icon': entry['icon'],
+                        'title': post.title,
+                        'summary': re.compile(r'<[^>]+>').sub('', post.summary),  # Remove HTML tags
+                        'date': time.strftime("%A, %B %d, %Y - %H:%M", post.published_parsed),  # Format date
+                        'link': post.link
+                        })
+            except:
+                pass
     # Sort news ascending by date
     news.sort(key = lambda x: datetime.strptime(x['date'], '%A, %B %d, %Y - %H:%M'), reverse=True)
     return news

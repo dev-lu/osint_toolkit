@@ -5,7 +5,9 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialOceanic } from "react-syntax-highlighter/dist/esm/styles/prism";
 import ReactMarkdown from "react-markdown";
 
+import { apiKeysState } from '../../App';
 import Introduction from "../Introduction";
+import NoApikeys from "../ioc-analyzer/NoApikeys";
 
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -26,6 +28,8 @@ export const aiassistantTabIndex = atom({
 export default function AiAssistant() {
   const [loading, setLoading] = React.useState(false);
   const [result, setResult] = React.useState(null);
+  const [buttonClicked, setButtonClicked] = React.useState(false);
+  const apiKeys = useRecoilValue(apiKeysState);
 
   const cardStyle = {
     m: 1,
@@ -66,17 +70,21 @@ export default function AiAssistant() {
   };
 
   async function callOpenAI(input, endpoint) {
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/api/aiassistant/" + endpoint,
-        { input: input }
-      );
-      setResult(response.data.analysis_result);
-    } catch (error) {
-      console.error(error);
+    if (!apiKeys.openai) {
+      setButtonClicked(true);
+    } else {
+      setLoading(true);
+      try {
+        const response = await axios.post(
+          "http://localhost:8000/api/aiassistant/" + endpoint,
+          { input: input }
+        );
+        setResult(response.data.analysis_result);
+      } catch (error) {
+        console.error(error);
+      }
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   function showResult(answer) {
@@ -168,7 +176,7 @@ export default function AiAssistant() {
             </Stack>
           </Card>
 
-          {result ? (
+          {!apiKeys.openai && buttonClicked ? <><NoApikeys /></> : result ? (
             showResult(result)
           ) : (
             <Introduction moduleName="AI Assistant LA" />
@@ -194,7 +202,7 @@ export default function AiAssistant() {
                 size="large"
                 type="submit"
                 sx={{ borderRadius: 5, mt: 2, ml: 1 }}
-                onClick={() =>
+                onClick={() => 
                   callOpenAI(
                     document.getElementById("aiassistant_pa-input-textfield")
                       .value,
@@ -210,7 +218,7 @@ export default function AiAssistant() {
             </Stack>
           </Card>
 
-          {result ? (
+          {!apiKeys.openai && buttonClicked ? <><NoApikeys /></> : result ? (
             showResult(result)
           ) : (
             <Introduction moduleName="AI Assistant PA" />
@@ -252,7 +260,7 @@ export default function AiAssistant() {
             </Stack>
           </Card>
 
-          {result ? (
+          {!apiKeys.openai && buttonClicked ? <><NoApikeys /></> : result ? (
             showResult(result)
           ) : (
             <Introduction moduleName="AI Assistant CE" />
@@ -294,7 +302,7 @@ export default function AiAssistant() {
             </Stack>
           </Card>
 
-          {result ? (
+          {!apiKeys.openai && buttonClicked ? <><NoApikeys /></> : result ? (
             showResult(result)
           ) : (
             <Introduction moduleName="AI Assistant CDO" />

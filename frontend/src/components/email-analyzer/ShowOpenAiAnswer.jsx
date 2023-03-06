@@ -1,20 +1,23 @@
 import React from 'react'
 import axios from "axios";
+import { useRecoilValue } from "recoil";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialOceanic } from "react-syntax-highlighter/dist/esm/styles/prism";
 import ReactMarkdown from "react-markdown";
+
+import { apiKeysState } from '../../App';
 
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import { LinearProgress } from "@mui/material";
 import Grow from "@mui/material/Grow";
 import Stack from "@mui/material/Stack";
-import NoApikeys from '../ioc-analyzer/NoApikeys';
 
 
 export default function ShowOpenAiAnswer(props) {
     const [loading, setLoading] = React.useState(false);
     const [result, setResult] = React.useState(null);
+    const apiKeys = useRecoilValue(apiKeysState);
 
     async function callOpenAI(input, endpoint) {
         setLoading(true);
@@ -74,18 +77,20 @@ export default function ShowOpenAiAnswer(props) {
     }
 
   return (
-    <>
-      <Button
-        variant="contained"
-        disableElevation
-        size="small"
-        onClick={() => callOpenAI(props.input, "mailanalysis")}
-      >
-        <Stack spacing={2} justifyContent="left">
-          Analyze message body with OpenAI
-          {loading ? <LinearProgress color="inherit" /> : null}
-        </Stack>
-      </Button>
+    <> {
+      !apiKeys.openai ? null : <Button
+      variant="contained"
+      disableElevation
+      size="small"
+      onClick={() => callOpenAI(props.input, "mailanalysis")}
+    >
+      <Stack spacing={2} justifyContent="left">
+        Analyze message body with OpenAI
+        {loading ? <LinearProgress color="inherit" /> : null}
+      </Stack>
+    </Button>
+    }
+      
       {result ? (showResult(result)) : null}
     </>
   )
