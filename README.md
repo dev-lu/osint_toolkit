@@ -41,7 +41,8 @@ OSINT Toolkit is a web application designed to make the life of security analyst
 ## Features
 ### Newsfeed
 Newsfeed is a module that keeps you up to date on the latest cyber security news by aggregating articles from trusted sources such as Wired, The Hacker News, Security Magazine, Threatpost, TechCrunch Security, and Dark Reading. With Newsfeed, you can stay informed about the latest developments in the world of cyber security without having to visit multiple websites or subscribe to multiple newsletters. Whether you are a security professional looking to stay current on industry trends or just want to stay informed about potential threats to your personal online security, Newsfeed is a valuable resource.
-![newsfeed](https://user-images.githubusercontent.com/44299200/223217579-0184f46c-82d6-4ff9-9f0a-00e444cf7acb.png)
+![newsfeed](https://user-images.githubusercontent.com/44299200/227624764-ebfc69b5-8a02-4967-af19-2c1196732ffa.png)
+
 
 ### Email Analyzer
 Email Analyzer is a module that allows you to analyze .eml files for potential threats. To use the module, simply drag an .eml file into it. The module will then parse the file and perform basic security checks to identify any potential risks. It also extracts all indicators of compromise (IOCs) from the file and makes it possible to analyze them using various open source intelligence (OSINT) services. In addition, Email Analyzer generates hash values for every attachment in the file, allowing you to perform a privacy-friendly analysis of these files. This can help you protect your organization from cyber attacks and other threats that may come through email.
