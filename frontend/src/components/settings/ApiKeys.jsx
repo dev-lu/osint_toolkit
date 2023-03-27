@@ -8,16 +8,18 @@ import Card from "@mui/material/Card";
 import Chip from "@mui/material/Chip";
 import PaidIcon from '@mui/icons-material/Paid';
 import Stack from "@mui/material/Stack";
+import useTheme from "@mui/material/styles/useTheme";
 
 
 export default function ApiKeys() {
   const apiKeys = useRecoilValue(apiKeysState);
+  const theme = useTheme();
 
   const cardStyle = {
     m: 1,
     p: 1.5,
     borderRadius: 5,
-    backgroundColor: "aliceblue",
+    backgroundColor: theme.palette.background.card,
     boxShadow: 0,
   };
 

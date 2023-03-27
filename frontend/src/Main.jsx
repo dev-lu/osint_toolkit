@@ -17,6 +17,7 @@ import Box from "@mui/material/Box";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import MailIcon from "@mui/icons-material/Mail";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
+import { Paper } from "@mui/material";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import SearchIcon from "@mui/icons-material/Search";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -76,14 +77,12 @@ export default function Main(props) {
   };
 
   return (
-    <Box
+    <Paper
       sx={{
-        backgroundColor: "white",
         minWidth: "450px",
         minHeight: "300px",
         maxWidth: "1450px",
         margin: "30px auto",
-        border: "1px solid rgb(192, 192, 192)",
         padding: "30px",
         borderRadius: 5,
         overflow: "auto",
@@ -149,6 +148,6 @@ export default function Main(props) {
       <TabPanel value={value} index={6}>
         <Settings />
       </TabPanel>
-    </Box>
+    </Paper>
   );
 }

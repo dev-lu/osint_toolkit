@@ -6,6 +6,7 @@ import ResultTable from './ResultTable'
 import Introduction from '../Introduction'
 import FormGroup from '@mui/material/FormGroup';
 import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
@@ -103,7 +104,7 @@ export default function Analyzer() {
   };
 
   return (
-    <div>
+    <>
         <br />
         <FormGroup row>
           <TextField  id="ioc-input-textfield" 
@@ -140,6 +141,6 @@ export default function Analyzer() {
           <br />
         </> : null}
         {showTable ? <ResultTable key={key} ioc={ioc} iocType={iocType} /> : <Introduction moduleName='IOC Analyzer' />}
-    </div>
+    </>
   )
 }

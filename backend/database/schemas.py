@@ -29,6 +29,7 @@ class SettingsSchema(BaseModel):
     darkmode: bool
     proxy_string: str
     proxy_enabled: bool
+    font: str
     
     class Config:
         orm_mode = True

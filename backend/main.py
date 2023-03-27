@@ -134,6 +134,7 @@ def add_default_newsfeeds(db: Session):
         NewsfeedSettings(name="Computerworld", url="https://www.computerworld.com/category/security/feed", icon="computerworld", enabled=True),
         NewsfeedSettings(name="CyberScoop", url="https://www.cyberscoop.com/news/threats/feed", icon="cyberscoop", enabled=True),
         NewsfeedSettings(name="Dark Reading", url="https://www.darkreading.com/rss_simple.asp", icon="darkreading", enabled=True),
+        NewsfeedSettings(name="HackerNoon", url="https://hackernoon.com/tagged/cybersecurity/feed", icon="hackernoon", enabled=True),
         NewsfeedSettings(name="Helpnet Security", url="https://www.helpnetsecurity.com/feed/", icon="helpnetsecurity", enabled=True),
         NewsfeedSettings(name="Krebs on Security", url="https://krebsonsecurity.com/feed/", icon="krebsonsecurity", enabled=True),
         NewsfeedSettings(name="Security Magazine", url="https://www.securitymagazine.com/rss/topic/2236", icon="securitymagazine", enabled=True),
@@ -142,6 +143,8 @@ def add_default_newsfeeds(db: Session):
         NewsfeedSettings(name="The Hacker News", url="https://feeds.feedburner.com/TheHackersNews", icon="thehackernews", enabled=True),
         NewsfeedSettings(name="threatpost", url="https://threatpost.com/feed/", icon="threatpost", enabled=True),
         NewsfeedSettings(name="The Record", url="https://therecord.media/feed", icon="therecord", enabled=True),
+        NewsfeedSettings(name="The Register", url="https://www.theregister.co.uk/security/headlines.atom", icon="theregister", enabled=True),
+        NewsfeedSettings(name="The Verge", url="https://www.theverge.com/rss/cyber-security/index.xml", icon="theverge", enabled=True),
         NewsfeedSettings(name="Wired", url="https://www.wired.com/feed/category/security/latest/rss", icon="wired", enabled=True),
         NewsfeedSettings(name="ZDNet", url="https://www.zdnet.com/topic/security/rss.xml", icon="zdnet", enabled=True)
     ]

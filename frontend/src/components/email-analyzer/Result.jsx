@@ -25,19 +25,21 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
+import useTheme from "@mui/material/styles/useTheme";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 
 
 export default function Result(props) {
+  const theme = useTheme();
   const card_style = {
     p: 2,
     mt: 2,
-    backgroundColor: "aliceblue",
+    backgroundColor: theme.palette.background.card,
     boxShadow: 0,
     borderRadius: 5,
   };
 
-  const tableCellStyle = { backgroundColor: "white" };
+  const tableCellStyle = { backgroundColor: theme.palette.background.tablecell };
 
   const tableContainerStyle = {
     borderRadius: 5,
@@ -115,12 +117,13 @@ export default function Result(props) {
 
   function showAttachements() {
     if (result["attachments"].length > 0) {
-      return result["attachments"].map((row) => (
-        <>
+      return result["attachments"].map((row, index) => (
+        <React.Fragment key={index}>
           <TableContainer sx={tableContainerStyle}>
             <Table aria-label="simple table" sx={tableCellStyle}>
               <TableHead>
-                <TableCell colSpan={3} sx={{ backgroundColor: "white" }}>
+                <TableRow>
+                <TableCell colSpan={3} sx={{ backgroundColor: theme.palette.background.tablecell }}>
                   <Typography
                     sx={{ flex: "1 1 100%" }}
                     variant="h6"
@@ -132,7 +135,9 @@ export default function Result(props) {
                     </b>
                   </Typography>
                 </TableCell>
+                </TableRow>
               </TableHead>
+              <TableBody>
               <TableRow>
                 <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
                   {" "}
@@ -196,10 +201,11 @@ export default function Result(props) {
                   </Button>
                 </TableCell>
               </TableRow>
+              </TableBody>
             </Table>
           </TableContainer>
           {showHashAnalysisAttachements ? hashAnalysis(row.md5) : <></>}
-        </>
+        </React.Fragment>
       ));
     } else {
       return <p>No attachments found</p>;
@@ -210,9 +216,9 @@ export default function Result(props) {
     if (result["warnings"].length > 0) {
       return (
         <>
-          {result["warnings"].map((row) => (
+          {result["warnings"].map((row, index) => (
             <Alert
-            key={"ema_warnings_"+row["warning_title"]}
+            key={"ema_warnings_alert_" + index}
               severity={
                 row["warning_tlp"] === "red"
                   ? "error"
@@ -269,8 +275,9 @@ export default function Result(props) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {result["hops"].map((row) => (
+                {result["hops"].map((row, index) => (
                   <TableRow
+                    key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
@@ -322,8 +329,8 @@ export default function Result(props) {
                   </TableCell>
                 </TableRow>
               </TableHead>
-              {Object.entries(result["headers"]).map((key) => (
-                <>
+              {Object.entries(result["headers"]).map((key, index) => (
+                <React.Fragment key={index}>
                   <TableBody>
                     <TableRow
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -334,7 +341,7 @@ export default function Result(props) {
                       </TableCell>
                     </TableRow>
                   </TableBody>
-                </>
+                </React.Fragment>
               ))}
             </Table>
           </TableContainer>
@@ -346,18 +353,18 @@ export default function Result(props) {
   function showUrls() {
     if (result["urls"].length > 0) {
       return (
-        <>
+        <React.Fragment key="urls_fragment">
           <TableContainer component={Paper} sx={tableContainerStyle}>
             <Table aria-label="simple table" sx={tableCellStyle}>
-              {result["urls"].map((row) => (
-                <TableRow>
+              <TableBody>
+              {result["urls"].map((row, index) => (
+                <TableRow key={index}>
                   <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
                     {row}
                   </TableCell>
                   <TableCell sx={{ overflowWrap: "anywhere" }}>
                     <Button
                       variant="outlined"
-                      noWrap
                       disableElevation
                       size="small"
                       onClick={() => {
@@ -371,10 +378,11 @@ export default function Result(props) {
                   </TableCell>
                 </TableRow>
               ))}
+              </TableBody>
             </Table>
           </TableContainer>
           {showUrlAnalyse ? urlAnalyse(url) : <></>}
-        </>
+        </React.Fragment>
       );
     } else {
       return <p>No URLs found...</p>;
@@ -385,7 +393,7 @@ export default function Result(props) {
     <>
       {/* General information card */}
       <Grow in={true}>
-        <Card key={"ema_general_info"} sx={card_style}>
+        <Card key={"ema_general_info_card"} sx={card_style}>
           <h2>
             <InfoIcon /> General information
           </h2>
@@ -442,7 +450,7 @@ export default function Result(props) {
 
       {/* Basic security checks card */}
       <Grow in={true}>
-        <Card key={"ema_basic_checks"} sx={card_style}>
+        <Card key={"ema_basic_checks_card"} sx={card_style}>
           <h2>
             <VerifiedUserIcon /> Basic security checks
           </h2>
@@ -452,7 +460,7 @@ export default function Result(props) {
 
       {/* Attachements card */}
       <Grow in={true}>
-        <Card key={"ema_attachements"} sx={card_style}>
+        <Card key={"ema_attachements_card"} sx={card_style}>
           <h2>
             <AttachFileIcon /> Attachments ({result["attachments"].length})
           </h2>
@@ -462,7 +470,7 @@ export default function Result(props) {
 
       {/* URLs card */}
       <Grow in={true}>
-        <Card key={"ema_urls"} sx={card_style}>
+        <Card key={"ema_urls_card"} sx={card_style}>
           <h2>
             <LinkIcon /> URLs in body ({result["urls"].length})
           </h2>
@@ -472,7 +480,7 @@ export default function Result(props) {
 
       {/* Hops card */}
       <Grow in={true}>
-        <Card key={"ema_hops"} sx={card_style}>
+        <Card key={"ema_hops_card"} sx={card_style}>
           <h2>
             <RouteIcon /> Hops ({result["hops"].length})
           </h2>
@@ -482,9 +490,9 @@ export default function Result(props) {
 
       {/* Full header card */}
       <Grow in={true}>
-        <Card key={"ema_file_header"} sx={card_style}>
+        <Card key={"ema_file_header_card"} sx={card_style}>
           <h2>
-            <HorizontalSplitIcon /> Full Header ({result["headers"].length})
+            <HorizontalSplitIcon /> Complete Header ({result["headers"].length} fields)
           </h2>
           {showHeaderFields()}
         </Card>
@@ -492,7 +500,7 @@ export default function Result(props) {
 
       {/* Message text card */}
       <Grow in={true}>
-        <Card key={"ema_message_text"} sx={card_style}>
+        <Card key={"ema_message_text_card"} sx={card_style}>
           <h2>
             <ChatIcon /> Message body (HTML sanitized)
           </h2>

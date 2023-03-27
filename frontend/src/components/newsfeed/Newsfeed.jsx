@@ -13,9 +13,12 @@ import Pagination from '@mui/material/Pagination';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
+import useTheme from "@mui/material/styles/useTheme";
 
 
 export default function Newsfeed() {
+    const theme = useTheme();
+
     const newsfeed = useRecoilValue(newsfeedState);
     const setNewsfeed = useSetRecoilState(newsfeedState);
 
@@ -41,7 +44,7 @@ export default function Newsfeed() {
             <Grow in={true} key={"grow-loading-" + i}>
                 <Card sx={{ m:2, p:2,
                     borderRadius: 5, 
-                    backgroundColor:'aliceblue', 
+                    backgroundColor: theme.palette.background.card, 
                     boxShadow: 0, }}
                     key={"card-loading-" + i}
                     >
@@ -109,7 +112,7 @@ export default function Newsfeed() {
                         <Grow in={true} key={"grow-" + index}>
                             <Card sx={{ m:2, p:2,
                                 borderRadius: 5, 
-                                backgroundColor:'aliceblue', 
+                                backgroundColor: theme.palette.background.card, 
                                 boxShadow: 0, }}
                                 key={"card-" + index}
                                 >

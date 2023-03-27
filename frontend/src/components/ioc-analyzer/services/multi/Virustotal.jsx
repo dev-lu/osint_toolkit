@@ -9,6 +9,7 @@ import Grid from '@mui/material/Grid';
 
 import NoDetails from '../NoDetails';
 import ResultRow from "../../ResultRow";
+import { closestIndexTo } from 'date-fns';
 
 
 export default function Virustotal(props) {
@@ -38,7 +39,7 @@ export default function Virustotal(props) {
             result.data ? <Box sx={{ margin: 1 }}>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                <Card key={"details"} variant="outlined" sx={{m: 1, p: 2, borderRadius: 5, boxShadow: 0, flexBasis: '48%' }}>
+                <Card key="details_card" variant="outlined" sx={{m: 1, p: 2, borderRadius: 5, boxShadow: 0, flexBasis: '48%' }}>
                 <h3>Details</h3> 
                 <p> <b>Detected as malicious by</b> { malCount } engine(s)</p>
                 { result['data']['attributes']['regional_internet_registry'] ? 
@@ -55,7 +56,7 @@ export default function Virustotal(props) {
                     null }
                 </Card>
 
-                <Card key={"statistics"} variant="outlined" sx={{m:1, p: 2, borderRadius: 5, boxShadow: 0, flexBasis: '48%' }}>
+                <Card key={"statistics_card"} variant="outlined" sx={{m:1, p: 2, borderRadius: 5, boxShadow: 0, flexBasis: '48%' }}>
                     <h3>Analysis statistics</h3> 
                     <p> <b>Harmless:</b> { result['data']['attributes']['last_analysis_stats']['harmless'] }</p>
                     <p> <b>Malicious:</b> { result['data']['attributes']['last_analysis_stats']['malicious'] }</p>
@@ -66,59 +67,59 @@ export default function Virustotal(props) {
             </div>
 
 
-            {result['data']['attributes']['tags'] && result['data']['attributes']['tags'].length > 0 ? <Card variant="outlined" sx={{m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}>
+            {result['data']['attributes']['tags'] && result['data']['attributes']['tags'].length > 0 ? <Card variant="outlined" key="tags_card" sx={{m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}>
             <p>
             <b>Tags</b>
                 { result['data']['attributes']['tags'] > 0 ?
                     result['data']['attributes']['tags'].map((tag) => {
-                        return <li key={tag}>{tag}</li>
+                        return <li key={tag}> {tag} </li>
                     }) : <p>None</p>
                 }
             </p> 
             </Card> : null}
 
-            {result['data']['attributes']['crowdsourced_context'] ? <Card key={"crowdsourced_context_card"} variant="outlined" sx={{m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}>
+            {result['data']['attributes']['crowdsourced_context'] && result['data']['attributes']['crowdsourced_context'].length > 0 ? <Card key="crowdsourced_context_card" variant="outlined" sx={{m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}>
             <h3>Crowdsourced context</h3>
                 { result['data']['attributes']['crowdsourced_context'].length > 0 ?
-                    result['data']['attributes']['crowdsourced_context'].map((cc) => {
-                        return <p key={cc.source}>
-                                <b>Title: </b>{cc.title}<br />
-                                <b>Source: </b>{cc.source}<br />
-                                <b>Timestamp: </b>{cc.timestamp}<br />
-                                <b>Detail: </b>{cc.detail}<br />
-                                <b>Severity: </b>{cc.severity}<br />
-                            </p>
+                    result['data']['attributes']['crowdsourced_context'].map((cc, index) => {
+                        return (<div key={index + "_div"}>
+                                    <b>Title: </b>{cc.title}<br />
+                                    <b>Source: </b>{cc.source}<br />
+                                    <b>Timestamp: </b>{cc.timestamp}<br />
+                                    <b>Detail: </b>{cc.detail}<br />
+                                    <b>Severity: </b>{cc.severity}<br />
+                            </div>)
                     }) : <p>None</p>
                 }
             </Card> : null}
             
 
             {result['data']['attributes']['popularity_ranks'] && Object.keys(result['data']['attributes']['popularity_ranks']).length > 0 ?
-            <Card key={"popularity"} variant="outlined" sx={{m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}>
+            <Card key="popularity_card" variant="outlined" sx={{m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}>
                 <h3>Popularity ranks</h3>
                 { 
                 Object.entries(result['data']['attributes']['popularity_ranks']).map(([name, data]) => {
                 return (
-                    <>
-                        <Card variant="outlined" sx={{m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}>
+                    <div key={name + "_div"}>
+                        <Card variant="outlined" key={name + "_popularity_card"} sx={{m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}>
                             <p><b>{name} </b> </p>
                             <p><b>Rank: </b> {data.rank}</p>
                         </Card>
-                    </>
+                    </div>
                 );
             }) 
             }
             </Card> : null}
 
             {result['data']['attributes']['last_analysis_results'] && Object.keys(result['data']['attributes']['last_analysis_results']).length > 0 ?
-            <Card key={"analysis_results"} variant="outlined" sx={{m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}>
+            <Card key="last_analysis_results_card" variant="outlined" sx={{m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}>
                 <h3>Last analysis results</h3>
                 <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 { 
-                Object.entries(result['data']['attributes']['last_analysis_results']).map(([name, data]) => {
+                Object.entries(result['data']['attributes']['last_analysis_results']).map(([name, data], index) => {
                 return (
-                    <>
-                        <Card variant="outlined" sx={{
+                    <div key={index}>
+                        <Card variant="outlined" key={name + "_analysis_results_card"} sx={{
                             m: 2, 
                             p: 2, 
                             borderRadius: 5, 
@@ -134,7 +135,7 @@ export default function Virustotal(props) {
                             <p><b>Method: </b> {data.method}</p>
                             <p><b>Engine name: </b> {data.engine_name}</p>
                         </Card>
-                    </>
+                    </div>
                 );
             }) 
             }
@@ -142,12 +143,12 @@ export default function Virustotal(props) {
             </Card> : null}
             
 
-            {result['data']['attributes']['whois'] ? <Card key={"whois"} variant="outlined" sx={{m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}>
+            {result['data']['attributes']['whois'] ? <Card key="whois_card" variant="outlined" sx={{m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}>
                 <h3>Whois</h3>
                 <p style={{ whiteSpace: 'pre-wrap' }}>{ result['data']['attributes']['whois'] }</p> 
             </Card> : null}
             </Box> : <Box sx={{ margin: 1 }}>
-                    <Grid xs display="flex" justifyContent="center" alignItems="center">
+                    <Grid xs item={true} display="flex" justifyContent="center" alignItems="center">
                         <NoDetails />
                     </Grid>
                 </Box> 

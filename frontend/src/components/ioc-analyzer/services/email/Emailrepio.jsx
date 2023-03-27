@@ -178,9 +178,9 @@ export default function Emailrepio(props) {
               <h3>Profiles</h3>
               <p>Online profiles used by the email</p>
             {result.details.profiles && result.details.profiles.length > 0 ? (
-              result.details.profiles.map((profile) => (
+              result.details.profiles.map((profile, index) => (
                 <>
-                    <li key={profile}>{profile}</li>
+                    <li key={index}>{profile}</li>
                 </>
               ))
             ) : (
@@ -214,8 +214,11 @@ export default function Emailrepio(props) {
           mailStatus === null ? (
             "No info available"
           ) : (
-            "Reputation: " + mailStatus + <br /> + "Suspicious: " + result.suspicious ? 'Yes' : 'No'
-          )
+            <>
+              Reputation: {mailStatus}<br />
+              Suspicious: {result.suspicious ? 'Yes' : 'No'}
+            </>
+          )          
         }
         summary_color={{ color: null }}
         color={

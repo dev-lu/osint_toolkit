@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Divider from '@mui/material/Divider';
 
-import NoDetails from "../NoDetails";
 import ResultRow from "../../ResultRow";
 
 

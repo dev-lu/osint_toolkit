@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from 'react';
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
 
@@ -8,23 +8,37 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Card from "@mui/material/Card";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import FormControl from '@mui/material/FormControl';
 import { FormControlLabel } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
+import FormHelperText from '@mui/material/FormHelperText';
+import MenuItem from '@mui/material/MenuItem';
 import SaveIcon from "@mui/icons-material/Save";
+import Select from '@mui/material/Select';
 import Switch from "@mui/material/Switch";
 import TextField from "@mui/material/TextField";
+import useTheme from "@mui/material/styles/useTheme";
 
 
 export default function General() {
   const generalSettings = useRecoilValue(generalSettingsState);
   const setGeneralSettings = useSetRecoilState(generalSettingsState);
+  const [selectedFont, setSelectedFont] = useState('Poppins');
+  const theme = useTheme();
+
+  
+  function handleFontChange(event) {
+    setSelectedFont(event.target.value);
+    document.body.setAttribute('data-font', event.target.value);
+  }
+
 
   const cardStyle = {
     p: 1,
     pl: 2,
     m: 1,
     boxShadow: "0",
-    backgroundColor: "aliceblue",
+    backgroundColor: theme.palette.background.card,
     borderRadius: 5,
   };
 
@@ -141,8 +155,26 @@ export default function General() {
               onChange={() => handleDarkmodeChange()}
             />
           }
-          label="Darkmode (not working at the moment)"
+          label="Darkmode"
         />
+        <br />
+        <br />
+        <p>Custom font</p>
+        <FormControl sx={{ m: 1, minWidth: 120 }}>
+        <Select
+          value={selectedFont}
+          onChange={handleFontChange}
+          displayEmpty
+          inputProps={{ 'aria-label': 'Without label' }}
+        >
+          <MenuItem value="Poppins">Poppins</MenuItem>
+          <MenuItem value="Nunito">Nunito</MenuItem>
+          <MenuItem value="Roboto">Roboto</MenuItem>
+          <MenuItem value="Arial">Arial</MenuItem>
+          <MenuItem value="Helvetica">Helvetica</MenuItem>
+        </Select>
+        <FormHelperText>Change the application wide font for OSINT Toolkit</FormHelperText>
+      </FormControl>
       </Card>
       <Card sx={cardStyle}>
         <h3> Proxy (not working at the moment)</h3>

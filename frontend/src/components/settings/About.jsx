@@ -4,6 +4,7 @@ import Card from "@mui/material/Card";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import Stack from "@mui/material/Stack";
+import useTheme from "@mui/material/styles/useTheme";
 
 import liberapay from './images/donate_liberapay.png';
 import kofi from './images/donate_kofi.png';
@@ -11,11 +12,12 @@ import patreon from './images/donate_patreon.png';
 
 
 export default function About() {
+  const theme = useTheme();
   const cardStyle = {
     m: 1,
     p: 2,
     borderRadius: 5,
-    backgroundColor: "aliceblue",
+    backgroundColor: theme.palette.background.card,
     boxShadow: 0,
   };
 

@@ -11,10 +11,12 @@ import {
   TableCell,
   Paper
 } from "@mui/material";
+import useTheme from "@mui/material/styles/useTheme";
 
 
 export default function ResultTable(props) {
   const [response] = React.useState(null);
+  const theme = useTheme();
 
   const config = { headers: { "Content-Type": "multipart/form-data" } };
   let fd = new FormData();
@@ -32,7 +34,7 @@ export default function ResultTable(props) {
   return (
     <TableContainer component={Paper}>
       <Table aria-label="result_table">
-        <TableHead sx={{ bgcolor: "WhiteSmoke" }}>
+        <TableHead sx={{ bgcolor: theme.palette.background.tablecell }}>
           <TableRow>
             <TableCell sx={{ fontWeight: "bold" }}>
               {" "}
@@ -42,9 +44,9 @@ export default function ResultTable(props) {
         </TableHead>
         <TableBody>
           {response["domains"] ? (
-            response["domains"].map((section) => {
+            response["domains"].map((section, index) => {
               return (
-                <TableRow key={section}>
+                <TableRow key={index + "_domains_row"}>
                   <TableCell>{section}</TableCell>
                 </TableRow>
               );

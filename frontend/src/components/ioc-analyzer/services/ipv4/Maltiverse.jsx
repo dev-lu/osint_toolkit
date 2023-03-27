@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import Stack from '@mui/material/Stack';
+import useTheme from "@mui/material/styles/useTheme";
 
 import ResultRow from "../../ResultRow";
 
@@ -12,6 +13,7 @@ export default function Maltiverse(props) {
     const [result, setResult] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const theme = useTheme();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,7 +35,7 @@ export default function Maltiverse(props) {
             {result ? (
                 <Box sx={{ margin: 1 }}>
                 <Stack direction="row" spacing={1} width={'100%'} alignItems="stretch">
-                    <Card key={"maltiverse_threat_info"} variant="outlined" sx={{p: 2, borderRadius: 5, boxShadow: 0, width: '50%' }}>
+                    <Card key={"maltiverse_threat_info_card"} variant="outlined" sx={{p: 2, borderRadius: 5, boxShadow: 0, width: '50%' }}>
                         <b>Threat information</b>
                         <p>Classification: {result['classification']} </p>
                         <p>IP: {result['ip_addr']} </p>
@@ -57,7 +59,7 @@ export default function Maltiverse(props) {
                         <p>Number of whitelisted domains resolving: {result['number_of_whitelisted_domains_resolving']} </p>
                     </Card>
                     <Stack spacing={1} width={'50%'} alignItems="stretch">
-                        <Card key={"maltiverse_general"} variant="outlined" sx={{p: 2, borderRadius: 5, boxShadow: 0}}>
+                        <Card key={"maltiverse_general_info_card"} variant="outlined" sx={{p: 2, borderRadius: 5, boxShadow: 0}}>
                             <b>General information</b>
                             <p>Address: {result['address']} </p>
                             <p>City: {result['city']} </p>
@@ -65,7 +67,7 @@ export default function Maltiverse(props) {
                             <p>Registrant name: {result['registrant_name']} </p>
                             <p>Type: {result['type']} </p>
                         </Card>
-                        <Card key={"maltiverse_asn"} variant="outlined" sx={{p: 2, borderRadius: 5, boxShadow: 0}}>
+                        <Card key={"maltiverse_asn_card"} variant="outlined" sx={{p: 2, borderRadius: 5, boxShadow: 0}}>
                             <b>ASN information:</b>
                             <p>ASN: {result['as_name']} </p>
                             <p>ASN CIDR: {result['asn_cidr']} </p>
@@ -79,10 +81,10 @@ export default function Maltiverse(props) {
             
             <Card key={"maltiverse_blacklists"} variant="outlined" sx={{m:1, p: 2, borderRadius: 5, boxShadow: 0 }}>
                     <h3>Blacklists:</h3> { result['blacklist'] ?
-                        result['blacklist'].map((blacklist) => {
+                        result['blacklist'].map((blacklist, index) => {
                             return (
                                 <>
-                                <Card variant="outlined" sx={{m:1, p: 2, borderRadius: 5, boxShadow: 0, backgroundColor: 'whitesmoke' }}>
+                                <Card variant="outlined" key={index + "_blacklist_card"} sx={{m:1, p: 2, borderRadius: 5, boxShadow: 0, backgroundColor: theme.palette.background.card }}>
                                 <p><b>Description: {blacklist['description']}</b></p>
                                 <p>First seen: {blacklist['first_seen']}</p>
                                 <p>Last seen: {blacklist['last_seen']}</p>

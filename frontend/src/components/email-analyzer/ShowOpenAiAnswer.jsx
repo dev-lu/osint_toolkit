@@ -12,12 +12,14 @@ import Card from "@mui/material/Card";
 import { LinearProgress } from "@mui/material";
 import Grow from "@mui/material/Grow";
 import Stack from "@mui/material/Stack";
+import useTheme from "@mui/material/styles/useTheme";
 
 
 export default function ShowOpenAiAnswer(props) {
     const [loading, setLoading] = React.useState(false);
     const [result, setResult] = React.useState(null);
     const apiKeys = useRecoilValue(apiKeysState);
+    const theme = useTheme();
 
     async function callOpenAI(input, endpoint) {
         setLoading(true);
@@ -43,11 +45,14 @@ export default function ShowOpenAiAnswer(props) {
                   m: 2,
                   p: 3,
                   borderRadius: 5,
-                  backgroundColor: "aliceblue",
+                  backgroundColor: theme.palette.background.card,
                   boxShadow: 0,
+                  textAlign: "left",
                 }}
+                key="openai_answer_card"
               >
-                <h3>OpenAI message body analysis:</h3>
+                <h3>OpenAI message-body analysis:</h3>
+                <br />
                 <ReactMarkdown
                   children={answer.toString()}
                   components={{
@@ -84,7 +89,7 @@ export default function ShowOpenAiAnswer(props) {
       size="small"
       onClick={() => callOpenAI(props.input, "mailanalysis")}
     >
-      <Stack spacing={2} justifyContent="left">
+      <Stack spacing={2}>
         Analyze message body with OpenAI
         {loading ? <LinearProgress color="inherit" /> : null}
       </Stack>

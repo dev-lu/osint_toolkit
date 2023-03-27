@@ -18,6 +18,7 @@ import Stack from "@mui/material/Stack";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import TextField from "@mui/material/TextField";
+import useTheme from "@mui/material/styles/useTheme";
 
 
 export const aiassistantTabIndex = atom({
@@ -30,12 +31,13 @@ export default function AiAssistant() {
   const [result, setResult] = React.useState(null);
   const [buttonClicked, setButtonClicked] = React.useState(false);
   const apiKeys = useRecoilValue(apiKeysState);
+  const theme = useTheme();
 
   const cardStyle = {
     m: 1,
     p: 2,
     borderRadius: 5,
-    backgroundColor: "white",
+    backgroundColor: theme.palette.background.textfieldlarge,
     boxShadow: 0,
   };
 
@@ -96,7 +98,7 @@ export default function AiAssistant() {
               m: 2,
               p: 3,
               borderRadius: 5,
-              backgroundColor: "aliceblue",
+              backgroundColor: theme.palette.background.card,
               boxShadow: 0,
             }}
           >

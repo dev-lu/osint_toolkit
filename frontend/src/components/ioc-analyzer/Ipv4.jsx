@@ -10,6 +10,7 @@ import { TableContainer,
     TableCell, 
     Paper 
   } from '@mui/material'
+import useTheme from "@mui/material/styles/useTheme";
 
 import AbuseIpdbData from './services/ipv4/AbuseIpdb.jsx';
 import Alienvault from './services/multi/Alienvault.jsx';
@@ -26,6 +27,7 @@ import NoApikeys from './NoApikeys';
 
 export default function Ipv4(props) {
   const apiKeys = useRecoilValue(apiKeysState);
+  const theme = useTheme();
 
   function showResult() {
     if (
@@ -56,15 +58,15 @@ export default function Ipv4(props) {
                     boxShadow: 0, 
                     borderRadius: 5, 
                     border: 1, 
-                    borderColor: 'grey.100' 
+                    borderColor: 'darkgrey' 
                     }}>
               <Table aria-label='result_table' >
                 <TableHead>
                   <TableRow>
-                    <TableCell />
-                    <TableCell sx={{ fontWeight: 'bold' }}>Service</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Result</TableCell>
-                    <TableCell></TableCell>
+                    <TableCell sx={{ bgcolor: theme.palette.background.tablecell }} />
+                    <TableCell sx={{ bgcolor: theme.palette.background.tablecell, fontWeight: 'bold' }}>Service</TableCell>
+                    <TableCell sx={{ bgcolor: theme.palette.background.tablecell, fontWeight: 'bold' }}>Result</TableCell>
+                    <TableCell sx={{ bgcolor: theme.palette.background.tablecell }} ></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

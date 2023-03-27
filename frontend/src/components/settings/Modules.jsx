@@ -14,6 +14,7 @@ import { modulesState } from "../../App";
 import { newsfeedListState } from "../../App";
 
 import { List, ListItem, ListItemAvatar, Avatar, ListItemText } from '@mui/material';
+import useTheme from "@mui/material/styles/useTheme";
 
 
 export default function Modules() {
@@ -23,11 +24,13 @@ export default function Modules() {
   const newsfeedList = useRecoilValue(newsfeedListState);
   const setNewsfeedList = useSetRecoilState(newsfeedListState)
 
+  const theme = useTheme();
+
   const cardStyle = {
     m: 1,
     p: 2,
     borderRadius: 5,
-    backgroundColor: "aliceblue",
+    backgroundColor: theme.palette.background.card,
     boxShadow: 0,
   };
 

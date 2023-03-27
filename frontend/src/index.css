@@ -1,9 +1,31 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400&display=swap'); */
 
+/* nunito-regular - latin */
 @font-face {
-  font-family: 'Poppins_local';
-  src: url('./fonts/Poppins/Poppins-Light.ttf') format('truetype') 300,
-       url('./fonts/Poppins/Poppins-Regular.ttf') format('truetype') 400;
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/Nunito/nunito-v25-latin-regular.eot'); /* IE9 Compat Modes */
+  src: url('./fonts/Nunito/nunito-v25-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./fonts/Nunito/nunito-v25-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('./fonts/Nunito/nunito-v25-latin-regular.woff') format('woff'), /* Modern Browsers */
+       url('./fonts/Nunito/nunito-v25-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('./fonts/Nunito/nunito-v25-latin-regular.svg#Nunito') format('svg'); /* Legacy iOS */
+}
+
+/* poppins-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/Poppins/poppins-v20-latin-regular.eot'); /* IE9 Compat Modes */
+  src: url('./fonts/Poppins/poppins-v20-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./fonts/Poppins/poppins-v20-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('./fonts/Poppins/poppins-v20-latin-regular.woff') format('woff'), /* Modern Browsers */
+       url('./fonts/Poppins/poppins-v20-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('./fonts/Poppins/poppins-v20-latin-regular.svg#Poppins') format('svg'); /* Legacy iOS */
 }
 
 * {
@@ -14,9 +36,27 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color:#ebebeb ;
 }
 
+body[data-font="Nunito"] {
+  font-family: 'Nunito', sans-serif;
+}
+
+body[data-font="Poppins"] {
+  font-family: 'Poppins', sans-serif;
+}
+
+body[data-font="Helvetica"] {
+  font-family: 'Helvetica', sans-serif;
+}
+
+body[data-font="Roboto"] {
+  font-family: 'Roboto', sans-serif;
+}
+
+body[data-font="Arial"] {
+  font-family: 'Arial', sans-serif;
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

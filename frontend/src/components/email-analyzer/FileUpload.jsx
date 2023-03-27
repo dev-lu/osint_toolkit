@@ -3,12 +3,18 @@ import axios from 'axios';
 import {useDropzone} from 'react-dropzone';
 
 import Button from '@mui/material/Button';
+import useTheme from "@mui/material/styles/useTheme";
+
 import Introduction from '../Introduction'
 import Result from './Result';
 
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 
 
+
+
+export default function FileUpload(props) {
+  const theme = useTheme();
 const baseStyle = {
     flex: 1,
     display: 'flex',
@@ -19,7 +25,7 @@ const baseStyle = {
     borderRadius: 2,
     borderColor: 'lightgrey',
     borderStyle: 'dashed',
-    backgroundColor: '#fafafa',
+    backgroundColor: theme.palette.background.card,
     color: '#bdbdbd',
     outline: 'none',
     transition: 'border .24s ease-in-out'
@@ -36,9 +42,6 @@ const baseStyle = {
   const rejectStyle = {
     borderColor: '#ff1744'
   };
-
-
-export default function FileUpload(props) {
 
     const {
         getRootProps,

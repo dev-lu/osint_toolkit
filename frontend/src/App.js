@@ -1,10 +1,15 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { atom, useSetRecoilState } from "recoil";
+import { atom, useSetRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 import Main from "./Main";
 
+
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 // Recoil state for API keys
 export const apiKeysState = atom({
@@ -41,9 +46,90 @@ function App() {
   const [newsfeedListLoaded, setNewsfeedListLoaded] = useState(false);
 
   const setApiKeys = useSetRecoilState(apiKeysState);
+  const generalSettings = useRecoilValue(generalSettingsState);
   const setGeneralSettings = useSetRecoilState(generalSettingsState);
   const setModules = useSetRecoilState(modulesState);
   const setNewsfeedList = useSetRecoilState(newsfeedListState);
+
+
+  const getDesignTokens = (mode) => ({
+    palette: {
+      mode,
+      ...(mode === 'light'
+        ? {
+            // Values for light mode
+            typography: {
+              htmlFontSize: 16,
+            },
+            background: {
+              default: '#ebebeb', 
+              card: 'aliceblue',
+              textfieldlarge: 'white',
+            },
+            components: {
+              MuiCard: {
+                variants: [
+                  { 
+                    props: {
+                      variant: 'primary'
+                    },
+                    style: {
+                      backgroundColor: "black",
+                      minWidth: "450px",
+                      minHeight: "300px",
+                      maxWidth: "1450px",
+                      margin: "30px auto",
+                      border: "1px solid rgb(192, 192, 192)",
+                      padding: "30px",
+                      borderRadius: 5,
+                      overflow: "auto",
+                      boxShadow: "5"
+                    },
+                  },
+                  { props: {variant: 'secondary'},
+                    style: {
+                      m:2, p:2,
+                      borderRadius: 5, 
+                      backgroundColor: 'black', 
+                      boxShadow: 0
+                    }
+                  },
+                ]
+              }
+            },
+          }
+        : {
+            // Values for dark mode
+            typography: {
+              htmlFontSize: 16,
+            },
+            background: {
+              default: '#333333',
+              paper: '#404040',
+              card: '#6F6F6F',
+              textfieldlarge: '#6F6F6F',
+              tablecell: '#595959'
+            },
+          }),
+    },
+  });
+
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setGeneralSettings((prevSettings) => ({
+          ...prevSettings,
+          darkmode: !prevSettings.darkmode,
+        }));
+      },
+    }),
+    [setGeneralSettings],
+  );
+
+  const mode = generalSettings.darkmode ? 'dark' : 'light';
+
+  // Update the theme only if the mode changes
+  const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
   useEffect(() => {
     // Get state of API keys
@@ -97,7 +183,14 @@ function App() {
     generalSettingsLoaded &&
     newsfeedListLoaded
   ) {
-    return <Main />;
+    return (
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Main />
+        </ThemeProvider>
+      </ColorModeContext.Provider>
+    );
   }
 }
 

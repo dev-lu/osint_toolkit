@@ -15,6 +15,7 @@ import twitter_logo_small from '../icons/twitter_logo_small.png';
 import NoDetails from './NoDetails';
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
+import useTheme from "@mui/material/styles/useTheme";
 
 
 
@@ -23,6 +24,7 @@ export default function Twitter(props) {
     const [setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false);
+    const theme = useTheme();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -109,15 +111,15 @@ export default function Twitter(props) {
             <TableCell bgcolor='lightgrey' ></TableCell>
         </TableRow>
         <TableRow>
-            <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: 'aliceblue' }} colSpan={6}>
+            <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: theme.palette.background.tablecell }} colSpan={6}>
                 <Collapse in={open} timeout="auto" unmountOnExit>
-                    <Box sx={{ margin: 1 }}>
+                    <Box key="tweets_box" sx={{ margin: 1 }}>
                         <h3>Tweets</h3>
                             { result[0]['count'] > 0 ?
-                                result.slice(1).map((tweet) => {
+                                result.slice(1).map((tweet, index) => {
                                     return (
-                                        <>
-                                            <Card elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
+                                        <React.Fragment key={index + "_tweet_fragment"}>
+                                            <Card elevation={0} variant="outlined" key={index + "_tweet_card"} sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
                                                 <p><b>Author: </b></p>
                                                 <p>{tweet['author']}</p>
                                                 <br />
@@ -127,7 +129,7 @@ export default function Twitter(props) {
                                                 <p><b>Text: </b></p>
                                                 <p sx={{maxWidth: '100px', overflowWrap: 'break-word'}}>{tweet['text']}</p>
                                             </Card>
-                                        </>
+                                        </React.Fragment>
                                     )
                                 }) : <Grid display="flex" justifyContent="center" alignItems="center">
                                     <NoDetails /></Grid>

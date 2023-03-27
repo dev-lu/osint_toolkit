@@ -10,6 +10,7 @@ import { TableContainer,
     TableCell, 
     Paper 
   } from '@mui/material'
+import useTheme from "@mui/material/styles/useTheme";
 
 import Reddit from './services/Reddit';
 import Twitter from './services/Twitter';
@@ -23,6 +24,7 @@ import NoApikeys from './NoApikeys';
 
 
 export default function Domain(props) {
+    const theme = useTheme();
     const apiKeys = useRecoilValue(apiKeysState);
 
     function showResult() {
@@ -51,15 +53,15 @@ export default function Domain(props) {
                     boxShadow: 0, 
                     borderRadius: 5, 
                     border: 1, 
-                    borderColor: 'grey.100' 
+                    borderColor: 'darkgrey' 
                     }}>
                   <Table aria-label='result_table' >
                     <TableHead>
                       <TableRow>
-                        <TableCell />
-                        <TableCell sx={{ fontWeight: 'bold' }}>Service</TableCell>
-                        <TableCell sx={{ fontWeight: 'bold' }}>Result</TableCell>
-                        <TableCell></TableCell>
+                        <TableCell sx={{ bgcolor: theme.palette.background.tablecell }} />
+                        <TableCell sx={{ bgcolor: theme.palette.background.tablecell, fontWeight: 'bold' }}>Service</TableCell>
+                        <TableCell sx={{ bgcolor: theme.palette.background.tablecell, fontWeight: 'bold' }}>Result</TableCell>
+                        <TableCell sx={{ bgcolor: theme.palette.background.tablecell }} ></TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>

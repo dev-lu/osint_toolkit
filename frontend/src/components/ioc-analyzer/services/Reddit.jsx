@@ -47,7 +47,7 @@ const details = (
               </Stack>
             </Stack>
             <br />
-            {post.message != "" ? <p>{post.message}</p> : <p>No message text...</p>}
+            {post.message !== "" ? <p>{post.message}</p> : <p>No message text...</p>}
           </Card>
         ))}
       </Box>

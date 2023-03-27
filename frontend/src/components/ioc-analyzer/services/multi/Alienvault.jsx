@@ -38,12 +38,24 @@ export default function Alienvault(props) {
         <Box sx={{ margin: 1 }}>
           <Card
             variant="outlined"
+            key="general_info_card"
             sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
-            key={"pulse_info"}
+          >
+            <h4>General information</h4>
+            <p>Indicator: {result["indicator"] ? result["indicator"] : "N/A"} </p>
+            <p>Reputation: {result["reputation"] ? result["reputation"] : "N/A"} </p>
+            <p>Country: {result["country_name"] ? result["country_name"] : "N/A"} </p>
+            <p>Type: {result["type"] ? result["type"] : "N/A"} </p>
+            <p>ASN: {result["asn"] ? result["asn"] : "N/A"} </p>
+            <br />
+          </Card>
+          <Card
+            variant="outlined"
+            sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
+            key={"pulse_info_card"}
           >
             <h3>Pulse information</h3>
             <p>Pulse count: {pulses} </p>
-            <p>
               {pulses > 0 ? (
                 <>
                   <br />
@@ -52,31 +64,19 @@ export default function Alienvault(props) {
                 </>
               ) : null}
               {result["pulse_info"]["pulses"]
-                ? result["pulse_info"]["pulses"].map((pulse) => {
+                ? result["pulse_info"]["pulses"].map((pulse, index) => {
                     return (
-                      <>
-                        <Chip key={pulse.name} label={pulse.name} sx={{ m: 0.5 }} />
+                      <React.Fragment key={index + "_pulse_fragment"}>
+                        <Chip key={index + "_pulse_chip"} label={pulse.name} sx={{ m: 0.5 }} />
                         <br />
-                      </>
+                      </React.Fragment>
                     );
                   })
                 : "None"}
-            </p>
           </Card>
           <Card
             variant="outlined"
-            sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
-          >
-            <h4>General information</h4>
-            <p>Indicator: {result["indicator"]} </p>
-            <p>Reputation: {result["reputation"]} </p>
-            <p>Country: {result["country_name"]} </p>
-            <p>Type: {result["type"]} </p>
-            <p>ASN: {result["asn"]} </p>
-            <br />
-          </Card>
-          <Card
-            variant="outlined"
+            key="sections_card"
             sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
           >
               <b>Sections:</b>

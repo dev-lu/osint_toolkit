@@ -11,9 +11,11 @@ import IconButton from "@mui/material/IconButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { TableRow, TableCell } from "@mui/material";
+import useTheme from "@mui/material/styles/useTheme";
 
 
 export default function ResultRow(props) {
+  const theme = useTheme();
   const [open, setOpen] = useState(false);
   /*
     Available props:  
@@ -100,7 +102,7 @@ export default function ResultRow(props) {
         </TableCell>
         <TableCell>
           {" "}
-          <p style={props.summary_color}>{props.summary} </p>
+          <p style={props.summary_color}> {props.summary} </p>
         </TableCell>
         <TableCell bgcolor={props.color}></TableCell>
       </TableRow>
@@ -109,7 +111,7 @@ export default function ResultRow(props) {
           style={{
             paddingBottom: 0,
             paddingTop: 0,
-            backgroundColor: "aliceblue",
+            backgroundColor: theme.palette.background.card,
           }}
           colSpan={6}
         >

@@ -25,9 +25,11 @@ import {
   TableCell,
   Paper,
 } from "@mui/material";
+import useTheme from "@mui/material/styles/useTheme";
 
 
 export default function ResultTable(props) {
+  const theme = useTheme();
   const [response, setResponse] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
 
@@ -97,18 +99,20 @@ export default function ResultTable(props) {
       const status = props;
       if (String(status).startsWith(2)) {
         return <CircleIcon sx={{ color: "green", fontSize: "small" }} />;
+      } else if (String(status).startsWith(4)) {
+        return <CircleIcon sx={{ color: "orange", fontSize: "small" }} />;
       } else if (String(status).startsWith(5)) {
         return <CircleIcon sx={{ color: "red", fontSize: "small" }} />;
       } else if (status === null) {
         return <></>;
       } else {
-        return <CircleIcon sx={{ color: "grey", fontSize: "small" }} />;
+        return <CircleIcon sx={{ color: "darkgrey", fontSize: "small" }} />;
       }
     }
 
     return (
       <>
-        <TableRow key={section["task"]["uuid"]}>
+        <TableRow key={section["task"]["uuid"]} sx={{bgcolor: theme.palette.background.tablecell}}>
           <TableCell>
             <IconButton
               aria-label="expand row"
@@ -137,7 +141,7 @@ export default function ResultTable(props) {
             style={{
               paddingBottom: 0,
               paddingTop: 0,
-              backgroundColor: "aliceblue",
+              backgroundColor: theme.palette.background.card,
               overflowWrap: "anywhere",
             }}
             colSpan={6}
@@ -289,17 +293,15 @@ export default function ResultTable(props) {
         sx={{
           boxShadow: 0,
           borderRadius: 5,
-          border: 1,
-          borderColor: "grey.100",
         }}
       >
         <Table aria-label="result_table">
-          <TableHead sx={{ bgcolor: "WhiteSmoke" }}>
+          <TableHead>
             <TableRow>
-              <TableCell />
-              <TableCell sx={{ fontWeight: "bold" }}>Domain</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Status code</TableCell>
-              <TableCell sx={{ fontWeight: "bold", textAlign: "left" }}>
+              <TableCell sx={{ bgcolor: theme.palette.background.tablecell }}/>
+              <TableCell sx={{ bgcolor: theme.palette.background.tablecell, fontWeight: "bold" }}>Domain</TableCell>
+              <TableCell sx={{ bgcolor: theme.palette.background.tablecell, fontWeight: "bold" }}>Status code</TableCell>
+              <TableCell sx={{ bgcolor: theme.palette.background.tablecell, fontWeight: "bold", textAlign: "left" }}>
                 Found
               </TableCell>
             </TableRow>
