@@ -1,11 +1,18 @@
 import React from 'react';
-import ot_logo from '../images/ot_logo.png';
-
+import ot_logo_light from '../images/ot_logo_light.png';
+import ot_logo_dark from '../images/ot_logo_dark.png';
+import useTheme from "@mui/material/styles/useTheme";
 
 function Header() {
+  const theme = useTheme();
+
   return (
     <div>
-      <img src={ot_logo} height={100} alt="OSINT Toolkit logo"/>
+      <img
+        src={theme.palette.mode === 'dark' ? ot_logo_dark : ot_logo_light}
+        height={80}
+        alt="OSINT Toolkit logo"
+      />
     </div>
   )
 }
