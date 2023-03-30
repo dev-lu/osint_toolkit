@@ -61,72 +61,123 @@ export default function Virustotal(props) {
                 display: "flex",
                 flexWrap: "wrap",
                 justifyContent: "center",
-                alignItems: "center",
+                alignItems: "stretch",
               }}
             >
               <Card
-                key="details_card"
                 variant="outlined"
                 sx={{
-                  m: 1,
+                  mb: 1,
+                  mr: 1,
                   p: 2,
                   borderRadius: 5,
                   boxShadow: 0,
-                  width: "100%",
-                  maxWidth: "600px",
+                  flexBasis: "48%",
                 }}
               >
                 <Typography variant="h5" component="h2" gutterBottom>
                   Details
                 </Typography>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "8px",
-                  }}
-                >
-                  <Typography variant="body1">
-                    Detected as malicious by {malCount} engine(s)
-                  </Typography>
+                <List>
+                  <ListItem alignItems="flex-start">
+                    <ListItemText
+                      primary={`Detected as malicious by ${malCount} engine(s)`}
+                    />
+                  </ListItem>
                   {result["data"]["attributes"][
                     "regional_internet_registry"
                   ] && (
-                    <Typography variant="body1">
-                      Internet registry:{" "}
-                      {
-                        result["data"]["attributes"][
-                          "regional_internet_registry"
-                        ]
-                      }
-                    </Typography>
+                    <ListItem alignItems="flex-start">
+                      <ListItemText
+                        primary="Internet registry"
+                        secondary={
+                          result["data"]["attributes"][
+                            "regional_internet_registry"
+                          ]
+                        }
+                      />
+                    </ListItem>
                   )}
                   {result["data"]["attributes"]["network"] && (
-                    <Typography variant="body1">
-                      Network: {result["data"]["attributes"]["network"]}
-                    </Typography>
+                    <ListItem alignItems="flex-start">
+                      <ListItemText
+                        primary="Network"
+                        secondary={result["data"]["attributes"]["network"]}
+                      />
+                    </ListItem>
                   )}
                   {result["data"]["attributes"]["country"] && (
-                    <Typography variant="body1">
-                      Country: {result["data"]["attributes"]["country"]}
-                    </Typography>
+                    <ListItem alignItems="flex-start">
+                      <ListItemText
+                        primary="Country"
+                        secondary={result["data"]["attributes"]["country"]}
+                      />
+                    </ListItem>
                   )}
                   {result["data"]["attributes"]["as_owner"] && (
-                    <Typography variant="body1">
-                      AS owner: {result["data"]["attributes"]["as_owner"]}
-                    </Typography>
+                    <ListItem alignItems="flex-start">
+                      <ListItemText
+                        primary="AS owner"
+                        secondary={result["data"]["attributes"]["as_owner"]}
+                      />
+                    </ListItem>
                   )}
-                </div>
+                  {result["data"]["attributes"]["type_extension"] && (
+                    <ListItem alignItems="flex-start">
+                      <ListItemText
+                        primary="Type extension"
+                        secondary={
+                          result["data"]["attributes"]["type_extension"]
+                        }
+                      />
+                    </ListItem>
+                  )}
+                  {result["data"]["attributes"]["md5"] && (
+                    <ListItem alignItems="flex-start">
+                      <ListItemText
+                        primary="MD5"
+                        secondary={result["data"]["attributes"]["md5"]}
+                      />
+                    </ListItem>
+                  )}
+                  {result["data"]["attributes"]["sha1"] && (
+                    <ListItem alignItems="flex-start">
+                      <ListItemText
+                        primary="SHA1"
+                        secondary={result["data"]["attributes"]["sha1"]}
+                      />
+                    </ListItem>
+                  )}
+                  {result["data"]["attributes"]["sha256"] && (
+                    <ListItem alignItems="flex-start">
+                      <ListItemText
+                        primary="SHA256"
+                        secondary={result["data"]["attributes"]["sha256"]}
+                      />
+                    </ListItem>
+                  )}
+                  {result["data"]["attributes"]["unique_sources"] && (
+                    <ListItem alignItems="flex-start">
+                      <ListItemText
+                        primary="Unique sources"
+                        secondary={
+                          result["data"]["attributes"]["unique_sources"]
+                        }
+                      />
+                    </ListItem>
+                  )}
+                </List>
               </Card>
 
               <Card
                 key={"statistics_card"}
                 variant="outlined"
                 sx={{
-                  m: 1,
+                  mb: 1,
                   p: 2,
                   borderRadius: 5,
                   boxShadow: 0,
+                  height: "100%",
                   flexBasis: "48%",
                 }}
               >
@@ -223,10 +274,16 @@ export default function Virustotal(props) {
                 <Typography variant="h5" component="h2" gutterBottom>
                   Tags
                 </Typography>
-                {result["data"]["attributes"]["tags"] > 0 ? (
-                  result["data"]["attributes"]["tags"].map((tag, index) => {
-                    return <Chip key={index}> {tag} </Chip>;
-                  })
+                {result["data"]["attributes"]["tags"].length > 0 ? (
+                  <>
+                    {result["data"]["attributes"]["tags"].map((tag, index) => (
+                      <React.Fragment key={index}>
+                        <Chip label={tag} sx={{ m: 0.5 }} />
+                        {index !==
+                          result["data"]["attributes"]["tags"].length - 1}
+                      </React.Fragment>
+                    ))}
+                  </>
                 ) : (
                   <p>None</p>
                 )}

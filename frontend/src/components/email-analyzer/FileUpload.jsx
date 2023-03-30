@@ -25,7 +25,7 @@ const baseStyle = {
     borderRadius: 2,
     borderColor: 'lightgrey',
     borderStyle: 'dashed',
-    backgroundColor: theme.palette.background.card,
+    backgroundColor: theme.palette.background.uploadarea,
     color: '#bdbdbd',
     outline: 'none',
     transition: 'border .24s ease-in-out'

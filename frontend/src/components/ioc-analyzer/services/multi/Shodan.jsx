@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 import NoDetails from '../NoDetails';
 import ResultRow from "../../ResultRow";
@@ -39,7 +40,9 @@ export default function Shodan(props) {
                     <NoDetails />
                     </Grid> : <>
                 <Card key={"shodan_details"} elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
-                    <h3>Details</h3>
+                    <Typography variant="h5" component="h2" gutterBottom>
+                        Details
+                    </Typography>
                     {result['city'] ? <p><b>City: </b>{result['city']}</p> : null}
                     {result['region_code'] ? <p><b>Region code: </b>{result['region_code']}</p> : null}
                     {result['country_code'] ? <p><b>Coutry code: </b>{result['country_code']}</p> : null}
@@ -51,7 +54,9 @@ export default function Shodan(props) {
                 </Card>
 
                 {result['ports'] && result['ports'].length > 0 ? <Card key={"shodan_ports"} elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
-                    <p><b>Open ports</b></p>
+                    <Typography variant="h5" component="h2" gutterBottom>
+                        Open ports
+                    </Typography>
                     { Array.isArray(result['ports']) ?
                         result['ports'].map((ports, index) => {
                         return (
@@ -64,7 +69,9 @@ export default function Shodan(props) {
                 </Card> : null}
 
                 {result['domains'] && result['domains'].length > 0 ? <Card key={"shodan_domains"} elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
-                    <p><b>Domains</b></p>
+                    <Typography variant="h5" component="h2" gutterBottom>
+                        Domains
+                    </Typography>
                     { 
                         result['domains'].map((domain, index) => {
                         return (
@@ -77,7 +84,9 @@ export default function Shodan(props) {
                 </Card> : null}
 
                 {result['subdomains'] && result['subdomains'].length > 0 ? <Card key={"shodan_domains"} elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
-                    <p><b>Subdomains</b></p>
+                    <Typography variant="h5" component="h2" gutterBottom>
+                        Subdomains
+                    </Typography>
                     { 
                         result['subdomains'].map((subdomain, index) => {
                         return (
@@ -90,7 +99,9 @@ export default function Shodan(props) {
                 </Card> : null}
 
                 { result['hostnames'] && result['hostnames'].length > 0 ? <Card key={"shodan_hostnames"} elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
-                    <p><b>Hostnames</b></p>
+                    <Typography variant="h5" component="h2" gutterBottom>
+                        Hostnames
+                    </Typography>
                     {
                         result['hostnames'].map((hostname, index) => {
                         return (
@@ -103,7 +114,9 @@ export default function Shodan(props) {
                 </Card> : null}
 
                 {result['tags'] && result['tags'].length > 0 ? <Card key={"shodan_tags"} elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
-                    <p><b>Tags</b></p>
+                    <Typography variant="h5" component="h2" gutterBottom>
+                        Tags
+                    </Typography>
                     { 
                         result['tags'].map((tags, index) => {
                         return (

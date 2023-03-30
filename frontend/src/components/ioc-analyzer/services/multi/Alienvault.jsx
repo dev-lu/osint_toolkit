@@ -1,9 +1,18 @@
 import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Card from "@mui/material/Card";
+
 import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CircleIcon from "@mui/icons-material/Circle";
+import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Typography from "@mui/material/Typography";
+
 import ResultRow from "../../ResultRow";
 
 export default function Alienvault(props) {
@@ -36,50 +45,75 @@ export default function Alienvault(props) {
     <>
       {result ? (
         <Box sx={{ margin: 1 }}>
-          <Card
-            variant="outlined"
-            key="general_info_card"
-            sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
-          >
-            <h4>General information</h4>
-            <p>Indicator: {result["indicator"] ? result["indicator"] : "N/A"} </p>
-            <p>Reputation: {result["reputation"] ? result["reputation"] : "N/A"} </p>
-            <p>Country: {result["country_name"] ? result["country_name"] : "N/A"} </p>
-            <p>Type: {result["type"] ? result["type"] : "N/A"} </p>
-            <p>ASN: {result["asn"] ? result["asn"] : "N/A"} </p>
-            <br />
+          <Card variant="outlined" sx={{ mb: 2, borderRadius: 5, boxShadow: 0 }}>
+            <CardContent>
+              <Typography variant="h5" component="h2" gutterBottom>
+                General Information
+              </Typography>
+              <List sx={{ mb: 2 }}>
+                <ListItem disablePadding>
+                  <ListItemText primary="Indicator" secondary={result.indicator || "N/A"} />
+                </ListItem>
+                {result.reputation ? <ListItem disablePadding>
+                  <ListItemText primary="Reputation" secondary={result.reputation} />
+                </ListItem> : null}
+                {result.country_name ? <ListItem disablePadding>
+                  <ListItemText primary="Country" secondary={result.country_name} />
+                </ListItem> : null}
+                {result.type ? <ListItem disablePadding>
+                  <ListItemText primary="Type" secondary={result.type} />
+                </ListItem> : null}
+                {result.asn ? <ListItem disablePadding>
+                  <ListItemText primary="ASN" secondary={result.asn} />
+                </ListItem> : null}
+              </List>
+            </CardContent>
           </Card>
-          <Card
-            variant="outlined"
-            sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
-            key={"pulse_info_card"}
-          >
-            <h3>Pulse information</h3>
-            <p>Pulse count: {pulses} </p>
-              {pulses > 0 ? (
+          <Card variant="outlined" sx={{ borderRadius: 5, boxShadow: 0 }}>
+            <CardContent>
+              <Typography variant="h5" component="h2" gutterBottom>
+                Pulse Information
+              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                <Typography variant="h4" component="span" sx={{ mr: 1 }}>
+                  {pulses}
+                </Typography>
+                <Typography variant="subtitle1" component="span">
+                  {pulses === 1 ? "Pulse" : "Pulses"}
+                </Typography>
+              </Box>
+              {pulses > 0 && (
                 <>
-                  <br />
-                  <b>Pulses</b>
-                  <br />
+                  <Divider sx={{ mb: 2 }} />
+                  <Typography variant="h6" component="h3" gutterBottom>
+                    Pulses
+                  </Typography>
+                  {result.pulse_info.pulses?.map((pulse) => (
+                    <Chip
+                      key={pulse.id}
+                      label={pulse.name}
+                      icon={pulse.TLP ? <CircleIcon sx={{ "&&": { color: pulse.TLP }, fontSize: "small" }} /> : null}
+                      sx={{ m: 0.5}}
+                    />
+                  ))}
+                  {!result.pulse_info.pulses && (
+                    <Typography variant="body2" color="text.secondary">
+                      None
+                    </Typography>
+                  )}
                 </>
-              ) : null}
-              {result["pulse_info"]["pulses"]
-                ? result["pulse_info"]["pulses"].map((pulse, index) => {
-                    return (
-                      <React.Fragment key={index + "_pulse_fragment"}>
-                        <Chip key={index + "_pulse_chip"} label={pulse.name} sx={{ m: 0.5 }} />
-                        <br />
-                      </React.Fragment>
-                    );
-                  })
-                : "None"}
+              )}
+            </CardContent>
           </Card>
+
           <Card
             variant="outlined"
             key="sections_card"
-            sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
+            sx={{ mt: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
           >
-              <b>Sections:</b>
+            <Typography variant="h5" component="h2" gutterBottom>
+              Sections
+            </Typography>
               <br />{" "}
               {result["sections"]
                 ? result["sections"].map((section) => {

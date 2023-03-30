@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CircleIcon from "@mui/icons-material/Circle";
 import Collapse from "@mui/material/Collapse";
+import Grow from "@mui/material/Grow";
 import IconButton from "@mui/material/IconButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -288,20 +289,23 @@ export default function ResultTable(props) {
 
   return (
     <>
+    <Grow in={true}>
       <TableContainer
         component={Paper}
         sx={{
-          boxShadow: 0,
-          borderRadius: 5,
+          boxShadow: 0, 
+          borderRadius: 5, 
+          border: 1, 
+          borderColor: theme.palette.background.tableborder,
         }}
       >
         <Table aria-label="result_table">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ bgcolor: theme.palette.background.tablecell }}/>
-              <TableCell sx={{ bgcolor: theme.palette.background.tablecell, fontWeight: "bold" }}>Domain</TableCell>
-              <TableCell sx={{ bgcolor: theme.palette.background.tablecell, fontWeight: "bold" }}>Status code</TableCell>
-              <TableCell sx={{ bgcolor: theme.palette.background.tablecell, fontWeight: "bold", textAlign: "left" }}>
+              <TableCell sx={{ bgcolor: theme.palette.background.tableheader }}/>
+              <TableCell sx={{ bgcolor: theme.palette.background.tableheader, fontWeight: "bold" }}>Domain</TableCell>
+              <TableCell sx={{ bgcolor: theme.palette.background.tableheader, fontWeight: "bold" }}>Status code</TableCell>
+              <TableCell sx={{ bgcolor: theme.palette.background.tableheader, fontWeight: "bold", textAlign: "left" }}>
                 Found
               </TableCell>
             </TableRow>
@@ -319,6 +323,7 @@ export default function ResultTable(props) {
           </TableBody>
         </Table>
       </TableContainer>
+      </Grow>
     </>
   );
 }

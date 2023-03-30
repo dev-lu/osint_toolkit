@@ -107,8 +107,8 @@ export default function Twitter(props) {
                     <img src={twitter_logo_small} alt='' style={{ height: '12px' }} />
                     &nbsp;&nbsp;Twitter
             </TableCell>
-            <TableCell> At least { result[0]['count'] } Tweets within the last 7 days </TableCell>
-            <TableCell bgcolor='lightgrey' ></TableCell>
+            <TableCell> {result.length > 0 ? 'At least ' : null} { result[0]['count'] } Tweets within the last 7 days </TableCell>
+            <TableCell bgcolor={result && result.length > 0 ? "orange" : "green"} ></TableCell>
         </TableRow>
         <TableRow>
             <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: theme.palette.background.tablecell }} colSpan={6}>

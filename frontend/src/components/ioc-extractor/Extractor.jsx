@@ -40,7 +40,7 @@ export default function Extractor(props) {
     borderRadius: 5,
     borderColor: "lightgrey",
     borderStyle: "dashed",
-    backgroundColor: theme.palette.background.card,
+    backgroundColor: theme.palette.background.uploadarea,
     color: "#bdbdbd",
     outline: "none",
     transition: "border .24s ease-in-out",
@@ -141,7 +141,7 @@ export default function Extractor(props) {
 
           }}
         >
-          <Alert severity="info" sx={{ backgroundColor: theme.palette.background.tablecell }}>
+          <Alert severity="info" sx={{ backgroundColor: theme.palette.background.tableheader }}>
             <AlertTitle>
               <b>{file["statistics"]["total"]} unique IOCs found</b>
             </AlertTitle>

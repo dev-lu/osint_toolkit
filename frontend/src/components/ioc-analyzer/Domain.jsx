@@ -53,7 +53,7 @@ export default function Domain(props) {
                     boxShadow: 0, 
                     borderRadius: 5, 
                     border: 1, 
-                    borderColor: 'darkgrey' 
+                    borderColor: theme.palette.background.tableborder,
                     }}>
                   <Table aria-label='result_table' >
                     <TableHead>

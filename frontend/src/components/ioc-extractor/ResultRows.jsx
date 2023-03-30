@@ -56,9 +56,9 @@ export default function ResultRows(props) {
   return (
     <React.Fragment key={""}>
         <Table>
-        <TableHead sx={{ backgroundColor: theme.palette.background.tablecell }}>
+        <TableHead>
             <TableRow>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "20px", width: "100%", backgroundColor: theme.palette.background.tablecell }}>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "20px", width: "100%", backgroundColor: theme.palette.background.tableheader }}>
                 <IconButton
                     aria-label="expand row"
                     size="small"

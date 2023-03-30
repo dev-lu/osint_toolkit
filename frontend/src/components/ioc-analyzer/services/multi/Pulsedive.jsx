@@ -54,7 +54,7 @@ export default function Pulsedive(props) {
         summary_color={{ color: null }}
         color={
             result != null && result['results'][0] ?
-            result['results'][0]['risk'] === 'none' ? 'green' : result['results'][0]['risk'] === 'low' ? 'orange' : 'red' : 'lightgrey'
+            (result['results'][0]['risk'] === 'none' ? 'green' : result['results'][0]['risk'] === 'low' ? 'orange' : 'red') : 'lightgrey'
         }
         error={error}
         details={details}

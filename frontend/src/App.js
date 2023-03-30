@@ -65,6 +65,10 @@ function App() {
               default: '#ebebeb', 
               card: 'aliceblue',
               textfieldlarge: 'white',
+              uploadarea: '#fafafa',
+              tableheader: 'whitesmoke',
+              tablecell: 'white',
+              tableborder: '#ebebeb',
             },
             components: {
               MuiCard: {
@@ -107,8 +111,11 @@ function App() {
               default: '#333333',
               paper: '#404040',
               card: '#6F6F6F',
+              uploadarea: '#6F6F6F',
               textfieldlarge: '#6F6F6F',
-              tablecell: '#595959'
+              tableheader: '#333333',
+              tablecell: '#595959',
+              tableborder: '#333333',
             },
           }),
     },

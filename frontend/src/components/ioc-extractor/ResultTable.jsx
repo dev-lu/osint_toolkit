@@ -32,7 +32,7 @@ export default function ResultTable(props) {
 
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer>
       <Table aria-label="result_table">
         <TableHead sx={{ bgcolor: theme.palette.background.tablecell }}>
           <TableRow>
