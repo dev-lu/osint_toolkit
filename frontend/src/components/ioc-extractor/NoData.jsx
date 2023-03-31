@@ -5,9 +5,11 @@ import Divider from "@mui/material/Divider";
 import MuiGrid from "@mui/material/Grid";
 import NotInterestedIcon from "@mui/icons-material/NotInterested";
 import { styled } from "@mui/material/styles";
+import useTheme from "@mui/material/styles/useTheme";
 
 
 export default function NoData() {
+  const theme = useTheme();
   const Grid = styled(MuiGrid)(({ theme }) => ({
     width: "100%",
     ...theme.typography.body2,
@@ -24,7 +26,7 @@ export default function NoData() {
           m: 2,
           p: 2,
           borderRadius: 5,
-          backgroundColor: "#f9fafa",
+          backgroundColor: theme.palette.background.card,
         }}
       >
         <Grid container>
