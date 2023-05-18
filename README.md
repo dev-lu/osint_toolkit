@@ -18,6 +18,7 @@ OSINT Toolkit is a full-stack web application designed to assist security analys
   * [IOC Extractor](#ioc-extractor)
   * [Domain Monitoring](#domain-monitoring)
   * [AI Assistant](#ai-assistant)
+  * [CVSS Calculator](#cvss-calculator)
   * [Customizability](#customizable)
 * [Planned features](#planned-features-for-later-versions)
 * [Deploy with Docker](#deploy-with-docker)
@@ -62,6 +63,11 @@ The Domain Monitoring module helps you protect your organization from phishing a
 ### AI Assistant
 The AI Assistant module provides powerful AI-based solutions for log data analysis, email text analysis, and source code explanation. Leveraging advanced AI algorithms from OpenAI, it helps security experts respond quickly and effectively to potential security threats, protecting their networks and maintaining system integrity.
 <img width="1227" alt="aia" src="https://user-images.githubusercontent.com/44299200/223217940-8a8d1d61-5d74-4fd0-b8b2-d7d1198660cf.png">
+
+### CVSS Calculator
+The CVSS Calculator modules allows you to calculate the CVSS 3.1 score of a vulnerability.
+![cvss-calculator](https://github.com/dev-lu/osint_toolkit/assets/44299200/4646cac4-0924-4c55-8498-8408a9a87aa1)
+
 
 ### Customizable
 Customize the descriptions of each module with your own markdown-formatted text. Disable any modules that are not needed, and they will not be shown. Tailor the toolkit to your specific requirements.
