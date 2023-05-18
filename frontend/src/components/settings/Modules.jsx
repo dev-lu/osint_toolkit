@@ -495,6 +495,21 @@ export default function Modules() {
             Save
           </Button>
         </Card>
+        <Card sx={cardStyle}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={modules["CVSS Calculator"].enabled}
+                onChange={() => handleModuleChange("CVSS Calculator")}
+              />
+            }
+            label={<h3>CVSS Calculator</h3>}
+          />
+          <p>
+            CVSS Calculator is a module that allows you to calculate the CVSS score of a vulnerability.
+          </p>
+          <br />
+        </Card>
       </FormGroup>
     </>
   );

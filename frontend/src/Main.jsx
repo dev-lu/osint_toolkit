@@ -14,6 +14,7 @@ import Newsfeed from "./components/newsfeed/Newsfeed";
 import Settings from "./components/settings/Settings";
 
 import Box from "@mui/material/Box";
+import CalculateIcon from "@mui/icons-material/Calculate";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import MailIcon from "@mui/icons-material/Mail";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
@@ -24,9 +25,10 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
+import CvssCalculator from "./components/cvss-calculator/CvssCalculator";
 
 
-export default function Main(props) {
+export default function Main() {
   const modules = useRecoilValue(modulesState);
 
   function getLowestTabIndex() {
@@ -42,8 +44,10 @@ export default function Main(props) {
       return 4;
     } else if (modules["AI Assistant"].enabled) {
       return 5;
-    } else {
+    } else if (modules["CVSS Calculator"].enabled) {
       return 6;
+    } else {
+      return 7;
     }
   }
 
@@ -124,7 +128,11 @@ export default function Main(props) {
           {modules["AI Assistant"].enabled ? (
             <Tab value={5} icon={<PsychologyIcon />} label="AI Assistant" />
           ) : null}
-          <Tab value={6} icon={<SettingsIcon />} label="Settings" />
+          {modules["CVSS Calculator"].enabled ? (
+            <Tab value={6} icon={<CalculateIcon />} label="CVSS Calculator" />
+          ) : null}
+
+          <Tab value={7} icon={<SettingsIcon />} label="Settings" />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -146,6 +154,9 @@ export default function Main(props) {
         <AiAssistant />
       </TabPanel>
       <TabPanel value={value} index={6}>
+        <CvssCalculator />
+      </TabPanel>
+      <TabPanel value={value} index={7}>
         <Settings />
       </TabPanel>
     </Paper>

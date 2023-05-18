@@ -112,6 +112,7 @@ def add_default_module_settings(db: Session):
         ModuleSettings(name="AI Assistant PA", description=default_strings.ai_assistant_pa['description'], enabled=True),
         ModuleSettings(name="AI Assistant CE", description=default_strings.ai_assistant_ce['description'], enabled=True),
         ModuleSettings(name="AI Assistant CDO", description=default_strings.ai_assistant_cdo['description'], enabled=True),
+        ModuleSettings(name="CVSS Calculator", description="", enabled=True),
     ]
     for default in default_settings:
         existing_setting = db.query(ModuleSettings).filter(ModuleSettings.name == default.name).first()

@@ -64,6 +64,8 @@ function App() {
             background: {
               default: '#ebebeb', 
               card: 'aliceblue',
+              cvssCard: 'aliceblue',
+              cvssCircle: 'white',
               textfieldlarge: 'white',
               uploadarea: '#fafafa',
               tableheader: 'whitesmoke',
@@ -111,6 +113,8 @@ function App() {
               default: '#333333',
               paper: '#404040',
               card: '#6F6F6F',
+              cvssCard: '#404040',
+              cvssCircle: '#6F6F6F',
               uploadarea: '#6F6F6F',
               textfieldlarge: '#6F6F6F',
               tableheader: '#333333',
