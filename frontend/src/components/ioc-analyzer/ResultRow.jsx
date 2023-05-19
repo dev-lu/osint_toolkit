@@ -56,6 +56,54 @@ export default function ResultRow(props) {
     );
   }
 
+  if (props.result.error === 401) {
+    return (
+      <>
+        <TableRow key={props.id + "_row"}>
+          <TableCell>
+            <IconButton aria-label="expand row" size="large">
+              <KeyboardArrowDownIcon />
+            </IconButton>
+          </TableCell>
+          <TableCell>
+            <img
+              src={require(`./icons/${props.icon}.png`)}
+              alt=""
+              style={{ height: "12px" }}
+            />
+            &nbsp;&nbsp;{props.name}
+          </TableCell>
+          <TableCell>Invalid API key (401 Unauthorized) </TableCell>
+          <TableCell bgcolor="black"></TableCell>
+        </TableRow>
+      </>
+    );
+  }
+
+  if (props.result.error === 429) {
+    return (
+      <>
+        <TableRow key={props.id + "_row"}>
+          <TableCell>
+            <IconButton aria-label="expand row" size="large">
+              <KeyboardArrowDownIcon />
+            </IconButton>
+          </TableCell>
+          <TableCell>
+            <img
+              src={require(`./icons/${props.icon}.png`)}
+              alt=""
+              style={{ height: "12px" }}
+            />
+            &nbsp;&nbsp;{props.name}
+          </TableCell>
+          <TableCell>API limits exceeded (429 Too Many Requests) </TableCell>
+          <TableCell bgcolor="black"></TableCell>
+        </TableRow>
+      </>
+    );
+  }
+
   if (!props.result) {
     return (
       <>
