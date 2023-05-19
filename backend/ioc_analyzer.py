@@ -28,6 +28,9 @@ def virustotal(ioc:str, type:str, apikey:str, proxies:dict):
                             headers = headers, 
                             proxies=proxies)
     response_json = json.loads(response.text)
+    match response.status_code:
+        case 401: response_json = {"error": 401}
+        case 429: response_json = {"error": 429}
     return response_json
 
 
@@ -42,6 +45,9 @@ def maltiverse_check(ip:str, endpoint:str, apikey:str, proxies:dict):
                             headers=headers, 
                             proxies=proxies)
     response_json = json.loads(response.text)
+    match response.status_code:
+        case 401: response_json = {"error": 401}
+        case 429: response_json = {"error": 429}
     return response_json
 
 # ===========================================================================
@@ -69,6 +75,9 @@ def abuseipdb_ip_check(ip:str, apikey:str, proxies:dict):
                             params = querystring, 
                             proxies=proxies)
     response_json = json.loads(response.text)
+    match response.status_code:
+        case 401: response_json = {"error": 401}
+        case 429: response_json = {"error": 429}
     return response_json
 
 
@@ -89,6 +98,9 @@ def alienvaultotx(ioc:str, type:str, apikey:str, proxies:dict):
                             headers = headers, 
                             proxies=proxies)
     response_json = json.loads(response.text)
+    match response.status_code:
+        case 401: response_json = {"error": 401}
+        case 429: response_json = {"error": 429}
     return response_json
 
 
@@ -109,9 +121,13 @@ def threatfox_ip_check(ip:str, apikey:str, proxies:dict):
                             data = payload_json,
                             proxies=proxies)
     response_json = json.loads(response.text)
+    match response.status_code:
+        case 401: response_json = {"error": 401}
+        case 429: response_json = {"error": 429}
     return response_json
 
 
+# TODO: Finish implementation
 def blocklist_de_ip_check(ip:str, proxies:dict):
     url = "http://api.blocklist.de/api.php?"
     endpoint = "ip="
@@ -123,6 +139,9 @@ def blocklist_de_ip_check(ip:str, proxies:dict):
         "attacks": attacks,
         "reports": reports
     }
+    match response.status_code:
+        case 401: result_dict = {"error": 401}
+        case 429: result_dict = {"error": 429}
     return result_dict
 
 
@@ -133,6 +152,9 @@ def check_pulsedive(ioc:str, apikey:str, proxies:dict):
     endpoint = f"explore.php?q=ioc%3D{ioc}&limit=10&pretty=1&key={apikey}"
     response = requests.get(url = url + endpoint, proxies=proxies)
     response_json = json.loads(response.text)
+    match response.status_code:
+        case 401: response_json = {"error": 401}
+        case 429: response_json = {"error": 429}
     return response_json
 
 
@@ -140,6 +162,9 @@ def check_bgpview(ip:str, proxies:dict):
     url = f"https://api.bgpview.io/ip/{ip}"
     response = requests.get(url = url, proxies=proxies)
     response_json = json.loads(response.text)
+    match response.status_code:
+        case 401: response_json = {"error": 401}
+        case 429: response_json = {"error": 429}
     return response_json
 
 
@@ -148,6 +173,9 @@ def ipqualityscore_ip_check(ip:str, apikey:str, proxies:dict):
     endpoint = f"https://ipqualityscore.com/api/json/ip/{apikey}/{ip}"
     response = requests.get(url = endpoint, proxies=proxies)
     response_json = json.loads(response.text)
+    match response.status_code:
+        case 401: response_json = {"error": 401}
+        case 429: response_json = {"error": 429}
     return response_json
 
 
@@ -163,6 +191,9 @@ def urlscanio(domain:str, proxies:dict):
     url = f"https://urlscan.io/api/v1/search/?q=domain:{domain}"
     response = requests.get(url = url, proxies=proxies)
     response_json = [dict(item, expanded=False) for item in response.json()['results']]
+    match response.status_code:
+        case 401: response_json = {"error": 401}
+        case 429: response_json = {"error": 429}
     return response_json
 
 
@@ -176,9 +207,13 @@ def urlhaus_url_check(url:str, proxies:dict):
                              data=data, 
                              proxies=proxies)
     response_json = json.loads(response.text)
+    match response.status_code:
+        case 401: response_json = {"error": 401}
+        case 429: response_json = {"error": 429}
     return response_json
 
 # Domains, URLs, IPs
+# TODO: Finish implementation
 def checkphish_ai(ioc:str, apikey: str):
     scan_url = 'https://developers.checkphish.ai/api/neo/scan'
     scan_data = {
@@ -194,6 +229,9 @@ def checkphish_ai(ioc:str, apikey: str):
     }
     status_response = requests.post(url=status_url, data=status_data)
     status_response_json = json.loads(status_response.text)
+    match scan_response.status_code:
+        case 401: status_response_json = {"error": 401}
+        case 429: status_response_json = {"error": 429}
     return status_response_json
 
 
@@ -225,6 +263,9 @@ def safebrowsing_url_check(ioc:str, apikey:str, proxies:dict):
                              data=json.dumps(data),
                              proxies=proxies)
     response_json = json.loads(response.text)
+    match response.status_code:
+        case 401: response_json = {"error": 401}
+        case 429: response_json = {"error": 429}
     return response_json
 
 
@@ -236,6 +277,9 @@ def hunter_email_check(email:str, apikey:str, proxies:dict):
     url = f"https://api.hunter.io/v2/email-verifier?email={email}&api_key={apikey}"
     response = requests.get(url=url, proxies=proxies)
     response_json = json.loads(response.text)
+    match response.status_code:
+        case 401: response_json = {"error": 401}
+        case 429: response_json = {"error": 429}
     return response_json
 
 
@@ -246,6 +290,9 @@ def emailrep_email_check(email:str, apikey: str, proxies:dict):
                             headers=headers, 
                             proxies=proxies)
     response_json = json.loads(response.text)
+    match response.status_code:
+        case 401: response_json = {"error": 401}
+        case 429: response_json = {"error": 429}
     return response_json
 
 def haveibeenpwnd_email_check(email:str, apikey: str, proxies:dict):
@@ -257,6 +304,9 @@ def haveibeenpwnd_email_check(email:str, apikey: str, proxies:dict):
             url=f"https://haveibeenpwned.com/api/v3/{service}/{email}", 
             headers=headers, 
             proxies=proxies)
+        match response.status_code:
+            case 401: return {"error": 401}
+            case 429: return {"error": 429}
         sleep(6) # Rate limiting is 1 request per 5 seconds
         if response.content:
             result[service] = json.loads(response.content)
@@ -296,6 +346,9 @@ def malwarebazaar_hash_check(hash:str, proxies:dict):
                              data=data, 
                              proxies=proxies)
     response_json = json.loads(response.text)
+    match response.status_code:
+        case 401: response_json = {"error": 401}
+        case 429: response_json = {"error": 429}
     return response_json
 
 
@@ -313,11 +366,17 @@ def check_shodan(ioc:str, method:str, apikey:str, proxies:dict):
         response = requests.get(url = url + endpoint[method] + ioc + '?key=' + apikey, 
                                 proxies=proxies)
         response_json = json.loads(response.text)
+        match response.status_code:
+            case 401: response_json = {"error": 401}
+            case 429: response_json = {"error": 429}
         return response_json
     elif method == 'domain':
         response = requests.get(url = url + endpoint[method] + ioc + '?key=' + apikey, 
                                 proxies=proxies)
         response_json = json.loads(response.text)
+        match response.status_code:
+            case 401: response_json = {"error": 401}
+            case 429: response_json = {"error": 429}
         return response_json
 
 
@@ -380,6 +439,9 @@ def search_reddit(ioc:str, client_secret: str, client_id: str):
                 "score": str(post_data["score"]),
                 "url": str(post_data["url"])
             })
+    match response.status_code:
+        case 401: result = {"error": 401}
+        case 429: result = {"error": 429}
     return result
 
 
@@ -393,4 +455,7 @@ def mastodon(keyword:str, bearer: str, proxies:dict):
                             headers=headers, 
                             proxies=proxies)
     response_json = json.loads(response.text)
+    match response.status_code:
+            case 401: response_json = {"error": 401}
+            case 429: response_json = {"error": 429}
     return response_json['statuses']
