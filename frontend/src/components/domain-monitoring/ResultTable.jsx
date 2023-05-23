@@ -24,7 +24,8 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Paper,
+  TablePagination,
+  Paper
 } from "@mui/material";
 import useTheme from "@mui/material/styles/useTheme";
 
@@ -33,6 +34,8 @@ export default function ResultTable(props) {
   const theme = useTheme();
   const [response, setResponse] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
 
   React.useEffect(() => {
     setLoading(true);
@@ -43,6 +46,16 @@ export default function ResultTable(props) {
         setLoading(false);
       });
   }, []);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   if (loading)
     return (
       <>
@@ -312,7 +325,9 @@ export default function ResultTable(props) {
           </TableHead>
           <TableBody>
             {response ? (
-              response.map((section) => {
+              response
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((section) => {
                 return <Row key={section["task"]["uuid"]} row={section} />;
               })
             ) : (
@@ -321,6 +336,15 @@ export default function ResultTable(props) {
               </TableRow>
             )}
           </TableBody>
+          <TablePagination
+            rowsPerPageOptions={[15, 25, 50, 75, 100]}
+            component="div"
+            count={response.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </Table>
       </TableContainer>
       </Grow>
