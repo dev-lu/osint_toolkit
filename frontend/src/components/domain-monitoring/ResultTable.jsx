@@ -336,7 +336,8 @@ export default function ResultTable(props) {
               </TableRow>
             )}
           </TableBody>
-          <TablePagination
+        </Table>
+        <TablePagination
             rowsPerPageOptions={[15, 25, 50, 75, 100]}
             component="div"
             count={response.length}
@@ -345,7 +346,6 @@ export default function ResultTable(props) {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-        </Table>
       </TableContainer>
       </Grow>
     </>
