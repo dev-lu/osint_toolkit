@@ -5,10 +5,8 @@ import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
-import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-import NoDetails from '../NoDetails';
 import ResultRow from "../../ResultRow";
 
 
@@ -32,106 +30,99 @@ export default function Shodan(props) {
         fetchData();
     }, []);
 
-    const details = (
-        <>
-            {result ? (
-                <Box sx={{ margin: 1 }}>
-                {result['error'] ? <Grid xs display="flex" justifyContent="center" alignItems="center">
-                    <NoDetails />
-                    </Grid> : <>
-                <Card key={"shodan_details"} elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
-                    <Typography variant="h5" component="h2" gutterBottom>
-                        Details
-                    </Typography>
-                    {result['city'] ? <p><b>City: </b>{result['city']}</p> : null}
-                    {result['region_code'] ? <p><b>Region code: </b>{result['region_code']}</p> : null}
-                    {result['country_code'] ? <p><b>Coutry code: </b>{result['country_code']}</p> : null}
-                    {result['country_name'] ? <p><b>Country: </b>{result['country_name']}</p> : null}
-                    {result['org'] ? <p><b>Organisation: </b>{result['org']}</p> : null}
-                    {result['isp'] ? <p><b>ISP: </b>{result['isp']}</p> : null}
-                    {result['asn'] ? <p><b>ASN: </b>{result['asn']}</p> : null}
-                    {result['domain'] ? <p><b>Domain: </b>{result['domain']}</p> : null}
-                </Card>
+    
+const details = (
+  <>
+    {result && !result['error'] && (
+      <Box sx={{ margin: 1 }}>
+        <Card key="shodan_details" elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
+          <Typography variant="h5" component="h2" gutterBottom>
+            Details
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            {result['city'] && <><b>City:</b> {result['city']}<br /></>}
+            {result['region_code'] && <><b>Region code:</b> {result['region_code']}<br /></>}
+            {result['country_code'] && <><b>Country code:</b> {result['country_code']}<br /></>}
+            {result['country_name'] && <><b>Country:</b> {result['country_name']}<br /></>}
+            {result['org'] && <><b>Organisation:</b> {result['org']}<br /></>}
+            {result['isp'] && <><b>ISP:</b> {result['isp']}<br /></>}
+            {result['asn'] && <><b>ASN:</b> {result['asn']}<br /></>}
+            {result['domain'] && <><b>Domain:</b> {result['domain']}<br /></>}
+          </Typography>
+        </Card>
 
-                {result['ports'] && result['ports'].length > 0 ? <Card key={"shodan_ports"} elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
-                    <Typography variant="h5" component="h2" gutterBottom>
-                        Open ports
-                    </Typography>
-                    { Array.isArray(result['ports']) ?
-                        result['ports'].map((ports, index) => {
-                        return (
-                            <React.Fragment key={index + "_ports_fragment"}>
-                                <Chip label={ports} variant="outlined" sx={{ m: 0.5 }} />
-                            </React.Fragment>
-                        );
-                    }) : <><li>None</li></>
-                    }
-                </Card> : null}
+        {result['ports'] && result['ports'].length > 0 && (
+          <Card key="shodan_ports" elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
+            <Typography variant="h5" component="h2" gutterBottom>
+              Open ports
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+              {result['ports'].map((port, index) => (
+                <Chip key={index} label={port} variant="outlined" sx={{ m: 0.5 }} />
+              ))}
+            </Box>
+          </Card>
+        )}
 
-                {result['domains'] && result['domains'].length > 0 ? <Card key={"shodan_domains"} elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
-                    <Typography variant="h5" component="h2" gutterBottom>
-                        Domains
-                    </Typography>
-                    { 
-                        result['domains'].map((domain, index) => {
-                        return (
-                            <React.Fragment key={index + "_domain_fragment"}>
-                                <li key={domain} >{domain}</li>
-                            </React.Fragment>
-                        );
-                    }) 
-                    }
-                </Card> : null}
+        {result['domains'] && result['domains'].length > 0 && (
+          <Card key="shodan_domains" elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
+            <Typography variant="h5" component="h2" gutterBottom>
+              Domains
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              {result['domains'].map((domain, index) => (
+                <React.Fragment key={index}>
+                  {domain}<br />
+                </React.Fragment>
+              ))}
+            </Typography>
+          </Card>
+        )}
 
-                {result['subdomains'] && result['subdomains'].length > 0 ? <Card key={"shodan_domains"} elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
-                    <Typography variant="h5" component="h2" gutterBottom>
-                        Subdomains
-                    </Typography>
-                    { 
-                        result['subdomains'].map((subdomain, index) => {
-                        return (
-                            <React.Fragment key={index + "fragment"}>
-                                <Chip key={subdomain} label={subdomain} variant="outlined" sx={{ m: 0.5 }} />
-                            </React.Fragment>
-                        );
-                    }) 
-                    }
-                </Card> : null}
+        {result['subdomains'] && result['subdomains'].length > 0 && (
+          <Card key="shodan_subdomains" elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
+            <Typography variant="h5" component="h2" gutterBottom>
+              Subdomains
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+              {result['subdomains'].map((subdomain, index) => (
+                <Chip key={index} label={subdomain} variant="outlined" sx={{ m: 0.5 }} />
+              ))}
+            </Box>
+          </Card>
+        )}
 
-                { result['hostnames'] && result['hostnames'].length > 0 ? <Card key={"shodan_hostnames"} elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
-                    <Typography variant="h5" component="h2" gutterBottom>
-                        Hostnames
-                    </Typography>
-                    {
-                        result['hostnames'].map((hostname, index) => {
-                        return (
-                            <React.Fragment key={index + "_hostnames_fragment"}>
-                                <li key={hostname} >{hostname}</li>
-                            </React.Fragment>
-                        );
-                    }) 
-                    }
-                </Card> : null}
+        {result['hostnames'] && result['hostnames'].length > 0 && (
+          <Card key="shodan_hostnames" elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
+            <Typography variant="h5" component="h2" gutterBottom>
+              Hostnames
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              {result['hostnames'].map((hostname, index) => (
+                <React.Fragment key={index}>
+                  {hostname}<br />
+                </React.Fragment>
+              ))}
+            </Typography>
+          </Card>
+        )}
 
-                {result['tags'] && result['tags'].length > 0 ? <Card key={"shodan_tags"} elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
-                    <Typography variant="h5" component="h2" gutterBottom>
-                        Tags
-                    </Typography>
-                    { 
-                        result['tags'].map((tags, index) => {
-                        return (
-                            <React.Fragment key={index + "_tags_fragment"}>
-                                <Chip key={tags} label={tags} variant="outlined" sx={{ m: 0.5 }} />
-                            </React.Fragment>
-                        );
-                    }) 
-                    }
-                </Card> : null}
-                </>}
-                </Box>
-            ) : null }
-        </>
-    )
+        {result['tags'] && result['tags'].length > 0 && (
+          <Card key="shodan_tags" elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
+            <Typography variant="h5" component="h2" gutterBottom>
+              Tags
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+              {result['tags'].map((tag, index) => (
+                <Chip key={index} label={tag} variant="outlined" sx={{ m: 0.5 }} />
+              ))}
+            </Box>
+          </Card>
+        )}
+      </Box>
+    )}
+  </>
+);
 
   return (
     <>
