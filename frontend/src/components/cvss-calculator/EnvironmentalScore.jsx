@@ -126,7 +126,7 @@ export default function EnvironmentalScore() {
             <TextField
               select
               fullWidth
-              label="Attack Vector (AV)"
+              label="Attack Vector (MAV)"
               value={cvssScores.environmental.modifiedAttackVector}
               onChange={(e) =>
                 setCvssScores((prevCvssScores) => ({
