@@ -3,15 +3,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { PieChart, Pie } from 'recharts';
 
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Box from "@mui/material/Box";
+import Grid from '@mui/material/Grid';
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from '@mui/material/Stack';
-import { Typography } from "@mui/material";
-
+import Typography from '@mui/material/Typography';
 
 import ResultRow from "../../ResultRow";
 
@@ -26,17 +26,17 @@ export default function IpQualityscore(props) {
         green: '#00C49F',
         orange: '#FFA500',
         red: '#FF0000',
-      };
+    };
       
-      const getCircleFillColor = score => {
+    const getCircleFillColor = score => {
         if (score === 0) {
-          return colors.green;
+            return colors.green;
         } else if (score >= 1 && score <= 50) {
-          return colors.orange;
+            return colors.orange;
         } else if (score >= 51 && score <= 100) {
-          return colors.red;
+            return colors.red;
         } 
-      };
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -65,65 +65,67 @@ export default function IpQualityscore(props) {
                     <Box sx={{ margin: 1, width: '65%' }}>
                         <Card variant="outlined" sx={{ borderRadius: 5, boxShadow: 0 }}>
                             <CardContent>
-                            <Typography variant="h5" component="h2">
-                                Details
-                            </Typography>
-                            <List>
-                                <ListItem>
-                                <ListItemText primary={`Score: ${result['fraud_score']}% malicious`} />
-                                </ListItem>
-                                <ListItem>
-                                <ListItemText primary={`Country code: ${result['country_code']}`} />
-                                </ListItem>
-                                <ListItem>
-                                <ListItemText primary={`Region: ${result['region']}`} />
-                                </ListItem>
-                                <ListItem>
-                                <ListItemText primary={`City: ${result['city']}`} />
-                                </ListItem>
-                                <ListItem>
-                                <ListItemText primary={`Organisation: ${result['organization']}`} />
-                                </ListItem>
-                            </List>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined" sx={{ mt: 2, borderRadius: 5, boxShadow: 0 }}>
-                            <CardContent>
-                            <Typography variant="h5" component="h2">
-                                Additional Details
-                            </Typography>
-                            <List>
-                                <ListItem>
-                                <ListItemText primary={`Is crawler: ${result['is_crawler'] ? 'Yes' : 'No'}`} />
-                                </ListItem>
-                                <ListItem>
-                                <ListItemText primary={`Timezone: ${result['timezone']}`} />
-                                </ListItem>
-                                <ListItem>
-                                <ListItemText primary={`Mobile: ${result['mobile'] ? 'Yes' : 'No'}`} />
-                                </ListItem>
-                                <ListItem>
-                                <ListItemText primary={`Is proxy: ${result['proxy'] ? 'Yes' : 'No'}`} />
-                                </ListItem>
-                                <ListItem>
-                                <ListItemText primary={`Is VPN: ${result['vpn'] ? 'Yes' : 'No'}`} />
-                                </ListItem>
-                                <ListItem>
-                                <ListItemText primary={`Is Tor: ${result['tor'] ? 'Yes' : 'No'}`} />
-                                </ListItem>
-                                <ListItem>
-                                <ListItemText primary={`Is active VPN: ${result['active_vpn'] ? 'Yes' : 'No'}`} />
-                                </ListItem>
-                                <ListItem>
-                                <ListItemText primary={`Is active Tor: ${result['active_tor'] ? 'Yes' : 'No'}`} />
-                                </ListItem>
-                                <ListItem>
-                                <ListItemText primary={`Recent abuse: ${result['recent_abuse'] ? 'Yes' : 'No'}`} />
-                                </ListItem>
-                                <ListItem>
-                                <ListItemText primary={`Bot: ${result['bot_status'] ? 'Yes' : 'No'}`} />
-                                </ListItem>
-                            </List>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={6}>
+                                        <Typography variant="h5" component="h2">
+                                            Details
+                                        </Typography>
+                                        <List>
+                                            <ListItem>
+                                                <ListItemText primary="Score" secondary={`${result['fraud_score']}% malicious`} />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText primary="Country code" secondary={`${result['country_code']}`} />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText primary="Region" secondary={`${result['region']}`} />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText primary="City" secondary={`City: ${result['city']}`} />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText primary="Organisation" secondary={`${result['organization']}`} />
+                                            </ListItem>
+                                        </List>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Typography variant="h5" component="h2">
+                                            Additional Details
+                                        </Typography>
+                                        <List>
+                                            <ListItem>
+                                                <ListItemText primary="Is crawler?" secondary={result['is_crawler'] ? 'Yes' : 'No'} />
+                                            </ListItem>
+                                            <ListItem>
+                                            <   ListItemText primary="Timezone" secondary={result['timezone']} />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText primary="Mobile?" secondary={result['mobile'] ? 'Yes' : 'No'} />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText primary="Is proxy?" secondary={result['proxy'] ? 'Yes' : 'No'} />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText primary="Is VPN?" secondary={result['vpn'] ? 'Yes' : 'No'} />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText primary="Is Tor?" secondary={result['tor'] ? 'Yes' : 'No'} />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText primary="Is active VPN?" secondary={result['active_vpn'] ? 'Yes' : 'No'} />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText primary="Is active Tor?" secondary={result['active_tor'] ? 'Yes' : 'No'} />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText primary="Recent abuse?" secondary={result['recent_abuse'] ? 'Yes' : 'No'} />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText primary="Bot?" secondary={result['bot_status'] ? 'Yes' : 'No'} />
+                                            </ListItem>
+                                        </List>
+                                    </Grid>
+                                </Grid>
                             </CardContent>
                         </Card>
                         </Box>
