@@ -1,11 +1,17 @@
 import React from 'react'
 import axios from "axios";
 import { useEffect, useState } from "react";
-import GaugeChart from 'react-gauge-chart'
+import { PieChart, Pie } from 'recharts';
 
 import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
 import Stack from '@mui/material/Stack';
+import { Typography } from "@mui/material";
+
 
 import ResultRow from "../../ResultRow";
 
@@ -15,6 +21,22 @@ export default function IpQualityscore(props) {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [score, setScore] = useState(null);
+
+    const colors = {
+        green: '#00C49F',
+        orange: '#FFA500',
+        red: '#FF0000',
+      };
+      
+      const getCircleFillColor = score => {
+        if (score === 0) {
+          return colors.green;
+        } else if (score >= 1 && score <= 50) {
+          return colors.orange;
+        } else if (score >= 51 && score <= 100) {
+          return colors.red;
+        } 
+      };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -41,38 +63,98 @@ export default function IpQualityscore(props) {
                     flexWrap: 'wrap'
                 }}>
                     <Box sx={{ margin: 1, width: '65%' }}>
-                        <Card variant="outlined" sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}>
-                            <h3>Details</h3>
-                            <p> <b>Score:</b> {result['fraud_score']} % malicious </p>
-                            <p> <b>Country code:</b> {result['country_code']} </p>
-                            <p> <b>Region:</b> {result['region']} </p>
-                            <p> <b>City:</b> {result['city']} </p>
-                            <p> <b>Organisation:</b> {result['organization']} </p>
+                        <Card variant="outlined" sx={{ borderRadius: 5, boxShadow: 0 }}>
+                            <CardContent>
+                            <Typography variant="h5" component="h2">
+                                Details
+                            </Typography>
+                            <List>
+                                <ListItem>
+                                <ListItemText primary={`Score: ${result['fraud_score']}% malicious`} />
+                                </ListItem>
+                                <ListItem>
+                                <ListItemText primary={`Country code: ${result['country_code']}`} />
+                                </ListItem>
+                                <ListItem>
+                                <ListItemText primary={`Region: ${result['region']}`} />
+                                </ListItem>
+                                <ListItem>
+                                <ListItemText primary={`City: ${result['city']}`} />
+                                </ListItem>
+                                <ListItem>
+                                <ListItemText primary={`Organisation: ${result['organization']}`} />
+                                </ListItem>
+                            </List>
+                            </CardContent>
                         </Card>
-                        <Card variant="outlined" sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}>
-                            <p> <b>Is crawler:</b> {result['is_crawler'] ? 'Yes' : 'No'} </p>
-                            <p> <b>Timezone:</b> {result['timezone']} </p>
-                            <p> <b>Mobile:</b> {result['mobile'] ? 'Yes' : 'No'} </p>
-                            <p> <b>Is proxy:</b> {result['proxy'] ? 'Yes' : 'No'} </p>
-                            <p> <b>Is VPN:</b> {result['vpn'] ? 'Yes' : 'No'} </p>
-                            <p> <b>Is Tor:</b> {result['tor'] ? 'Yes' : 'No'} </p>
-                            <p> <b>Is active VPN:</b> {result['active_vpn'] ? 'Yes' : 'No'} </p>
-                            <p> <b>Is active Tor:</b> {result['active_tor'] ? 'Yes' : 'No'} </p>
-                            <p> <b>Recent abuse:</b> {result['recent_abuse'] ? 'Yes' : 'No'} </p>
-                            <p> <b>Bot:</b> {result['bot_status'] ? 'Yes' : 'No'} </p>
+                        <Card variant="outlined" sx={{ mt: 2, borderRadius: 5, boxShadow: 0 }}>
+                            <CardContent>
+                            <Typography variant="h5" component="h2">
+                                Additional Details
+                            </Typography>
+                            <List>
+                                <ListItem>
+                                <ListItemText primary={`Is crawler: ${result['is_crawler'] ? 'Yes' : 'No'}`} />
+                                </ListItem>
+                                <ListItem>
+                                <ListItemText primary={`Timezone: ${result['timezone']}`} />
+                                </ListItem>
+                                <ListItem>
+                                <ListItemText primary={`Mobile: ${result['mobile'] ? 'Yes' : 'No'}`} />
+                                </ListItem>
+                                <ListItem>
+                                <ListItemText primary={`Is proxy: ${result['proxy'] ? 'Yes' : 'No'}`} />
+                                </ListItem>
+                                <ListItem>
+                                <ListItemText primary={`Is VPN: ${result['vpn'] ? 'Yes' : 'No'}`} />
+                                </ListItem>
+                                <ListItem>
+                                <ListItemText primary={`Is Tor: ${result['tor'] ? 'Yes' : 'No'}`} />
+                                </ListItem>
+                                <ListItem>
+                                <ListItemText primary={`Is active VPN: ${result['active_vpn'] ? 'Yes' : 'No'}`} />
+                                </ListItem>
+                                <ListItem>
+                                <ListItemText primary={`Is active Tor: ${result['active_tor'] ? 'Yes' : 'No'}`} />
+                                </ListItem>
+                                <ListItem>
+                                <ListItemText primary={`Recent abuse: ${result['recent_abuse'] ? 'Yes' : 'No'}`} />
+                                </ListItem>
+                                <ListItem>
+                                <ListItemText primary={`Bot: ${result['bot_status'] ? 'Yes' : 'No'}`} />
+                                </ListItem>
+                            </List>
+                            </CardContent>
                         </Card>
-                    </Box>
+                        </Box>
                     <Stack sx={{ width: '30%', align: 'right' }}>
-                        <GaugeChart id="gauge-chart5"
-                            style={{ width: '100%', align: 'right' }}
-                            animate={false}
-                            arcsLength={[0.2, 0.5, 0.3]}
-                            colors={['#5BE12C', '#F5CD19', '#EA4228']}
-                            textColor="#5E5E5E"
-                            percent={result['fraud_score'] / 100}
-                            arcPadding={0.02}
+                    <Card variant="outlined" sx={{ p: 2, borderRadius: 5, boxShadow: 0, margin: "0 auto" }}>
+                        <PieChart width={200} height={200}>
+                        <Pie
+                            data={[{ name: 'Score', value: score }, { name: 'Remaining', value: 100 - score, fill: '#d3d3d3' }]}
+                            dataKey="value"
+                            startAngle={90}
+                            endAngle={-270}
+                            innerRadius="80%"
+                            outerRadius="100%"
+                            minAngle={1}
+                            domain={[0, 100]}
+                            stroke="none"
+                            strokeWidth={0}
+                            fill={getCircleFillColor(score)}
                         />
-                        <h3 align='center'>Malicious</h3>
+                        <foreignObject width="100%" height="100%" style={{textAlign: "center"}}>
+                            <div style={{display: "inline-block", position: "relative", top: "50%", transform: "translateY(-50%)"}}>
+                            <Typography variant="h4" color={getCircleFillColor(score)} sx={{textAlign: "center"}} textAnchor="middle">
+                                <text x="50%" y="50%">{score}%</text>
+                            </Typography>
+                            <Typography variant="h5" color="textSecondary" sx={{textAlign: "center"}} textAnchor="middle">
+                                <text x="50%" y="50%">malicious</text>
+                            </Typography>
+                            </div>
+                        </foreignObject>
+                        </PieChart>
+                    </Card>
                     </Stack>
                 </div>
             ) : null}
