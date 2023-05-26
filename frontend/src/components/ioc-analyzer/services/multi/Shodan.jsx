@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 
 import ResultRow from "../../ResultRow";
@@ -30,6 +33,24 @@ export default function Shodan(props) {
         fetchData();
     }, []);
 
+    function renderValue(value) {
+      if (Array.isArray(value)) {
+        return value.map((item, index) => (
+          <div key={`value_${index}`}>
+            {renderValue(item)}
+          </div>
+        ));
+      } else if (typeof value === 'object' && value !== null) {
+        return Object.entries(value).map(([key, val], index) => (
+          <div key={`value_${key}_${index}`}>
+            <span>{key}: </span>
+            {renderValue(val)}
+          </div>
+        ));
+      } else {
+        return value;
+      }
+    }
     
 const details = (
   <>
@@ -39,17 +60,55 @@ const details = (
           <Typography variant="h5" component="h2" gutterBottom>
             Details
           </Typography>
-          <Typography variant="body1" gutterBottom>
-            {result['city'] && <><b>City:</b> {result['city']}<br /></>}
-            {result['region_code'] && <><b>Region code:</b> {result['region_code']}<br /></>}
-            {result['country_code'] && <><b>Country code:</b> {result['country_code']}<br /></>}
-            {result['country_name'] && <><b>Country:</b> {result['country_name']}<br /></>}
-            {result['org'] && <><b>Organisation:</b> {result['org']}<br /></>}
-            {result['isp'] && <><b>ISP:</b> {result['isp']}<br /></>}
-            {result['asn'] && <><b>ASN:</b> {result['asn']}<br /></>}
-            {result['domain'] && <><b>Domain:</b> {result['domain']}<br /></>}
-          </Typography>
+          <List>
+            <ListItem>
+              <ListItemText primary="City" secondary={result['city']} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Region code" secondary={result['region_code']} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Country code" secondary={result['country_code']} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Country" secondary={result['country_name']} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Organisation" secondary={result['org']} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="ISP" secondary={result['isp']} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="ASN" secondary={result['asn']} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Domain" secondary={result['domain']} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Last update" secondary={result['last_update']} />
+            </ListItem>
+          </List>
         </Card>
+
+        {result['data'] && (
+          <Card key="shodan_data" elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
+            <Typography variant="h5" component="h2" gutterBottom>
+              Data
+            </Typography>
+            {result['data'].map((item, index) => (
+              <List key={`shodan_data_${index}`}>
+                {Object.entries(item).map(([key, value]) => (
+                  value && (
+                    <ListItem key={`shodan_data_${index}_${key}`}>
+                      <ListItemText primary={key} secondary={renderValue(value)} />
+                    </ListItem>
+                  )
+                ))}
+              </List>
+            ))}
+          </Card>
+        )}
 
         {result['ports'] && result['ports'].length > 0 && (
           <Card key="shodan_ports" elevation={0} variant="outlined" sx={{ m: 1.5, p: 2, borderRadius: 5 }}>
