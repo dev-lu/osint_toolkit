@@ -64,8 +64,9 @@ The AI Assistant module provides powerful AI-based solutions for log data analys
 <img width="1227" alt="aia" src="https://user-images.githubusercontent.com/44299200/223217940-8a8d1d61-5d74-4fd0-b8b2-d7d1198660cf.png">
 
 ### CVSS Calculator
-The CVSS Calculator module allows you to calculate the CVSS 3.1 score of a vulnerability.
-![cvss-calculator](https://github.com/dev-lu/osint_toolkit/assets/44299200/0fd37f9f-d806-4bcc-9b81-d7d636cb2167)
+The CVSS Calculator module allows you to calculate the CVSS 3.1 score of a vulnerability and export the calculation as a markdown or JSON file.
+![cvss_calc](https://github.com/dev-lu/osint_toolkit/assets/44299200/6700a805-8698-445e-9cfc-e404370f58c0)
+
 
 ### Customizable
 Customize the descriptions of each module with your own markdown-formatted text. Disable any modules that are not needed, and they will not be shown. Tailor the toolkit to your specific requirements.
