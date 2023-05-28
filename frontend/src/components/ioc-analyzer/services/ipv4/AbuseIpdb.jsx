@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { PieChart, Pie, ResponsiveContainer, Cell } from 'recharts';
+import { PieChart, Pie } from 'recharts';
 
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
@@ -39,11 +39,11 @@ export default function AbuseIpdb(props) {
   };
   
   const getCircleFillColor = score => {
-    if (score >= 0 && score <= 20) {
+    if (score === 0) {
       return colors.green;
-    } else if (score >= 21 && score <= 60) {
+    } else if (score >= 1 && score <= 59) {
       return colors.orange;
-    } else if (score >= 61 && score <= 100) {
+    } else if (score >= 60 && score <= 100) {
       return colors.red;
     } 
   };
@@ -86,7 +86,7 @@ export default function AbuseIpdb(props) {
               <List sx={{ mt: 1 }}>
                 <ListItem>
                   <ListItemIcon>
-                    <CheckCircleOutlineIcon color="success" />
+                    <CheckCircleOutlineIcon sx={{ color: getCircleFillColor(score)}} />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Score: ${result.data["abuseConfidenceScore"]}% malicious`}
@@ -94,7 +94,7 @@ export default function AbuseIpdb(props) {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <FileCopyOutlinedIcon color="info" />
+                    <FileCopyOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Total reports: ${result.data["totalReports"]}`}
@@ -102,7 +102,7 @@ export default function AbuseIpdb(props) {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <PeopleOutlinedIcon color="info" />
+                    <PeopleOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Number of reporting users: ${result.data["numDistinctUsers"]}`}
@@ -110,7 +110,7 @@ export default function AbuseIpdb(props) {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <ScheduleOutlinedIcon color="info" />
+                    <ScheduleOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Last report: ${result.data["lastReportedAt"]}`}
@@ -118,7 +118,7 @@ export default function AbuseIpdb(props) {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <VerifiedUserOutlinedIcon color="success" />
+                    <VerifiedUserOutlinedIcon color={result.data["isWhitelisted"] ? "success" : "primary"} />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Whitelisted: ${
@@ -128,7 +128,7 @@ export default function AbuseIpdb(props) {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <LanguageOutlinedIcon color="info" />
+                    <LanguageOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Country code: ${result.data["countryCode"]}`}
@@ -136,19 +136,19 @@ export default function AbuseIpdb(props) {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <RouterOutlinedIcon color="info" />
+                    <RouterOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText primary={`ISP: ${result.data["isp"]}`} />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <DomainOutlinedIcon color="info" />
+                    <DomainOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText primary={`Domain: ${result.data["domain"]}`} />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <CategoryOutlinedIcon color="info" />
+                    <CategoryOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Type: ${
@@ -160,7 +160,7 @@ export default function AbuseIpdb(props) {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <DnsOutlinedIcon color="info" />
+                    <DnsOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Hostnames: ${
