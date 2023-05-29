@@ -28,6 +28,7 @@ import LinearProgress, {
 } from "@mui/material/LinearProgress";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
@@ -60,6 +61,11 @@ export default function Virustotal(props) {
       backgroundColor: "red",
     },
   }));
+  const [expanded, setExpanded] = useState(false);
+
+  const toggleExpanded = () => {
+    setExpanded(!expanded);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -728,8 +734,13 @@ export default function Virustotal(props) {
                   Whois
                 </Typography>
                 <Typography component="p" sx={{ whiteSpace: "pre-wrap" }}>
-                  {result["data"]["attributes"]["whois"]}
+                  {expanded ? result["data"]["attributes"]["whois"] : result["data"]["attributes"]["whois"].slice(0, 200)}
                 </Typography>
+                {result["data"]["attributes"]["whois"].length > 250 && (
+                  <Button onClick={toggleExpanded}>
+                    {expanded ? "Read Less" : "Read More"}
+                  </Button>
+                )}
               </Card>
             )}
           </Box>
