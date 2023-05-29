@@ -559,25 +559,30 @@ export default function Virustotal(props) {
                     </List>
                   </Grid>
                 </Grid>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Box sx={{ width: "100%", m: 1 }}>
-                    <BorderLinearProgress
-                      variant="determinate"
-                      value={
-                        (result["data"]["attributes"]["total_votes"][
-                          "malicious"
-                        ] /
+                {result["data"]["attributes"]["total_votes"]["malicious"] ===
+                  0 &&
+                result["data"]["attributes"]["total_votes"]["harmless"] ===
+                  0 ? null : (
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Box sx={{ width: "100%", m: 1 }}>
+                      <BorderLinearProgress
+                        variant="determinate"
+                        value={
                           (result["data"]["attributes"]["total_votes"][
-                            "harmless"
-                          ] +
-                            result["data"]["attributes"]["total_votes"][
-                              "malicious"
-                            ])) *
-                        100
-                      }
-                    />
+                            "malicious"
+                          ] /
+                            (result["data"]["attributes"]["total_votes"][
+                              "harmless"
+                            ] +
+                              result["data"]["attributes"]["total_votes"][
+                                "malicious"
+                              ])) *
+                          100
+                        }
+                      />
+                    </Box>
                   </Box>
-                </Box>
+                )}
               </Card>
             </div>
 
