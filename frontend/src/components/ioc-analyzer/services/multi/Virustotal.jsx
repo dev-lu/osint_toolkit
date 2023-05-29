@@ -39,7 +39,18 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TablePagination,
+} from "@mui/material";
 import { Typography } from "@mui/material";
+import useTheme from "@mui/material/styles/useTheme";
 
 import NoDetails from "../NoDetails";
 import ResultRow from "../../ResultRow";
@@ -50,6 +61,24 @@ export default function Virustotal(props) {
   const [loading, setLoading] = useState(true);
   const [malCount, setMalCount] = useState(null);
   const [totalEngines, setTotalEngines] = useState(null);
+  const [expanded, setExpanded] = useState(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const theme = useTheme();
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const toggleExpanded = () => {
+    setExpanded(!expanded);
+  };
+
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 10,
     borderRadius: 5,
@@ -61,11 +90,6 @@ export default function Virustotal(props) {
       backgroundColor: "red",
     },
   }));
-  const [expanded, setExpanded] = useState(false);
-
-  const toggleExpanded = () => {
-    setExpanded(!expanded);
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -684,43 +708,93 @@ export default function Virustotal(props) {
                 <Typography variant="h5" component="h2" gutterBottom>
                   Last analysis results
                 </Typography>
-                <div style={{ display: "flex", flexWrap: "wrap" }}>
-                  {Object.entries(
-                    result["data"]["attributes"]["last_analysis_results"]
-                  ).map(([name, data], index) => (
-                    <div
-                      key={index}
-                      style={{ flexBasis: "20%", marginBottom: "5px" }}
-                    >
-                      <Card
-                        variant="outlined"
-                        key={name + "_analysis_results_card"}
-                        sx={{
-                          m: 1,
-                          p: 2,
-                          borderRadius: 5,
-                          boxShadow: 0,
-                          color: "white",
-                          backgroundColor:
-                            data.category === "malicious" ? "red" : "#6AAB8E",
-                          height: "80%",
-                        }}
-                      >
-                        <h4>{name}</h4>
-                        <Divider variant="middle" sx={{ m: 1 }} />
-                        <p>
-                          <b>Category: </b> {data.category}
-                        </p>
-                        <p>
-                          <b>Result: </b> {data.result}
-                        </p>
-                        <p>
-                          <b>Method: </b> {data.method}
-                        </p>
-                      </Card>
-                    </div>
-                  ))}
-                </div>
+                <TableContainer
+                  component={Paper}
+                  sx={{
+                    boxShadow: 0,
+                    borderRadius: 5,
+                    border: 1,
+                    borderColor: theme.palette.background.tableborder,
+                  }}
+                >
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Name
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Category
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Result
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Method
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {Object.entries(
+                        result["data"]["attributes"]["last_analysis_results"]
+                      )
+                        .slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
+                        .map(([name, analysis], index) => (
+                          <TableRow key={index}>
+                            <TableCell>{name}</TableCell>
+                            <TableCell
+                              sx={{
+                                bgcolor:
+                                  analysis.category === "malicious"
+                                    ? "red"
+                                    : "#6AAB8E",
+                              }}
+                            >
+                              {analysis.category}
+                            </TableCell>
+                            <TableCell>{analysis.result}</TableCell>
+                            <TableCell>{analysis.method}</TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                    component="div"
+                    count={
+                      Object.entries(
+                        result["data"]["attributes"]["last_analysis_results"]
+                      ).length
+                    }
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </TableContainer>
               </Card>
             ) : null}
 
@@ -734,7 +808,9 @@ export default function Virustotal(props) {
                   Whois
                 </Typography>
                 <Typography component="p" sx={{ whiteSpace: "pre-wrap" }}>
-                  {expanded ? result["data"]["attributes"]["whois"] : result["data"]["attributes"]["whois"].slice(0, 200)}
+                  {expanded
+                    ? result["data"]["attributes"]["whois"]
+                    : result["data"]["attributes"]["whois"].slice(0, 200)}
                 </Typography>
                 {result["data"]["attributes"]["whois"].length > 250 && (
                   <Button onClick={toggleExpanded}>
