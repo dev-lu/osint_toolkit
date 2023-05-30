@@ -150,7 +150,7 @@ export default function Virustotal(props) {
                 <List>
                   <ListItem alignItems="flex-start">
                     <ListItemIcon>
-                      <GppMaybeOutlinedIcon color="primary" />
+                      <GppMaybeOutlinedIcon color={malCount > 0 ? "error" : "primary"} />
                     </ListItemIcon>
                     <ListItemText
                       primary={`Detected as malicious by ${malCount} engine(s)`}
