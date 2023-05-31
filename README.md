@@ -43,13 +43,13 @@ OSINT Toolkit is a full-stack web application designed to assist security analys
 The Newsfeed module keeps you informed about the latest cybersecurity news by aggregating articles from trusted sources such as Wired, The Hacker News, Security Magazine, Threatpost, TechCrunch Security, and Dark Reading. Stay up-to-date with industry trends and potential threats without having to visit multiple websites or subscribe to numerous newsletters.
 ![227624764-ebfc69b5-8a02-4967-af19-2c1196732ffa](https://github.com/dev-lu/osint_toolkit/assets/44299200/8ec3edd0-31e3-41b9-b2c5-049627cd9e53)
 
+### IOC Analyzer
+The IOC Analyzer module helps you analyze different types of indicators of compromise (IOCs) such as IP addresses, hashes, email addresses, domains, and URLs. It leverages services like VirusTotal, AlienVault, AbuseIPDB, and social media platforms like Reddit and Twitter to gather information about the IOCs. The module automatically detects the type of IOC being analyzed and utilizes the appropriate services to provide relevant information, enabling you to identify potential threats and take necessary actions to protect your organization.
+![ioc_analyzer](https://github.com/dev-lu/osint_toolkit/assets/44299200/ae2269fb-8025-4478-83bc-e8a129396a3b)
+
 ### Email Analyzer
 The Email Analyzer module allows you to analyze .eml files for potential threats. Simply drag and drop an .eml file into the module, and it will parse the file, perform basic security checks, extract indicators of compromise (IOCs), and analyze messages with the help of AI. Analyze the IOCs using various open-source intelligence (OSINT) services, and enhance your organization's email security.
 ![ema](https://user-images.githubusercontent.com/44299200/223221309-f45a9644-b965-4f00-9261-0209f74a0a72.png)
-
-### IOC Analyzer
-The IOC Analyzer module helps you analyze different types of indicators of compromise (IOCs) such as IP addresses, hashes, email addresses, domains, and URLs. It leverages services like VirusTotal, AlienVault, AbuseIPDB, and social media platforms like Reddit and Twitter to gather information about the IOCs. The module automatically detects the type of IOC being analyzed and utilizes the appropriate services to provide relevant information, enabling you to identify potential threats and take necessary actions to protect your organization.
-![ioca](https://user-images.githubusercontent.com/44299200/223217758-c3a939ea-10af-4745-b575-54fb40f018b0.png)
 
 ### IOC Extractor
 The IOC Extractor module allows you to extract and organize IOCs from unstructured files using regular expressions (Regex). It automatically removes duplicates, saving you the effort of sorting through the same IOCs multiple times. Simply drop your file containing the IOCs into the tool, and analyze each detected IOC with a single click.
