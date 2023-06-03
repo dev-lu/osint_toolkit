@@ -4,6 +4,14 @@ import { useEffect, useState } from "react";
 
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
+import DnsIcon from "@mui/icons-material/Dns";
+import GppBadIcon from "@mui/icons-material/GppBad";
+import Grid from "@mui/material/Grid";
+import InfoIcon from "@mui/icons-material/Info";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import {
   Table,
@@ -17,6 +25,7 @@ import {
 } from "@mui/material";
 import { Typography } from "@mui/material";
 import useTheme from "@mui/material/styles/useTheme";
+import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 
 import ResultRow from "../../ResultRow";
 
@@ -67,55 +76,152 @@ export default function Maltiverse(props) {
               variant="outlined"
               sx={{ p: 2, borderRadius: 5, boxShadow: 0, width: "50%" }}
             >
-                <Typography variant="h5" gutterBottom component="div">
-                    Threat information
+              <Grid direction="row" container spacing={2} pt={2} pl={2}>
+                <PrivacyTipIcon />
+                <Typography variant="h5" gutterBottom component="div" pl={2}>
+                  Threat information
                 </Typography>
-              <p>Classification: {result["classification"]} </p>
-              <p>IP: {result["ip_addr"]} </p>
-              <p>
-                Is content delivery network: {result["is_cdn"] ? "Yes" : "No"}{" "}
-              </p>
-              <p>
-                Is command and control server: {result["is_cnc"] ? "Yes" : "No"}{" "}
-              </p>
-              <p>
-                Is distributing malware:{" "}
-                {result["is_distributing_malware"] ? "Yes" : "No"}{" "}
-              </p>
-              <p>Is hoster: {result["is_hosting"] ? "Yes" : "No"} </p>
-              <p>Is IOT threat: {result["is_iot_threat"] ? "Yes" : "No"} </p>
-              <p>
-                Is known attacker: {result["is_known_attacker"] ? "Yes" : "No"}{" "}
-              </p>
-              <p>
-                Is known scanner: {result["is_known_scanner"] ? "Yes" : "No"}{" "}
-              </p>
-              <p>Is mining pool: {result["is_mining_pool"] ? "Yes" : "No"} </p>
-              <p>Is open proxy: {result["is_open_proxy"] ? "Yes" : "No"} </p>
-              <p>Is Sinkhole: {result["is_sinkhole"] ? "Yes" : "No"} </p>
-              <p>Is Tor node: {result["is_tor_node"] ? "Yes" : "No"} </p>
-              <p>Is VPN node: {result["is_vpn_node"] ? "Yes" : "No"} </p>
-              <p>Modification time: {result["modification_time"]} </p>
-              <p>
-                Number of blacklisted domains resolving:{" "}
-                {result["number_of_blacklisted_domains_resolving"]}{" "}
-              </p>
-              <p>
-                Number of domains resolving:{" "}
-                {result["number_of_domains_resolving"]}{" "}
-              </p>
-              <p>
-                Number of malicious URLs allocated:{" "}
-                {result["number_of_offline_malicious_urls_allocated"]}{" "}
-              </p>
-              <p>
-                Number of online milicious URLs allocated:{" "}
-                {result["number_of_online_malicious_urls_allocated"]}{" "}
-              </p>
-              <p>
-                Number of whitelisted domains resolving:{" "}
-                {result["number_of_whitelisted_domains_resolving"]}{" "}
-              </p>
+              </Grid>
+
+              <List>
+                <ListItem>
+                  <ListItemText
+                    primary="Classification"
+                    secondary={result["classification"]}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText primary="IP" secondary={result["ip_addr"]} />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Is content delivery network"
+                    secondary={result["is_cdn"] ? "Yes" : "No"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Is command and control server"
+                    secondary={result["is_cnc"] ? "Yes" : "No"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Is distributing malware"
+                    secondary={result["is_distributing_malware"] ? "Yes" : "No"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Is hoster"
+                    secondary={result["is_hosting"] ? "Yes" : "No"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Is IOT threat"
+                    secondary={result["is_iot_threat"] ? "Yes" : "No"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Is known attacker"
+                    secondary={result["is_known_attacker"] ? "Yes" : "No"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Is known scanner"
+                    secondary={result["is_known_scanner"] ? "Yes" : "No"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Is mining pool"
+                    secondary={result["is_mining_pool"] ? "Yes" : "No"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Is open proxy"
+                    secondary={result["is_open_proxy"] ? "Yes" : "No"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Is Sinkhole"
+                    secondary={result["is_sinkhole"] ? "Yes" : "No"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Is Tor node"
+                    secondary={result["is_tor_node"] ? "Yes" : "No"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Is VPN node"
+                    secondary={result["is_vpn_node"] ? "Yes" : "No"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Is web hosting"
+                    secondary={result["is_web_hosting"] ? "Yes" : "No"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Is web server"
+                    secondary={result["is_web_server"] ? "Yes" : "No"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Is web spider"
+                    secondary={result["is_web_spider"] ? "Yes" : "No"}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Number of blacklisted domains resolving"
+                    secondary={
+                      result["number_of_blacklisted_domains_resolving"]
+                    }
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Number of offline malicious URLs allocated"
+                    secondary={
+                      result["number_of_offline_malicious_urls_allocated"]
+                    }
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Number of online malicious URLs allocated"
+                    secondary={
+                      result["number_of_online_malicious_urls_allocated"]
+                    }
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Number of whitelisted domains resolving"
+                    secondary={
+                      result["number_of_whitelisted_domains_resolving"]
+                    }
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Modification time"
+                    secondary={result["modification_time"]}
+                  />
+                </ListItem>
+              </List>
             </Card>
             <Stack spacing={1} width={"50%"} alignItems="stretch">
               <Card
@@ -123,28 +229,79 @@ export default function Maltiverse(props) {
                 variant="outlined"
                 sx={{ p: 2, borderRadius: 5, boxShadow: 0 }}
               >
-                <Typography variant="h5" gutterBottom component="div">
+                <Grid direction="row" container spacing={2} pt={2} pl={2}>
+                  <InfoIcon />
+                  <Typography variant="h5" gutterBottom component="div" pl={2}>
                     General information
-                </Typography>
-                <p>Address: {result["address"]} </p>
-                <p>City: {result["city"]} </p>
-                <p>Country code: {result["country_code"]} </p>
-                <p>Registrant name: {result["registrant_name"]} </p>
-                <p>Type: {result["type"]} </p>
+                  </Typography>
+                </Grid>
+                <List>
+                  <ListItem>
+                    <ListItemText
+                      primary="Address"
+                      secondary={result["address"]}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText primary="City" secondary={result["city"]} />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Country code"
+                      secondary={result["country_code"]}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Registrant name"
+                      secondary={result["registrant_name"]}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText primary="Type" secondary={result["type"]} />
+                  </ListItem>
+                </List>
               </Card>
               <Card
                 key={"maltiverse_asn_card"}
                 variant="outlined"
                 sx={{ p: 2, borderRadius: 5, boxShadow: 0 }}
               >
-                <Typography variant="h5" gutterBottom component="div">
+                <Grid direction="row" container spacing={2} pt={2} pl={2}>
+                  <DnsIcon />
+                  <Typography variant="h5" gutterBottom component="div" pl={2}>
                     ASN information
-                </Typography>
-                <p>ASN: {result["as_name"]} </p>
-                <p>ASN CIDR: {result["asn_cidr"]} </p>
-                <p>ASN country code: {result["asn_country_code"]} </p>
-                <p>ASN date: {result["asn_date"]} </p>
-                <p>ASN registry: {result["asn_registry"]} </p>
+                  </Typography>
+                </Grid>
+                <List>
+                  <ListItem>
+                    <ListItemText primary="ASN" secondary={result["as_name"]} />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="ASN CIDR"
+                      secondary={result["asn_cidr"]}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="ASN country code"
+                      secondary={result["asn_country_code"]}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="ASN date"
+                      secondary={result["asn_date"]}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="ASN registry"
+                      secondary={result["asn_registry"]}
+                    />
+                  </ListItem>
+                </List>
               </Card>
             </Stack>
           </Stack>
@@ -154,9 +311,12 @@ export default function Maltiverse(props) {
             variant="outlined"
             sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
           >
-            <Typography variant="h5" gutterBottom component="div">
-              Blacklists
-            </Typography>
+            <Grid direction="row" container spacing={2} pt={2} pl={2}>
+              <GppBadIcon />
+              <Typography variant="h5" gutterBottom component="div" pl={2}>
+                Blacklists
+              </Typography>
+            </Grid>
             {result["blacklist"] && result["blacklist"].length > 0 ? (
               <TableContainer
                 component={Paper}
