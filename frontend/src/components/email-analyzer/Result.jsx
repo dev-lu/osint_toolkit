@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import dompurify from "dompurify";
 
 import Email from "../ioc-analyzer/Email.jsx";
@@ -41,12 +42,17 @@ import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 
 export default function Result(props) {
   const theme = useTheme();
+  const [expanded, setExpanded] = useState(false);
   const card_style = {
     p: 2,
     mt: 2,
     backgroundColor: theme.palette.background.card,
     boxShadow: 0,
     borderRadius: 5,
+  };
+
+  const toggleExpanded = () => {
+    setExpanded(!expanded);
   };
 
   const tableCellStyle = {
@@ -609,9 +615,22 @@ export default function Result(props) {
           <h2>
             <ChatIcon /> Message body (HTML sanitized)
           </h2>
+          {expanded
+            ? dompurify.sanitize(result["message_text"], {
+                USE_PROFILES: { html: false, svg: false, svgFilters: false },
+              })
+            : dompurify
+                .sanitize(result["message_text"], {
+                  USE_PROFILES: { html: false, svg: false, svgFilters: false },
+                })
+                .slice(0, 700)}
           {dompurify.sanitize(result["message_text"], {
             USE_PROFILES: { html: false, svg: false, svgFilters: false },
-          })}
+          }).length > 700 ? (
+            <Button onClick={toggleExpanded}>
+              {expanded ? "Read Less" : "Read More"}
+            </Button>
+          ) : null}
         </Card>
       </Grow>
       <br />
