@@ -16,6 +16,7 @@ import IconButton from "@mui/material/IconButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import LinearProgress from "@mui/material/LinearProgress";
+import { List, ListItem, ListItemText } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import {
   TableContainer,
@@ -25,10 +26,10 @@ import {
   TableRow,
   TableCell,
   TablePagination,
-  Paper
+  Paper,
 } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import useTheme from "@mui/material/styles/useTheme";
-
 
 export default function ResultTable(props) {
   const theme = useTheme();
@@ -126,7 +127,10 @@ export default function ResultTable(props) {
 
     return (
       <>
-        <TableRow key={section["task"]["uuid"]} sx={{bgcolor: theme.palette.background.tablecell}}>
+        <TableRow
+          key={section["task"]["uuid"]}
+          sx={{ bgcolor: theme.palette.background.tablecell }}
+        >
           <TableCell>
             <IconButton
               aria-label="expand row"
@@ -174,7 +178,9 @@ export default function ResultTable(props) {
                   }}
                 >
                   <Stack sx={{ float: "right" }}>
-                    <h2 align="center">Screenshot</h2>
+                    <Typography variant="h6" align="center">
+                      Screenshot
+                    </Typography>
                     <a
                       href={section["screenshot"]}
                       target="_blank"
@@ -197,77 +203,101 @@ export default function ResultTable(props) {
                   variant="outlined"
                   sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
                 >
-                  <p>
-                    <b>IP: </b>
-                    {section["page"]["ip"]}
-                  </p>
-                  <p>
-                    <b>Country: </b> {section["page"]["country"]}
-                  </p>
+                  <List>
+                    <ListItem>
+                      <ListItemText
+                        primary="IP"
+                        secondary={section["page"]["ip"]}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Country"
+                        secondary={section["page"]["country"]}
+                      />
+                    </ListItem>
+                  </List>
                 </Card>
                 <Card
                   variant="outlined"
                   sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
                 >
-                  <p>
-                    <b>Status code: </b>
-                    {section["page"]["status"]}
-                  </p>
-                  <p>
-                    <b>Server: </b>
-                    {section["page"]["server"]}
-                  </p>
-                  <p>
-                    <b>MIME type: </b>
-                    {section["page"]["mimeType"]}
-                  </p>
-                  <p>
-                    <b>ASN Name: </b>
-                    {section["page"]["asnname"]}
-                  </p>
+                  <List>
+                    <ListItem>
+                      <ListItemText
+                        primary="Status code"
+                        secondary={section["page"]["status"]}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Server"
+                        secondary={section["page"]["server"]}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="MIME type"
+                        secondary={section["page"]["mimeType"]}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="ASN Name"
+                        secondary={section["page"]["asnname"]}
+                      />
+                    </ListItem>
+                  </List>
                 </Card>
                 <Card
                   variant="outlined"
                   sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
                 >
-                  <p>
-                    <b>TLS valid days: </b>
-                    {section["page"]["tlsValidDays"]}
-                  </p>
-                  <p>
-                    <b>TLS age in days: </b>
-                    {section["page"]["tlsAgeDays"]}
-                  </p>
-                  <p>
-                    <b>TLS valid from: </b>
-                    {section["page"]["tlsValidFrom"]}
-                  </p>
-                  <p>
-                    <b>TLS issuer: </b>
-                    {section["page"]["tlsIssuer"]}
-                  </p>
+                  <List>
+                    <ListItem>
+                      <ListItemText
+                        primary="TLS valid days"
+                        secondary={section["page"]["tlsValidDays"]}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="TLS age in days"
+                        secondary={section["page"]["tlsAgeDays"]}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="TLS valid from"
+                        secondary={section["page"]["tlsValidFrom"]}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="TLS issuer"
+                        secondary={section["page"]["tlsIssuer"]}
+                      />
+                    </ListItem>
+                  </List>
                 </Card>
                 <Card
                   variant="outlined"
                   sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
                 >
-                  <p>
-                    <b>URL: </b>
-                    {section["page"]["url"]}
-                  </p>
-                  <br />
-                  <p>
-                    <b>Result: </b>{" "}
-                    <a
-                      href={section["result"]}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {" "}
-                      {section["result"]}{" "}
-                    </a>
-                  </p>
-                  <br />
+                  <List>
+                    <ListItem>
+                      <ListItemText
+                        primary="URL"
+                        secondary={section["page"]["url"]}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primary="Result"
+                        secondary={section["result"]}
+                      />
+                    </ListItem>
+                  </List>
                   <Button
                     variant="outlined"
                     disableElevation
@@ -302,42 +332,64 @@ export default function ResultTable(props) {
 
   return (
     <>
-    <Grow in={true}>
-      <TableContainer
-        component={Paper}
-        sx={{
-          boxShadow: 0, 
-          borderRadius: 5, 
-          border: 1, 
-          borderColor: theme.palette.background.tableborder,
-        }}
-      >
-        <Table aria-label="result_table">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ bgcolor: theme.palette.background.tableheader }}/>
-              <TableCell sx={{ bgcolor: theme.palette.background.tableheader, fontWeight: "bold" }}>Domain</TableCell>
-              <TableCell sx={{ bgcolor: theme.palette.background.tableheader, fontWeight: "bold" }}>Status code</TableCell>
-              <TableCell sx={{ bgcolor: theme.palette.background.tableheader, fontWeight: "bold", textAlign: "left" }}>
-                Found
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {response ? (
-              response
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((section) => {
-                return <Row key={section["task"]["uuid"]} row={section} />;
-              })
-            ) : (
+      <Grow in={true}>
+        <TableContainer
+          component={Paper}
+          sx={{
+            boxShadow: 0,
+            borderRadius: 5,
+            border: 1,
+            borderColor: theme.palette.background.tableborder,
+          }}
+        >
+          <Table aria-label="result_table">
+            <TableHead>
               <TableRow>
-                <TableCell>No Data</TableCell>
+                <TableCell
+                  sx={{ bgcolor: theme.palette.background.tableheader }}
+                />
+                <TableCell
+                  sx={{
+                    bgcolor: theme.palette.background.tableheader,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Domain
+                </TableCell>
+                <TableCell
+                  sx={{
+                    bgcolor: theme.palette.background.tableheader,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Status code
+                </TableCell>
+                <TableCell
+                  sx={{
+                    bgcolor: theme.palette.background.tableheader,
+                    fontWeight: "bold",
+                    textAlign: "left",
+                  }}
+                >
+                  Found
+                </TableCell>
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
-        <TablePagination
+            </TableHead>
+            <TableBody>
+              {response ? (
+                response
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((section) => {
+                    return <Row key={section["task"]["uuid"]} row={section} />;
+                  })
+              ) : (
+                <TableRow>
+                  <TableCell>No Data</TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+          <TablePagination
             rowsPerPageOptions={[15, 25, 50, 75, 100]}
             component="div"
             count={response.length}
@@ -346,7 +398,7 @@ export default function ResultTable(props) {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-      </TableContainer>
+        </TableContainer>
       </Grow>
     </>
   );
