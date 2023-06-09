@@ -9,8 +9,10 @@ import Ipv4 from "../ioc-analyzer/Ipv4";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import CircleIcon from "@mui/icons-material/Circle";
 import Collapse from "@mui/material/Collapse";
+import Grid from "@mui/material/Grid";
 import Grow from "@mui/material/Grow";
 import IconButton from "@mui/material/IconButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -166,15 +168,16 @@ export default function ResultTable(props) {
           >
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1 }}>
-                <br />
                 <Card
                   variant="outlined"
+                  key={"screenshot_card_" + section["task"]["uuid"]}
                   sx={{
                     m: 1,
                     p: 2,
                     borderRadius: 5,
                     boxShadow: 0,
                     float: "right",
+                    height: "100%",
                   }}
                 >
                   <Stack sx={{ float: "right" }}>
@@ -199,123 +202,138 @@ export default function ResultTable(props) {
                     </a>
                   </Stack>
                 </Card>
+
                 <Card
                   variant="outlined"
-                  sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
+                  sx={{
+                    m: 1,
+                    p: 1,
+                    borderRadius: 5,
+                    boxShadow: 0,
+                    height: "100%",
+                  }}
                 >
-                  <List>
-                    <ListItem>
-                      <ListItemText
-                        primary="IP"
-                        secondary={section["page"]["ip"]}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="Country"
-                        secondary={section["page"]["country"]}
-                      />
-                    </ListItem>
-                  </List>
+                  <CardContent>
+                    <Grid container spacing={2}>
+                      <Grid item xs={6}>
+                        <List>
+                          <ListItem>
+                            <ListItemText
+                              primary="IP"
+                              secondary={section["page"]["ip"]}
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemText
+                              primary="Country"
+                              secondary={section["page"]["country"]}
+                            />
+                          </ListItem>
+                        </List>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <List>
+                          <ListItem>
+                            <ListItemText
+                              primary="URL"
+                              secondary={section["page"]["url"]}
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemText
+                              primary="Result"
+                              secondary={section["result"]}
+                            />
+                          </ListItem>
+                        </List>
+                      </Grid>
+                    </Grid>
+                    <Button
+                      variant="outlined"
+                      disableElevation
+                      size="small"
+                      onClick={() => setShowIpAnalyse(!showIpAnalyse)}
+                    >
+                      Analyse IP
+                    </Button>
+                    &nbsp;&nbsp;
+                    <Button
+                      variant="outlined"
+                      disableElevation
+                      size="small"
+                      onClick={() => setShowDomainAnalyse(!showDomainAnalyse)}
+                    >
+                      Analyse Domain
+                    </Button>
+                  </CardContent>
                 </Card>
+
                 <Card
                   variant="outlined"
-                  sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
+                  sx={{ m: 1, p: 1, borderRadius: 5, boxShadow: 0 }}
                 >
-                  <List>
-                    <ListItem>
-                      <ListItemText
-                        primary="Status code"
-                        secondary={section["page"]["status"]}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="Server"
-                        secondary={section["page"]["server"]}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="MIME type"
-                        secondary={section["page"]["mimeType"]}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="ASN Name"
-                        secondary={section["page"]["asnname"]}
-                      />
-                    </ListItem>
-                  </List>
+                  <CardContent>
+                    <Grid container spacing={2}>
+                      <Grid item xs={6}>
+                        <List>
+                          <ListItem>
+                            <ListItemText
+                              primary="Status code"
+                              secondary={section["page"]["status"]}
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemText
+                              primary="Server"
+                              secondary={section["page"]["server"]}
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemText
+                              primary="MIME type"
+                              secondary={section["page"]["mimeType"]}
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemText
+                              primary="ASN Name"
+                              secondary={section["page"]["asnname"]}
+                            />
+                          </ListItem>
+                        </List>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <List>
+                          <ListItem>
+                            <ListItemText
+                              primary="TLS valid days"
+                              secondary={section["page"]["tlsValidDays"]}
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemText
+                              primary="TLS age in days"
+                              secondary={section["page"]["tlsAgeDays"]}
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemText
+                              primary="TLS valid from"
+                              secondary={section["page"]["tlsValidFrom"]}
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemText
+                              primary="TLS issuer"
+                              secondary={section["page"]["tlsIssuer"]}
+                            />
+                          </ListItem>
+                        </List>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
                 </Card>
-                <Card
-                  variant="outlined"
-                  sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
-                >
-                  <List>
-                    <ListItem>
-                      <ListItemText
-                        primary="TLS valid days"
-                        secondary={section["page"]["tlsValidDays"]}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="TLS age in days"
-                        secondary={section["page"]["tlsAgeDays"]}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="TLS valid from"
-                        secondary={section["page"]["tlsValidFrom"]}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="TLS issuer"
-                        secondary={section["page"]["tlsIssuer"]}
-                      />
-                    </ListItem>
-                  </List>
-                </Card>
-                <Card
-                  variant="outlined"
-                  sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
-                >
-                  <List>
-                    <ListItem>
-                      <ListItemText
-                        primary="URL"
-                        secondary={section["page"]["url"]}
-                      />
-                    </ListItem>
-                    <ListItem>
-                      <ListItemText
-                        primary="Result"
-                        secondary={section["result"]}
-                      />
-                    </ListItem>
-                  </List>
-                  <Button
-                    variant="outlined"
-                    disableElevation
-                    size="small"
-                    onClick={() => setShowIpAnalyse(!showIpAnalyse)}
-                  >
-                    Analyse IP
-                  </Button>
-                  &nbsp;&nbsp;
-                  <Button
-                    variant="outlined"
-                    disableElevation
-                    size="small"
-                    onClick={() => setShowDomainAnalyse(!showDomainAnalyse)}
-                  >
-                    Analyse Domain
-                  </Button>
-                </Card>
+
                 {showIpAnalyse ? ipAnalyse(section["page"]["ip"]) : <></>}
                 {showDomainAnalyse ? (
                   domainAnalyse(section["task"]["domain"])
