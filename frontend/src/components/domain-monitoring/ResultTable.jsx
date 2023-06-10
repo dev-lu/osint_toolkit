@@ -14,11 +14,14 @@ import CircleIcon from "@mui/icons-material/Circle";
 import Collapse from "@mui/material/Collapse";
 import Grid from "@mui/material/Grid";
 import Grow from "@mui/material/Grow";
+import HttpIcon from "@mui/icons-material/Http";
 import IconButton from "@mui/material/IconButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import LanIcon from "@mui/icons-material/Lan";
 import LinearProgress from "@mui/material/LinearProgress";
-import { List, ListItem, ListItemText } from "@mui/material";
+import LanguageIcon from "@mui/icons-material/Language";
+import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import {
   TableContainer,
@@ -218,12 +221,18 @@ export default function ResultTable(props) {
                       <Grid item xs={6}>
                         <List>
                           <ListItem>
+                            <ListItemIcon>
+                              <LanIcon />
+                            </ListItemIcon>
                             <ListItemText
                               primary="IP"
                               secondary={section["page"]["ip"]}
                             />
                           </ListItem>
                           <ListItem>
+                            <ListItemIcon>
+                              <LanguageIcon />
+                            </ListItemIcon>
                             <ListItemText
                               primary="Country"
                               secondary={section["page"]["country"]}
@@ -234,12 +243,18 @@ export default function ResultTable(props) {
                       <Grid item xs={6}>
                         <List>
                           <ListItem>
+                            <ListItemIcon>
+                              <HttpIcon />
+                            </ListItemIcon>
                             <ListItemText
                               primary="URL"
                               secondary={section["page"]["url"]}
                             />
                           </ListItem>
                           <ListItem>
+                            <ListItemIcon>
+                              <HttpIcon />
+                            </ListItemIcon>
                             <ListItemText
                               primary="Result"
                               secondary={section["result"]}
