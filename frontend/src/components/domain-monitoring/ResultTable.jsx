@@ -6,12 +6,18 @@ import ReactCountryFlag from "react-country-flag";
 import Domain from "../ioc-analyzer/Domain";
 import Ipv4 from "../ioc-analyzer/Ipv4";
 
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import Box from "@mui/material/Box";
+import BusinessIcon from "@mui/icons-material/Business";
 import Button from "@mui/material/Button";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import CategoryIcon from "@mui/icons-material/Category";
 import CircleIcon from "@mui/icons-material/Circle";
 import Collapse from "@mui/material/Collapse";
+import DateRangeIcon from "@mui/icons-material/DateRange";
+import DomainVerificationIcon from "@mui/icons-material/DomainVerification";
 import Grid from "@mui/material/Grid";
 import Grow from "@mui/material/Grow";
 import HttpIcon from "@mui/icons-material/Http";
@@ -22,7 +28,9 @@ import LanIcon from "@mui/icons-material/Lan";
 import LinearProgress from "@mui/material/LinearProgress";
 import LanguageIcon from "@mui/icons-material/Language";
 import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import Stack from "@mui/material/Stack";
+import StorageIcon from "@mui/icons-material/Storage";
 import {
   TableContainer,
   Table,
@@ -253,7 +261,7 @@ export default function ResultTable(props) {
                           </ListItem>
                           <ListItem>
                             <ListItemIcon>
-                              <HttpIcon />
+                              <OpenInNewIcon />
                             </ListItemIcon>
                             <ListItemText
                               primary="Result"
@@ -292,24 +300,50 @@ export default function ResultTable(props) {
                       <Grid item xs={6}>
                         <List>
                           <ListItem>
+                            <ListItemIcon>
+                              {String(section["page"]["status"]).startsWith(
+                                2
+                              ) ? (
+                                <CircleIcon sx={{ color: "green" }} />
+                              ) : String(section["page"]["status"]).startsWith(
+                                  4
+                                ) ? (
+                                <CircleIcon sx={{ color: "orange" }} />
+                              ) : String(section["page"]["status"]).startsWith(
+                                  5
+                                ) ? (
+                                <CircleIcon sx={{ color: "red" }} />
+                              ) : (
+                                <CircleIcon sx={{ color: "darkgrey" }} />
+                              )}
+                            </ListItemIcon>
                             <ListItemText
                               primary="Status code"
                               secondary={section["page"]["status"]}
                             />
                           </ListItem>
                           <ListItem>
+                            <ListItemIcon>
+                              <StorageIcon />
+                            </ListItemIcon>
                             <ListItemText
                               primary="Server"
                               secondary={section["page"]["server"]}
                             />
                           </ListItem>
                           <ListItem>
+                            <ListItemIcon>
+                              <CategoryIcon />
+                            </ListItemIcon>
                             <ListItemText
                               primary="MIME type"
                               secondary={section["page"]["mimeType"]}
                             />
                           </ListItem>
                           <ListItem>
+                            <ListItemIcon>
+                              <BusinessIcon />
+                            </ListItemIcon>
                             <ListItemText
                               primary="ASN Name"
                               secondary={section["page"]["asnname"]}
@@ -320,24 +354,36 @@ export default function ResultTable(props) {
                       <Grid item xs={6}>
                         <List>
                           <ListItem>
+                            <ListItemIcon>
+                              <DomainVerificationIcon />
+                            </ListItemIcon>
                             <ListItemText
                               primary="TLS valid days"
                               secondary={section["page"]["tlsValidDays"]}
                             />
                           </ListItem>
                           <ListItem>
+                            <ListItemIcon>
+                              <DateRangeIcon />
+                            </ListItemIcon>
                             <ListItemText
                               primary="TLS age in days"
                               secondary={section["page"]["tlsAgeDays"]}
                             />
                           </ListItem>
                           <ListItem>
+                            <ListItemIcon>
+                              <CalendarMonthIcon />
+                            </ListItemIcon>
                             <ListItemText
                               primary="TLS valid from"
                               secondary={section["page"]["tlsValidFrom"]}
                             />
                           </ListItem>
                           <ListItem>
+                            <ListItemIcon>
+                              <AdminPanelSettingsIcon />
+                            </ListItemIcon>
                             <ListItemText
                               primary="TLS issuer"
                               secondary={section["page"]["tlsIssuer"]}
