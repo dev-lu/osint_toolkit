@@ -81,7 +81,7 @@ export default function ResultTable(props) {
     );
   if (!response) return null;
 
-  function ipAnalyse(props) {
+  function ipAnalysis(props) {
     const ioc = props;
     return (
       <>
@@ -99,7 +99,7 @@ export default function ResultTable(props) {
     );
   }
 
-  function domainAnalyse(props) {
+  function domainAnalysis(props) {
     const ioc = props;
     return (
       <>
@@ -120,8 +120,8 @@ export default function ResultTable(props) {
   function Row(props) {
     const section = props.row;
     const [open, setOpen] = React.useState(false);
-    const [showIpAnalyse, setShowIpAnalyse] = React.useState(false);
-    const [showDomainAnalyse, setShowDomainAnalyse] = React.useState(false);
+    const [showIpAnalysis, setShowIpAnalysis] = React.useState(false);
+    const [showDomainAnalysis, setShowDomainAnalysis] = React.useState(false);
 
     function Status(props) {
       const status = props;
@@ -275,18 +275,18 @@ export default function ResultTable(props) {
                       variant="outlined"
                       disableElevation
                       size="small"
-                      onClick={() => setShowIpAnalyse(!showIpAnalyse)}
+                      onClick={() => setShowIpAnalysis(!showIpAnalysis)}
                     >
-                      Analyse IP
+                      Analyze IP
                     </Button>
                     &nbsp;&nbsp;
                     <Button
                       variant="outlined"
                       disableElevation
                       size="small"
-                      onClick={() => setShowDomainAnalyse(!showDomainAnalyse)}
+                      onClick={() => setShowDomainAnalysis(!showDomainAnalysis)}
                     >
-                      Analyse Domain
+                      Analyze Domain
                     </Button>
                   </CardContent>
                 </Card>
@@ -395,9 +395,9 @@ export default function ResultTable(props) {
                   </CardContent>
                 </Card>
 
-                {showIpAnalyse ? ipAnalyse(section["page"]["ip"]) : <></>}
-                {showDomainAnalyse ? (
-                  domainAnalyse(section["task"]["domain"])
+                {showIpAnalysis ? ipAnalysis(section["page"]["ip"]) : <></>}
+                {showDomainAnalysis ? (
+                  domainAnalysis(section["task"]["domain"])
                 ) : (
                   <></>
                 )}
