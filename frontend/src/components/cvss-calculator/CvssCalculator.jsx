@@ -19,7 +19,9 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Button from "@mui/material/Button";
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Card from "@mui/material/Card";
+import Chip from "@mui/material/Chip";
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+import DataUsageIcon from '@mui/icons-material/DataUsage';
 import Divider from "@mui/material/Divider";
 import DownloadIcon from '@mui/icons-material/Download';
 import Grid from "@mui/material/Grid";
@@ -421,7 +423,11 @@ __________
       <br />
       <br />
       <Divider>
-        <Typography variant="h6">Overall CVSS 3.1 Score</Typography>
+        <Chip 
+          icon={<DataUsageIcon />} 
+          label="Overall CVSS 3.1 Score"
+          style={{ fontSize: "20px", padding: "10px", height: "40px" }}
+        />
       </Divider>
       <br />
       <Card
