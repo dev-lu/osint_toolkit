@@ -5,6 +5,7 @@ import Circle from "./Circle";
 import { cvssScoresAtom } from "./CvssScoresAtom";
 
 import Card from "@mui/material/Card";
+import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import ForestIcon from "@mui/icons-material/Forest";
 import Grid from "@mui/material/Grid";
@@ -24,8 +25,11 @@ export default function EnvironmentalScore() {
         <br />
         <br />
         <Divider>
-          <ForestIcon />
-          <Typography variant="h6">Environmental Score Metrics</Typography>
+          <Chip 
+            icon={<ForestIcon />} 
+            label="Environmental Score Metrics"
+            style={{ fontSize: "20px", padding: "10px", height: "40px" }}
+          />
         </Divider>
         <br />
         <Grid
