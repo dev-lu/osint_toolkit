@@ -206,8 +206,7 @@ export default function ResultTable(props) {
                         style={{
                           width: "250px",
                           float: "right",
-                          border: "1px solid #a5a4a4",
-                          padding: "5px",
+                          borderRadius: "15px",
                         }}
                       />
                     </a>
