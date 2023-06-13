@@ -459,3 +459,26 @@ def mastodon(keyword:str, bearer: str, proxies:dict):
             case 401: response_json = {"error": 401}
             case 429: response_json = {"error": 429}
     return response_json['statuses']
+
+
+# ===========================================================================
+# CVEs
+# ===========================================================================
+def search_nist_nvd(cve:str, api_key:str, proxies:dict):
+    headers = {
+        "apiKey": api_key
+    }
+    pattern = r"^CVE-\d{4}-\d{4,}$"
+    match_cve = re.match(pattern, cve)
+    if match_cve: 
+        url = f"https://services.nvd.nist.gov/rest/json/cves/2.0?cveId={cve}"
+        response = requests.get(url=url, 
+                                headers=headers,
+                                proxies=proxies)
+        response_json = json.loads(response.text)
+        match response.status_code:
+            case 401: response_json = {"error": 401}
+            case 429: response_json = {"error": 429}
+    else: 
+        response_json = {'error': 'Invalid input '}
+    return response_json
