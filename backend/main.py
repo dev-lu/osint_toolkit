@@ -50,6 +50,14 @@ tags_metadata = [
         "description": "Search social media.",
     },
     {
+        "name": "CVEs",
+        "description": "Search for vulnerabilities in form of CVE IDs.",  
+    },
+    {
+        "name": "AI Assistant",
+        "description": "AI Assistant services.",
+    },
+    {
         "name": "OSINT Toolkit modules",
         "description": "Internal OSINT Toolkit modules.",
     }
@@ -378,6 +386,17 @@ async def root(email):
     '''
     apikey = crud.get_apikey(name="hibp", db=SessionLocal()).key
     return ioc_analyzer.haveibeenpwnd_email_check(email, apikey, get_proxy())
+
+@app.get("/api/cve/nist_nvd/{cve}", tags=["CVEs"])
+async def root(cve):
+    '''
+    Get information about a CVE from the NIST NVD
+    '''
+    if not hasattr(crud.get_apikey(name="nist_nvd", db=SessionLocal()), 'key'):
+        return {"error": "No API key found for NIST NVD"}
+    else: 
+        apikey = crud.get_apikey(name="nist_nvd", db=SessionLocal()).key
+    return ioc_analyzer.search_nist_nvd(cve, apikey, get_proxy())
 
 @app.get("/api/socialmedia/twitter/{ioc}", tags=["Social Media"])
 async def root(ioc):
