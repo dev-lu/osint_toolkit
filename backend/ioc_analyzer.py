@@ -413,7 +413,7 @@ def search_twitter(ioc:str, bearer):
     
 
 
-def search_reddit(ioc:str, client_secret: str, client_id: str, proxies:dict):
+def search_reddit(ioc:str, client_secret: str, client_id: str):
     headers = {"User-Agent": "OSINT Toolkit 0.1"}
     result = []
     params = {
@@ -424,7 +424,7 @@ def search_reddit(ioc:str, client_secret: str, client_id: str, proxies:dict):
         "t": "all"
     }
     url = f"https://www.reddit.com/search.json"
-    response = requests.get(url, headers=headers, params=params, auth=(client_id, client_secret), proxies=proxies)
+    response = requests.get(url, headers=headers, params=params, auth=(client_id, client_secret))
 
     if response.ok:
         data = response.json()
