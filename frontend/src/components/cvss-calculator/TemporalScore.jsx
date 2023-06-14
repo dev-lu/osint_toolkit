@@ -5,6 +5,7 @@ import Circle from "./Circle";
 import { cvssScoresAtom } from "./CvssScoresAtom";
 
 import Card from "@mui/material/Card";
+import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
@@ -23,8 +24,11 @@ export default function TemporalScore() {
       <br />
       <br />
       <Divider>
-        <TimerIcon />
-        <Typography variant="h6">Temporal Score Metrics</Typography>
+        <Chip 
+            icon={<TimerIcon />} 
+            label="Temporal Score Metrics"
+            style={{ fontSize: "20px", padding: "10px", height: "40px" }}
+        />
       </Divider>
       <br />
       <Grid

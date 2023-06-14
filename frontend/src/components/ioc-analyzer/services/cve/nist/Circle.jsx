@@ -22,7 +22,7 @@ const Circle = ({ value }) => {
   const data = [{ value: value }, { value: (10 - value), fill: '#d3d3d3'  }];
       
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="50%" height="50%">
       <PieChart>
         <Pie
           data={data}
@@ -44,6 +44,8 @@ const Circle = ({ value }) => {
         </foreignObject>
       </PieChart>
     </ResponsiveContainer>
+
+
   );
 };
 

@@ -30,6 +30,7 @@ export default function Analyzer() {
     const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/;
     const domainRegex = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/;
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    const cveRegex = /^CVE-[0-9]{4}-[0-9]{4,}$/;
 
 
     function validateIoc(ioc) 
@@ -82,7 +83,14 @@ export default function Analyzer() {
           setIocType("Email");
           handleShowTable()
           return (true)
-        } else {
+        } else if (cveRegex.test(ioc)) {
+          setInvalidInput(false);
+          setKey(ioc);
+          setIocType("CVE");
+          handleShowTable()
+          return (true)
+        }
+        else {
           handleHideTable()
           setInvalidInput(true);
           return (false)

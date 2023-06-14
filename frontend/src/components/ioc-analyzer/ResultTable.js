@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Cve from './Cve';
 import Domain from './Domain';
 import Email from './Email';
 import Hash from './Hash';
@@ -55,6 +56,12 @@ function ResultTable(props) {
     return (
       <>
         <Email ioc={props.ioc} />
+      </>
+    )
+  } else if (props.iocType === 'CVE') {
+    return (
+      <>
+        <Cve ioc={props.ioc} />
       </>
     )
   }

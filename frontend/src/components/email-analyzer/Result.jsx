@@ -1,9 +1,10 @@
 import React from "react";
-import dompurify from 'dompurify';
+import { useState } from "react";
+import dompurify from "dompurify";
 
 import Email from "../ioc-analyzer/Email.jsx";
 import Hash from "../ioc-analyzer/Hash.jsx";
-import OpenAi from "./ShowOpenAiAnswer.jsx"
+import OpenAi from "./ShowOpenAiAnswer.jsx";
 import Url from "../ioc-analyzer/Url.jsx";
 
 import Alert from "@mui/material/Alert";
@@ -11,26 +12,37 @@ import { AlertTitle } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ChatIcon from "@mui/icons-material/Chat";
+import DescriptionIcon from "@mui/icons-material/Description";
+import Grid from "@mui/material/Grid";
 import Grow from "@mui/material/Grow";
 import HorizontalSplitIcon from "@mui/icons-material/HorizontalSplit";
 import InfoIcon from "@mui/icons-material/Info";
 import LinkIcon from "@mui/icons-material/Link";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemIcon from "@mui/material/ListItemIcon";
 import Paper from "@mui/material/Paper";
+import PersonIcon from "@mui/icons-material/Person";
+import ReplyIcon from "@mui/icons-material/Reply";
 import RouteIcon from "@mui/icons-material/Route";
+import SubjectIcon from "@mui/icons-material/Subject";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import ThreePIcon from "@mui/icons-material/ThreeP";
 import Typography from "@mui/material/Typography";
 import useTheme from "@mui/material/styles/useTheme";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 
-
 export default function Result(props) {
   const theme = useTheme();
+  const [expanded, setExpanded] = useState(false);
   const card_style = {
     p: 2,
     mt: 2,
@@ -39,7 +51,13 @@ export default function Result(props) {
     borderRadius: 5,
   };
 
-  const tableCellStyle = { backgroundColor: theme.palette.background.tablecell };
+  const toggleExpanded = () => {
+    setExpanded(!expanded);
+  };
+
+  const tableCellStyle = {
+    backgroundColor: theme.palette.background.tablecell,
+  };
 
   const tableContainerStyle = {
     borderRadius: 5,
@@ -52,7 +70,8 @@ export default function Result(props) {
 
   const result = props.result;
 
-  const [showHashAnalysisAttachements, setShowHashAnalysisAttachements] = React.useState(false);
+  const [showHashAnalysisAttachements, setShowHashAnalysisAttachements] =
+    React.useState(false);
   function hashAnalysis(props) {
     const ioc = props;
     return (
@@ -91,7 +110,6 @@ export default function Result(props) {
     );
   }
 
-
   const [url, setUrl] = React.useState(null);
   const [showUrlAnalyse, setShowUrlAnalyse] = React.useState(false);
   function urlAnalyse(props) {
@@ -109,9 +127,9 @@ export default function Result(props) {
     const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
     const matches = inputString.match(emailRegex);
     if (matches && matches.length > 0) {
-      return(matches[0]);
+      return matches[0];
     } else {
-      return(null);
+      return null;
     }
   };
 
@@ -123,84 +141,101 @@ export default function Result(props) {
             <Table aria-label="simple table" sx={tableCellStyle}>
               <TableHead>
                 <TableRow>
-                <TableCell colSpan={3} sx={{ backgroundColor: theme.palette.background.tablecell }}>
-                  <Typography
-                    sx={{ flex: "1 1 100%" }}
-                    variant="h6"
-                    id={row.md5}
-                    component="div"
+                  <TableCell
+                    colSpan={3}
+                    sx={{ backgroundColor: theme.palette.background.tablecell }}
                   >
-                    <b>
-                      {row.filename != null ? row.filename : "Unknown filename"}
-                    </b>
-                  </Typography>
-                </TableCell>
+                    <Typography
+                      sx={{ flex: "1 1 100%" }}
+                      variant="h6"
+                      id={row.md5}
+                      component="div"
+                    >
+                      <b>
+                        {row.filename != null
+                          ? row.filename
+                          : "Unknown filename"}
+                      </b>
+                    </Typography>
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-              <TableRow>
-                <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
-                  {" "}
-                  <b> MD5 </b>{" "}
-                </TableCell>
-                <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
-                  {" "}
-                  {row.md5}{" "}
-                </TableCell>
-                <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
-                  <Button
-                    variant="outlined"
-                    disableElevation
-                    size="small"
-                    onClick={() => setShowHashAnalysisAttachements(!showHashAnalysisAttachements)}
-                    sx={{ float: "right" }}
-                  >
-                    Analyze
-                  </Button>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
-                  {" "}
-                  <b> SHA1 </b>{" "}
-                </TableCell>
-                <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
-                  {" "}
-                  {row.sha1}{" "}
-                </TableCell>
-                <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
-                  <Button
-                    variant="outlined"
-                    disableElevation
-                    size="small"
-                    onClick={() => setShowHashAnalysisAttachements(!showHashAnalysisAttachements)}
-                    sx={{ float: "right" }}
-                  >
-                    Analyze
-                  </Button>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
-                  {" "}
-                  <b> SHA256 </b>{" "}
-                </TableCell>
-                <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
-                  {" "}
-                  {row.sha256}{" "}
-                </TableCell>
-                <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
-                  <Button
-                    variant="outlined"
-                    disableElevation
-                    size="small"
-                    onClick={() => setShowHashAnalysisAttachements(!showHashAnalysisAttachements)}
-                    sx={{ float: "right" }}
-                  >
-                    Analyze
-                  </Button>
-                </TableCell>
-              </TableRow>
+                <TableRow>
+                  <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
+                    {" "}
+                    <b> MD5 </b>{" "}
+                  </TableCell>
+                  <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
+                    {" "}
+                    {row.md5}{" "}
+                  </TableCell>
+                  <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
+                    <Button
+                      variant="outlined"
+                      disableElevation
+                      size="small"
+                      onClick={() =>
+                        setShowHashAnalysisAttachements(
+                          !showHashAnalysisAttachements
+                        )
+                      }
+                      sx={{ float: "right" }}
+                    >
+                      Analyze
+                    </Button>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
+                    {" "}
+                    <b> SHA1 </b>{" "}
+                  </TableCell>
+                  <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
+                    {" "}
+                    {row.sha1}{" "}
+                  </TableCell>
+                  <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
+                    <Button
+                      variant="outlined"
+                      disableElevation
+                      size="small"
+                      onClick={() =>
+                        setShowHashAnalysisAttachements(
+                          !showHashAnalysisAttachements
+                        )
+                      }
+                      sx={{ float: "right" }}
+                    >
+                      Analyze
+                    </Button>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
+                    {" "}
+                    <b> SHA256 </b>{" "}
+                  </TableCell>
+                  <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
+                    {" "}
+                    {row.sha256}{" "}
+                  </TableCell>
+                  <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
+                    <Button
+                      variant="outlined"
+                      disableElevation
+                      size="small"
+                      onClick={() =>
+                        setShowHashAnalysisAttachements(
+                          !showHashAnalysisAttachements
+                        )
+                      }
+                      sx={{ float: "right" }}
+                    >
+                      Analyze
+                    </Button>
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
@@ -218,7 +253,7 @@ export default function Result(props) {
         <>
           {result["warnings"].map((row, index) => (
             <Alert
-            key={"ema_warnings_alert_" + index}
+              key={"ema_warnings_alert_" + index}
               severity={
                 row["warning_tlp"] === "red"
                   ? "error"
@@ -357,27 +392,27 @@ export default function Result(props) {
           <TableContainer component={Paper} sx={tableContainerStyle}>
             <Table aria-label="simple table" sx={tableCellStyle}>
               <TableBody>
-              {result["urls"].map((row, index) => (
-                <TableRow key={index}>
-                  <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
-                    {row}
-                  </TableCell>
-                  <TableCell sx={{ overflowWrap: "anywhere" }}>
-                    <Button
-                      variant="outlined"
-                      disableElevation
-                      size="small"
-                      onClick={() => {
-                        setShowUrlAnalyse(!showUrlAnalyse);
-                        setUrl(row);
-                      }}
-                      sx={{ float: "right", whiteSpace: "nowrap" }}
-                    >
-                      Analyze
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+                {result["urls"].map((row, index) => (
+                  <TableRow key={index}>
+                    <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
+                      {row}
+                    </TableCell>
+                    <TableCell sx={{ overflowWrap: "anywhere" }}>
+                      <Button
+                        variant="outlined"
+                        disableElevation
+                        size="small"
+                        onClick={() => {
+                          setShowUrlAnalyse(!showUrlAnalyse);
+                          setUrl(row);
+                        }}
+                        sx={{ float: "right", whiteSpace: "nowrap" }}
+                      >
+                        Analyze
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
@@ -397,55 +432,130 @@ export default function Result(props) {
           <h2>
             <InfoIcon /> General information
           </h2>
-          <p>
-            <b>From: </b> {result["basic_info"]["from"]}{" "}
-          </p>
-          <p>
-            <b>Reply To: </b> {result["basic_info"]["return-path"]}{" "}
-          </p>
-          <p>
-            <b>To: </b> {result["basic_info"]["to"]}{" "}
-          </p>
-          <p>
-            <b>Date: </b> {result["basic_info"]["date"]}{" "}
-          </p>
-          <p>
-            <b>Subject: </b> {result["basic_info"]["subject"]}{" "}
-          </p>
-          <br />
-          <h4>Hash vaules of the .eml file itself</h4>
-          <p>
-            <b>MD5: </b> {result["eml_hashes"]["md5"]}{" "}
-          </p>
-          <p>
-            <b>SHA1: </b> {result["eml_hashes"]["sha1"]}{" "}
-          </p>
-          <p>
-            <b>SHA256: </b> {result["eml_hashes"]["sha256"]}{" "}
-          </p>
-          <br />
-          <Button
-          variant="outlined"
-          disableElevation
-          size="small"
-          onClick={() => setShowHashAnalysisEml(!showHashAnalysisEml)}
-          sx={{ float: "left" }}
-        >
-          Analyze .eml hash
-        </Button> 
-        <Button
-          variant="outlined"
-          disableElevation
-          size="small"
-          onClick={() => setShowEmailAnalyse(!showEmailAnalyse)}
-          sx={{ float: "left", ml: 2 }}
-        >
-          Analyze sender address
-        </Button>
-        {showHashAnalysisEml ? hashAnalysisEml(result["eml_hashes"]["md5"]) : null}
-        {showEmailAnalyse && emailAnalyse(extractEmailAddress(result["basic_info"]["from"])) != null ? emailAnalyse(extractEmailAddress(result["basic_info"]["from"])) : null}
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    {" "}
+                    <PersonIcon />{" "}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={result["basic_info"]["from"]}
+                    secondary="From"
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    {" "}
+                    <ReplyIcon />{" "}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      result["basic_info"]["return-path"]
+                        ? result["basic_info"]["return-path"]
+                        : "N/A"
+                    }
+                    secondary="Reply To"
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    {" "}
+                    <ThreePIcon />{" "}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={result["basic_info"]["to"]}
+                    secondary="To"
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    {" "}
+                    <CalendarMonthIcon />{" "}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={result["basic_info"]["date"]}
+                    secondary="Date"
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    {" "}
+                    <SubjectIcon />{" "}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={result["basic_info"]["subject"]}
+                    secondary="Subject"
+                  />
+                </ListItem>
+              </List>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="h6" component="div">
+                <b>Hash vaules of the .eml file itself</b>
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    {" "}
+                    <DescriptionIcon />{" "}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={result["eml_hashes"]["md5"]}
+                    secondary="MD5"
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    {" "}
+                    <DescriptionIcon />{" "}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={result["eml_hashes"]["sha1"]}
+                    secondary="SHA1"
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    {" "}
+                    <DescriptionIcon />{" "}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={result["eml_hashes"]["sha256"]}
+                    secondary="SHA256"
+                  />
+                </ListItem>
+              </List>
+              <Button
+                variant="outlined"
+                disableElevation
+                size="small"
+                onClick={() => setShowHashAnalysisEml(!showHashAnalysisEml)}
+                sx={{ float: "left" }}
+              >
+                Analyze .eml hash
+              </Button>
+              <Button
+                variant="outlined"
+                disableElevation
+                size="small"
+                onClick={() => setShowEmailAnalyse(!showEmailAnalyse)}
+                sx={{ float: "left", ml: 2 }}
+              >
+                Analyze sender address
+              </Button>
+            </Grid>
+          </Grid>
+          {showHashAnalysisEml
+            ? hashAnalysisEml(result["eml_hashes"]["md5"])
+            : null}
+          {showEmailAnalyse &&
+          emailAnalyse(extractEmailAddress(result["basic_info"]["from"])) !=
+            null
+            ? emailAnalyse(extractEmailAddress(result["basic_info"]["from"]))
+            : null}
         </Card>
-        
       </Grow>
 
       {/* Basic security checks card */}
@@ -492,7 +602,8 @@ export default function Result(props) {
       <Grow in={true}>
         <Card key={"ema_file_header_card"} sx={card_style}>
           <h2>
-            <HorizontalSplitIcon /> Complete Header ({result["headers"].length} fields)
+            <HorizontalSplitIcon /> Complete Header ({result["headers"].length}{" "}
+            fields)
           </h2>
           {showHeaderFields()}
         </Card>
@@ -504,13 +615,31 @@ export default function Result(props) {
           <h2>
             <ChatIcon /> Message body (HTML sanitized)
           </h2>
-          {dompurify.sanitize(result["message_text"], {USE_PROFILES: { html: false, svg: false, svgFilters: false }})}
+          {expanded
+            ? dompurify.sanitize(result["message_text"], {
+                USE_PROFILES: { html: false, svg: false, svgFilters: false },
+              })
+            : dompurify
+                .sanitize(result["message_text"], {
+                  USE_PROFILES: { html: false, svg: false, svgFilters: false },
+                })
+                .slice(0, 700)}
+          {dompurify.sanitize(result["message_text"], {
+            USE_PROFILES: { html: false, svg: false, svgFilters: false },
+          }).length > 700 ? (
+            <Button onClick={toggleExpanded}>
+              {expanded ? "Read Less" : "Read More"}
+            </Button>
+          ) : null}
         </Card>
-        
       </Grow>
       <br />
-      <div align='center'>
-        <OpenAi input={dompurify.sanitize(result["message_text"], {USE_PROFILES: { html: false, svg: false, svgFilters: false }})} />
+      <div align="center">
+        <OpenAi
+          input={dompurify.sanitize(result["message_text"], {
+            USE_PROFILES: { html: false, svg: false, svgFilters: false },
+          })}
+        />
       </div>
     </>
   );

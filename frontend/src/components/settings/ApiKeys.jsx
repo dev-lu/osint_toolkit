@@ -189,6 +189,23 @@ export default function ApiKeys() {
         </Stack>
       </Card>
       <Card sx={cardStyle}>
+        {/* NIST NVD */}
+        <Stack spacing={1}>
+          <p>
+            <b>NIST NVD</b>
+          </p>
+          <ApiKeyInput
+            name="nist_nvd"
+            description="NIST NVD"
+            link="https://nvd.nist.gov/developers/request-an-api-key"
+            apiKeys={apiKeys}
+          />
+          <Stack direction="row" spacing={1}>
+            <Chip label="CVEs" />
+          </Stack>
+        </Stack>
+      </Card>
+      <Card sx={cardStyle}>
         {/* Pulsedive */}
         <Stack spacing={1}>
           <p>

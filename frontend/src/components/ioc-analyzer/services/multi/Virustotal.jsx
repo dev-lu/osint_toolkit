@@ -1,16 +1,34 @@
 import React from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { PieChart, Pie, ResponsiveContainer } from "recharts";
 
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import BusinessIcon from "@mui/icons-material/Business";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import ExtensionOutlinedIcon from "@mui/icons-material/ExtensionOutlined";
+import GppMaybeOutlinedIcon from "@mui/icons-material/GppMaybeOutlined";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
+import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
+import LanIcon from "@mui/icons-material/Lan";
+import PeopleIcon from "@mui/icons-material/People";
+import PollOutlinedIcon from "@mui/icons-material/PollOutlined";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import RouterOutlinedIcon from "@mui/icons-material/RouterOutlined";
 import StarIcon from "@mui/icons-material/Star";
+import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 
+import LinearProgress, {
+  linearProgressClasses,
+} from "@mui/material/LinearProgress";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
@@ -18,8 +36,21 @@ import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import { styled } from "@mui/material/styles";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TablePagination,
+} from "@mui/material";
 import { Typography } from "@mui/material";
+import useTheme from "@mui/material/styles/useTheme";
 
 import NoDetails from "../NoDetails";
 import ResultRow from "../../ResultRow";
@@ -29,6 +60,36 @@ export default function Virustotal(props) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [malCount, setMalCount] = useState(null);
+  const [totalEngines, setTotalEngines] = useState(null);
+  const [expanded, setExpanded] = useState(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const theme = useTheme();
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const toggleExpanded = () => {
+    setExpanded(!expanded);
+  };
+
+  const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+    height: 10,
+    borderRadius: 5,
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      backgroundColor: "#6AAB8E",
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+      borderRadius: 5,
+      backgroundColor: "red",
+    },
+  }));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +103,13 @@ export default function Virustotal(props) {
         setResult(response.data);
         setMalCount(
           response.data.data.attributes.last_analysis_stats.malicious
+        );
+        setTotalEngines(
+          response.data.data.attributes.last_analysis_stats.harmless +
+            response.data.data.attributes.last_analysis_stats.malicious +
+            response.data.data.attributes.last_analysis_stats.suspicious +
+            response.data.data.attributes.last_analysis_stats.timeout +
+            response.data.data.attributes.last_analysis_stats.undetected
         );
       } catch (e) {
         setError(e);
@@ -62,6 +130,7 @@ export default function Virustotal(props) {
                 flexWrap: "wrap",
                 justifyContent: "center",
                 alignItems: "stretch",
+                height: "100%",
               }}
             >
               <Card
@@ -72,7 +141,7 @@ export default function Virustotal(props) {
                   p: 2,
                   borderRadius: 5,
                   boxShadow: 0,
-                  flexBasis: "48%",
+                  width: "calc(50% - 10px)",
                 }}
               >
                 <Typography variant="h5" component="h2" gutterBottom>
@@ -80,6 +149,9 @@ export default function Virustotal(props) {
                 </Typography>
                 <List>
                   <ListItem alignItems="flex-start">
+                    <ListItemIcon>
+                      <GppMaybeOutlinedIcon color={malCount > 0 ? "error" : "primary"} />
+                    </ListItemIcon>
                     <ListItemText
                       primary={`Detected as malicious by ${malCount} engine(s)`}
                     />
@@ -88,6 +160,9 @@ export default function Virustotal(props) {
                     "regional_internet_registry"
                   ] && (
                     <ListItem alignItems="flex-start">
+                      <ListItemIcon>
+                        <RouterOutlinedIcon color="primary" />
+                      </ListItemIcon>
                       <ListItemText
                         primary="Internet registry"
                         secondary={
@@ -100,6 +175,9 @@ export default function Virustotal(props) {
                   )}
                   {result["data"]["attributes"]["network"] && (
                     <ListItem alignItems="flex-start">
+                      <ListItemIcon>
+                        <LanIcon color="primary" />
+                      </ListItemIcon>
                       <ListItemText
                         primary="Network"
                         secondary={result["data"]["attributes"]["network"]}
@@ -108,6 +186,9 @@ export default function Virustotal(props) {
                   )}
                   {result["data"]["attributes"]["country"] && (
                     <ListItem alignItems="flex-start">
+                      <ListItemIcon>
+                        <LanguageOutlinedIcon color="primary" />
+                      </ListItemIcon>
                       <ListItemText
                         primary="Country"
                         secondary={result["data"]["attributes"]["country"]}
@@ -116,6 +197,9 @@ export default function Virustotal(props) {
                   )}
                   {result["data"]["attributes"]["as_owner"] && (
                     <ListItem alignItems="flex-start">
+                      <ListItemIcon>
+                        <BusinessIcon color="primary" />
+                      </ListItemIcon>
                       <ListItemText
                         primary="AS owner"
                         secondary={result["data"]["attributes"]["as_owner"]}
@@ -124,6 +208,9 @@ export default function Virustotal(props) {
                   )}
                   {result["data"]["attributes"]["type_extension"] && (
                     <ListItem alignItems="flex-start">
+                      <ListItemIcon>
+                        <ExtensionOutlinedIcon color="primary" />
+                      </ListItemIcon>
                       <ListItemText
                         primary="Type extension"
                         secondary={
@@ -134,6 +221,9 @@ export default function Virustotal(props) {
                   )}
                   {result["data"]["attributes"]["md5"] && (
                     <ListItem alignItems="flex-start">
+                      <ListItemIcon>
+                        <InsertDriveFileOutlinedIcon color="primary" />
+                      </ListItemIcon>
                       <ListItemText
                         primary="MD5"
                         secondary={result["data"]["attributes"]["md5"]}
@@ -142,6 +232,9 @@ export default function Virustotal(props) {
                   )}
                   {result["data"]["attributes"]["sha1"] && (
                     <ListItem alignItems="flex-start">
+                      <ListItemIcon>
+                        <InsertDriveFileOutlinedIcon color="primary" />
+                      </ListItemIcon>
                       <ListItemText
                         primary="SHA1"
                         secondary={result["data"]["attributes"]["sha1"]}
@@ -150,6 +243,9 @@ export default function Virustotal(props) {
                   )}
                   {result["data"]["attributes"]["sha256"] && (
                     <ListItem alignItems="flex-start">
+                      <ListItemIcon>
+                        <InsertDriveFileOutlinedIcon color="primary" />
+                      </ListItemIcon>
                       <ListItemText
                         primary="SHA256"
                         secondary={result["data"]["attributes"]["sha256"]}
@@ -158,6 +254,9 @@ export default function Virustotal(props) {
                   )}
                   {result["data"]["attributes"]["unique_sources"] && (
                     <ListItem alignItems="flex-start">
+                      <ListItemIcon>
+                        <CategoryOutlinedIcon color="primary" />
+                      </ListItemIcon>
                       <ListItemText
                         primary="Unique sources"
                         secondary={
@@ -177,90 +276,313 @@ export default function Virustotal(props) {
                   p: 2,
                   borderRadius: 5,
                   boxShadow: 0,
-                  height: "100%",
-                  flexBasis: "48%",
+                  width: "calc(50% - 10px)",
                 }}
               >
-                <Typography variant="h5" component="h2" gutterBottom>
-                  Analysis statistics
-                </Typography>
-                <List>
-                  <ListItem disablePadding>
-                    <ListItemAvatar>
-                      <Avatar sx={{ backgroundColor: "#6AAB8E" }}>
-                        <CheckCircleOutlineIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary="Harmless"
-                      secondary={
-                        result["data"]["attributes"]["last_analysis_stats"][
-                          "harmless"
-                        ]
-                      }
-                    />
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemAvatar>
-                      <Avatar sx={{ backgroundColor: "red" }}>
-                        <HighlightOffIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary="Malicious"
-                      secondary={
-                        result["data"]["attributes"]["last_analysis_stats"][
-                          "malicious"
-                        ]
-                      }
-                    />
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemAvatar>
-                      <Avatar sx={{ backgroundColor: "#F5BB00" }}>
-                        <ReportProblemIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary="Suspicious"
-                      secondary={
-                        result["data"]["attributes"]["last_analysis_stats"][
-                          "suspicious"
-                        ]
-                      }
-                    />
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemAvatar>
-                      <Avatar>
-                        <QuestionMarkIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary="Undetected"
-                      secondary={
-                        result["data"]["attributes"]["last_analysis_stats"][
-                          "undetected"
-                        ]
-                      }
-                    />
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemAvatar>
-                      <Avatar>
-                        <AccessTimeIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary="Timeout"
-                      secondary={
-                        result["data"]["attributes"]["last_analysis_stats"][
-                          "timeout"
-                        ]
-                      }
-                    />
-                  </ListItem>
-                </List>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <Typography variant="h5" component="h2" gutterBottom>
+                      Analysis statistics
+                    </Typography>
+                    <List>
+                      <ListItem disablePadding>
+                        <ListItemAvatar>
+                          <Avatar sx={{ backgroundColor: "#6AAB8E" }}>
+                            <CheckCircleOutlineIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary="Harmless"
+                          secondary={
+                            result["data"]["attributes"]["last_analysis_stats"][
+                              "harmless"
+                            ]
+                          }
+                        />
+                      </ListItem>
+                      <ListItem disablePadding>
+                        <ListItemAvatar>
+                          <Avatar sx={{ backgroundColor: "red" }}>
+                            <HighlightOffIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary="Malicious"
+                          secondary={
+                            result["data"]["attributes"]["last_analysis_stats"][
+                              "malicious"
+                            ]
+                          }
+                        />
+                      </ListItem>
+                      <ListItem disablePadding>
+                        <ListItemAvatar>
+                          <Avatar sx={{ backgroundColor: "#F5BB00" }}>
+                            <ReportProblemIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary="Suspicious"
+                          secondary={
+                            result["data"]["attributes"]["last_analysis_stats"][
+                              "suspicious"
+                            ]
+                          }
+                        />
+                      </ListItem>
+                      <ListItem disablePadding>
+                        <ListItemAvatar>
+                          <Avatar>
+                            <QuestionMarkIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary="Undetected"
+                          secondary={
+                            result["data"]["attributes"]["last_analysis_stats"][
+                              "undetected"
+                            ]
+                          }
+                        />
+                      </ListItem>
+                      <ListItem disablePadding>
+                        <ListItemAvatar>
+                          <Avatar>
+                            <AccessTimeIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary="Timeout"
+                          secondary={
+                            result["data"]["attributes"]["last_analysis_stats"][
+                              "timeout"
+                            ]
+                          }
+                        />
+                      </ListItem>
+                    </List>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    sx={{ display: "flex", alignItems: "center" }}
+                  >
+                    <ResponsiveContainer width="80%" height="80%">
+                      <PieChart width={250} height={250}>
+                        <Pie
+                          data={[
+                            { name: "malcount", value: malCount },
+                            {
+                              name: "suspicious",
+                              value:
+                                result["data"]["attributes"][
+                                  "last_analysis_stats"
+                                ]["suspicious"],
+                              fill: "#F5BB00",
+                            },
+                            {
+                              name: "harmless",
+                              value:
+                                result["data"]["attributes"][
+                                  "last_analysis_stats"
+                                ]["harmless"],
+                              fill: "#6AAB8E",
+                            },
+                            {
+                              name: "undetected",
+                              value:
+                                result["data"]["attributes"][
+                                  "last_analysis_stats"
+                                ]["undetected"],
+                              fill: "grey",
+                            },
+                            {
+                              name: "timeout",
+                              value:
+                                result["data"]["attributes"][
+                                  "last_analysis_stats"
+                                ]["timeout"],
+                              fill: "grey",
+                            },
+                            {
+                              name: "Remaining",
+                              value:
+                                totalEngines -
+                                (malCount +
+                                  result["data"]["attributes"][
+                                    "last_analysis_stats"
+                                  ]["harmless"] +
+                                  result["data"]["attributes"][
+                                    "last_analysis_stats"
+                                  ]["suspicious"] +
+                                  result["data"]["attributes"][
+                                    "last_analysis_stats"
+                                  ]["undetected"] +
+                                  result["data"]["attributes"][
+                                    "last_analysis_stats"
+                                  ]["timeout"]),
+                              fill: "#d3d3d3",
+                            },
+                          ]}
+                          dataKey="value"
+                          startAngle={90}
+                          endAngle={-270}
+                          innerRadius="80%"
+                          outerRadius="100%"
+                          minAngle={1}
+                          domain={[0, totalEngines]}
+                          stroke="none"
+                          strokeWidth={0}
+                          fill="red"
+                        />
+                        <foreignObject
+                          width="100%"
+                          height="100%"
+                          style={{ textAlign: "center" }}
+                        >
+                          <div
+                            style={{
+                              display: "inline-block",
+                              position: "relative",
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                            }}
+                          >
+                            <Typography
+                              variant="h3"
+                              color={
+                                malCount > 0
+                                  ? "red"
+                                  : result["data"]["attributes"][
+                                      "last_analysis_stats"
+                                    ]["suspicious"] > 0
+                                  ? "#F5BB00"
+                                  : "#6AAB8E"
+                              }
+                              sx={{ textAlign: "center" }}
+                              textAnchor="middle"
+                            >
+                              <text x="50%" y="50%">
+                                {malCount}
+                              </text>
+                            </Typography>
+                            <Typography
+                              variant="h5"
+                              color="textSecondary"
+                              sx={{ textAlign: "center" }}
+                              textAnchor="middle"
+                            >
+                              <text x="50%" y="50%">
+                                / {totalEngines}
+                              </text>
+                            </Typography>
+                          </div>
+                        </foreignObject>
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </Grid>
+                </Grid>
+
+                <Divider>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <PeopleIcon />
+                    <Typography variant="body1" sx={{ ml: 1 }}>
+                      Community
+                    </Typography>
+                  </Box>
+                </Divider>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <List>
+                      <ListItem alignItems="flex-start">
+                        <ListItemIcon>
+                          <ThumbUpOutlinedIcon color="primary" />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary="Voted harmless"
+                          secondary={
+                            result["data"]["attributes"]["total_votes"][
+                              "harmless"
+                            ]
+                          }
+                        />
+                      </ListItem>
+                      <ListItem alignItems="flex-start">
+                        <ListItemIcon>
+                          <ThumbDownOutlinedIcon color="primary" />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary="Voted malicious"
+                          secondary={
+                            result["data"]["attributes"]["total_votes"][
+                              "malicious"
+                            ]
+                          }
+                        />
+                      </ListItem>
+                    </List>
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <List>
+                      <ListItem alignItems="flex-start">
+                        <ListItemIcon>
+                          <PollOutlinedIcon color="primary" />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary="Reputation"
+                          secondary={result["data"]["attributes"]["reputation"]}
+                        />
+                      </ListItem>
+                      <ListItem alignItems="flex-start">
+                        <ListItemIcon>
+                          <CalendarMonthOutlinedIcon color="primary" />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary="Last modification"
+                          secondary={`${new Date(
+                            result.data.attributes.last_modification_date * 1000
+                          ).toLocaleDateString()} ${new Date(
+                            result["data"]["attributes"][
+                              "last_modification_date"
+                            ] * 1000
+                          ).toLocaleTimeString()}`}
+                        />
+                      </ListItem>
+                    </List>
+                  </Grid>
+                </Grid>
+                {result["data"]["attributes"]["total_votes"]["malicious"] ===
+                  0 &&
+                result["data"]["attributes"]["total_votes"]["harmless"] ===
+                  0 ? null : (
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Box sx={{ width: "100%", m: 1 }}>
+                      <BorderLinearProgress
+                        variant="determinate"
+                        value={
+                          (result["data"]["attributes"]["total_votes"][
+                            "malicious"
+                          ] /
+                            (result["data"]["attributes"]["total_votes"][
+                              "harmless"
+                            ] +
+                              result["data"]["attributes"]["total_votes"][
+                                "malicious"
+                              ])) *
+                          100
+                        }
+                      />
+                    </Box>
+                  </Box>
+                )}
               </Card>
             </div>
 
@@ -391,43 +713,93 @@ export default function Virustotal(props) {
                 <Typography variant="h5" component="h2" gutterBottom>
                   Last analysis results
                 </Typography>
-                <div style={{ display: "flex", flexWrap: "wrap" }}>
-                  {Object.entries(
-                    result["data"]["attributes"]["last_analysis_results"]
-                  ).map(([name, data], index) => (
-                    <div
-                      key={index}
-                      style={{ flexBasis: "20%", marginBottom: "20px" }}
-                    >
-                      <Card
-                        variant="outlined"
-                        key={name + "_analysis_results_card"}
-                        sx={{
-                          m: 2,
-                          p: 2,
-                          borderRadius: 5,
-                          boxShadow: 0,
-                          color: "white",
-                          backgroundColor:
-                            data.category === "malicious" ? "red" : "#6AAB8E",
-                          height: "100%",
-                        }}
-                      >
-                        <h4>{name}</h4>
-                        <Divider variant="middle" sx={{ m: 1 }} />
-                        <p>
-                          <b>Category: </b> {data.category}
-                        </p>
-                        <p>
-                          <b>Result: </b> {data.result}
-                        </p>
-                        <p>
-                          <b>Method: </b> {data.method}
-                        </p>
-                      </Card>
-                    </div>
-                  ))}
-                </div>
+                <TableContainer
+                  component={Paper}
+                  sx={{
+                    boxShadow: 0,
+                    borderRadius: 5,
+                    border: 1,
+                    borderColor: theme.palette.background.tableborder,
+                  }}
+                >
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Name
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Category
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Result
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Method
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {Object.entries(
+                        result["data"]["attributes"]["last_analysis_results"]
+                      )
+                        .slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
+                        .map(([name, analysis], index) => (
+                          <TableRow key={index}>
+                            <TableCell>{name}</TableCell>
+                            <TableCell
+                              sx={{
+                                bgcolor:
+                                  analysis.category === "malicious"
+                                    ? "red"
+                                    : "#6AAB8E",
+                              }}
+                            >
+                              {analysis.category}
+                            </TableCell>
+                            <TableCell>{analysis.result}</TableCell>
+                            <TableCell>{analysis.method}</TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                    component="div"
+                    count={
+                      Object.entries(
+                        result["data"]["attributes"]["last_analysis_results"]
+                      ).length
+                    }
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </TableContainer>
               </Card>
             ) : null}
 
@@ -441,8 +813,15 @@ export default function Virustotal(props) {
                   Whois
                 </Typography>
                 <Typography component="p" sx={{ whiteSpace: "pre-wrap" }}>
-                  {result["data"]["attributes"]["whois"]}
+                  {expanded
+                    ? result["data"]["attributes"]["whois"]
+                    : result["data"]["attributes"]["whois"].slice(0, 200)}
                 </Typography>
+                {result["data"]["attributes"]["whois"].length > 250 && (
+                  <Button onClick={toggleExpanded}>
+                    {expanded ? "Read Less" : "Read More"}
+                  </Button>
+                )}
               </Card>
             )}
           </Box>

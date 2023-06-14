@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import GaugeChart from "react-gauge-chart";
+import { PieChart, Pie } from 'recharts';
 
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
@@ -31,6 +31,22 @@ export default function AbuseIpdb(props) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [score, setScore] = useState(null);
+
+  const colors = {
+    green: '#00C49F',
+    orange: '#FFA500',
+    red: '#FF0000',
+  };
+  
+  const getCircleFillColor = score => {
+    if (score === 0) {
+      return colors.green;
+    } else if (score >= 1 && score <= 59) {
+      return colors.orange;
+    } else if (score >= 60 && score <= 100) {
+      return colors.red;
+    } 
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +86,7 @@ export default function AbuseIpdb(props) {
               <List sx={{ mt: 1 }}>
                 <ListItem>
                   <ListItemIcon>
-                    <CheckCircleOutlineIcon color="success" />
+                    <CheckCircleOutlineIcon sx={{ color: getCircleFillColor(score)}} />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Score: ${result.data["abuseConfidenceScore"]}% malicious`}
@@ -78,7 +94,7 @@ export default function AbuseIpdb(props) {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <FileCopyOutlinedIcon color="info" />
+                    <FileCopyOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Total reports: ${result.data["totalReports"]}`}
@@ -86,7 +102,7 @@ export default function AbuseIpdb(props) {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <PeopleOutlinedIcon color="info" />
+                    <PeopleOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Number of reporting users: ${result.data["numDistinctUsers"]}`}
@@ -94,7 +110,7 @@ export default function AbuseIpdb(props) {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <ScheduleOutlinedIcon color="info" />
+                    <ScheduleOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Last report: ${result.data["lastReportedAt"]}`}
@@ -102,7 +118,7 @@ export default function AbuseIpdb(props) {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <VerifiedUserOutlinedIcon color="success" />
+                    <VerifiedUserOutlinedIcon color={result.data["isWhitelisted"] ? "success" : "primary"} />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Whitelisted: ${
@@ -112,7 +128,7 @@ export default function AbuseIpdb(props) {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <LanguageOutlinedIcon color="info" />
+                    <LanguageOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Country code: ${result.data["countryCode"]}`}
@@ -120,19 +136,19 @@ export default function AbuseIpdb(props) {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <RouterOutlinedIcon color="info" />
+                    <RouterOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText primary={`ISP: ${result.data["isp"]}`} />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <DomainOutlinedIcon color="info" />
+                    <DomainOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText primary={`Domain: ${result.data["domain"]}`} />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <CategoryOutlinedIcon color="info" />
+                    <CategoryOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Type: ${
@@ -144,7 +160,7 @@ export default function AbuseIpdb(props) {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <DnsOutlinedIcon color="info" />
+                    <DnsOutlinedIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Hostnames: ${
@@ -158,29 +174,32 @@ export default function AbuseIpdb(props) {
             </Card>
           </Box>
 
-          <Card variant="outlined" sx={{ p: 2, borderRadius: 5, boxShadow: 0 }}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Typography variant="h5" component="h3" gutterBottom>
-                Malicious
-              </Typography>
-              <GaugeChart
-                id="gauge-chart5"
-                style={{ width: "100%" }}
-                animate={false}
-                arcsLength={[0.2, 0.5, 0.3]}
-                colors={["#5BE12C", "#F5CD19", "#EA4228"]}
-                textColor="#5E5E5E"
-                percent={result.data["abuseConfidenceScore"] / 100}
-                arcPadding={0.02}
+          <Card variant="outlined" sx={{ p: 2, borderRadius: 5, boxShadow: 0, margin: "0 auto" }}>
+            <PieChart width={200} height={200}>
+              <Pie
+                data={[{ name: 'Score', value: score }, { name: 'Remaining', value: 100 - score, fill: '#d3d3d3' }]}
+                dataKey="value"
+                startAngle={90}
+                endAngle={-270}
+                innerRadius="80%"
+                outerRadius="100%"
+                minAngle={1}
+                domain={[0, 100]}
+                stroke="none"
+                strokeWidth={0}
+                fill={getCircleFillColor(score)}
               />
-            </Box>
+              <foreignObject width="100%" height="100%" style={{textAlign: "center"}}>
+                <div style={{display: "inline-block", position: "relative", top: "50%", transform: "translateY(-50%)"}}>
+                  <Typography variant="h4" color={getCircleFillColor(score)} sx={{textAlign: "center"}} textAnchor="middle">
+                    <text x="50%" y="50%">{score}%</text>
+                  </Typography>
+                  <Typography variant="h5" color="textSecondary" sx={{textAlign: "center"}} textAnchor="middle">
+                    <text x="50%" y="50%">malicious</text>
+                  </Typography>
+                </div>
+              </foreignObject>
+            </PieChart>
           </Card>
         </Box>
       )}

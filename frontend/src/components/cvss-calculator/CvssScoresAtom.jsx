@@ -25,9 +25,6 @@ export const cvssScoresAtom = atom({
         temporalSeverity: ""
       },
       environmental: {
-        confidentialityRequirement: "X",
-        integrityRequirement: "X",
-        availabilityRequirement: "X",
         modifiedAttackVector: "X",
         modifiedAttackComplexity: "X",
         modifiedPrivilegesRequired: "X",
@@ -36,6 +33,9 @@ export const cvssScoresAtom = atom({
         modifiedConfidentialityImpact: "X",
         modifiedIntegrityImpact: "X",
         modifiedAvailabilityImpact: "X",
+        confidentialityRequirement: "X",
+        integrityRequirement: "X",
+        availabilityRequirement: "X",
         environmentalScore: 0, 
         modifiedImpactSubScore: 0,
         modifiedImpactScore: 0,

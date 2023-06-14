@@ -6,6 +6,7 @@ import Circle from "./Circle";
 
 import BarChartIcon from "@mui/icons-material/BarChart";
 import Card from "@mui/material/Card";
+import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
@@ -40,8 +41,11 @@ export default function BaseScore() {
     <>
       <br />
       <Divider>
-        <BarChartIcon />
-        <Typography variant="h6">Base Score Metrics (required)</Typography>
+        <Chip 
+          icon={<BarChartIcon />} 
+          label="Base Score Metrics (required)"
+          style={{ fontSize: "20px", padding: "10px", height: "40px" }}
+        />
       </Divider>
       <br />
       <Grid

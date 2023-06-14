@@ -131,7 +131,7 @@ export default function Newsfeed() {
                                     disableElevation
                                     href={item.link}
                                     target="_blank"
-                                >Continue reading...</Button>
+                                >Go to article</Button>
                             </Card>
                         </Grow>       
                     );
