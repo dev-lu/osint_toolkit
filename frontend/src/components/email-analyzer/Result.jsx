@@ -493,7 +493,7 @@ export default function Result(props) {
             </Grid>
             <Grid item xs={6}>
               <Typography variant="h6" component="div">
-                <b>Hash vaules of the .eml file itself</b>
+                <b>Hash values of the .eml file itself</b>
               </Typography>
               <List>
                 <ListItem>
