@@ -2,8 +2,7 @@
 
 # OSINT Toolkit
 > **Warning**
-> OSINT Toolkit is not production ready yet. This is an early prototype, that still needs some work before it goes out of beta. 
-> The code needs some refactoring, bug fixing, and error handling before the first stable version can be released.
+> OSINT Toolkit is not production ready yet. This is an early prototype, that still needs some work to be done. 
 ## A fullstack web application built for security analysts
 
 ![Walkthrough video](https://user-images.githubusercontent.com/44299200/222213168-eb32a66f-7f3d-41de-ad0a-a5a55e798920.mov)
@@ -49,15 +48,15 @@ The IOC Analyzer module helps you analyze different types of indicators of compr
 
 ### Email Analyzer
 The Email Analyzer module allows you to analyze .eml files for potential threats. Simply drag and drop an .eml file into the module, and it will parse the file, perform basic security checks, extract indicators of compromise (IOCs), and analyze messages with the help of AI. Analyze the IOCs using various open-source intelligence (OSINT) services, and enhance your organization's email security.
-![ema](https://user-images.githubusercontent.com/44299200/223221309-f45a9644-b965-4f00-9261-0209f74a0a72.png)
+![ema](https://github.com/dev-lu/osint_toolkit/assets/44299200/4f4c8a5b-348a-4db8-a5f5-15ebc4f2ea87)
 
 ### IOC Extractor
 The IOC Extractor module allows you to extract and organize IOCs from unstructured files using regular expressions (Regex). It automatically removes duplicates, saving you the effort of sorting through the same IOCs multiple times. Simply drop your file containing the IOCs into the tool, and analyze each detected IOC with a single click.
-![ioce](https://user-images.githubusercontent.com/44299200/223217837-3bab4389-c7b9-4390-b9f5-ce07ca1809f9.png)
+![ioce](https://github.com/dev-lu/osint_toolkit/assets/44299200/db3072cb-a358-4fa1-81d2-bec8273d7c54)
 
 ### Domain monitoring
 The Domain Monitoring module helps you protect your organization from phishing attacks by searching for recently registered domains that match specific patterns. By utilizing the URLScan.io API, you can view screenshots of websites associated with domains without visiting them directly. Additionally, you can check each domain and its resolved IP against multiple threat intelligence services, further enhancing your organization's security.
-![DomainMonitoring](https://user-images.githubusercontent.com/44299200/218256274-2d63de3e-8a92-45cb-ae3d-5e66220d5513.png)
+![dm](https://github.com/dev-lu/osint_toolkit/assets/44299200/e71c2b38-219c-4e7c-aebb-8df5da06bbfb)
 
 ### AI Assistant
 The AI Assistant module provides powerful AI-based solutions for log data analysis, email text analysis, and source code explanation. Leveraging advanced AI algorithms from OpenAI, it helps security experts respond quickly and effectively to potential security threats, protecting their networks and maintaining system integrity.
