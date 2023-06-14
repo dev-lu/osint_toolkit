@@ -25,18 +25,18 @@ OSINT Toolkit is a full-stack web application designed to assist security analys
 * [Deploy from source](#deploy-from-source)
 
 ## Integrated services
-| IPs            | Domains    | URLs                 | Emails             | Hashes     |
-|----------------|------------|----------------------|--------------------|------------|
-| AbuseIPDB      | Alienvault | Alienvault           | Emailrep.io        | Alienvault |
-| Alienvault     | Maltiverse | Google Safe Browsing | Hunter.io          | Maltiverse |
-| IPQualityScore | Pulsedive  | Maltiverse           | Have I Been Pwnd   | Pulsedive  |
-| Maltiverse     | Shodan     | Pulsedive            | Reddit             | Reddit     |
-| Pulsedive      | ThreatFox  | Shodan               | Twitter            | ThreatFox  |
-| Shodan         | Reddit     | ThreatFox            |                    | Twitter    |
-| Reddit         | Twitter    | Reddit               |                    | Virustotal |
-| ThreatFox      | URLScan    | Twitter              |                    |            |
-| Twitter        | Virustotal | URLScan              |                    |            |
-| Virustotal     |            | Virustotal           |                    |            |
+| IPs            | Domains    | URLs                 | Emails             | Hashes     | CVEs       |
+|----------------|------------|----------------------|--------------------|------------|------------|
+| AbuseIPDB      | Alienvault | Alienvault           | Emailrep.io        | Alienvault | NIST NVD   |
+| Alienvault     | Maltiverse | Google Safe Browsing | Hunter.io          | Maltiverse |            |
+| IPQualityScore | Pulsedive  | Maltiverse           | Have I Been Pwnd   | Pulsedive  |            |
+| Maltiverse     | Shodan     | Pulsedive            | Reddit             | Reddit     |            |
+| Pulsedive      | ThreatFox  | Shodan               | Twitter            | ThreatFox  |            |
+| Shodan         | Reddit     | ThreatFox            |                    | Twitter    |            |
+| Reddit         | Twitter    | Reddit               |                    | Virustotal |            |
+| ThreatFox      | URLScan    | Twitter              |                    |            |            |
+| Twitter        | Virustotal | URLScan              |                    |            |            |
+| Virustotal     |            | Virustotal           |                    |            |            |
 
 ## Features
 ### Newsfeed
