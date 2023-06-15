@@ -6,7 +6,14 @@ import CategoryIcon from "@mui/icons-material/Category";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
-import { List, ListItem, ListItemIcon, ListItemText, Tab } from "@mui/material";
+import {
+  Box,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Tab,
+} from "@mui/material";
 import PolylineIcon from "@mui/icons-material/Polyline";
 import SourceIcon from "@mui/icons-material/Source";
 import Typography from "@mui/material/Typography";
@@ -133,7 +140,35 @@ export default function CvssMetrics(props) {
             </List>
           </Grid>
           <Grid item xs={4}>
-            <Circle value={props.metrics.cvssData.baseScore} />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <Circle value={props.metrics.cvssData.baseScore} />
+              <Typography
+                variant="h6"
+                fontWeight={
+                  props.metrics.cvssData.baseScore >= 9.0 ? "bold" : "normal"
+                }
+                color={
+                  props.metrics.cvssData.baseScore >= 7.0
+                    ? "red"
+                    : props.metrics.cvssData.baseScore >= 4.0
+                    ? "orange"
+                    : "green"
+                }
+                align="center"
+                gutterBottom
+                sx={{ display: "block", marginBottom: 1 }}
+              >
+                {props.metrics.cvssData.baseSeverity}
+              </Typography>
+            </Box>
           </Grid>
         </Grid>
       </>
