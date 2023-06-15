@@ -13,6 +13,7 @@ import CvssMetrics from "./CvssMetrics";
 import Details from "./Details";
 import RefTable from "./RefTable";
 import ResultRow from "../../../ResultRow";
+import VendorComments from "./VendorComments";
 import Weaknesses from "./Weaknesses";
 
 export default function NistNvd(props) {
@@ -82,6 +83,10 @@ export default function NistNvd(props) {
             ) : null}
           </Card>
 
+          {cveDetails.vendorComments ? (
+            <VendorComments comments={cveDetails.vendorComments} />
+          ) : null}
+
           {cveDetails.configurations ? (
             <Card
               variant="outlined"
@@ -107,7 +112,7 @@ export default function NistNvd(props) {
                     component="div"
                     sx={{ mt: 3, ml: 2 }}
                   >
-                    ({index + 1}) - Operator: {configuration.operator}{" "}
+                    ({index + 1}) - Operator: {configuration.nodes[0].operator}{" "}
                     {configuration.negate ? "- Negate" : null}
                   </Typography>
                   <ConfTable configuration={configuration} index={index} />
