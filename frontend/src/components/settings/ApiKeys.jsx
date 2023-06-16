@@ -68,6 +68,23 @@ export default function ApiKeys() {
         </Stack>
       </Card>
       <Card sx={cardStyle}>
+        {/* Checkphish */}
+        <Stack spacing={1}>
+          <p>
+            <b>Checkphish.ai</b>
+          </p>
+          <ApiKeyInput
+            name="checkphishai"
+            description="Checkphish"
+            link="https://checkphish.ai/docs/checkphish-api/"
+            apiKeys={apiKeys}
+          />
+          <Stack direction="row" spacing={1}>
+            <Chip label="IPv4" /><Chip label="Domains" /><Chip label="URLs" />
+          </Stack>
+        </Stack>
+      </Card>
+      <Card sx={cardStyle}>
         {/* emailrep.io */}
         <Stack spacing={1}>
           <p>
