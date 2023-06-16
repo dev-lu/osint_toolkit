@@ -268,6 +268,30 @@ async def root(hostname):
     apikey = crud.get_apikey(name="maltiverse", db=SessionLocal()).key
     return ioc_analyzer.maltiverse_check(hostname, "hostname", apikey, get_proxy())
 
+@app.get("/api/url/checkphish/{url}", tags=["URLs"])
+async def root(url):
+    '''
+    Get URL reputation from CheckPhish
+    '''
+    apikey = crud.get_apikey(name="checkphishai", db=SessionLocal()).key
+    return ioc_analyzer.checkphish_ai(url, apikey)
+
+@app.get("/api/domain/checkphish/{url}", tags=["Domains"])
+async def root(url):
+    '''
+    Get URL reputation from CheckPhish
+    '''
+    apikey = crud.get_apikey(name="checkphishai", db=SessionLocal()).key
+    return ioc_analyzer.checkphish_ai(url, apikey)
+
+@app.get("/api/ip/checkphish/{url}", tags=["IP addresses"])
+async def root(url):
+    '''
+    Get URL reputation from CheckPhish
+    '''
+    apikey = crud.get_apikey(name="checkphishai", db=SessionLocal()).key
+    return ioc_analyzer.checkphish_ai(url, apikey)
+
 @app.get("/api/url/maltiverse/{url}", tags=["URLs"])
 async def root(url):
     '''
@@ -418,10 +442,9 @@ async def root(ioc):
 @app.get("/api/socialmedia/mastodon/{ioc}", tags=["Social Media"])
 async def roof(ioc):
     '''
-    Get latest Mastodon Posts for IOC
+    Get latest Mastodon Posts (ioc.exchange) for a specific IOC
     '''
-    mastodon_token = crud.get_apikey(name="mastodon_bearer", db=SessionLocal()).key
-    return ioc_analyzer.mastodon(ioc, mastodon_token, get_proxy())
+    return ioc_analyzer.mastodon(ioc)
 
 @app.get("/api/url/urlhaus/{url}", tags=["URLs"])
 async def root(url):
