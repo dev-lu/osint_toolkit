@@ -213,26 +213,38 @@ def urlhaus_url_check(url:str, proxies:dict):
     return response_json
 
 # Domains, URLs, IPs
-# TODO: Finish implementation
 def checkphish_ai(ioc:str, apikey: str):
     scan_url = 'https://developers.checkphish.ai/api/neo/scan'
     scan_data = {
         'apiKey': apikey,
         'urlInfo': { 'url': ioc }
         }
-    scan_response = requests.post(url=scan_url, data=scan_data)
-    status_url = 'https://developers.checkphish.ai/api/neo/status'
+    headers = {'Content-Type': 'application/json'}
+    scan_response = requests.post(url=scan_url, headers=headers, data=json.dumps(scan_data))
+    match scan_response.status_code:
+        case 401: return {"error": 401}
+        case 429: return {"error": 429}
+    status_url = 'https://developers.checkphish.ai/api/neo/scan/status'
     status_data = {
         'apiKey': apikey,
         'jobID': scan_response.json()['jobID'],
         'insights': True
     }
-    status_response = requests.post(url=status_url, data=status_data)
-    status_response_json = json.loads(status_response.text)
-    match scan_response.status_code:
-        case 401: status_response_json = {"error": 401}
-        case 429: status_response_json = {"error": 429}
-    return status_response_json
+    print(scan_response.json())
+    if scan_response.json()['jobID'] == 'none':
+        if scan_response.json()['errorMessage']:
+            return {"error": scan_response.json()['errorMessage']}
+        return {"error": 404}
+    for i in range(5):
+        status_response = requests.post(url=status_url, headers=headers, json=status_data)
+        match status_response.status_code:
+            case 401: return {"error": 401}
+            case 429: return {"error": 429}
+        status_response_json = status_response.json()
+        if status_response_json['status'] == 'DONE':
+            return status_response_json
+        sleep(5)
+    return 
 
 
 # Domains and URLs for Safebrowsing
@@ -446,19 +458,14 @@ def search_reddit(ioc:str, client_secret: str, client_id: str):
 
 
 # API is not useful atm. Only allows to search for own toots
-def mastodon(keyword:str, bearer: str, proxies:dict):
-    url = f"https://mastodon.social/api/v2/search?q={keyword}"
-    headers = {
-        'Authorization': 'Bearer ' + bearer
-    }
-    response = requests.get(url=url, 
-                            headers=headers, 
-                            proxies=proxies)
-    response_json = json.loads(response.text)
+def mastodon(keyword:str):
+    url = f"https://ioc.exchange/api/v2/search?q={keyword}"
+    response = requests.get(url=url)
+    response_json = json.loads(response.text)["statuses"]
     match response.status_code:
             case 401: response_json = {"error": 401}
             case 429: response_json = {"error": 429}
-    return response_json['statuses']
+    return response_json
 
 
 # ===========================================================================
