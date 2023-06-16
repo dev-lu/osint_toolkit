@@ -12,6 +12,7 @@ import { TableContainer,
   } from '@mui/material'
 import useTheme from "@mui/material/styles/useTheme";
 
+import Checkphish from './services/multi/Checkphish';
 import Reddit from './services/Reddit';
 import Twitter from './services/Twitter';
 import Alienvault from './services/multi/Alienvault';
@@ -30,6 +31,7 @@ export default function Domain(props) {
     function showResult() {
         if (
           !apiKeys.alienvault && 
+          !apiKeys.checkphishai &&
           !apiKeys.virustotal && 
           !apiKeys.pulsedive && 
           !apiKeys.safebrowsing &&
@@ -66,6 +68,7 @@ export default function Domain(props) {
                     </TableHead>
                     <TableBody>
                         {apiKeys.alienvault ? <Alienvault ioc={props.ioc} type='domain' /> : <></>}
+                        {apiKeys.checkphishai ? <Checkphish ioc={props.ioc} type='domain' /> : <></>}
                         {apiKeys.safebrowsing ? <Safebrowsing ioc={props.ioc} type='domain' /> : <></>}
                         {apiKeys.pulsedive ? <Pulsedive ioc={props.ioc} type='domain' /> : <></>}
                         {apiKeys.virustotal ? <Virustotal ioc={props.ioc} type='domain' /> : <></>}
