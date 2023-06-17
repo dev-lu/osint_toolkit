@@ -11,6 +11,7 @@ import { TableContainer,
   } from '@mui/material'
 import useTheme from "@mui/material/styles/useTheme";
 
+import Checkphish from './services/multi/Checkphish';
 import Reddit from './services/Reddit';
 import Twitter from './services/Twitter';
 import Virustotal from './services/multi/Virustotal';
@@ -24,6 +25,7 @@ export default function Url(props) {
 
     function showResult() {
         if (
+          !apiKeys.checkphishai &&
           !apiKeys.virustotal && 
           !apiKeys.safebrowsing &&
           !apiKeys.reddit_cid &&
@@ -57,6 +59,7 @@ export default function Url(props) {
                       </TableRow>
                     </TableHead>
                     <TableBody>
+                      {apiKeys.checkphishai ? <Checkphish ioc={props.ioc} type='url' /> : <></>}
                       {apiKeys.safebrowsing ? <Safebrowsing ioc={props.ioc} type='domain' /> : <></>}
                       {apiKeys.virustotal ? <Virustotal ioc={props.ioc} type='domain' /> : <></>}
                       {apiKeys.reddit_cid && apiKeys.reddit_cs ? <Reddit ioc={props.ioc} /> : <></>}
