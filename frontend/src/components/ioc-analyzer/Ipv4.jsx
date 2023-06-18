@@ -14,6 +14,7 @@ import useTheme from "@mui/material/styles/useTheme";
 
 import AbuseIpdbData from './services/ipv4/AbuseIpdb.jsx';
 import Alienvault from './services/multi/Alienvault.jsx';
+import Checkphish from './services/multi/Checkphish';
 import Virustotal from './services/multi/Virustotal.jsx';
 import Threatfox from './services/ipv4/Threatfox.jsx';
 import Maltiverse from './services/ipv4/Maltiverse.jsx';
@@ -33,6 +34,7 @@ export default function Ipv4(props) {
     if (
       !apiKeys.abuseipdb && 
       !apiKeys.alienvault && 
+      !apiKeys.checkphishai &&
       !apiKeys.virustotal && 
       !apiKeys.ipqualityscore && 
       !apiKeys.maltiverse && 
@@ -72,6 +74,7 @@ export default function Ipv4(props) {
                 <TableBody>
                 {apiKeys.abuseipdb ? <AbuseIpdbData ioc={props.ioc} /> : <></>}
                 {apiKeys.alienvault ? <Alienvault ioc={props.ioc} type='ip' /> : <></>}
+                {apiKeys.checkphishai ? <Checkphish ioc={props.ioc} type='ip' /> : <></>}
                 {apiKeys.virustotal ? <Virustotal ioc={props.ioc} type='ip' /> : <></>}
                 {apiKeys.ipqualityscore ? <Ipqualityscore ioc={props.ioc} /> : <></>}
                 {apiKeys.maltiverse ? <Maltiverse ioc={props.ioc} /> : <></>}
