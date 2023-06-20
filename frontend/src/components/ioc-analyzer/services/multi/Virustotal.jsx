@@ -150,7 +150,9 @@ export default function Virustotal(props) {
                 <List>
                   <ListItem alignItems="flex-start">
                     <ListItemIcon>
-                      <GppMaybeOutlinedIcon color={malCount > 0 ? "error" : "primary"} />
+                      <GppMaybeOutlinedIcon
+                        color={malCount > 0 ? "error" : "primary"}
+                      />
                     </ListItemIcon>
                     <ListItemText
                       primary={`Detected as malicious by ${malCount} engine(s)`}
@@ -701,6 +703,30 @@ export default function Virustotal(props) {
                 </div>
               </Card>
             ) : null}
+
+            {result["data"]["attributes"]["names"] &&
+              result["data"]["attributes"]["names"].length > 0 && (
+                <>
+                  <Card
+                    key="last_analysis_results_card"
+                    variant="outlined"
+                    sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
+                  >
+                    <Typography variant="h5" component="h2" gutterBottom>
+                      Filenames
+                    </Typography>
+                    <List>
+                      {result["data"]["attributes"]["names"].map(
+                        (name, index) => (
+                          <ListItem>
+                            <ListItemText primary={name} />
+                          </ListItem>
+                        )
+                      )}
+                    </List>
+                  </Card>
+                </>
+              )}
 
             {result["data"]["attributes"]["last_analysis_results"] &&
             Object.keys(result["data"]["attributes"]["last_analysis_results"])
