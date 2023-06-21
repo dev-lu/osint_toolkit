@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { PieChart, Pie, ResponsiveContainer } from "recharts";
 
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import BusinessIcon from "@mui/icons-material/Business";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
@@ -221,6 +222,17 @@ export default function Virustotal(props) {
                       />
                     </ListItem>
                   )}
+                  {result["data"]["attributes"]["magic"] && (
+                    <ListItem alignItems="flex-start">
+                      <ListItemIcon>
+                        <AutoFixHighIcon color="primary" />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Magic"
+                        secondary={result["data"]["attributes"]["magic"]}
+                      />
+                    </ListItem>
+                  )}
                   {result["data"]["attributes"]["md5"] && (
                     <ListItem alignItems="flex-start">
                       <ListItemIcon>
@@ -229,6 +241,7 @@ export default function Virustotal(props) {
                       <ListItemText
                         primary="MD5"
                         secondary={result["data"]["attributes"]["md5"]}
+                        style={{ wordBreak: "break-all" }}
                       />
                     </ListItem>
                   )}
@@ -240,6 +253,7 @@ export default function Virustotal(props) {
                       <ListItemText
                         primary="SHA1"
                         secondary={result["data"]["attributes"]["sha1"]}
+                        style={{ wordBreak: "break-all" }}
                       />
                     </ListItem>
                   )}
@@ -251,6 +265,43 @@ export default function Virustotal(props) {
                       <ListItemText
                         primary="SHA256"
                         secondary={result["data"]["attributes"]["sha256"]}
+                        style={{ wordBreak: "break-all" }}
+                      />
+                    </ListItem>
+                  )}
+                  {result["data"]["attributes"]["ssdeep"] && (
+                    <ListItem alignItems="flex-start">
+                      <ListItemIcon>
+                        <InsertDriveFileOutlinedIcon color="primary" />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="ssdeep"
+                        secondary={result["data"]["attributes"]["ssdeep"]}
+                        style={{ wordBreak: "break-all" }}
+                      />
+                    </ListItem>
+                  )}
+                  {result["data"]["attributes"]["tlsh"] && (
+                    <ListItem alignItems="flex-start">
+                      <ListItemIcon>
+                        <InsertDriveFileOutlinedIcon color="primary" />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="TLSH"
+                        secondary={result["data"]["attributes"]["tlsh"]}
+                        style={{ wordBreak: "break-all" }}
+                      />
+                    </ListItem>
+                  )}
+                  {result["data"]["attributes"]["vhash"] && (
+                    <ListItem alignItems="flex-start">
+                      <ListItemIcon>
+                        <InsertDriveFileOutlinedIcon color="primary" />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="vhash"
+                        secondary={result["data"]["attributes"]["vhash"]}
+                        style={{ wordBreak: "break-all" }}
                       />
                     </ListItem>
                   )}
@@ -757,7 +808,7 @@ export default function Virustotal(props) {
                             fontWeight: "bold",
                           }}
                         >
-                          Name
+                          Engine
                         </TableCell>
                         <TableCell
                           sx={{
