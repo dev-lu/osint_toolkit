@@ -779,6 +779,112 @@ export default function Virustotal(props) {
                 </>
               )}
 
+            {result["data"]["attributes"]["elf_info"] &&
+            result["data"]["attributes"]["elf_info"]["section_list"].length >
+              0 ? (
+              <Card
+                variant="outlined"
+                key="tags_card"
+                sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
+              >
+                <Typography variant="h5" component="h2" gutterBottom>
+                  ELF information (Executable and Linkable Format)
+                </Typography>
+                <List>
+                  <Grid container spacing={2}>
+                    {Object.entries(
+                      result["data"]["attributes"]["elf_info"]["header"]
+                    ).map(([key, value]) => (
+                      <Grid item xs={4} key={key}>
+                        <ListItemText primary={key} secondary={value} />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </List>
+                <Typography variant="h5" component="h2" gutterBottom mt={2}>
+                  Section List
+                </Typography>
+                <TableContainer
+                  component={Paper}
+                  sx={{
+                    boxShadow: 0,
+                    borderRadius: 5,
+                    border: 1,
+                    borderColor: theme.palette.background.tableborder,
+                  }}
+                >
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Name
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Section type
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Virtual address
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Physical offset
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Flags
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Size
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {result["data"]["attributes"]["elf_info"][
+                        "section_list"
+                      ].map((section, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{section["name"]}</TableCell>
+                          <TableCell>{section.section_type}</TableCell>
+                          <TableCell>{section.virtual_address}</TableCell>
+                          <TableCell>{section.physical_offset}</TableCell>
+                          <TableCell>{section.flags}</TableCell>
+                          <TableCell>{section.size}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Card>
+            ) : null}
+
             {result["data"]["attributes"]["last_analysis_results"] &&
             Object.keys(result["data"]["attributes"]["last_analysis_results"])
               .length > 0 ? (
