@@ -665,6 +665,35 @@ export default function Virustotal(props) {
               </Card>
             ) : null}
 
+            {result["data"]["attributes"]["type_tags"] &&
+            result["data"]["attributes"]["type_tags"].length > 0 ? (
+              <Card
+                variant="outlined"
+                key="tags_card"
+                sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
+              >
+                <Typography variant="h5" component="h2" gutterBottom>
+                  Type tags
+                </Typography>
+                {result["data"]["attributes"]["type_tags"].length > 0 ? (
+                  <>
+                    {result["data"]["attributes"]["type_tags"].map(
+                      (tag, index) => (
+                        <React.Fragment key={index}>
+                          <Chip label={tag} sx={{ m: 0.5 }} />
+                          {index !==
+                            result["data"]["attributes"]["type_tags"].length -
+                              1}
+                        </React.Fragment>
+                      )
+                    )}
+                  </>
+                ) : (
+                  <p>None</p>
+                )}
+              </Card>
+            ) : null}
+
             {result["data"]["attributes"]["crowdsourced_context"] &&
             result["data"]["attributes"]["crowdsourced_context"].length > 0 ? (
               <Card
