@@ -914,6 +914,107 @@ export default function Virustotal(props) {
               </Card>
             ) : null}
 
+            {result["data"]["attributes"]["crowdsourced_ids_results"] &&
+            result["data"]["attributes"]["crowdsourced_ids_results"].length >
+              0 ? (
+              <Card
+                variant="outlined"
+                key="tags_card"
+                sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
+              >
+                <Typography variant="h5" component="h2" gutterBottom>
+                  Crowdsourced IDS rules
+                </Typography>
+                <TableContainer
+                  component={Paper}
+                  sx={{
+                    boxShadow: 0,
+                    borderRadius: 5,
+                    border: 1,
+                    borderColor: theme.palette.background.tableborder,
+                  }}
+                >
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Rule category
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Alert severity
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Rule message
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Rule raw
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Rule url
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Rule source
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            bgcolor: theme.palette.background.tablecell,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Rule ID
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {result["data"]["attributes"][
+                        "crowdsourced_ids_results"
+                      ].map((result, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{result.rule_category}</TableCell>
+                          <TableCell>{result.alert_severity}</TableCell>
+                          <TableCell>{result.rule_msg}</TableCell>
+                          <TableCell>{result.rule_raw}</TableCell>
+                          <TableCell>{result.rule_url}</TableCell>
+                          <TableCell>{result.rule_source}</TableCell>
+                          <TableCell>{result.rule_id}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Card>
+            ) : null}
+
             {result["data"]["attributes"]["last_analysis_results"] &&
             Object.keys(result["data"]["attributes"]["last_analysis_results"])
               .length > 0 ? (
