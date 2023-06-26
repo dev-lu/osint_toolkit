@@ -1,33 +1,12 @@
 import React from "react";
 import axios from "axios";
-import { useEffect, useState, useRef } from "react";
-import { PieChart, Pie, ResponsiveContainer } from "recharts";
+import { useEffect, useState } from "react";
 
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
-import BusinessIcon from "@mui/icons-material/Business";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import ExtensionOutlinedIcon from "@mui/icons-material/ExtensionOutlined";
-import GppMaybeOutlinedIcon from "@mui/icons-material/GppMaybeOutlined";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
-import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
-import LanIcon from "@mui/icons-material/Lan";
-import PeopleIcon from "@mui/icons-material/People";
-import PollOutlinedIcon from "@mui/icons-material/PollOutlined";
-import ReportProblemIcon from "@mui/icons-material/ReportProblem";
-import RouterOutlinedIcon from "@mui/icons-material/RouterOutlined";
 import StarIcon from "@mui/icons-material/Star";
-import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
-import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
-import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
-import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -36,8 +15,6 @@ import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import {
@@ -55,8 +32,9 @@ import useTheme from "@mui/material/styles/useTheme";
 
 import NoDetails from "../NoDetails";
 import ResultRow from "../../ResultRow";
-import Details from "./Virustotal/Details"
+import Details from "./Virustotal/Details";
 import AnalysisStatistics from "./Virustotal/AnalysisStatistics";
+import Tags from "./Virustotal/Tags";
 
 export default function Virustotal(props) {
   const [result, setResult] = useState(null);
@@ -137,33 +115,16 @@ export default function Virustotal(props) {
               }}
             >
               <Details malCount={malCount} result={result} />
-              <AnalysisStatistics malCount={malCount} totalEngines={totalEngines} result={result} />
+              <AnalysisStatistics
+                malCount={malCount}
+                totalEngines={totalEngines}
+                result={result}
+              />
             </div>
 
             {result["data"]["attributes"]["tags"] &&
             result["data"]["attributes"]["tags"].length > 0 ? (
-              <Card
-                variant="outlined"
-                key="tags_card"
-                sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
-              >
-                <Typography variant="h5" component="h2" gutterBottom>
-                  Tags
-                </Typography>
-                {result["data"]["attributes"]["tags"].length > 0 ? (
-                  <>
-                    {result["data"]["attributes"]["tags"].map((tag, index) => (
-                      <React.Fragment key={index}>
-                        <Chip label={tag} sx={{ m: 0.5 }} />
-                        {index !==
-                          result["data"]["attributes"]["tags"].length - 1}
-                      </React.Fragment>
-                    ))}
-                  </>
-                ) : (
-                  <p>None</p>
-                )}
-              </Card>
+              <Tags result={result} />
             ) : null}
 
             {result["data"]["attributes"]["type_tags"] &&
