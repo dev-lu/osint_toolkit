@@ -5,7 +5,7 @@
 > OSINT Toolkit is not production ready yet. This is an early prototype, that still needs some work to be done. 
 ## A fullstack web application built for security analysts
 
-![Walkthrough video](https://user-images.githubusercontent.com/44299200/222213168-eb32a66f-7f3d-41de-ad0a-a5a55e798920.mov)
+https://github.com/dev-lu/osint_toolkit/assets/44299200/1d9b16db-cadd-45b8-8e0e-a0d36afbbb48
 
 OSINT Toolkit is a full-stack web application designed to assist security analysts in their work. It combines various functions and services into a single tool, making it easier for analysts to identify potential threats and stay updated with the latest developments in the field of cybersecurity.
 
