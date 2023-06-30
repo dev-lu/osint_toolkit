@@ -13,7 +13,6 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { TableRow, TableCell } from "@mui/material";
 import useTheme from "@mui/material/styles/useTheme";
 
-
 export default function ResultRow(props) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
@@ -56,7 +55,7 @@ export default function ResultRow(props) {
     );
   }
 
-  if (props.result.error === 401) {
+  if (props.result.error && props.result.error === 401) {
     return (
       <>
         <TableRow key={props.id + "_row"}>
@@ -80,7 +79,7 @@ export default function ResultRow(props) {
     );
   }
 
-  if (props.result.error === 429) {
+  if (props.result.error && props.result.error === 429) {
     return (
       <>
         <TableRow key={props.id + "_row"}>
@@ -104,7 +103,7 @@ export default function ResultRow(props) {
     );
   }
 
-  if (!props.result) {
+  if (!props.result || props.result === null) {
     return (
       <>
         <TableRow key={props.id + "_row"}>
@@ -150,7 +149,9 @@ export default function ResultRow(props) {
         </TableCell>
         <TableCell>
           {" "}
-          <p style={props.summary_color}> {props.summary} </p>
+          <>
+            <p style={props.summary_color}> {props.summary} </p>
+          </>
         </TableCell>
         <TableCell bgcolor={props.color}></TableCell>
       </TableRow>

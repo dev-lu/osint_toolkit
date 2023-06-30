@@ -3,8 +3,6 @@ import { useState } from "react";
 
 import BusinessIcon from "@mui/icons-material/Business";
 import Card from "@mui/material/Card";
-import Chip from "@mui/material/Chip";
-import Divider from "@mui/material/Divider";
 import CommentIcon from "@mui/icons-material/Comment";
 import Grid from "@mui/material/Grid";
 import InfoIcon from "@mui/icons-material/Info";

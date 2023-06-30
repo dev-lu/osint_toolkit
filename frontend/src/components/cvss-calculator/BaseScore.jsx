@@ -17,7 +17,6 @@ import TextField from "@mui/material/TextField";
 import { Typography } from "@mui/material";
 import useTheme from "@mui/material/styles/useTheme";
 
-
 export default function BaseScore() {
   const theme = useTheme();
   const [cvssScores, setCvssScores] = useRecoilState(cvssScoresAtom);
@@ -41,8 +40,8 @@ export default function BaseScore() {
     <>
       <br />
       <Divider>
-        <Chip 
-          icon={<BarChartIcon />} 
+        <Chip
+          icon={<BarChartIcon />}
           label="Base Score Metrics (required)"
           style={{ fontSize: "20px", padding: "10px", height: "40px" }}
         />

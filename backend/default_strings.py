@@ -84,8 +84,6 @@ ioc_analyzer = dict(
     
      
     
-     
-    
     """
 )
 

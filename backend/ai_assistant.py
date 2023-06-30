@@ -31,6 +31,9 @@ def ask_prompt(input: str, apikey: str, prompt: str, proxies:dict):
                              headers=headers, 
                              data=json.dumps(data),
                              proxies=proxies)
+    match response.status_code:
+        case 401: return "Error 401: Unauthorized"
+        case 429: return "Error 429: You exceeded your current quota, please check your plan and billing details."
     if response.status_code == 200:
         response_data = response.json()
         response_text = response_data["choices"][0]["text"]

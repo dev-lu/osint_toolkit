@@ -79,12 +79,12 @@ const details = (
   return (
     <>
         <ResultRow
-        name="Checkpish"
+        name="Checkphish"
         id="checkphish"
         icon="checkphish_logo_small"
         loading={loading}
         result={result}
-        summary={result && result['disposition'] ? result['disposition'] : result.error ? result.error : 'N/A'}
+        summary={result && result['disposition'] ? result['disposition'] : 'N/A'}
         summary_color={{ color: null }}
         color={result && result['disposition'] === 'clean' ? 'green' : 'red'}
         error={error}

@@ -18,6 +18,8 @@ def virustotal(ioc:str, type:str, apikey:str, proxies:dict):
         endpoint = "urls"
     elif type == "hash":
         endpoint = "files"
+    else:
+        return {"error": "unknown ioc type"}
     url = f"https://www.virustotal.com/api/v3/{endpoint}/{ioc}"
     apikey = apikey
     if not apikey: apikey = ""
@@ -88,6 +90,8 @@ def alienvaultotx(ioc:str, type:str, apikey:str, proxies:dict):
         endpoint = "file"
     elif type == "domain":
         endpoint = "domain"
+    else:
+        return {"error": "unknown ioc type"}
     url = f"https://otx.alienvault.com/api/v1/indicators/{endpoint}/{ioc}"
     apikey = apikey
     if not apikey: apikey = ""
@@ -128,6 +132,7 @@ def threatfox_ip_check(ip:str, apikey:str, proxies:dict):
 
 
 # TODO: Finish implementation
+'''
 def blocklist_de_ip_check(ip:str, proxies:dict):
     url = "http://api.blocklist.de/api.php?"
     endpoint = "ip="
@@ -143,7 +148,7 @@ def blocklist_de_ip_check(ip:str, proxies:dict):
         case 401: result_dict = {"error": 401}
         case 429: result_dict = {"error": 429}
     return result_dict
-
+'''
 
 # TODO: Implement other IOC types
 def check_pulsedive(ioc:str, apikey:str, proxies:dict):
@@ -395,19 +400,23 @@ def check_shodan(ioc:str, method:str, apikey:str, proxies:dict):
 # ===========================================================================
 # Social media
 # ===========================================================================
-def search_twitter(ioc:str, bearer):
+def search_twitter(ioc: str, bearer: str):
     import tweepy as tw
     import unicodedata
+    
     twitter_bearer_token = bearer
     client = tw.Client(bearer_token=twitter_bearer_token)
+    
     # Define search query and exclude retweets
     query = f'{ioc} -is:retweet'
+    
     # get tweets from API
     tweets = client.search_recent_tweets(
         query = query, 
         tweet_fields = ['context_annotations', 'created_at', 'author_id', 'public_metrics'], 
         max_results = 15
     )
+    
     results = []
     if tweets.data:
         results.append({'count': len(tweets.data)})

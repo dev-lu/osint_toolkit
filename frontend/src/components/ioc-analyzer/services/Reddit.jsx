@@ -4,13 +4,15 @@ import { useEffect, useState } from "react";
 
 import { AccessTime, Link, Person, Score } from "@mui/icons-material";
 
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
-import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import { Typography } from "@mui/material";
 
+import NoDetails from "./NoDetails";
 import ResultRow from "../ResultRow";
 
 export default function Reddit(props) {
@@ -137,9 +139,17 @@ export default function Reddit(props) {
           ))}
         </Box>
       ) : (
-        <Typography variant="body1" component="p">
-          No results
-        </Typography>
+        <Box sx={{ margin: 1 }}>
+          <Grid
+            xs
+            item={true}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <NoDetails />
+          </Grid>
+        </Box>
       )}
     </>
   );

@@ -6,10 +6,9 @@ import { apiKeysState } from "../../App";
 
 import Card from "@mui/material/Card";
 import Chip from "@mui/material/Chip";
-import PaidIcon from '@mui/icons-material/Paid';
+import PaidIcon from "@mui/icons-material/Paid";
 import Stack from "@mui/material/Stack";
 import useTheme from "@mui/material/styles/useTheme";
-
 
 export default function ApiKeys() {
   const apiKeys = useRecoilValue(apiKeysState);
@@ -46,7 +45,8 @@ export default function ApiKeys() {
             apiKeys={apiKeys}
           />
           <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" /><Chip label="IPv6" />
+            <Chip label="IPv4" />
+            <Chip label="IPv6" />
           </Stack>
         </Stack>
       </Card>
@@ -63,7 +63,11 @@ export default function ApiKeys() {
             apiKeys={apiKeys}
           />
           <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" /><Chip label="IPv6" /><Chip label="Domains" /><Chip label="URLs" /><Chip label="Hashes" />
+            <Chip label="IPv4" />
+            <Chip label="IPv6" />
+            <Chip label="Domains" />
+            <Chip label="URLs" />
+            <Chip label="Hashes" />
           </Stack>
         </Stack>
       </Card>
@@ -80,7 +84,9 @@ export default function ApiKeys() {
             apiKeys={apiKeys}
           />
           <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" /><Chip label="Domains" /><Chip label="URLs" />
+            <Chip label="IPv4" />
+            <Chip label="Domains" />
+            <Chip label="URLs" />
           </Stack>
         </Stack>
       </Card>
@@ -132,17 +138,18 @@ export default function ApiKeys() {
             apiKeys={apiKeys}
           />
           <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" /><Chip label="IPv6" />
+            <Chip label="IPv4" />
+            <Chip label="IPv6" />
           </Stack>
         </Stack>
       </Card>
       <Card sx={cardStyle}>
         {/* HaveIBeenPWND */}
         <Stack spacing={1}>
-            <Stack direction="row" alignItems="center" >
-              <PaidIcon sx={{mr: 1}} /> 
-              <b> Have I Been Pwned</b>
-            </Stack>
+          <Stack direction="row" alignItems="center">
+            <PaidIcon sx={{ mr: 1 }} />
+            <b> Have I Been Pwned</b>
+          </Stack>
           <ApiKeyInput
             name="hibp"
             description="Have I Been Pwned"
@@ -201,7 +208,11 @@ export default function ApiKeys() {
             apiKeys={apiKeys}
           />
           <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" /><Chip label="IPv6" /><Chip label="Domains" /><Chip label="URLs" /><Chip label="Hashes" />
+            <Chip label="IPv4" />
+            <Chip label="IPv6" />
+            <Chip label="Domains" />
+            <Chip label="URLs" />
+            <Chip label="Hashes" />
           </Stack>
         </Stack>
       </Card>
@@ -235,7 +246,11 @@ export default function ApiKeys() {
             apiKeys={apiKeys}
           />
           <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" /><Chip label="IPv6" /><Chip label="Domains" /><Chip label="URLs" /><Chip label="Hashes" />
+            <Chip label="IPv4" />
+            <Chip label="IPv6" />
+            <Chip label="Domains" />
+            <Chip label="URLs" />
+            <Chip label="Hashes" />
           </Stack>
         </Stack>
       </Card>
@@ -258,7 +273,12 @@ export default function ApiKeys() {
             apiKeys={apiKeys}
           />
           <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" /><Chip label="IPv6" /><Chip label="Domains" /><Chip label="URLs" /><Chip label="Hashes" /><Chip label="Email" />
+            <Chip label="IPv4" />
+            <Chip label="IPv6" />
+            <Chip label="Domains" />
+            <Chip label="URLs" />
+            <Chip label="Hashes" />
+            <Chip label="Email" />
           </Stack>
         </Stack>
       </Card>
@@ -275,7 +295,10 @@ export default function ApiKeys() {
             apiKeys={apiKeys}
           />
           <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" /><Chip label="IPv6" /><Chip label="Domains" /><Chip label="URLs" />
+            <Chip label="IPv4" />
+            <Chip label="IPv6" />
+            <Chip label="Domains" />
+            <Chip label="URLs" />
           </Stack>
         </Stack>
       </Card>
@@ -292,7 +315,11 @@ export default function ApiKeys() {
             apiKeys={apiKeys}
           />
           <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" /><Chip label="IPv6" /><Chip label="Domains" /><Chip label="URLs" /><Chip label="Hashes" />
+            <Chip label="IPv4" />
+            <Chip label="IPv6" />
+            <Chip label="Domains" />
+            <Chip label="URLs" />
+            <Chip label="Hashes" />
           </Stack>
         </Stack>
       </Card>
@@ -309,7 +336,12 @@ export default function ApiKeys() {
             apiKeys={apiKeys}
           />
           <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" /><Chip label="IPv6" /><Chip label="Domains" /><Chip label="URLs" /><Chip label="Hashes" /><Chip label="Email" />
+            <Chip label="IPv4" />
+            <Chip label="IPv6" />
+            <Chip label="Domains" />
+            <Chip label="URLs" />
+            <Chip label="Hashes" />
+            <Chip label="Email" />
           </Stack>
         </Stack>
       </Card>
@@ -326,7 +358,8 @@ export default function ApiKeys() {
             apiKeys={apiKeys}
           />
           <Stack direction="row" spacing={1}>
-            <Chip label="Domains" /><Chip label="URLs" />
+            <Chip label="Domains" />
+            <Chip label="URLs" />
           </Stack>
         </Stack>
       </Card>
@@ -357,7 +390,10 @@ export default function ApiKeys() {
             apiKeys={apiKeys}
           />
           <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" /><Chip label="Domains" /><Chip label="URLs" /><Chip label="Hashes" />
+            <Chip label="IPv4" />
+            <Chip label="Domains" />
+            <Chip label="URLs" />
+            <Chip label="Hashes" />
           </Stack>
         </Stack>
       </Card>
