@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 
 import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -41,6 +42,9 @@ export default function ELFInformation(props) {
     >
       <Typography variant="h5" component="h2" gutterBottom>
         ELF information (Executable and Linkable Format)
+      </Typography>
+      <Typography variant="h5" component="h2" gutterBottom mt={2}>
+        Header
       </Typography>
       <List>
         <Grid container spacing={2}>
@@ -149,6 +153,21 @@ export default function ELFInformation(props) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </TableContainer>
+      <Typography variant="h5" component="h2" gutterBottom mt={2}>
+        Segment List
+      </Typography>
+      <List>
+        {props.result["data"]["attributes"]["elf_info"]["segment_list"].map(
+          (segment, index) => (
+            <ListItem key={index}>
+              <ListItemText
+                primary={segment.segment_type}
+                secondary={segment.resources.join(", ")}
+              />
+            </ListItem>
+          )
+        )}
+      </List>
     </Card>
   );
 }
