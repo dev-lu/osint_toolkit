@@ -55,6 +55,30 @@ export default function ResultRow(props) {
     );
   }
 
+  if (!props.result || props.result === null) {
+    return (
+      <>
+        <TableRow key={props.id + "_row"}>
+          <TableCell>
+            <IconButton aria-label="expand row" size="large">
+              <KeyboardArrowDownIcon />
+            </IconButton>
+          </TableCell>
+          <TableCell>
+            <img
+              src={require(`./icons/${props.icon}.png`)}
+              alt=""
+              style={{ height: "12px" }}
+            />
+            &nbsp;&nbsp;{props.name}
+          </TableCell>
+          <TableCell> Error </TableCell>
+          <TableCell bgcolor="black"></TableCell>
+        </TableRow>
+      </>
+    );
+  }
+
   if (props.result.error && props.result.error === 401) {
     return (
       <>
@@ -103,7 +127,7 @@ export default function ResultRow(props) {
     );
   }
 
-  if (!props.result || props.result === null) {
+  if (props.result.error && typeof props.result.error === 'number' && String(props.result.error).length === 3) {
     return (
       <>
         <TableRow key={props.id + "_row"}>
@@ -120,7 +144,7 @@ export default function ResultRow(props) {
             />
             &nbsp;&nbsp;{props.name}
           </TableCell>
-          <TableCell> Error </TableCell>
+          <TableCell> Error: {props.result.error} </TableCell>
           <TableCell bgcolor="black"></TableCell>
         </TableRow>
       </>
