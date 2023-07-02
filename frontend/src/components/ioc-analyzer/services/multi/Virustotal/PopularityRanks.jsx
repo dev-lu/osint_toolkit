@@ -3,6 +3,7 @@ import React from "react";
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
+import StarHalfIcon from "@mui/icons-material/StarHalf";
 import StarIcon from "@mui/icons-material/Star";
 import { Typography } from "@mui/material";
 
@@ -13,9 +14,16 @@ export default function PopularityRanks(props) {
       variant="outlined"
       sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
     >
-      <Typography variant="h5" component="h2" gutterBottom>
-        Popularity ranks
-      </Typography>
+      <Grid container alignItems="center">
+        <Grid mr={1} item>
+          <StarHalfIcon />
+        </Grid>
+        <Grid item>
+          <Typography variant="h5" component="h2" gutterBottom>
+            Popularity ranks
+          </Typography>
+        </Grid>
+      </Grid>
       <Typography variant="subtitle1" color="textSecondary">
         Domain's position in popularity ranks such as Alexa, Quantcast, Statvoo,
         etc.

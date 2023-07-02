@@ -4,6 +4,7 @@ import { PieChart, Pie, ResponsiveContainer } from "recharts";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import DataUsageIcon from "@mui/icons-material/DataUsage";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import PeopleIcon from "@mui/icons-material/People";
 import PollOutlinedIcon from "@mui/icons-material/PollOutlined";
@@ -55,9 +56,16 @@ export default function AnalysisStatistics(props) {
     >
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <Typography variant="h5" component="h2" gutterBottom>
-            Analysis statistics
-          </Typography>
+          <Grid container alignItems="center">
+            <Grid mr={1} item>
+              <DataUsageIcon />
+            </Grid>
+            <Grid item>
+              <Typography variant="h5" component="h2" gutterBottom>
+                Analysis statistics
+              </Typography>
+            </Grid>
+          </Grid>
           <List>
             <ListItem disablePadding>
               <ListItemAvatar>

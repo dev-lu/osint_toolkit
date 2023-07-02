@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 
 import Card from "@mui/material/Card";
+import Grid from "@mui/material/Grid";
+import RuleIcon from "@mui/icons-material/Rule";
 import {
   Table,
   TableBody,
@@ -35,9 +37,16 @@ export default function CrowdsourcedIDSRules(props) {
       key="tags_card"
       sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
     >
-      <Typography variant="h5" component="h2" gutterBottom>
-        Crowdsourced IDS rules
-      </Typography>
+      <Grid container alignItems="center">
+        <Grid mr={1} item>
+          <RuleIcon />
+        </Grid>
+        <Grid item>
+          <Typography variant="h5" component="h2" gutterBottom>
+            Crowdsourced IDS rules
+          </Typography>
+        </Grid>
+      </Grid>
       <TableContainer
         component={Paper}
         sx={{

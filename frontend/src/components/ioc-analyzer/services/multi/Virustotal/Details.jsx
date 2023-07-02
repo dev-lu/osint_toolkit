@@ -4,6 +4,7 @@ import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import BusinessIcon from "@mui/icons-material/Business";
 import ExtensionOutlinedIcon from "@mui/icons-material/ExtensionOutlined";
 import GppMaybeOutlinedIcon from "@mui/icons-material/GppMaybeOutlined";
+import InfoIcon from "@mui/icons-material/Info";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import LanIcon from "@mui/icons-material/Lan";
@@ -11,6 +12,7 @@ import RouterOutlinedIcon from "@mui/icons-material/RouterOutlined";
 import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 
 import Card from "@mui/material/Card";
+import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -31,9 +33,16 @@ export default function Details(props) {
         width: "calc(50% - 10px)",
       }}
     >
-      <Typography variant="h5" component="h2" gutterBottom>
-        Details
-      </Typography>
+      <Grid container alignItems="center">
+        <Grid mr={1} item>
+          <InfoIcon />
+        </Grid>
+        <Grid item>
+          <Typography variant="h5" component="h2" gutterBottom>
+            Details
+          </Typography>
+        </Grid>
+      </Grid>
       <List>
         <ListItem alignItems="flex-start">
           <ListItemIcon>

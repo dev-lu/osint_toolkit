@@ -17,6 +17,7 @@ import {
   Paper,
   TablePagination,
 } from "@mui/material";
+import TerminalIcon from "@mui/icons-material/Terminal";
 import { Typography } from "@mui/material";
 import useTheme from "@mui/material/styles/useTheme";
 
@@ -40,9 +41,16 @@ export default function ELFInformation(props) {
       key="tags_card"
       sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
     >
-      <Typography variant="h5" component="h2" gutterBottom>
-        ELF information (Executable and Linkable Format)
-      </Typography>
+      <Grid container alignItems="center">
+        <Grid mr={1} item>
+          <TerminalIcon />
+        </Grid>
+        <Grid item>
+          <Typography variant="h5" component="h2" gutterBottom>
+            ELF information (Executable and Linkable Format)
+          </Typography>
+        </Grid>
+      </Grid>
       <Typography variant="h5" component="h2" gutterBottom mt={2}>
         Header
       </Typography>

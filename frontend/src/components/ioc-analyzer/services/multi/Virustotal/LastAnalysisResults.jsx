@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 
 import Card from "@mui/material/Card";
+import Grid from "@mui/material/Grid";
+import PolicyIcon from "@mui/icons-material/Policy";
 import {
   Table,
   TableBody,
@@ -35,9 +37,16 @@ export default function LastAnalysisResults(props) {
       variant="outlined"
       sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
     >
-      <Typography variant="h5" component="h2" gutterBottom>
-        Last analysis results
-      </Typography>
+      <Grid container alignItems="center">
+        <Grid mr={1} item>
+          <PolicyIcon />
+        </Grid>
+        <Grid item>
+          <Typography variant="h5" component="h2" gutterBottom>
+            Last analysis results
+          </Typography>
+        </Grid>
+      </Grid>
       <TableContainer
         component={Paper}
         sx={{
