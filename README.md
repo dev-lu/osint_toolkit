@@ -78,7 +78,6 @@ Customize the descriptions of each module with your own markdown-formatted text.
 - Export reports
 - Save history and generate statistics
 - Metadata viewer
-- View and analyze PCAP files
 
 ## Deploy with docker
 1. Download the repository and extract the files
@@ -87,12 +86,22 @@ Customize the descriptions of each module with your own markdown-formatted text.
 4. Once the container is running, you can access the app in your browser at http://localhost:3000
 
 ## Deploy from source
+### Prerequisites
+- Python 3.10 or higher
+- Pip (Python package installer)
+- Node.js with NPM
+- Port 3000 and 8000 available
+
 ### Backend
 #### Windows
-`py -m uvicorn main:app --reload`
+1. Install Python requirements: `py -m pip install -r requirements.txt`
+2. Start the backend: `py -m uvicorn main:app`
 
 #### Linux / MacOS
-`uvicorn main:app --reload`
+1. Install Python requirements: `pip install -r requirements.txt`
+2. Start the backend: `uvicorn main:app`
 
 ### Frontend
-`npm start`
+1. Install required packages: `npm install`
+2. Start frontend: `npm start`
+3. Access the app in your browser at http://localhost:3000
