@@ -89,7 +89,7 @@ Customize the descriptions of each module with your own markdown-formatted text.
 ### Prerequisites
 - Python 3.10 or higher
 - Pip (Python package installer)
-- Node.js with NPM
+- Node.js 17 or higher with NPM
 - Port 3000 and 8000 available
 
 ### Backend
