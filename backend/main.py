@@ -13,14 +13,13 @@ import domain_monitoring
 import newsfeed
 import ai_assistant
 from typing import Dict, Any
+import os
 
 
 models.Base.metadata.create_all(bind=engine)
 
 # Allowed origins for avoiding CORS errors
-origins = [
-    "http://localhost:3000"
-]
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000")
 
 description = "## OSINT Toolkit interactive API documentation"
 
@@ -81,7 +80,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=allowed_origins.split(","),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
