@@ -509,7 +509,7 @@ The Temporal metrics measure the current state of exploit techniques or code ava
         ? "Unproven"
         : "Unknown"
     }
-- Remedation Level (RL): ${
+- Remediation Level (RL): ${
       cvssScores.temporal.remediationLevel === "X"
         ? "Not Defined"
         : cvssScores.temporal.remediationLevel === "O"
