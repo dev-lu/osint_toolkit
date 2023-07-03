@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import api from "../../../../api";
 import { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
@@ -31,11 +31,11 @@ export default function Virustotal(props) {
     const fetchData = async () => {
       try {
         const url =
-          "http://localhost:8000/api/" +
+          "/api/" +
           props.type +
           "/virustotal?ioc=" +
           encodeURIComponent(props.ioc);
-        const response = await axios.get(url);
+        const response = await api.get(url);
         setResult(response.data);
         setMalCount(
           response.data.data.attributes.last_analysis_stats.malicious

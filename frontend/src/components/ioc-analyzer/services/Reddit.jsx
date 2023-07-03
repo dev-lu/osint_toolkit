@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 import { AccessTime, Link, Person, Score } from "@mui/icons-material";
@@ -14,6 +13,7 @@ import { Typography } from "@mui/material";
 
 import NoDetails from "./NoDetails";
 import ResultRow from "../ResultRow";
+import api from "../../../api";
 
 export default function Reddit(props) {
   const [result, setResult] = useState(null);
@@ -44,8 +44,8 @@ export default function Reddit(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const url = "http://localhost:8000/api/socialmedia/reddit/" + props.ioc;
-        const response = await axios.get(url);
+        const url = "/api/socialmedia/reddit/" + props.ioc;
+        const response = await api.get(url);
         setResult(response.data);
       } catch (e) {
         setError(e);

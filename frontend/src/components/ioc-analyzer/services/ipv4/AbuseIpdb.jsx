@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import api from "../../../../api";
 import { useEffect, useState } from "react";
 import { PieChart, Pie } from 'recharts';
 
@@ -52,8 +52,8 @@ export default function AbuseIpdb(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const url = "http://localhost:8000/api/ip/abuseipdb/" + props.ioc;
-        const response = await axios.get(url);
+        const url = "/api/ip/abuseipdb/" + props.ioc;
+        const response = await api.get(url);
         setResult(response.data);
         setScore(response.data["data"]["abuseConfidenceScore"]);
       } catch (e) {

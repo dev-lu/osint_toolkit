@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { atom, useSetRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
+import api from "./api";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -144,8 +145,8 @@ function App() {
 
   useEffect(() => {
     // Get state of API keys
-    axios
-      .get("http://localhost:8000/api/apikeys/is_active")
+    api
+      .get("/api/apikeys/is_active")
       .then((response) => {
         const result = response.data;
         setApiKeys(result);
@@ -153,8 +154,8 @@ function App() {
       });
 
     // Get module settings
-    axios
-      .get("http://localhost:8000/api/settings/modules/")
+    api
+      .get("/api/settings/modules/")
       .then((response) => {
         const result = response.data.reduce((dict, item) => {
           const { name, ...rest } = item;
@@ -166,8 +167,8 @@ function App() {
       });
 
     // Get general settings
-    axios
-      .get("http://localhost:8000/api/settings/general/")
+    api
+      .get("/api/settings/general/")
       .then((response) => {
         const result = response.data[0];
         setGeneralSettings(result);
@@ -175,8 +176,8 @@ function App() {
       });
 
     // Get list of RSS feeds
-    axios
-      .get("http://localhost:8000/api/settings/modules/newsfeed/")
+    api
+      .get("/api/settings/modules/newsfeed/")
       .then((response) => {
         const result = response.data.reduce((dict, item) => {
           const { name, ...rest } = item;

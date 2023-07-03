@@ -19,7 +19,7 @@ import os
 models.Base.metadata.create_all(bind=engine)
 
 # Allowed origins for avoiding CORS errors
-allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000")
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "*")
 
 description = "## OSINT Toolkit interactive API documentation"
 

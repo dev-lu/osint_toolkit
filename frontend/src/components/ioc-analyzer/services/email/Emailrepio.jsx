@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import api from "../../../../api";
 import { useEffect, useState } from "react";
 
 import Avatar from "@mui/material/Avatar";
@@ -36,11 +36,11 @@ export default function Emailrepio(props) {
     const fetchData = async () => {
       try {
         const url =
-          "http://localhost:8000/api/" +
+          "/api/" +
           props.type +
           "/emailrepio/" +
           encodeURIComponent(props.email);
-        const response = await axios.get(url);
+        const response = await api.get(url);
         setResult(response.data);
         setMailStatus(response.data.reputation);
       } catch (e) {

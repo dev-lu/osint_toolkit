@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from "axios";
+import api from '../../../../api';
 import { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
@@ -17,8 +17,8 @@ export default function Threatfox(props) {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const url = 'http://localhost:8000/api/ip/threatfox/' + props.ioc;
-                const response = await axios.get(url);
+                const url = '/api/ip/threatfox/' + props.ioc;
+                const response = await api.get(url);
                 setResult(response.data);
             } catch (e) {
                 setError(e);

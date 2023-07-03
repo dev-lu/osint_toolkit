@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import api from '../../../api';
 import { useEffect, useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
@@ -30,8 +30,8 @@ export default function Twitter(props) {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const url = 'http://localhost:8000/api/socialmedia/twitter/' + encodeURIComponent(props.ioc);
-                const response = await axios.get(url);
+                const url = '/api/socialmedia/twitter/' + encodeURIComponent(props.ioc);
+                const response = await api.get(url);
                 setResult(response.data);
             } catch (e) {
                 setError(e);

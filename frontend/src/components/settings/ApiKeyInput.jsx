@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
-import axios from "axios";
+import api from "../../api";
 
 import { apiKeysState } from "../../App";
 
@@ -18,8 +18,8 @@ export default function ApiKeyInput(props) {
   const setApiKeys = useSetRecoilState(apiKeysState);
 
   function updateApikeys() {
-    axios
-      .get("http://localhost:8000/api/apikeys/is_active")
+    api
+      .get("/api/apikeys/is_active")
       .then((response) => {
         const result = response.data;
         setApiKeys(result);
@@ -32,14 +32,14 @@ export default function ApiKeyInput(props) {
   };
 
   function handleApiKey(method, name, key) {
-    let url = `http://localhost:8000/api/apikeys/`;
+    let url = `/api/apikeys/`;
     let json = {};
     if (method === "delete") {
-      url = `http://localhost:8000/api/apikeys?name=${name}`;
+      url = `/api/apikeys?name=${name}`;
     } else {
       json = { name: name, key: key, is_active: true };
     }
-    axios[method](url, json)
+    api[method](url, json)
       .then(() => updateApikeys())
       .catch((error) => console.log(error));
   }

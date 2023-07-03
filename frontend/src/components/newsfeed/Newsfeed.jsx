@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-import axios from 'axios';
+import api from '../../api';
 import he from 'he';
 
 import { newsfeedState } from "../../App";
@@ -70,8 +70,8 @@ export default function Newsfeed() {
             setNewsfeed([])
             setPage(1)
 
-            const url = 'http://localhost:8000/api/newsfeed'
-            axios
+            const url = '/api/newsfeed'
+            api
             .get(url)
             .then(response => {
                 const result = response.data;

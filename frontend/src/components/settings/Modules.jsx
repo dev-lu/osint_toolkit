@@ -1,6 +1,6 @@
 import React from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-import axios from "axios";
+import api from "../../api";
 
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -36,16 +36,16 @@ export default function Modules() {
 
   function handleModuleChange(moduleName) {
     if (modules[moduleName].enabled === false) {
-      axios.post(
-        "http://localhost:8000/api/settings/modules/enable/?module_name=" +
+      api.post(
+        "/api/settings/modules/enable/?module_name=" +
           moduleName
       );
       const newState = { ...modules };
       newState[moduleName] = { ...newState[moduleName], enabled: true };
       setModules(newState);
     } else {
-      axios.post(
-        "http://localhost:8000/api/settings/modules/disable/?module_name=" +
+      api.post(
+        "/api/settings/modules/disable/?module_name=" +
           moduleName
       );
       const newState = { ...modules };
@@ -55,7 +55,7 @@ export default function Modules() {
   }
 
   function handleModuleDescriptionChange(moduleName, description) {
-    axios.put("http://localhost:8000/api/settings/modules", {
+    api.put("/api/settings/modules", {
       name: moduleName,
       description: description,
       enabled: modules[moduleName].enabled,
@@ -70,12 +70,12 @@ export default function Modules() {
 
   function handleEnableDisableNewsfeed(feedName) {
     if (newsfeedList[feedName].enabled === false) {
-      axios.post("http://localhost:8000/api/settings/modules/newsfeed/enable?feedName="+feedName);
+      api.post("/api/settings/modules/newsfeed/enable?feedName="+feedName);
       const newState = { ...newsfeedList };
         newState[feedName] = { ...newState[feedName], enabled: true };
         setNewsfeedList(newState);
     } else {
-      axios.post("http://localhost:8000/api/settings/modules/newsfeed/disable?feedName="+feedName);
+      api.post("/api/settings/modules/newsfeed/disable?feedName="+feedName);
     const newState = { ...newsfeedList };
       newState[feedName] = { ...newState[feedName], enabled: false };
       setNewsfeedList(newState);

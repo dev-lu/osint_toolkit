@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from "axios";
+import api from '../../api';
 import { useRecoilValue } from "recoil";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialOceanic } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -24,8 +24,8 @@ export default function ShowOpenAiAnswer(props) {
     async function callOpenAI(input, endpoint) {
         setLoading(true);
         try {
-          const response = await axios.post(
-            "http://localhost:8000/api/aiassistant/" + endpoint,
+          const response = await api.post(
+            "/api/aiassistant/" + endpoint,
             { input: input }
           );
           setResult(response.data.analysis_result);

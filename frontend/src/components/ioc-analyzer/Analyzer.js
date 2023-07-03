@@ -6,7 +6,6 @@ import ResultTable from './ResultTable'
 import Introduction from '../Introduction'
 import FormGroup from '@mui/material/FormGroup';
 import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';

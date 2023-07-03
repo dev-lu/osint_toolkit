@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import axios from 'axios';
+import api from '../../api';
 import {useDropzone} from 'react-dropzone';
 
 import Button from '@mui/material/Button';
@@ -85,7 +85,7 @@ const baseStyle = {
     const config = { headers: { 'Content-Type': 'multipart/form-data' } };
     let fd = new FormData();
     fd.append('file',file);
-    axios.post(`http://localhost:8000/api/mailanalyzer/`, fd, config)
+    api.post(`/api/mailanalyzer/`, fd, config)
       .then((response) => {
         const result = response.data
         setFile(result); 

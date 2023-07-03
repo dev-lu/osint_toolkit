@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import api from "../../api";
 
 import PublicIcon from "@mui/icons-material/Public";
 import {
@@ -21,8 +21,8 @@ export default function ResultTable(props) {
   const config = { headers: { "Content-Type": "multipart/form-data" } };
   let fd = new FormData();
   fd.append("file", props.result);
-  axios
-    .post(`http://localhost:8000/api/extractor`, fd, config)
+  api
+    .post(`/api/extractor`, fd, config)
     .then((response) => {
       const result = response.data;
     })

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSetRecoilState, useRecoilValue } from "recoil";
-import axios from "axios";
+import api from '../../api';
 
 import { generalSettingsState } from "../../App";
 
@@ -45,9 +45,9 @@ export default function General() {
   function handleDarkmodeChange() {
     try {
       if (!generalSettings.darkmode) {
-        axios
+        api
           .put(
-            "http://localhost:8000/api/settings/general/darkmode/?darkmode=true"
+            "/api/settings/general/darkmode/?darkmode=true"
           )
           .then((response) => {
             if (response.status === 200) {
@@ -58,9 +58,9 @@ export default function General() {
             console.error(error);
           });
       } else {
-        axios
+        api
           .put(
-            "http://localhost:8000/api/settings/general/darkmode/?darkmode=false"
+            "/api/settings/general/darkmode/?darkmode=false"
           )
           .then((response) => {
             if (response.status === 200) {
@@ -79,9 +79,9 @@ export default function General() {
   function handleProxyStringEnabledChange() {
     try {
       if (!generalSettings.proxy_enabled) {
-        axios
+        api
           .put(
-            "http://localhost:8000/api/settings/general/proxy_enabled/?proxy_enabled=true"
+            "/api/settings/general/proxy_enabled/?proxy_enabled=true"
           )
           .then((response) => {
             if (response.status === 200) {
@@ -92,9 +92,9 @@ export default function General() {
             console.error(error);
           });
       } else {
-        axios
+        api
           .put(
-            "http://localhost:8000/api/settings/general/proxy_enabled/?proxy_enabled=false"
+            "/api/settings/general/proxy_enabled/?proxy_enabled=false"
           )
           .then((response) => {
             if (response.status === 200) {
@@ -111,9 +111,9 @@ export default function General() {
   }
 
   function handleProxyStringInput(proxyString) {
-    axios
+    api
       .put(
-        `http://localhost:8000/api/settings/general/proxy_string/?proxy_string=${proxyString}`
+        `/api/settings/general/proxy_string/?proxy_string=${proxyString}`
       )
       .then((response) => {
         if (response.status === 200) {
@@ -126,9 +126,9 @@ export default function General() {
   }
 
   function handleDeleteProxyString() {
-    axios
+    api
       .put(
-        `http://localhost:8000/api/settings/general/proxy_string/?proxy_string=${""}`
+        `/api/settings/general/proxy_string/?proxy_string=${""}`
       )
       .then((response) => {
         if (response.status === 200) {

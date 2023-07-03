@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import api from "../../../../api";
 import { useEffect, useState } from "react";
 
 import Card from "@mui/material/Card";
@@ -50,8 +50,8 @@ export default function Maltiverse(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const url = "http://localhost:8000/api/ip/maltiverse/" + props.ioc;
-        const response = await axios.get(url);
+        const url = "/api/ip/maltiverse/" + props.ioc;
+        const response = await api.get(url);
         setResult(response.data);
       } catch (e) {
         setError(e);

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { useState } from "react";
 
 import Ipv4 from "../ioc-analyzer/Ipv4";
@@ -9,22 +9,15 @@ import Domain from "../ioc-analyzer/Domain";
 import Email from "../ioc-analyzer/Email";
 import NoData from "./NoData";
 
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Collapse from "@mui/material/Collapse";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import LanIcon from "@mui/icons-material/Lan";
-import LinkIcon from "@mui/icons-material/Link";
 import Modal from "@mui/material/Modal";
-import PublicIcon from "@mui/icons-material/Public";
-import SystemUpdateAltIcon from "@mui/icons-material/SystemUpdateAlt";
 import {
-  TableContainer,
   Table,
   TableHead,
   TableBody,

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useState } from "react";
-import axios from "axios";
+import api from "../../api";
 import { useDropzone } from "react-dropzone";
 
 import ResultRows from "./ResultRows";
@@ -87,8 +87,8 @@ export default function Extractor(props) {
     const config = { headers: { "Content-Type": "multipart/form-data" } };
     let fd = new FormData();
     fd.append("file", file);
-    axios
-      .post(`http://localhost:8000/api/extractor/`, fd, config)
+    api
+      .post(`/api/extractor/`, fd, config)
       .then((response) => {
         const result = response.data;
         setFile(result);

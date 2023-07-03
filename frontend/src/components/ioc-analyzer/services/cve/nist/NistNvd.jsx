@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import api from "../../../../../api";
 import { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
@@ -26,11 +26,11 @@ export default function NistNvd(props) {
     const fetchData = async () => {
       try {
         const url =
-          "http://localhost:8000/api/" +
+          "/api/" +
           props.type +
           "/nist_nvd/" +
           encodeURIComponent(props.cve);
-        const response = await axios.get(url);
+        const response = await api.get(url);
         setResult(response.data);
         response.data.vulnerabilities[0].cve
           ? setCveDetails(response.data.vulnerabilities[0].cve)

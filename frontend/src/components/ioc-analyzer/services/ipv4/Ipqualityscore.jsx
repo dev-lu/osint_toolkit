@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import api from "../../../../api";
 import { useEffect, useState } from "react";
 import { PieChart, Pie } from "recharts";
 
@@ -47,8 +47,8 @@ export default function IpQualityscore(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const url = "http://localhost:8000/api/ip/ipqualityscore/" + props.ioc;
-        const response = await axios.get(url);
+        const url = "/api/ip/ipqualityscore/" + props.ioc;
+        const response = await api.get(url);
         setResult(response.data);
         setScore(response.data["fraud_score"]);
       } catch (e) {

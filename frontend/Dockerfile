@@ -1,4 +1,3 @@
-# Build the react app
 FROM node:alpine
 
 # Create app directory
@@ -14,10 +13,12 @@ RUN npm install react-scripts --silent
 
 COPY . ./
 
+# Set React compatible environment variable
+ARG BACKEND_URL
+ENV REACT_APP_BACKEND_URL=$BACKEND_URL
+
 # Expose port 3000
 EXPOSE 3000
 
-# Run npm start, to run the react app
+# Run npm start, to run react app
 CMD ["npm", "start"]
-
-

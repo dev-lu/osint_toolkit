@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import api from "../../api";
 import { format, parseISO } from "date-fns";
 import ReactCountryFlag from "react-country-flag";
 
@@ -32,8 +32,8 @@ export default function ResultTable(props) {
 
   React.useEffect(() => {
     setLoading(true);
-    axios
-      .get("http://localhost:8000/api/url/urlscanio/" + props.domain)
+    api
+      .get("/api/url/urlscanio/" + props.domain)
       .then((response) => {
         setResponse(response.data);
         setLoading(false);
