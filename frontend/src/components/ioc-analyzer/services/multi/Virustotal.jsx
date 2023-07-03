@@ -18,6 +18,7 @@ import ELFInformation from "./Virustotal/ELFInformation";
 import CrowdsourcedIDSRules from "./Virustotal/CrowdsourcedIDSRules";
 import LastAnalysisResults from "./Virustotal/LastAnalysisResults";
 import Whois from "./Virustotal/Whois";
+import ThreatClassification from "./Virustotal/ThreatClassification";
 
 export default function Virustotal(props) {
   const [result, setResult] = useState(null);
@@ -85,6 +86,10 @@ export default function Virustotal(props) {
             result["data"]["attributes"]["type_tags"].length > 0 ? (
               <TypeTags result={result} />
             ) : null}
+
+            {result["data"]["attributes"]["popular_threat_classification"] && (
+              <ThreatClassification result={result} />
+            )}
 
             {result["data"]["attributes"]["crowdsourced_context"] &&
             result["data"]["attributes"]["crowdsourced_context"].length > 0 ? (
