@@ -3,21 +3,21 @@ import api from "../../../../api";
 import { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
-import BusinessIcon from '@mui/icons-material/Business';
+import BusinessIcon from "@mui/icons-material/Business";
 import Card from "@mui/material/Card";
 import Chip from "@mui/material/Chip";
-import DnsIcon from '@mui/icons-material/Dns';
-import EventIcon from '@mui/icons-material/Event';
-import LocationCityIcon from '@mui/icons-material/LocationCity';
+import DnsIcon from "@mui/icons-material/Dns";
+import EventIcon from "@mui/icons-material/Event";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
 import Grid from "@mui/material/Grid";
-import LanIcon from '@mui/icons-material/Lan';
+import LanIcon from "@mui/icons-material/Lan";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import { ListItemIcon } from "@mui/material";
 import ListItemText from "@mui/material/ListItemText";
-import PlaceIcon from '@mui/icons-material/Place';
-import PublicIcon from '@mui/icons-material/Public';
-import TagIcon from '@mui/icons-material/Tag';
+import PlaceIcon from "@mui/icons-material/Place";
+import PublicIcon from "@mui/icons-material/Public";
+import TagIcon from "@mui/icons-material/Tag";
 import Typography from "@mui/material/Typography";
 
 import ResultRow from "../../ResultRow";
@@ -32,10 +32,7 @@ export default function Shodan(props) {
       setLoading(true);
       try {
         const url =
-          "/api/" +
-          props.type +
-          "/shodan?ioc=" +
-          encodeURIComponent(props.ioc);
+          "/api/" + props.type + "/shodan?ioc=" + encodeURIComponent(props.ioc);
         const response = await api.get(url);
         setResult(response.data);
       } catch (e) {
@@ -65,7 +62,7 @@ export default function Shodan(props) {
 
   const details = (
     <>
-      {result && !result["error"] && (
+      {result && !result["shodan_error"] && (
         <Box sx={{ margin: 1 }}>
           <Card
             key="shodan_details"

@@ -127,9 +127,14 @@ export default function ResultRow(props) {
     );
   }
 
-  if (props.result.error && typeof props.result.error === 'number' && String(props.result.error).length === 3) {
+  if (
+    props.result.error &&
+    typeof props.result.error === "number" &&
+    String(props.result.error).length === 3
+  ) {
     return (
       <>
+        console.log(props.result)
         <TableRow key={props.id + "_row"}>
           <TableCell>
             <IconButton aria-label="expand row" size="large">
