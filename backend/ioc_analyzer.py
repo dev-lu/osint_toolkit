@@ -536,3 +536,19 @@ def search_nist_nvd(cve: str, api_key: str, proxies: dict):
     else:
         response_json = {'error': 'Invalid input '}
     return response_json
+
+
+# ===========================================================================
+# Other
+# ===========================================================================
+def search_github(ioc: str, access_token: str):
+    headers = {
+        'Authorization': f'Token {access_token}'
+    }
+    url = f'https://api.github.com/search/code?q={ioc}'
+    response = requests.get(url, headers)
+    if response.status_code == 200:
+        response_json = response.json()
+        return response_json
+    else:
+        return {'error': response.status_code}
