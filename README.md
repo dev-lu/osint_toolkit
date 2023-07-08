@@ -26,9 +26,10 @@ OSINT Toolkit is a full-stack web application designed to assist security analys
 ## Integrated services
 | IPs            | Domains       | URLs                 | Emails           | Hashes     | CVEs     |
 |----------------|---------------|----------------------|------------------|------------|----------|
-| AbuseIPDB      | Alienvault    | Alienvault           | Emailrep.io      | Alienvault | NIST NVD |
-| Alienvault     | Checkphish.ai | Checkphish.ai        | Hunter.io        | Maltiverse |          |
-| Checkphish.ai  | Maltiverse    | Google Safe Browsing | Have I Been Pwnd | Pulsedive  |          |
+| AbuseIPDB      | Alienvault    | Alienvault           | Emailrep.io      | Alienvault | GitHub   |
+| Alienvault     | Checkphish.ai | Checkphish.ai        | GitHub           | GitHub     | NIST NVD |
+| Checkphish.ai  | GitHub        | GitHub               | Hunter.io        | Maltiverse |          |
+| GitHub         | Maltiverse    | Google Safe Browsing | Have I Been Pwnd | Pulsedive  |          |
 | IPQualityScore | Pulsedive     | Maltiverse           | Reddit           | Reddit     |          |
 | Maltiverse     | Shodan        | Pulsedive            | Twitter          | ThreatFox  |          |
 | Pulsedive      | ThreatFox     | Shodan               |                  | Twitter    |          |
