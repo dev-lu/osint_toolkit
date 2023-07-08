@@ -108,6 +108,29 @@ export default function ApiKeys() {
         </Stack>
       </Card>
       <Card sx={cardStyle}>
+        {/* GitHub */}
+        <Stack spacing={1}>
+          <p>
+            <b>GitHub</b>
+          </p>
+          <ApiKeyInput
+            name="github"
+            description="GitHub"
+            link="https://docs.github.com/de/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens"
+            apiKeys={apiKeys}
+          />
+          <Stack direction="row" spacing={1}>
+            <Chip label="CVEs" />
+            <Chip label="Domains" />
+            <Chip label="Email" />
+            <Chip label="Hashes" />
+            <Chip label="IPv4" />
+            <Chip label="IPv6" />
+            <Chip label="URLs" />
+          </Stack>
+        </Stack>
+      </Card>
+      <Card sx={cardStyle}>
         {/* Google Safe Browsing */}
         <Stack spacing={1}>
           <p>

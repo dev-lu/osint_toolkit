@@ -134,7 +134,6 @@ export default function ResultRow(props) {
   ) {
     return (
       <>
-        console.log(props.result)
         <TableRow key={props.id + "_row"}>
           <TableCell>
             <IconButton aria-label="expand row" size="large">

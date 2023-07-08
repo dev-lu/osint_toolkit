@@ -50,7 +50,7 @@ tags_metadata = [
     },
     {
         "name": "CVEs",
-        "description": "Search for vulnerabilities in form of CVE IDs.",  
+        "description": "Search for vulnerabilities in form of CVE IDs.",
     },
     {
         "name": "AI Assistant",
@@ -71,11 +71,11 @@ app = FastAPI(
         "url": "https://github.com/dev-lu",
         "email": "larsursprung@gmail.comm",
     },
-        license_info={
+    license_info={
         "name": "MIT License",
         "url": "https://mit-license.org/",
     },
-        openapi_tags=tags_metadata
+    openapi_tags=tags_metadata
 )
 
 app.add_middleware(
@@ -87,6 +87,8 @@ app.add_middleware(
 )
 
 # Dependency
+
+
 def get_db():
     db = SessionLocal()
     try:
@@ -98,8 +100,11 @@ def get_db():
 # Defaults
 # ===========================================================================
 # Write default general settings
+
+
 def add_default_general_settings(db: Session):
-    default_settings = Settings(id=0, darkmode=False, proxy_enabled=False, proxy_string='localhost')
+    default_settings = Settings(
+        id=0, darkmode=False, proxy_enabled=False, proxy_string='localhost')
     existing_settings = db.query(Settings).filter(Settings.id == 0).first()
     if not existing_settings:
         db.add(default_settings)
@@ -110,23 +115,33 @@ def add_default_general_settings(db: Session):
 def add_default_module_settings(db: Session):
     default_settings = [
         ModuleSettings(name="Newsfeed", description="", enabled=True),
-        ModuleSettings(name="IOC Analyzer", description=default_strings.ioc_analyzer['description'], enabled=True),
-        ModuleSettings(name="IOC Extractor", description=default_strings.ioc_extractor['description'], enabled=True),
-        ModuleSettings(name="Email Analyzer", description=default_strings.email_analyzer['description'], enabled=True),
-        ModuleSettings(name="Domain Monitoring", description=default_strings.domain_monitoring['description'], enabled=True),
-        ModuleSettings(name="AI Assistant", description=default_strings.ai_assistant['description'], enabled=True),
-        ModuleSettings(name="AI Assistant LA", description=default_strings.ai_assistant_la['description'], enabled=True),
-        ModuleSettings(name="AI Assistant PA", description=default_strings.ai_assistant_pa['description'], enabled=True),
-        ModuleSettings(name="AI Assistant CE", description=default_strings.ai_assistant_ce['description'], enabled=True),
-        ModuleSettings(name="AI Assistant CDO", description=default_strings.ai_assistant_cdo['description'], enabled=True),
+        ModuleSettings(name="IOC Analyzer",
+                       description=default_strings.ioc_analyzer['description'], enabled=True),
+        ModuleSettings(name="IOC Extractor",
+                       description=default_strings.ioc_extractor['description'], enabled=True),
+        ModuleSettings(name="Email Analyzer",
+                       description=default_strings.email_analyzer['description'], enabled=True),
+        ModuleSettings(name="Domain Monitoring",
+                       description=default_strings.domain_monitoring['description'], enabled=True),
+        ModuleSettings(name="AI Assistant",
+                       description=default_strings.ai_assistant['description'], enabled=True),
+        ModuleSettings(name="AI Assistant LA",
+                       description=default_strings.ai_assistant_la['description'], enabled=True),
+        ModuleSettings(name="AI Assistant PA",
+                       description=default_strings.ai_assistant_pa['description'], enabled=True),
+        ModuleSettings(name="AI Assistant CE",
+                       description=default_strings.ai_assistant_ce['description'], enabled=True),
+        ModuleSettings(name="AI Assistant CDO",
+                       description=default_strings.ai_assistant_cdo['description'], enabled=True),
         ModuleSettings(name="CVSS Calculator", description="", enabled=True),
     ]
     for default in default_settings:
-        existing_setting = db.query(ModuleSettings).filter(ModuleSettings.name == default.name).first()
+        existing_setting = db.query(ModuleSettings).filter(
+            ModuleSettings.name == default.name).first()
         if existing_setting:
             pass
-            #existing_setting.description = default.description
-            #existing_setting.enabled = default.enabled
+            # existing_setting.description = default.description
+            # existing_setting.enabled = default.enabled
         else:
             new_setting = ModuleSettings(
                 name=default.name,
@@ -139,25 +154,42 @@ def add_default_module_settings(db: Session):
 
 def add_default_newsfeeds(db: Session):
     default_newsfeeds = [
-        NewsfeedSettings(name="Computerworld", url="https://www.computerworld.com/category/security/feed", icon="computerworld", enabled=True),
-        NewsfeedSettings(name="CyberScoop", url="https://www.cyberscoop.com/news/threats/feed", icon="cyberscoop", enabled=True),
-        NewsfeedSettings(name="Dark Reading", url="https://www.darkreading.com/rss_simple.asp", icon="darkreading", enabled=True),
-        NewsfeedSettings(name="HackerNoon", url="https://hackernoon.com/tagged/cybersecurity/feed", icon="hackernoon", enabled=True),
-        NewsfeedSettings(name="Helpnet Security", url="https://www.helpnetsecurity.com/feed/", icon="helpnetsecurity", enabled=True),
-        NewsfeedSettings(name="Krebs on Security", url="https://krebsonsecurity.com/feed/", icon="krebsonsecurity", enabled=True),
-        NewsfeedSettings(name="Security Magazine", url="https://www.securitymagazine.com/rss/topic/2236", icon="securitymagazine", enabled=True),
-        NewsfeedSettings(name="SecurityWeek", url="https://feeds.feedburner.com/securityweek", icon="securityweek", enabled=True),
-        NewsfeedSettings(name="TechCrunch", url="https://techcrunch.com/category/security/feed", icon="techcrunch", enabled=True),
-        NewsfeedSettings(name="The Hacker News", url="https://feeds.feedburner.com/TheHackersNews", icon="thehackernews", enabled=True),
-        NewsfeedSettings(name="threatpost", url="https://threatpost.com/feed/", icon="threatpost", enabled=True),
-        NewsfeedSettings(name="The Record", url="https://therecord.media/feed", icon="therecord", enabled=True),
-        NewsfeedSettings(name="The Register", url="https://www.theregister.co.uk/security/headlines.atom", icon="theregister", enabled=True),
-        NewsfeedSettings(name="The Verge", url="https://www.theverge.com/rss/cyber-security/index.xml", icon="theverge", enabled=True),
-        NewsfeedSettings(name="Wired", url="https://www.wired.com/feed/category/security/latest/rss", icon="wired", enabled=True),
-        NewsfeedSettings(name="ZDNet", url="https://www.zdnet.com/topic/security/rss.xml", icon="zdnet", enabled=True)
+        NewsfeedSettings(name="Computerworld", url="https://www.computerworld.com/category/security/feed",
+                         icon="computerworld", enabled=True),
+        NewsfeedSettings(name="CyberScoop", url="https://www.cyberscoop.com/news/threats/feed",
+                         icon="cyberscoop", enabled=True),
+        NewsfeedSettings(name="Dark Reading", url="https://www.darkreading.com/rss_simple.asp",
+                         icon="darkreading", enabled=True),
+        NewsfeedSettings(name="HackerNoon", url="https://hackernoon.com/tagged/cybersecurity/feed",
+                         icon="hackernoon", enabled=True),
+        NewsfeedSettings(name="Helpnet Security", url="https://www.helpnetsecurity.com/feed/",
+                         icon="helpnetsecurity", enabled=True),
+        NewsfeedSettings(name="Krebs on Security", url="https://krebsonsecurity.com/feed/",
+                         icon="krebsonsecurity", enabled=True),
+        NewsfeedSettings(name="Security Magazine", url="https://www.securitymagazine.com/rss/topic/2236",
+                         icon="securitymagazine", enabled=True),
+        NewsfeedSettings(name="SecurityWeek", url="https://feeds.feedburner.com/securityweek",
+                         icon="securityweek", enabled=True),
+        NewsfeedSettings(name="TechCrunch", url="https://techcrunch.com/category/security/feed",
+                         icon="techcrunch", enabled=True),
+        NewsfeedSettings(name="The Hacker News", url="https://feeds.feedburner.com/TheHackersNews",
+                         icon="thehackernews", enabled=True),
+        NewsfeedSettings(name="threatpost", url="https://threatpost.com/feed/",
+                         icon="threatpost", enabled=True),
+        NewsfeedSettings(
+            name="The Record", url="https://therecord.media/feed", icon="therecord", enabled=True),
+        NewsfeedSettings(name="The Register", url="https://www.theregister.co.uk/security/headlines.atom",
+                         icon="theregister", enabled=True),
+        NewsfeedSettings(
+            name="The Verge", url="https://www.theverge.com/rss/cyber-security/index.xml", icon="theverge", enabled=True),
+        NewsfeedSettings(
+            name="Wired", url="https://www.wired.com/feed/category/security/latest/rss", icon="wired", enabled=True),
+        NewsfeedSettings(
+            name="ZDNet", url="https://www.zdnet.com/topic/security/rss.xml", icon="zdnet", enabled=True)
     ]
     for feed in default_newsfeeds:
-        existing_feed = db.query(NewsfeedSettings).filter(NewsfeedSettings.name == feed.name).first()
+        existing_feed = db.query(NewsfeedSettings).filter(
+            NewsfeedSettings.name == feed.name).first()
         if existing_feed:
             pass
         else:
@@ -192,7 +224,7 @@ async def startup_event():
     add_default_module_settings(db)
     add_default_general_settings(db)
     add_default_newsfeeds(db)
-    
+
 
 # ===========================================================================
 # Routes for external API calls
@@ -205,29 +237,33 @@ async def root(ip):
     apikey = crud.get_apikey(name="abuseipdb", db=SessionLocal()).key
     return ioc_analyzer.abuseipdb_ip_check(ip, apikey, get_proxy())
 
+
 @app.get("/api/ip/alienvault", tags=["IP addresses"])
-async def root(ioc:str = None):
+async def root(ioc: str = None):
     '''
     Get IP reputation from AlienVault OTX
     '''
     apikey = crud.get_apikey(name="alienvault", db=SessionLocal()).key
     return ioc_analyzer.alienvaultotx(ioc, 'ip', apikey, get_proxy())
 
+
 @app.get("/api/hash/alienvault", tags=["Hashes"])
-async def root(ioc:str = None):
+async def root(ioc: str = None):
     '''
     Get Hash reputation from AlienVault OTX
     '''
     apikey = crud.get_apikey(name="alienvault", db=SessionLocal()).key
     return ioc_analyzer.alienvaultotx(ioc, 'hash', apikey, get_proxy())
 
+
 @app.get("/api/domain/alienvault", tags=["Domains"])
-async def root(ioc:str = None):
+async def root(ioc: str = None):
     '''
     Get DOMAIN reputation from AlienVault OTX
     '''
     apikey = crud.get_apikey(name="alienvault", db=SessionLocal()).key
     return ioc_analyzer.alienvaultotx(ioc, 'domain', apikey, get_proxy())
+
 
 @app.get("/api/ip/bgpview/{ip}", tags=["IP addresses"])
 async def root(ip):
@@ -236,12 +272,14 @@ async def root(ip):
     '''
     return ioc_analyzer.check_bgpview(ip, get_proxy())
 
+
 @app.get("/api/ip/blocklist_de/{ip}", tags=["IP addresses"])
 async def root(ip):
     '''
     Get IP reputation from Blocklist.de
     '''
     return ioc_analyzer.blocklist_de_ip_check(ip, get_proxy())
+
 
 @app.get("/api/ip/ipqualityscore/{ip}", tags=["IP addresses"])
 async def root(ip):
@@ -251,6 +289,7 @@ async def root(ip):
     apikey = crud.get_apikey(name="ipqualityscore", db=SessionLocal()).key
     return ioc_analyzer.ipqualityscore_ip_check(ip, apikey, get_proxy())
 
+
 @app.get("/api/ip/maltiverse/{ip}", tags=["IP addresses"])
 async def root(ip):
     '''
@@ -258,6 +297,7 @@ async def root(ip):
     '''
     apikey = crud.get_apikey(name="maltiverse", db=SessionLocal()).key
     return ioc_analyzer.maltiverse_check(ip, "ip", apikey, get_proxy())
+
 
 @app.get("/api/domain/maltiverse/{hostname}", tags=["Domains"])
 async def root(hostname):
@@ -267,6 +307,7 @@ async def root(hostname):
     apikey = crud.get_apikey(name="maltiverse", db=SessionLocal()).key
     return ioc_analyzer.maltiverse_check(hostname, "hostname", apikey, get_proxy())
 
+
 @app.get("/api/url/checkphish/{url}", tags=["URLs"])
 async def root(url):
     '''
@@ -274,6 +315,7 @@ async def root(url):
     '''
     apikey = crud.get_apikey(name="checkphishai", db=SessionLocal()).key
     return ioc_analyzer.checkphish_ai(url, apikey)
+
 
 @app.get("/api/domain/checkphish/{url}", tags=["Domains"])
 async def root(url):
@@ -283,6 +325,7 @@ async def root(url):
     apikey = crud.get_apikey(name="checkphishai", db=SessionLocal()).key
     return ioc_analyzer.checkphish_ai(url, apikey)
 
+
 @app.get("/api/ip/checkphish/{url}", tags=["IP addresses"])
 async def root(url):
     '''
@@ -291,6 +334,7 @@ async def root(url):
     apikey = crud.get_apikey(name="checkphishai", db=SessionLocal()).key
     return ioc_analyzer.checkphish_ai(url, apikey)
 
+
 @app.get("/api/url/maltiverse/{url}", tags=["URLs"])
 async def root(url):
     '''
@@ -298,6 +342,7 @@ async def root(url):
     '''
     apikey = crud.get_apikey(name="maltiverse", db=SessionLocal()).key
     return ioc_analyzer.maltiverse_check(url, "url", apikey, get_proxy())
+
 
 @app.get("/api/hash/maltiverse/{hash}", tags=["Hashes"])
 async def root(hash):
@@ -315,6 +360,7 @@ async def root(hash):
     '''
     return ioc_analyzer.malwarebazaar_hash_check(hash, get_proxy())
 
+
 @app.get("/api/newsfeed", tags=["OSINT Toolkit modules"])
 async def root():
     '''
@@ -322,61 +368,69 @@ async def root():
     '''
     return newsfeed.get_news()
 
+
 @app.get("/api/ip/pulsedive", tags=["IP addresses"])
-async def root(ioc:str = None):
+async def root(ioc: str = None):
     '''
     Get IP reputation from Pulsedive
     '''
     apikey = crud.get_apikey(name="pulsedive", db=SessionLocal()).key
     return ioc_analyzer.check_pulsedive(ioc, apikey, get_proxy())
 
+
 @app.get("/api/domain/pulsedive", tags=["Domains"])
-async def root(ioc:str = None):
+async def root(ioc: str = None):
     '''
     Get Domains reputation from Pulsedive
     '''
     apikey = crud.get_apikey(name="pulsedive", db=SessionLocal()).key
     return ioc_analyzer.check_pulsedive(ioc, apikey, get_proxy())
 
+
 @app.get("/api/hash/pulsedive", tags=["Hashes"])
-async def root(ioc:str = None):
+async def root(ioc: str = None):
     '''
     Get Hash reputation from Pulsedive
     '''
     apikey = crud.get_apikey(name="pulsedive", db=SessionLocal()).key
     return ioc_analyzer.check_pulsedive(ioc, apikey, get_proxy())
 
+
 @app.get("/api/domain/safebrowsing", tags=["Domains"])
-async def root(ioc:str = None):
+async def root(ioc: str = None):
     '''
     Get domain reputation from Google Safe Browsing
     '''
     apikey = crud.get_apikey(name="safebrowsing", db=SessionLocal()).key
     return ioc_analyzer.safebrowsing_url_check(ioc, apikey, get_proxy())
 
+
 @app.get("/api/url/safebrowsing", tags=["URLs"])
-async def root(ioc:str = None):
+async def root(ioc: str = None):
     '''
     Get URL reputation from Google Safe Browsing
     '''
     apikey = crud.get_apikey(name="safebrowsing", db=SessionLocal()).key
     return ioc_analyzer.safebrowsing_url_check(ioc, apikey, get_proxy())
 
+
 @app.get("/api/ip/shodan", tags=["IP addresses"])
-async def root(ioc:str = None):
+async def root(ioc: str = None):
     '''
     Get information about IP from Shodan
     '''
     apikey = crud.get_apikey(name="shodan", db=SessionLocal()).key
     return ioc_analyzer.check_shodan(ioc, 'ip', apikey, get_proxy())
 
+
 @app.get("/api/domain/shodan", tags=["Domains"])
-async def root(ioc:str = None):
+async def root(ioc: str = None):
     '''
     Get information about a domain from Shodan
     '''
     apikey = crud.get_apikey(name="shodan", db=SessionLocal()).key
     return ioc_analyzer.check_shodan(ioc, 'domain', apikey, get_proxy())
+
 
 @app.get("/api/ip/threatfox/{ip}", tags=["IP addresses"])
 async def root(ip):
@@ -386,6 +440,7 @@ async def root(ip):
     apikey = crud.get_apikey(name="threatfox", db=SessionLocal()).key
     return ioc_analyzer.threatfox_ip_check(ip, apikey, get_proxy())
 
+
 @app.get("/api/email/hunterio/{email}", tags=["Emails"])
 async def root(email):
     '''
@@ -393,6 +448,7 @@ async def root(email):
     '''
     apikey = crud.get_apikey(name="hunterio", db=SessionLocal()).key
     return ioc_analyzer.hunter_email_check(email, apikey, get_proxy())
+
 
 @app.get("/api/email/emailrepio/{email}", tags=["Emails"])
 async def root(email):
@@ -402,6 +458,7 @@ async def root(email):
     apikey = crud.get_apikey(name="emailrepio", db=SessionLocal()).key
     return ioc_analyzer.emailrep_email_check(email, apikey, get_proxy())
 
+
 @app.get("/api/email/haveibeenpwnd/{email}", tags=["Emails"])
 async def root(email):
     '''
@@ -410,6 +467,7 @@ async def root(email):
     apikey = crud.get_apikey(name="hibp", db=SessionLocal()).key
     return ioc_analyzer.haveibeenpwnd_email_check(email, apikey, get_proxy())
 
+
 @app.get("/api/cve/nist_nvd/{cve}", tags=["CVEs"])
 async def root(cve):
     '''
@@ -417,17 +475,20 @@ async def root(cve):
     '''
     if not hasattr(crud.get_apikey(name="nist_nvd", db=SessionLocal()), 'key'):
         return {"error": "No API key found for NIST NVD"}
-    else: 
+    else:
         apikey = crud.get_apikey(name="nist_nvd", db=SessionLocal()).key
     return ioc_analyzer.search_nist_nvd(cve, apikey, get_proxy())
+
 
 @app.get("/api/socialmedia/twitter/{ioc}", tags=["Social Media"])
 async def root(ioc):
     '''
     Get latest Twitter Posts for IOC
     '''
-    twitter_bearer_token = crud.get_apikey(name="twitter_bearer", db=SessionLocal()).key
+    twitter_bearer_token = crud.get_apikey(
+        name="twitter_bearer", db=SessionLocal()).key
     return ioc_analyzer.search_twitter(ioc, twitter_bearer_token)
+
 
 @app.get("/api/socialmedia/reddit/{ioc}", tags=["Social Media"])
 async def root(ioc):
@@ -438,12 +499,14 @@ async def root(ioc):
     reddit_cid = crud.get_apikey(name="reddit_cid", db=SessionLocal()).key
     return ioc_analyzer.search_reddit(ioc=ioc, client_secret=reddit_cs, client_id=reddit_cid)
 
+
 @app.get("/api/socialmedia/mastodon/{ioc}", tags=["Social Media"])
 async def roof(ioc):
     '''
     Get latest Mastodon Posts (ioc.exchange) for a specific IOC
     '''
     return ioc_analyzer.mastodon(ioc)
+
 
 @app.get("/api/url/urlhaus/{url}", tags=["URLs"])
 async def root(url):
@@ -452,6 +515,7 @@ async def root(url):
     '''
     return ioc_analyzer.urlhaus_url_check(url, get_proxy())
 
+
 @app.get("/api/url/urlscanio/{domain}", tags=["URLs"])
 async def root(domain):
     '''
@@ -459,37 +523,51 @@ async def root(domain):
     '''
     return domain_monitoring.urlscanio(domain, get_proxy())
 
+
 @app.get("/api/ip/virustotal", tags=["IP addresses"])
-async def root(ioc:str = None):
+async def root(ioc: str = None):
     '''
     Get IP reputation from VirusTotal
     '''
     apikey = crud.get_apikey(name="virustotal", db=SessionLocal()).key
     return ioc_analyzer.virustotal(ioc, 'ip', apikey, get_proxy())
 
+
 @app.get("/api/domain/virustotal", tags=["Domains"])
-async def root(ioc:str = None):
+async def root(ioc: str = None):
     '''
     Get Domain reputation from VirusTotal
     '''
     apikey = crud.get_apikey(name="virustotal", db=SessionLocal()).key
     return ioc_analyzer.virustotal(ioc, 'domain', apikey, get_proxy())
 
+
 @app.get("/api/url/virustotal", tags=["URLs"])
-async def root(ioc:str = None):
+async def root(ioc: str = None):
     '''
     Get URL reputation from VirusTotal
     '''
     apikey = crud.get_apikey(name="virustotal", db=SessionLocal()).key
     return ioc_analyzer.virustotal(ioc, 'url', apikey, get_proxy())
 
+
 @app.get("/api/hash/virustotal", tags=["Hashes"])
-async def root(ioc:str = None):
+async def root(ioc: str = None):
     '''
     Get hash reputation from VirusTotal
     '''
     apikey = crud.get_apikey(name="virustotal", db=SessionLocal()).key
     return ioc_analyzer.virustotal(ioc, 'hash', apikey, get_proxy())
+
+
+@app.get("/api/multi/github", tags=["Hashes"])
+async def root(ioc: str = None):
+    '''
+    Get search results from GitHub
+    '''
+    apikey = crud.get_apikey(name="github", db=SessionLocal()).key
+    return ioc_analyzer.search_github(ioc=ioc, access_token=apikey)
+
 
 @app.post("/api/aiassistant/loganalysis", tags=["AI Assistant"])
 async def analyze_logs_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
@@ -498,8 +576,10 @@ async def analyze_logs_endpoint(input: dict = Body(..., example={"input": "YOUR_
     '''
     inputdata = input["input"]
     apikey = crud.get_apikey(name="openai", db=SessionLocal()).key
-    analysis_result = ai_assistant.ask_prompt(str(inputdata).encode('utf-8'), apikey, 'loganalysis', get_proxy())
+    analysis_result = ai_assistant.ask_prompt(
+        str(inputdata).encode('utf-8'), apikey, 'loganalysis', get_proxy())
     return {"analysis_result": analysis_result}
+
 
 @app.post("/api/aiassistant/mailanalysis", tags=["AI Assistant"])
 async def analyze_logs_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
@@ -508,8 +588,10 @@ async def analyze_logs_endpoint(input: dict = Body(..., example={"input": "YOUR_
     '''
     inputdata = input["input"]
     apikey = crud.get_apikey(name="openai", db=SessionLocal()).key
-    analysis_result = ai_assistant.ask_prompt(str(inputdata).encode('utf-8'), apikey, 'emailanalysis', get_proxy())
+    analysis_result = ai_assistant.ask_prompt(
+        str(inputdata).encode('utf-8'), apikey, 'emailanalysis', get_proxy())
     return {"analysis_result": analysis_result}
+
 
 @app.post("/api/aiassistant/codeexpert", tags=["AI Assistant"])
 async def analyze_code_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
@@ -518,7 +600,8 @@ async def analyze_code_endpoint(input: dict = Body(..., example={"input": "YOUR_
     '''
     inputdata = input["input"]
     apikey = crud.get_apikey(name="openai", db=SessionLocal()).key
-    analysis_result = ai_assistant.ask_prompt(str(inputdata).encode('utf-8'), apikey, 'codeexpert', get_proxy())
+    analysis_result = ai_assistant.ask_prompt(
+        str(inputdata).encode('utf-8'), apikey, 'codeexpert', get_proxy())
     return {"analysis_result": analysis_result}
 
 
@@ -535,6 +618,8 @@ def create_apikey(apikey: schemas.ApikeySchema, db: Session = Depends(get_db)):
     return db_apikey.to_dict()
 
 # Delete API key by name
+
+
 @app.delete("/api/apikeys", response_model=schemas.DeleteApikeyResponse, tags=["OSINT Toolkit modules"])
 def delete_apikey(name: str, db: Session = Depends(get_db)):
     apikey = crud.get_apikey(db, name)
@@ -544,6 +629,8 @@ def delete_apikey(name: str, db: Session = Depends(get_db)):
     return schemas.DeleteApikeyResponse(apikey=schemas.ApikeySchema(**apikey.to_dict()), message="API key deleted successfully")
 
 # Get all API keys
+
+
 @app.get("/api/apikeys/", response_model=list[schemas.ApikeySchema], tags=["OSINT Toolkit modules"])
 def read_apikeys(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     apikeys = crud.get_apikeys(db, skip=skip, limit=limit)
@@ -552,6 +639,8 @@ def read_apikeys(skip: int = 0, limit: int = 100, db: Session = Depends(get_db))
     return [apikey.to_dict() for apikey in apikeys]
 
 # Get API key by name
+
+
 @app.get("/api/apikeys", response_model=schemas.ApikeySchema, tags=["OSINT Toolkit modules"])
 def read_apikey(name: str, db: Session = Depends(get_db)):
     apikey = crud.get_apikey(db, name)
@@ -560,12 +649,16 @@ def read_apikey(name: str, db: Session = Depends(get_db)):
     return apikey.to_dict()
 
 # Get all API keys state
+
+
 @app.get("/api/apikeys/is_active", response_model=Dict[str, Any], tags=["OSINT Toolkit modules"])
 def get_all_apikeys_is_active(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     apikeys = crud.get_apikeys(db, skip=skip, limit=limit)
-    return { apikey.name: apikey.is_active for apikey in apikeys }
+    return {apikey.name: apikey.is_active for apikey in apikeys}
 
 # Get specific API key state
+
+
 @app.get("/api/apikeys/{name}/is_active", response_model=bool, tags=["OSINT Toolkit modules"])
 def get_apikey_is_active(name: str, db: Session = Depends(get_db)):
     apikey = crud.get_apikey(db, name)
@@ -574,6 +667,8 @@ def get_apikey_is_active(name: str, db: Session = Depends(get_db)):
     return apikey.is_active
 
 # Change API key state
+
+
 @app.put("/api/apikeys/{name}/is_active", response_model=schemas.ApikeyStateResponse, tags=["OSINT Toolkit modules"])
 def update_apikey_is_active(name: str, is_active: bool, db: Session = Depends(get_db)):
     apikey = crud.get_apikey(db, name)
@@ -584,11 +679,15 @@ def update_apikey_is_active(name: str, is_active: bool, db: Session = Depends(ge
     return schemas.ApikeySchema(**apikey.to_dict())
 
 # (File is for smaller files)
+
+
 @app.post("/api/extractor/", tags=["OSINT Toolkit modules"])
 async def create_file(file: bytes = File()):
     return ioc_extractor.extract_iocs(file)
 
 # (UploadFile is for larger files)
+
+
 @app.post("/api/mailanalyzer/", tags=["OSINT Toolkit modules"])
 async def create_upload_file(file: UploadFile):
     return email_analyzer.analyze_email(file.file.read())
@@ -605,16 +704,19 @@ def read_settings(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
         raise HTTPException(status_code=404, detail="No settings found")
     return settings
 
+
 @app.put("/api/settings/general/", response_model=schemas.SettingsSchema, tags=["OSINT Toolkit modules"])
 def update_settings(settings: schemas.SettingsSchema, db: Session = Depends(get_db)):
     existing_settings = crud.get_settings(db)
     if existing_settings:
         # update the existing settings
-        updated_settings = crud.update_settings(db, existing_settings[0].id, settings)
+        updated_settings = crud.update_settings(
+            db, existing_settings[0].id, settings)
         return updated_settings
     else:
         crud.create_settings(db, settings)
-    
+
+
 @app.put("/api/settings/general/darkmode/", response_model=schemas.SettingsSchema, tags=["OSINT Toolkit modules"])
 def update_settings_darkmode(darkmode: bool, db: Session = Depends(get_db)):
     existing_settings = crud.get_settings(db)
@@ -632,6 +734,7 @@ def update_settings_darkmode(darkmode: bool, db: Session = Depends(get_db)):
         db.refresh(new_settings)
         return new_settings.to_dict()
 
+
 @app.put("/api/settings/general/proxy_enabled/", response_model=schemas.SettingsSchema, tags=["OSINT Toolkit modules"])
 def update_settings_proxy_enabled(proxy_enabled: bool, db: Session = Depends(get_db)):
     existing_settings = crud.get_settings(db)
@@ -648,6 +751,7 @@ def update_settings_proxy_enabled(proxy_enabled: bool, db: Session = Depends(get
         db.commit()
         db.refresh(new_settings)
         return new_settings.to_dict()
+
 
 @app.put("/api/settings/general/proxy_string/", response_model=schemas.SettingsSchema, tags=["OSINT Toolkit modules"])
 def update_settings_proxy_string(proxy_string: str, db: Session = Depends(get_db)):
@@ -670,6 +774,8 @@ def update_settings_proxy_string(proxy_string: str, db: Session = Depends(get_db
 # Module settings routes
 # ===========================================================================
 # Get all module settings
+
+
 @app.get("/api/settings/modules/", response_model=list[schemas.ModuleSettingsSchema], tags=["OSINT Toolkit modules"])
 def read_module_settings(db: Session = Depends(get_db)):
     settings = crud.get_all_modules_settings(db)
@@ -678,18 +784,24 @@ def read_module_settings(db: Session = Depends(get_db)):
     return [setting.to_dict() for setting in settings]
 
 # Create module setting
+
+
 @app.post("/api/settings/modules/", response_model=ModuleSettingsCreateSchema, tags=["OSINT Toolkit modules"])
-def create_module_setting(setting: ModuleSettingsCreateSchema, db: Session = Depends(get_db)): 
+def create_module_setting(setting: ModuleSettingsCreateSchema, db: Session = Depends(get_db)):
     return crud.create_module_setting(db=db, settings=setting)
 
 # Create or update module setting
+
+
 @app.put("/api/settings/modules", response_model=ModuleSettingsSchema, tags=["OSINT Toolkit modules"])
 def update_module_setting(module_setting_input: ModuleSettingsCreateSchema, db: Session = Depends(get_db)):
-    module_setting = crud.get_specific_module_setting(db=db, module_name=module_setting_input.name)
+    module_setting = crud.get_specific_module_setting(
+        db=db, module_name=module_setting_input.name)
     if not module_setting:
-        #raise HTTPException(status_code=404, detail="Module setting not found")
+        # raise HTTPException(status_code=404, detail="Module setting not found")
         return crud.create_module_setting(db=db, settings=module_setting_input)
     return crud.update_module_setting(db=db, setting=module_setting, setting_input=module_setting_input)
+
 
 @app.post("/api/settings/modules/disable/", response_model=ModuleSettingsSchema, tags=["OSINT Toolkit modules"])
 def disable_setting(module_name: str, db: Session = Depends(get_db)):
@@ -701,6 +813,7 @@ def disable_setting(module_name: str, db: Session = Depends(get_db)):
     db.refresh(module_setting)
     return module_setting.to_dict()
 
+
 @app.post("/api/settings/modules/enable/", response_model=ModuleSettingsSchema, tags=["OSINT Toolkit modules"])
 def disable_setting(module_name: str, db: Session = Depends(get_db)):
     module_setting = crud.disable_module(db=db, module_name=module_name)
@@ -711,10 +824,12 @@ def disable_setting(module_name: str, db: Session = Depends(get_db)):
     db.refresh(module_setting)
     return module_setting.to_dict()
 
-@app.delete("/api/settings/modules/{module_name}", response_model=ModuleSettingsSchema, tags=["OSINT Toolkit modules"]) 
-def delete_module_setting(module_name: str, db: Session = Depends(get_db)): 
-    module_setting = crud.get_specific_module_setting(db=db, module_name=module_name) 
-    if not module_setting: 
+
+@app.delete("/api/settings/modules/{module_name}", response_model=ModuleSettingsSchema, tags=["OSINT Toolkit modules"])
+def delete_module_setting(module_name: str, db: Session = Depends(get_db)):
+    module_setting = crud.get_specific_module_setting(
+        db=db, module_name=module_name)
+    if not module_setting:
         raise HTTPException(status_code=404, detail="Module setting not found")
     return crud.delete_setting(db=db, setting_name=module_name)
 
@@ -731,19 +846,25 @@ def read_newsfeed_settings(db: Session = Depends(get_db)):
     return [setting.to_dict() for setting in settings]
 
 # Create or update newsfeed settings
+
+
 @app.put("/api/settings/modules/newsfeed/", response_model=schemas.NewsfeedSettingsSchema, tags=["OSINT Toolkit modules"])
 def update_newsfeed_settings(settings: schemas.NewsfeedSettingsSchema, db: Session = Depends(get_db)):
-    updated_settings = crud.update_newsfeed_settings(db, settings.name, settings)
+    updated_settings = crud.update_newsfeed_settings(
+        db, settings.name, settings)
     return updated_settings
-    #settings_schema = schemas.NewsfeedSettingsSchema(**settings.dict())
+    # settings_schema = schemas.NewsfeedSettingsSchema(**settings.dict())
 
 # Delete Newsfeed
+
+
 @app.delete("/api/settings/modules/newsfeed/{id}", response_model=schemas.NewsfeedSettingsSchema, tags=["OSINT Toolkit modules"])
 def delete_newsfeed_settings(id: int, db: Session = Depends(get_db)):
     deleted_newsfeed = crud.delete_newsfeed_settings(db, id)
     if not deleted_newsfeed:
         raise HTTPException(status_code=404, detail="Newsfeed not found")
     return {'Success': 'Newsfeed deleted'}
+
 
 @app.post("/api/settings/modules/newsfeed/enable", response_model=schemas.NewsfeedSettingsSchema, tags=["OSINT Toolkit modules"])
 def disable_setting(feedName: str, db: Session = Depends(get_db)):
@@ -754,6 +875,7 @@ def disable_setting(feedName: str, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(newsfeed_state)
     return newsfeed_state.to_dict()
+
 
 @app.post("/api/settings/modules/newsfeed/disable", response_model=schemas.NewsfeedSettingsSchema, tags=["OSINT Toolkit modules"])
 def disable_setting(feedName: str, db: Session = Depends(get_db)):

@@ -14,6 +14,7 @@ import {
 import useTheme from "@mui/material/styles/useTheme";
 
 import Checkphish from "./services/multi/Checkphish";
+import Github from "./services/multi/Github";
 import Reddit from "./services/Reddit";
 import Twitter from "./services/Twitter";
 import Alienvault from "./services/multi/Alienvault";
@@ -31,6 +32,7 @@ export default function Domain(props) {
   function showResult() {
     if (
       !apiKeys.alienvault &&
+      !apiKeys.github &&
       !apiKeys.checkphishai &&
       !apiKeys.virustotal &&
       !apiKeys.pulsedive &&
@@ -113,6 +115,11 @@ export default function Domain(props) {
                   )}
                   {apiKeys.shodan ? (
                     <Shodan ioc={props.ioc} type="domain" />
+                  ) : (
+                    <></>
+                  )}
+                  {apiKeys.github ? (
+                    <Github ioc={props.ioc} type="hash" />
                   ) : (
                     <></>
                   )}

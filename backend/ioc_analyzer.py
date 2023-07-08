@@ -546,7 +546,7 @@ def search_github(ioc: str, access_token: str):
         'Authorization': f'Token {access_token}'
     }
     url = f'https://api.github.com/search/code?q={ioc}'
-    response = requests.get(url, headers)
+    response = requests.get(url=url, headers=headers)
     if response.status_code == 200:
         response_json = response.json()
         return response_json
