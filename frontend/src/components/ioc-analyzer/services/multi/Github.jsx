@@ -56,7 +56,7 @@ export default function Github(props) {
 
   const details = (
     <>
-      {result && result["items"].length > 0 ? (
+      {result && result["items"] && result["items"].length > 0 ? (
         <Box sx={{ margin: 1 }}>
           <Card
             variant="outlined"

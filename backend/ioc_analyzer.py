@@ -527,7 +527,6 @@ def search_nist_nvd(cve: str, api_key: str, proxies: dict):
         response = requests.get(url=url,
                                 headers=headers,
                                 proxies=proxies)
-        response_json = json.loads(response.text)
         if response.status_code == 200:
             response_json = json.loads(response.text)
             return response_json

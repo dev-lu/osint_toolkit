@@ -3,7 +3,9 @@ import { useState } from "react";
 
 import NoDetails from "./services/NoDetails";
 
+import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
+import CardHeader from "@mui/material/CardHeader";
 import CircularProgress from "@mui/material/CircularProgress";
 import Collapse from "@mui/material/Collapse";
 import Grid from "@mui/material/Grid";
@@ -11,6 +13,7 @@ import IconButton from "@mui/material/IconButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { TableRow, TableCell } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import useTheme from "@mui/material/styles/useTheme";
 
 export default function ResultRow(props) {
@@ -38,12 +41,22 @@ export default function ResultRow(props) {
             </IconButton>
           </TableCell>
           <TableCell>
-            <img
-              src={require(`./icons/${props.icon}.png`)}
-              alt=""
-              style={{ height: "12px" }}
+            <CardHeader
+              avatar={
+                <Avatar
+                  alt={`${props.icon} icon`}
+                  src={require(`./icons/${props.icon}.png`)}
+                  sx={{
+                    width: 30,
+                    height: 30,
+                    border: "solid",
+                    border: 1,
+                    borderColor: theme.palette.background.tableborder,
+                  }}
+                />
+              }
+              title={props.name}
             />
-            &nbsp;&nbsp;{props.name}
           </TableCell>
           <TableCell>
             {" "}
@@ -65,12 +78,22 @@ export default function ResultRow(props) {
             </IconButton>
           </TableCell>
           <TableCell>
-            <img
-              src={require(`./icons/${props.icon}.png`)}
-              alt=""
-              style={{ height: "12px" }}
+            <CardHeader
+              avatar={
+                <Avatar
+                  alt={`${props.icon} icon`}
+                  src={require(`./icons/${props.icon}.png`)}
+                  sx={{
+                    width: 30,
+                    height: 30,
+                    border: "solid",
+                    border: 1,
+                    borderColor: theme.palette.background.tableborder,
+                  }}
+                />
+              }
+              title={props.name}
             />
-            &nbsp;&nbsp;{props.name}
           </TableCell>
           <TableCell> Error </TableCell>
           <TableCell bgcolor="black"></TableCell>
@@ -89,12 +112,22 @@ export default function ResultRow(props) {
             </IconButton>
           </TableCell>
           <TableCell>
-            <img
-              src={require(`./icons/${props.icon}.png`)}
-              alt=""
-              style={{ height: "12px" }}
+            <CardHeader
+              avatar={
+                <Avatar
+                  alt={`${props.icon} icon`}
+                  src={require(`./icons/${props.icon}.png`)}
+                  sx={{
+                    width: 30,
+                    height: 30,
+                    border: "solid",
+                    border: 1,
+                    borderColor: theme.palette.background.tableborder,
+                  }}
+                />
+              }
+              title={props.name}
             />
-            &nbsp;&nbsp;{props.name}
           </TableCell>
           <TableCell>Invalid API key (401 Unauthorized) </TableCell>
           <TableCell bgcolor="black"></TableCell>
@@ -113,12 +146,22 @@ export default function ResultRow(props) {
             </IconButton>
           </TableCell>
           <TableCell>
-            <img
-              src={require(`./icons/${props.icon}.png`)}
-              alt=""
-              style={{ height: "12px" }}
+            <CardHeader
+              avatar={
+                <Avatar
+                  alt={`${props.icon} icon`}
+                  src={require(`./icons/${props.icon}.png`)}
+                  sx={{
+                    width: 30,
+                    height: 30,
+                    border: "solid",
+                    border: 1,
+                    borderColor: theme.palette.background.tableborder,
+                  }}
+                />
+              }
+              title={props.name}
             />
-            &nbsp;&nbsp;{props.name}
           </TableCell>
           <TableCell>API limits exceeded (429 Too Many Requests) </TableCell>
           <TableCell bgcolor="black"></TableCell>
@@ -141,12 +184,22 @@ export default function ResultRow(props) {
             </IconButton>
           </TableCell>
           <TableCell>
-            <img
-              src={require(`./icons/${props.icon}.png`)}
-              alt=""
-              style={{ height: "12px" }}
+            <CardHeader
+              avatar={
+                <Avatar
+                  alt={`${props.icon} icon`}
+                  src={require(`./icons/${props.icon}.png`)}
+                  sx={{
+                    width: 30,
+                    height: 30,
+                    border: "solid",
+                    border: 1,
+                    borderColor: theme.palette.background.tableborder,
+                  }}
+                />
+              }
+              title={props.name}
             />
-            &nbsp;&nbsp;{props.name}
           </TableCell>
           <TableCell> Error: {props.result.error} </TableCell>
           <TableCell bgcolor="black"></TableCell>
@@ -168,12 +221,22 @@ export default function ResultRow(props) {
           </IconButton>
         </TableCell>
         <TableCell>
-          <img
-            src={require(`./icons/${props.icon}.png`)}
-            alt={props.name + " logo"}
-            style={{ height: "12px" }}
+          <CardHeader
+            avatar={
+              <Avatar
+                alt={`${props.icon} icon`}
+                src={require(`./icons/${props.icon}.png`)}
+                sx={{
+                  width: 30,
+                  height: 30,
+                  border: "solid",
+                  border: 1,
+                  borderColor: theme.palette.background.tableborder,
+                }}
+              />
+            }
+            title={props.name}
           />
-          &nbsp;&nbsp;{props.name}
         </TableCell>
         <TableCell>
           {" "}
