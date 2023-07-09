@@ -46,7 +46,7 @@ The Newsfeed module keeps you informed about the latest cybersecurity news by ag
 
 ### IOC Analyzer
 The IOC Analyzer module helps you analyze different types of indicators of compromise (IOCs) such as IP addresses, hashes, email addresses, domains, and URLs. It leverages services like VirusTotal, AlienVault, AbuseIPDB, and social media platforms like Reddit and Twitter to gather information about the IOCs. The module automatically detects the type of IOC being analyzed and utilizes the appropriate services to provide relevant information, enabling you to identify potential threats and take necessary actions to protect your organization.
-![ioc_analyzer](https://github.com/dev-lu/osint_toolkit/assets/44299200/ae2269fb-8025-4478-83bc-e8a129396a3b)
+![ioca](https://github.com/dev-lu/osint_toolkit/assets/44299200/8c0fb210-d9ca-4bc3-b5b9-21fa0d9a3ced)
 
 ### Email Analyzer
 The Email Analyzer module allows you to analyze .eml files for potential threats. Simply drag and drop an .eml file into the module, and it will parse the file, perform basic security checks, extract indicators of compromise (IOCs), and analyze messages with the help of AI. Analyze the IOCs using various open-source intelligence (OSINT) services, and enhance your organization's email security.
