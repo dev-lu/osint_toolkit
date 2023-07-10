@@ -55,6 +55,19 @@ def maltiverse_check(ip: str, endpoint: str, apikey: str, proxies: dict):
     else:
         return {"error": response.status_code}
 
+
+def crowdsec(ip: str, api_key: str):
+    headers = {
+        'x-api-key': api_key
+    }
+    url = f'https://cti.api.crowdsec.net/v2/smoke/{ip}'
+    response = requests.get(url=url, headers=headers)
+    if response.status_code == 200:
+        response_json = response.json()
+        return response_json
+    else:
+        return {'error': response.status_code}
+
 # ===========================================================================
 # IPv6
 # ===========================================================================

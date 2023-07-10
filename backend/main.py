@@ -281,6 +281,15 @@ async def root(ip):
     return ioc_analyzer.blocklist_de_ip_check(ip, get_proxy())
 
 
+@app.get("/api/ip/crowdsec/{ip}", tags=["IP addresses"])
+async def root(ip):
+    '''
+    Get IP reputation from CrowdSec
+    '''
+    apikey = crud.get_apikey(name="crowdsec", db=SessionLocal()).key
+    return ioc_analyzer.crowdsec(ip, apikey)
+
+
 @app.get("/api/ip/ipqualityscore/{ip}", tags=["IP addresses"])
 async def root(ip):
     '''

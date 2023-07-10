@@ -91,6 +91,23 @@ export default function ApiKeys() {
         </Stack>
       </Card>
       <Card sx={cardStyle}>
+        {/* CrowdSec */}
+        <Stack spacing={1}>
+          <p>
+            <b>CrowdSec</b>
+          </p>
+          <ApiKeyInput
+            name="crowdsec"
+            description="CrowdSec"
+            link="https://app.crowdsec.net/settings/api-keys"
+            apiKeys={apiKeys}
+          />
+          <Stack direction="row" spacing={1}>
+            <Chip label="IPv4" />
+          </Stack>
+        </Stack>
+      </Card>
+      <Card sx={cardStyle}>
         {/* emailrep.io */}
         <Stack spacing={1}>
           <p>
