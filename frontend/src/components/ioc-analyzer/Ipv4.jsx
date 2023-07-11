@@ -16,6 +16,7 @@ import useTheme from "@mui/material/styles/useTheme";
 import AbuseIpdbData from "./services/ipv4/AbuseIpdb.jsx";
 import Alienvault from "./services/multi/Alienvault.jsx";
 import Checkphish from "./services/multi/Checkphish";
+import CrowdSec from "./services/ipv4/CrowdSec.jsx";
 import Github from "./services/multi/Github";
 import Virustotal from "./services/multi/Virustotal.jsx";
 import Threatfox from "./services/ipv4/Threatfox.jsx";
@@ -37,6 +38,7 @@ export default function Ipv4(props) {
       !apiKeys.abuseipdb &&
       !apiKeys.alienvault &&
       !apiKeys.checkphishai &&
+      !apiKeys.crowdsec &&
       !apiKeys.github &&
       !apiKeys.virustotal &&
       !apiKeys.ipqualityscore &&
@@ -107,6 +109,11 @@ export default function Ipv4(props) {
                   )}
                   {apiKeys.checkphishai ? (
                     <Checkphish ioc={props.ioc} type="ip" />
+                  ) : (
+                    <></>
+                  )}
+                  {apiKeys.crowdsec ? (
+                    <CrowdSec ioc={props.ioc} type="ip" />
                   ) : (
                     <></>
                   )}
