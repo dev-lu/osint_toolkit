@@ -29,15 +29,16 @@ OSINT Toolkit is a full-stack web application designed to assist security analys
 | AbuseIPDB      | Alienvault    | Alienvault           | Emailrep.io      | Alienvault | GitHub   |
 | Alienvault     | Checkphish.ai | Checkphish.ai        | GitHub           | GitHub     | NIST NVD |
 | Checkphish.ai  | GitHub        | GitHub               | Hunter.io        | Maltiverse |          |
-| GitHub         | Maltiverse    | Google Safe Browsing | Have I Been Pwnd | Pulsedive  |          |
-| IPQualityScore | Pulsedive     | Maltiverse           | Reddit           | Reddit     |          |
-| Maltiverse     | Shodan        | Pulsedive            | Twitter          | ThreatFox  |          |
-| Pulsedive      | ThreatFox     | Shodan               |                  | Twitter    |          |
-| Shodan         | Reddit        | ThreatFox            |                  | Virustotal |          |
-| Reddit         | Twitter       | Reddit               |                  |            |          |
-| ThreatFox      | URLScan       | Twitter              |                  |            |          |
-| Twitter        | Virustotal    | URLScan              |                  |            |          |
-| Virustotal     |               | Virustotal           |                  |            |          |
+| CrowdSec       | Maltiverse    | Google Safe Browsing | Have I Been Pwnd | Pulsedive  |          |
+| GitHub         | Pulsedive     | Maltiverse           | Reddit           | Reddit     |          |
+| IPQualityScore | Shodan        | Pulsedive            | Twitter          | ThreatFox  |          |
+| Maltiverse     | ThreatFox     | Shodan               |                  | Twitter    |          |
+| Pulsedive      | Reddit        | ThreatFox            |                  | Virustotal |          |
+| Shodan         | Twitter       | Reddit               |                  |            |          |
+| Reddit         | URLScan       | Twitter              |                  |            |          |
+| ThreatFox      | Virustotal    | URLScan              |                  |            |          |
+| Twitter        |               | Virustotal           |                  |            |          |
+| Virustotal     |               |                      |                  |            |          |
 
 ## Features
 ### Newsfeed
