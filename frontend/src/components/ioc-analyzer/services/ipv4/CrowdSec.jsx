@@ -145,6 +145,27 @@ export default function CrowdSec(props) {
           </BarChart>
         </Card>
       )}
+
+      {result && result["behaviors"] && result["behaviors"].length > 0 && (
+        <Card
+          variant="outlined"
+          sx={{ mt: 2, p: 2, borderRadius: 5, boxShadow: 0 }}
+        >
+          <Typography variant="h5" component="h3" gutterBottom>
+            Behaviours
+          </Typography>
+          <List>
+            {result["behaviors"].map((behaviour, index) => (
+              <ListItem>
+                <ListItemText
+                  primary={behaviour.label}
+                  secondary={behaviour.description}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </Card>
+      )}
     </>
   );
 
