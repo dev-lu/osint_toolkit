@@ -166,6 +166,29 @@ export default function CrowdSec(props) {
           </List>
         </Card>
       )}
+
+      {result &&
+        result["attack_details"] &&
+        result["attack_details"].length > 0 && (
+          <Card
+            variant="outlined"
+            sx={{ mt: 2, p: 2, borderRadius: 5, boxShadow: 0 }}
+          >
+            <Typography variant="h5" component="h3" gutterBottom>
+              Attack details
+            </Typography>
+            <List>
+              {result["attack_details"].map((behaviour, index) => (
+                <ListItem>
+                  <ListItemText
+                    primary={behaviour.label}
+                    secondary={behaviour.description}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Card>
+        )}
     </>
   );
 
