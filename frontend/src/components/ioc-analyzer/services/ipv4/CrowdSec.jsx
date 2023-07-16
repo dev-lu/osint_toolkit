@@ -189,6 +189,27 @@ export default function CrowdSec(props) {
             </List>
           </Card>
         )}
+
+      {result && result["references"] && result["references"].length > 0 && (
+        <Card
+          variant="outlined"
+          sx={{ mt: 2, p: 2, borderRadius: 5, boxShadow: 0 }}
+        >
+          <Typography variant="h5" component="h3" gutterBottom>
+            References
+          </Typography>
+          <List>
+            {result["references"].map((behaviour, index) => (
+              <ListItem>
+                <ListItemText
+                  primary={behaviour.label}
+                  secondary={behaviour.description}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </Card>
+      )}
     </>
   );
 
