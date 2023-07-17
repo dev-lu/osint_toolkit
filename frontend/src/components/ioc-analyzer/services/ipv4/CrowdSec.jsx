@@ -3,11 +3,16 @@ import api from "../../../../api";
 import { useEffect, useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 
+import BusinessIcon from "@mui/icons-material/Business";
+import DnsIcon from "@mui/icons-material/Dns";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-
+import LanIcon from "@mui/icons-material/Lan";
+import LanguageIcon from "@mui/icons-material/Language";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Typography } from "@mui/material";
 
@@ -88,30 +93,45 @@ export default function CrowdSec(props) {
               <Grid item xs={6}>
                 <List sx={{ mt: 1 }}>
                   <ListItem>
+                    <ListItemIcon>
+                      <LanIcon />
+                    </ListItemIcon>
                     <ListItemText
                       primary="IP range"
                       secondary={`Score: ${result["ip_range"]}`}
                     />
                   </ListItem>
                   <ListItem>
+                    <ListItemIcon>
+                      <BusinessIcon />
+                    </ListItemIcon>
                     <ListItemText
                       primary="AS name"
                       secondary={`Score: ${result["as_name"]}`}
                     />
                   </ListItem>
                   <ListItem>
+                    <ListItemIcon>
+                      <LanguageIcon />
+                    </ListItemIcon>
                     <ListItemText
                       primary="Country"
                       secondary={`Score: ${result["location"]["country"]}`}
                     />
                   </ListItem>
                   <ListItem>
+                    <ListItemIcon>
+                      <LocationCityIcon />
+                    </ListItemIcon>
                     <ListItemText
                       primary="City"
                       secondary={`Score: ${result["location"]["city"]}`}
                     />
                   </ListItem>
                   <ListItem>
+                    <ListItemIcon>
+                      <DnsIcon />
+                    </ListItemIcon>
                     <ListItemText
                       primary="Reverse DNS"
                       secondary={`Score: ${result["location"]["reverse_dns"]}`}
