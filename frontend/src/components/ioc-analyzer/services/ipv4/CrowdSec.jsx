@@ -1,7 +1,16 @@
 import React from "react";
 import api from "../../../../api";
 import { useEffect, useState } from "react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 
 import BusinessIcon from "@mui/icons-material/Business";
 import DnsIcon from "@mui/icons-material/Dns";
@@ -47,6 +56,41 @@ export default function CrowdSec(props) {
     }));
   };
 
+  const scoreData = [
+    {
+      name: "Overall",
+      aggressiveness: result.scores?.overall?.aggressiveness || 0,
+      threat: result.scores?.overall?.threat || 0,
+      trust: result.scores?.overall?.trust || 0,
+      anomaly: result.scores?.overall?.anomaly || 0,
+      total: result.scores?.overall?.total || 0,
+    },
+    {
+      name: "Last Day",
+      aggressiveness: result.scores?.last_day?.aggressiveness || 0,
+      threat: result.scores?.last_day?.threat || 0,
+      trust: result.scores?.last_day?.trust || 0,
+      anomaly: result.scores?.last_day?.anomaly || 0,
+      total: result.scores?.last_day?.total || 0,
+    },
+    {
+      name: "Last Week",
+      aggressiveness: result.scores?.last_week?.aggressiveness || 0,
+      threat: result.scores?.last_week?.threat || 0,
+      trust: result.scores?.last_week?.trust || 0,
+      anomaly: result.scores?.last_week?.anomaly || 0,
+      total: result.scores?.last_week?.total || 0,
+    },
+    {
+      name: "Last Month",
+      aggressiveness: result.scores?.last_month?.aggressiveness || 0,
+      threat: result.scores?.last_month?.threat || 0,
+      trust: result.scores?.last_month?.trust || 0,
+      anomaly: result.scores?.last_month?.anomaly || 0,
+      total: result.scores?.last_month?.total || 0,
+    },
+  ];
+
   const details = (
     <>
       {result && (
@@ -56,40 +100,6 @@ export default function CrowdSec(props) {
               Details
             </Typography>
             <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <List sx={{ mt: 1 }}>
-                  <ListItem>
-                    <ListItemText
-                      primary="Aggressiveness"
-                      secondary={`Score: ${result["scores"]["overall"]["aggressiveness"]}`}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Threat"
-                      secondary={`Score: ${result["scores"]["overall"]["threat"]}`}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Trust"
-                      secondary={`Score: ${result["scores"]["overall"]["trust"]}`}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Anomaly"
-                      secondary={`Score: ${result["scores"]["overall"]["anomaly"]}`}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Total"
-                      secondary={`Score: ${result["scores"]["overall"]["total"]}`}
-                    />
-                  </ListItem>
-                </List>
-              </Grid>
               <Grid item xs={6}>
                 <List sx={{ mt: 1 }}>
                   <ListItem>
@@ -139,6 +149,26 @@ export default function CrowdSec(props) {
                   </ListItem>
                 </List>
               </Grid>
+              <Grid item xs={6} style={{ height: "400px" }}>
+                <ResponsiveContainer width="90%" height={400}>
+                  <BarChart data={scoreData}>
+                    <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis scale="auto" domain={[0, 5]} />
+                    <Tooltip />
+                    <Legend />
+                    <Bar
+                      dataKey="aggressiveness"
+                      fill="#8884d8"
+                      name="Aggressiveness"
+                    />
+                    <Bar dataKey="threat" fill="#82ca9d" name="Threat" />
+                    <Bar dataKey="trust" fill="#ffc658" name="Trust" />
+                    <Bar dataKey="anomaly" fill="#ff7300" name="Anomaly" />
+                    <Bar dataKey="total" fill="#ff6347" name="Total" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </Grid>
             </Grid>
           </Card>
         </>
@@ -149,20 +179,63 @@ export default function CrowdSec(props) {
           variant="outlined"
           sx={{ mt: 2, p: 2, borderRadius: 5, boxShadow: 0 }}
         >
-          <Typography variant="h5" component="h3" gutterBottom>
-            Target Countries
-          </Typography>
-          <BarChart
-            width={700}
-            height={400}
-            data={transformData(result["target_countries"])}
-          >
-            <CartesianGrid vertical={false} strokeDasharray="3 3" />
-            <XAxis dataKey="country" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="count" fill="#88CCF6" />
-          </BarChart>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Typography variant="h5" component="h3" gutterBottom>
+                Target Countries
+              </Typography>
+              <ResponsiveContainer width="90%" height={400}>
+                <BarChart
+                  width={700}
+                  height={400}
+                  data={transformData(result["target_countries"])}
+                >
+                  <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                  <XAxis dataKey="country" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="#88CCF6" />
+                </BarChart>
+              </ResponsiveContainer>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="h5" component="h3" gutterBottom>
+                Scores
+              </Typography>
+              <List sx={{ mt: 1 }}>
+                <ListItem>
+                  <ListItemText
+                    primary="Aggressiveness"
+                    secondary={`Score: ${result["scores"]["overall"]["aggressiveness"]}`}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Threat"
+                    secondary={`Score: ${result["scores"]["overall"]["threat"]}`}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Trust"
+                    secondary={`Score: ${result["scores"]["overall"]["trust"]}`}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Anomaly"
+                    secondary={`Score: ${result["scores"]["overall"]["anomaly"]}`}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Total"
+                    secondary={`Score: ${result["scores"]["overall"]["total"]}`}
+                  />
+                </ListItem>
+              </List>
+            </Grid>
+          </Grid>
         </Card>
       )}
 
