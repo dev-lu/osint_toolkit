@@ -49,6 +49,10 @@ tags_metadata = [
         "description": "Search social media.",
     },
     {
+        "name": "Multi",
+        "description": "Services that can search for multiple IoC types.",
+    },
+    {
         "name": "CVEs",
         "description": "Search for vulnerabilities in form of CVE IDs.",
     },
@@ -569,7 +573,7 @@ async def root(ioc: str = None):
     return ioc_analyzer.virustotal(ioc, 'hash', apikey, get_proxy())
 
 
-@app.get("/api/multi/github", tags=["Hashes"])
+@app.get("/api/multi/github", tags=["Multi"])
 async def root(ioc: str = None):
     '''
     Get search results from GitHub
