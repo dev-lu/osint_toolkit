@@ -123,7 +123,7 @@ export default function IpQualityscore(props) {
                         </ListItemIcon>
                         <ListItemText
                           primary="City"
-                          secondary={`City: ${result["city"]}`}
+                          secondary={`${result["city"]}`}
                         />
                       </ListItem>
                       <ListItem>
