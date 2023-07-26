@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, status
 from sqlalchemy.orm import Session
+from dependencies import get_db
 from database import crud, models, schemas
 from database.database import SessionLocal, engine
 from database.models import Settings
@@ -10,14 +11,6 @@ from typing import Dict, Any
 
 router = APIRouter()
 models.Base.metadata.create_all(bind=engine)
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 # ===========================================================================
 # Routes for internal API calls
