@@ -9,7 +9,7 @@ from time import sleep
 # ===========================================================================
 # IPv4
 # ===========================================================================
-def virustotal(ioc: str, type: str, apikey: str, proxies: dict):
+def virustotal(ioc: str, type: str, apikey: str):
     if type == "ip":
         endpoint = "ip_addresses"
     elif type == "domain":
@@ -28,8 +28,7 @@ def virustotal(ioc: str, type: str, apikey: str, proxies: dict):
         "x-apikey": apikey
     }
     response = requests.get(url=url,
-                            headers=headers,
-                            proxies=proxies)
+                            headers=headers)
     response_json = json.loads(response.text)
     if response.status_code == 200:
         response_json = json.loads(response.text)
@@ -38,7 +37,7 @@ def virustotal(ioc: str, type: str, apikey: str, proxies: dict):
         return {"error": response.status_code}
 
 
-def maltiverse_check(ip: str, endpoint: str, apikey: str, proxies: dict):
+def maltiverse_check(ip: str, endpoint: str, apikey: str):
     apikey = apikey
     headers = {
         'Authorization': f'Bearer {apikey}'
@@ -46,8 +45,7 @@ def maltiverse_check(ip: str, endpoint: str, apikey: str, proxies: dict):
 
     url = f"https://api.maltiverse.com/{endpoint}/"
     response = requests.get(url=f"{url}{ip}",
-                            headers=headers,
-                            proxies=proxies)
+                            headers=headers)
     response_json = json.loads(response.text)
     if response.status_code == 200:
         response_json = json.loads(response.text)
@@ -77,7 +75,7 @@ def crowdsec(ip: str, api_key: str):
 # ===========================================================================
 
 
-def abuseipdb_ip_check(ip: str, apikey: str, proxies: dict):
+def abuseipdb_ip_check(ip: str, apikey: str):
     apikey = apikey
     if not apikey:
         apikey = ""
@@ -93,8 +91,7 @@ def abuseipdb_ip_check(ip: str, apikey: str, proxies: dict):
     }
     response = requests.get(url=url + endpoint,
                             headers=headers,
-                            params=querystring,
-                            proxies=proxies)
+                            params=querystring)
     if response.status_code == 200:
         response_json = json.loads(response.text)
         return response_json
@@ -102,7 +99,7 @@ def abuseipdb_ip_check(ip: str, apikey: str, proxies: dict):
         return {"error": response.status_code}
 
 
-def alienvaultotx(ioc: str, type: str, apikey: str, proxies: dict):
+def alienvaultotx(ioc: str, type: str, apikey: str):
     if type == "ip":
         endpoint = "IPv4"
     elif type == "hash":
@@ -119,8 +116,7 @@ def alienvaultotx(ioc: str, type: str, apikey: str, proxies: dict):
         "X-OTX-API-Key": apikey
     }
     response = requests.get(url=url,
-                            headers=headers,
-                            proxies=proxies)
+                            headers=headers)
     if response.status_code == 200:
         response_json = json.loads(response.text)
         return response_json
@@ -129,7 +125,7 @@ def alienvaultotx(ioc: str, type: str, apikey: str, proxies: dict):
 
 
 # TODO: Other IOC types than IPs
-def threatfox_ip_check(ip: str, apikey: str, proxies: dict):
+def threatfox_ip_check(ip: str, apikey: str):
     apikey = apikey
     url = "https://threatfox-api.abuse.ch/api/v1/"
     headers = {
@@ -142,8 +138,7 @@ def threatfox_ip_check(ip: str, apikey: str, proxies: dict):
     payload_json = json.dumps(payload)
     response = requests.post(url=url,
                              headers=headers,
-                             data=payload_json,
-                             proxies=proxies)
+                             data=payload_json)
     response_json = json.loads(response.text)
     if response.status_code == 200:
         response_json = json.loads(response.text)
@@ -154,10 +149,10 @@ def threatfox_ip_check(ip: str, apikey: str, proxies: dict):
 
 # TODO: Finish implementation
 '''
-def blocklist_de_ip_check(ip:str, proxies:dict):
+def blocklist_de_ip_check(ip:str):
     url = "http://api.blocklist.de/api.php?"
     endpoint = "ip="
-    response = requests.get(url=url + endpoint + ip, proxies=proxies)
+    response = requests.get(url=url + endpoint + ip)
     result = response.text.replace("<br />", " ")
     attacks = re.search('attacks: (\d+)', result).group(1)
     reports = re.search('reports: (\d+)', result).group(1)
@@ -174,11 +169,11 @@ def blocklist_de_ip_check(ip:str, proxies:dict):
 # TODO: Implement other IOC types
 
 
-def check_pulsedive(ioc: str, apikey: str, proxies: dict):
+def check_pulsedive(ioc: str, apikey: str):
     apikey = apikey
     url = f"https://pulsedive.com/api/"
     endpoint = f"explore.php?q=ioc%3D{ioc}&limit=10&pretty=1&key={apikey}"
-    response = requests.get(url=url + endpoint, proxies=proxies)
+    response = requests.get(url=url + endpoint)
     response_json = json.loads(response.text)
     if response.status_code == 200:
         response_json = json.loads(response.text)
@@ -187,9 +182,9 @@ def check_pulsedive(ioc: str, apikey: str, proxies: dict):
         return {"error": response.status_code}
 
 
-def check_bgpview(ip: str, proxies: dict):
+def check_bgpview(ip: str):
     url = f"https://api.bgpview.io/ip/{ip}"
-    response = requests.get(url=url, proxies=proxies)
+    response = requests.get(url=url)
     response_json = json.loads(response.text)
     if response.status_code == 200:
         response_json = json.loads(response.text)
@@ -198,10 +193,10 @@ def check_bgpview(ip: str, proxies: dict):
         return {"error": response.status_code}
 
 
-def ipqualityscore_ip_check(ip: str, apikey: str, proxies: dict):
+def ipqualityscore_ip_check(ip: str, apikey: str):
     apikey = apikey
     endpoint = f"https://ipqualityscore.com/api/json/ip/{apikey}/{ip}"
-    response = requests.get(url=endpoint, proxies=proxies)
+    response = requests.get(url=endpoint)
     response_json = json.loads(response.text)
     if response.status_code == 200:
         response_json = json.loads(response.text)
@@ -218,9 +213,9 @@ def ipqualityscore_ip_check(ip: str, apikey: str, proxies: dict):
 # ===========================================================================
 # URLs
 # ===========================================================================
-def urlscanio(domain: str, proxies: dict):
+def urlscanio(domain: str):
     url = f"https://urlscan.io/api/v1/search/?q=domain:{domain}"
-    response = requests.get(url=url, proxies=proxies)
+    response = requests.get(url=url)
     response_json = [dict(item, expanded=False)
                      for item in response.json()['results']]
     if response.status_code == 200:
@@ -230,15 +225,14 @@ def urlscanio(domain: str, proxies: dict):
         return {"error": response.status_code}
 
 
-def urlhaus_url_check(url: str, proxies: dict):
+def urlhaus_url_check(url: str):
     import urllib.parse
     url = "https://urlhaus-api.abuse.ch/v1/url/"
     data = {
         'url': urllib.parse.quote_plus(url)
     }
     response = requests.post(url=url,
-                             data=data,
-                             proxies=proxies)
+                             data=data)
     response_json = json.loads(response.text)
     if response.status_code == 200:
         response_json = json.loads(response.text)
@@ -286,7 +280,7 @@ def checkphish_ai(ioc: str, apikey: str):
 
 
 # Domains and URLs for Safebrowsing
-def safebrowsing_url_check(ioc: str, apikey: str, proxies: dict):
+def safebrowsing_url_check(ioc: str, apikey: str):
     apikey = apikey
     url = f"https://safebrowsing.googleapis.com/v4/threatMatches:find?key={apikey}"
     headers = {'Content-type': 'application/json'}
@@ -310,8 +304,7 @@ def safebrowsing_url_check(ioc: str, apikey: str, proxies: dict):
     }
     response = requests.post(url=url,
                              headers=headers,
-                             data=json.dumps(data),
-                             proxies=proxies)
+                             data=json.dumps(data))
     response_json = json.loads(response.text)
     if response.status_code == 200:
         response_json = json.loads(response.text)
@@ -323,10 +316,10 @@ def safebrowsing_url_check(ioc: str, apikey: str, proxies: dict):
 # ===========================================================================
 # Emails
 # ===========================================================================
-def hunter_email_check(email: str, apikey: str, proxies: dict):
+def hunter_email_check(email: str, apikey: str):
     apikey = apikey
     url = f"https://api.hunter.io/v2/email-verifier?email={email}&api_key={apikey}"
-    response = requests.get(url=url, proxies=proxies)
+    response = requests.get(url=url)
     response_json = json.loads(response.text)
     if response.status_code == 200:
         response_json = json.loads(response.text)
@@ -335,12 +328,11 @@ def hunter_email_check(email: str, apikey: str, proxies: dict):
         return {"error": response.status_code}
 
 
-def emailrep_email_check(email: str, apikey: str, proxies: dict):
+def emailrep_email_check(email: str, apikey: str):
     url = f"https://emailrep.io/{email}"
     headers = {'key': apikey, 'User-Agent': 'OSINT Toolkit'}
     response = requests.get(url=url,
-                            headers=headers,
-                            proxies=proxies)
+                            headers=headers)
     response_json = json.loads(response.text)
     if response.status_code == 200:
         response_json = json.loads(response.text)
@@ -349,15 +341,14 @@ def emailrep_email_check(email: str, apikey: str, proxies: dict):
         return {"error": response.status_code}
 
 
-def haveibeenpwnd_email_check(email: str, apikey: str, proxies: dict):
+def haveibeenpwnd_email_check(email: str, apikey: str):
     services = ['pasteaccount', 'breachedaccount']
     headers = {'hibp-api-key': apikey, 'User-Agent': 'OSINT Toolkit'}
     result = {}
     for service in services:
         response = requests.get(
             url=f"https://haveibeenpwned.com/api/v3/{service}/{email}",
-            headers=headers,
-            proxies=proxies)
+            headers=headers)
         match response.status_code:
             case 401: return {"error": 401}
             case 429: return {"error": 429}
@@ -392,15 +383,14 @@ def haveibeenpwned_pastes_check(email:str, apikey: str):
 # ===========================================================================
 
 
-def malwarebazaar_hash_check(hash: str, proxies: dict):
+def malwarebazaar_hash_check(hash: str):
     url = "https://mb-api.abuse.ch/api/v1/"
     data = {
         'query': 'get_info',
         'hash': hash
     }
     response = requests.post(url=url,
-                             data=data,
-                             proxies=proxies)
+                             data=data)
     response_json = json.loads(response.text)
     if response.status_code == 200:
         response_json = json.loads(response.text)
@@ -412,7 +402,7 @@ def malwarebazaar_hash_check(hash: str, proxies: dict):
 # ===========================================================================
 # Universal
 # ===========================================================================
-def check_shodan(ioc: str, method: str, apikey: str, proxies: dict):
+def check_shodan(ioc: str, method: str, apikey: str):
     apikey = apikey
     url = "https://api.shodan.io"
     endpoint = {'ip': '/shodan/host/',  # IP information
@@ -420,8 +410,8 @@ def check_shodan(ioc: str, method: str, apikey: str, proxies: dict):
                 }
 
     if method == 'ip':
-        response = requests.get(url=url + endpoint[method] + ioc + '?key=' + apikey,
-                                proxies=proxies)
+        response = requests.get(
+            url=url + endpoint[method] + ioc + '?key=' + apikey)
         response_json = json.loads(response.text)
         if response.status_code == 200:
             response_json = json.loads(response.text)
@@ -431,8 +421,8 @@ def check_shodan(ioc: str, method: str, apikey: str, proxies: dict):
         else:
             return {"shodan_error": response.status_code}
     elif method == 'domain':
-        response = requests.get(url=url + endpoint[method] + ioc + '?key=' + apikey,
-                                proxies=proxies)
+        response = requests.get(
+            url=url + endpoint[method] + ioc + '?key=' + apikey)
         response_json = json.loads(response.text)
         if response.status_code == 200:
             response_json = json.loads(response.text)
@@ -529,7 +519,7 @@ def mastodon(keyword: str):
 # ===========================================================================
 # CVEs
 # ===========================================================================
-def search_nist_nvd(cve: str, api_key: str, proxies: dict):
+def search_nist_nvd(cve: str, api_key: str):
     headers = {
         "apiKey": api_key
     }
@@ -538,8 +528,7 @@ def search_nist_nvd(cve: str, api_key: str, proxies: dict):
     if match_cve:
         url = f"https://services.nvd.nist.gov/rest/json/cves/2.0?cveId={cve}"
         response = requests.get(url=url,
-                                headers=headers,
-                                proxies=proxies)
+                                headers=headers)
         if response.status_code == 200:
             response_json = json.loads(response.text)
             return response_json

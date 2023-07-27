@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, status
 from sqlalchemy.orm import Session
 from dependencies import get_db
 from database import crud, models, schemas
-from database.database import SessionLocal, engine
+from database.database import engine
 from database.models import Settings
 from database.schemas import ModuleSettingsSchema, ModuleSettingsCreateSchema
 import ioc_extractor
@@ -224,7 +224,7 @@ def disable_setting(module_name: str, db: Session = Depends(get_db)):
 
 
 @router.post("/api/settings/modules/enable/", response_model=ModuleSettingsSchema, tags=["OSINT Toolkit modules"])
-def disable_setting(module_name: str, db: Session = Depends(get_db)):
+def enable_setting(module_name: str, db: Session = Depends(get_db)):
     module_setting = crud.disable_module(db=db, module_name=module_name)
     if not module_setting:
         raise HTTPException(status_code=404, detail="Module setting not found")
@@ -276,7 +276,7 @@ def delete_newsfeed_settings(id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/api/settings/modules/newsfeed/enable", response_model=schemas.NewsfeedSettingsSchema, tags=["OSINT Toolkit modules"])
-def disable_setting(feedName: str, db: Session = Depends(get_db)):
+def enable_newsfeed(feedName: str, db: Session = Depends(get_db)):
     newsfeed_state = crud.disable_feed(db=db, feedName=feedName)
     if not newsfeed_state:
         raise HTTPException(status_code=404, detail="Newsfeed not found")
@@ -287,7 +287,7 @@ def disable_setting(feedName: str, db: Session = Depends(get_db)):
 
 
 @router.post("/api/settings/modules/newsfeed/disable", response_model=schemas.NewsfeedSettingsSchema, tags=["OSINT Toolkit modules"])
-def disable_setting(feedName: str, db: Session = Depends(get_db)):
+def disable_newsfeed(feedName: str, db: Session = Depends(get_db)):
     newsfeed_state = crud.disable_feed(db=db, feedName=feedName)
     if not newsfeed_state:
         raise HTTPException(status_code=404, detail="Newsfeed not found")

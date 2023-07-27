@@ -6,6 +6,8 @@ from .schemas import ApikeySchema, SettingsSchema, NewsfeedSettingsSchema, Modul
 # ===========================================================================
 # API key settings CRUD operations
 # ===========================================================================
+
+
 def create_apikey(db: Session, apikey: ApikeySchema):
     db_apikey = Apikey(**apikey.dict())
     db.add(db_apikey)
@@ -60,7 +62,8 @@ def update_module_setting(db: Session, setting: ModuleSettings, setting_input: M
 
 
 def disable_module(db: Session, module_name: str):
-    setting = db.query(ModuleSettings).filter(ModuleSettings.name == module_name).first()
+    setting = db.query(ModuleSettings).filter(
+        ModuleSettings.name == module_name).first()
     setting.enabled = False
     db.add(setting)
     db.commit()
@@ -70,10 +73,10 @@ def disable_module(db: Session, module_name: str):
 
 def create_module_setting(db: Session, settings: ModuleSettingsCreateSchema):
     data = ModuleSettings(
-        name = settings.name, 
-        description = settings.description,
-        enabled = True
-        )
+        name=settings.name,
+        description=settings.description,
+        enabled=True
+    )
     db.add(data)
     db.commit()
     db.refresh(data)
@@ -81,7 +84,8 @@ def create_module_setting(db: Session, settings: ModuleSettingsCreateSchema):
 
 
 def delete_setting(db: Session, setting_name: str):
-    setting = db.query(ModuleSettings).filter(ModuleSettings.name == setting_name).first()
+    setting = db.query(ModuleSettings).filter(
+        ModuleSettings.name == setting_name).first()
     db.delete(setting)
     db.commit()
     return setting.to_dict()
@@ -132,9 +136,10 @@ def create_newsfeed_settings(db: Session, settings: NewsfeedSettingsSchema):
 
 
 def update_newsfeed_settings(db: Session, name: str, settings: NewsfeedSettingsSchema):
-    db_settings = db.query(NewsfeedSettings).filter(NewsfeedSettings.name == name).first()
+    db_settings = db.query(NewsfeedSettings).filter(
+        NewsfeedSettings.name == name).first()
     if db_settings:
-        #db_settings.id = settings.id
+        # db_settings.id = settings.id
         db_settings.name = settings.name
         db_settings.url = settings.url
         db_settings.icon = settings.icon
@@ -147,18 +152,20 @@ def update_newsfeed_settings(db: Session, name: str, settings: NewsfeedSettingsS
         return db_settings
 
 
-def delete_newsfeed_settings(db: Session, name: str):
-    db_settings = db.query(NewsfeedSettings).filter(NewsfeedSettings.name == name).first()
+def delete_newsfeed_settings(db: Session, id: int):
+    db_settings = db.query(NewsfeedSettings).filter(
+        NewsfeedSettings.name == id).first()
     if db_settings:
         db.delete(db_settings)
         db.commit()
         return True
     else:
         return None
-    
-    
+
+
 def disable_feed(db: Session, feedName: str):
-    setting = db.query(NewsfeedSettings).filter(NewsfeedSettings.name == feedName).first()
+    setting = db.query(NewsfeedSettings).filter(
+        NewsfeedSettings.name == feedName).first()
     setting.enabled = False
     db.add(setting)
     db.commit()

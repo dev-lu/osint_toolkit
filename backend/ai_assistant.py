@@ -2,7 +2,7 @@ import requests
 import json
 
 
-def ask_prompt(input: str, apikey: str, prompt: str, proxies:dict):
+def ask_prompt(input: str, apikey: str, prompt: str):
     endpoint = "https://api.openai.com/v1/completions"
     prompts = {
         'loganalysis': "Explain the following log data first and then Analyze it for any malicious activity: " + str(input),
@@ -24,13 +24,12 @@ def ask_prompt(input: str, apikey: str, prompt: str, proxies:dict):
         "prompt": prompts[prompt],
         "model": model,
         "temperature": 0.6,
-        "max_tokens":1000
+        "max_tokens": 1000
     }
 
-    response = requests.post(endpoint, 
-                             headers=headers, 
-                             data=json.dumps(data),
-                             proxies=proxies)
+    response = requests.post(endpoint,
+                             headers=headers,
+                             data=json.dumps(data))
     match response.status_code:
         case 401: return "Error 401: Unauthorized"
         case 429: return "Error 429: You exceeded your current quota, please check your plan and billing details."
