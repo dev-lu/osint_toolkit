@@ -21,7 +21,7 @@ models.Base.metadata.create_all(bind=engine)
 @router.post("/api/apikeys/", response_model=schemas.ApikeySchema, tags=["OSINT Toolkit modules"], status_code=status.HTTP_201_CREATED)
 def create_apikey(apikey: schemas.ApikeySchema, db: Session = Depends(get_db)):
     existing_apikey = crud.get_apikey(db, apikey.name)
-    if existing_apikey['name'] is "None":
+    if existing_apikey['name'] == "None":
         db_apikey = crud.create_apikey(db, apikey)
         return db_apikey.to_dict()
     raise HTTPException(status_code=409, detail="Apikey already exists")
@@ -33,7 +33,7 @@ def create_apikey(apikey: schemas.ApikeySchema, db: Session = Depends(get_db)):
 @router.delete("/api/apikeys", response_model=schemas.DeleteApikeyResponse, tags=["OSINT Toolkit modules"])
 def delete_apikey(name: str, db: Session = Depends(get_db)):
     apikey = crud.get_apikey(db, name)
-    if apikey['name'] is "None" or not apikey:
+    if apikey['name'] == "None" or not apikey:
         raise HTTPException(status_code=404, detail="Apikey not found")
     crud.delete_apikey(db=db, name=name)
     return schemas.DeleteApikeyResponse(apikey=schemas.ApikeySchema(**apikey), message="API key deleted successfully")
