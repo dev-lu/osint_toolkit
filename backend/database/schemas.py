@@ -8,15 +8,15 @@ from .models import Settings as SettingsModel
 # ===========================================================================
 class ApikeySchema(BaseModel):
     name: str
-    key: str
-    is_active: bool
+    key: str = ""
+    is_active: bool = False
 
 
 class DeleteApikeyResponse(BaseModel):
     apikey: ApikeySchema
     message: str
-    
-    
+
+
 class ApikeyStateResponse(BaseModel):
     name: str
 
@@ -30,7 +30,7 @@ class SettingsSchema(BaseModel):
     proxy_string: str
     proxy_enabled: bool
     font: str
-    
+
     class Config:
         orm_mode = True
 
@@ -40,16 +40,16 @@ class SettingsSchema(BaseModel):
 # ===========================================================================
 class ModuleSettingsSchema(BaseModel):
     name: str
-    description: str = None
+    description: str = ""
     enabled: bool
-    
+
     class Config:
         orm_mode = True
 
 
 class ModuleSettingsCreateSchema(BaseModel):
     name: str
-    description: str = None
+    description: str = ""
     enabled: bool
 
 
@@ -61,12 +61,12 @@ class ModuleSettingsStatusSchema(BaseModel):
 # Newsfeeds (RSS)
 # ===========================================================================
 class NewsfeedSettingsSchema(BaseModel):
-    #id: int
+    # id: int
     name: str
     url: str
     icon: str
     enabled: bool
-    
+
     class Config:
         orm_mode = True
 

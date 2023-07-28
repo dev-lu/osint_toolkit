@@ -7,9 +7,9 @@ from .database import Base
 class Apikey(Base):
     __tablename__ = "apikeys"
     name = Column(String, unique=True, primary_key=True, index=True)
-    key = Column(String)
-    is_active = Column(Boolean, default=True)
-    
+    key = Column(String, default="")
+    is_active = Column(Boolean, default=False)
+
     def to_dict(self):
         return {
             'name': self.name,
@@ -17,8 +17,8 @@ class Apikey(Base):
             'is_active': self.is_active
         }
 
-   
-# Database model for the Settings database 
+
+# Database model for the Settings database
 class Settings(Base):
     __tablename__ = 'settings'
     id = Column(Integer, primary_key=True)
@@ -26,7 +26,7 @@ class Settings(Base):
     proxy_enabled = Column(Boolean, default=False)
     proxy_string = Column(String)
     font = Column(String, default='Poppins')
-    
+
     def to_dict(self):
         return {
             'id': self.id,
@@ -39,14 +39,13 @@ class Settings(Base):
 
 class ModuleSettings(Base):
     __tablename__ = "module_settings"
-    #id = Column(Integer, primary_key=True, index=True)
     name = Column(String, primary_key=True, index=True)
     description = Column(String)
     enabled = Column(Boolean, default=True)
-    
+
     def to_dict(self):
         return {
-            #'id': self.id,
+            # 'id': self.id,
             'name': self.name,
             'description': self.description,
             'enabled': self.enabled
@@ -61,13 +60,12 @@ class NewsfeedSettings(Base):
     url = Column(String)
     icon = Column(String, default='default')
     enabled = Column(Boolean, default=True)
-    
+
     def to_dict(self):
         return {
-            #'id': self.id,
+            # 'id': self.id,
             'name': self.name,
             'url': self.url,
             'icon': self.icon,
             'enabled': self.enabled
         }
-

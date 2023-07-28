@@ -21,10 +21,11 @@ models.Base.metadata.create_all(bind=engine)
 @router.post("/api/apikeys/", response_model=schemas.ApikeySchema, tags=["OSINT Toolkit modules"], status_code=status.HTTP_201_CREATED)
 def create_apikey(apikey: schemas.ApikeySchema, db: Session = Depends(get_db)):
     existing_apikey = crud.get_apikey(db, apikey.name)
-    if existing_apikey:
-        raise HTTPException(status_code=409, detail="Apikey already exists")
-    db_apikey = crud.create_apikey(db, apikey)
-    return db_apikey.to_dict()
+    if existing_apikey['name'] is "None":
+        db_apikey = crud.create_apikey(db, apikey)
+        return db_apikey.to_dict()
+    raise HTTPException(status_code=409, detail="Apikey already exists")
+
 
 # Delete API key by name
 
@@ -32,17 +33,17 @@ def create_apikey(apikey: schemas.ApikeySchema, db: Session = Depends(get_db)):
 @router.delete("/api/apikeys", response_model=schemas.DeleteApikeyResponse, tags=["OSINT Toolkit modules"])
 def delete_apikey(name: str, db: Session = Depends(get_db)):
     apikey = crud.get_apikey(db, name)
-    if apikey is None:
+    if apikey['name'] is "None" or not apikey:
         raise HTTPException(status_code=404, detail="Apikey not found")
     crud.delete_apikey(db=db, name=name)
-    return schemas.DeleteApikeyResponse(apikey=schemas.ApikeySchema(**apikey.to_dict()), message="API key deleted successfully")
+    return schemas.DeleteApikeyResponse(apikey=schemas.ApikeySchema(**apikey), message="API key deleted successfully")
 
 # Get all API keys
 
 
 @router.get("/api/apikeys/", response_model=list[schemas.ApikeySchema], tags=["OSINT Toolkit modules"])
-def read_apikeys(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    apikeys = crud.get_apikeys(db, skip=skip, limit=limit)
+def read_apikeys(db: Session = Depends(get_db)):
+    apikeys = crud.get_apikeys(db)
     if not apikeys:
         raise HTTPException(status_code=404, detail="No apikeys found")
     return [apikey.to_dict() for apikey in apikeys]
@@ -55,14 +56,14 @@ def read_apikey(name: str, db: Session = Depends(get_db)):
     apikey = crud.get_apikey(db, name)
     if apikey is None:
         raise HTTPException(status_code=404, detail="Apikey not found")
-    return apikey.to_dict()
+    return apikey
 
 # Get all API keys state
 
 
 @router.get("/api/apikeys/is_active", response_model=Dict[str, Any], tags=["OSINT Toolkit modules"])
-def get_all_apikeys_is_active(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    apikeys = crud.get_apikeys(db, skip=skip, limit=limit)
+def get_all_apikeys_is_active(db: Session = Depends(get_db)):
+    apikeys = crud.get_apikeys(db)
     return {apikey.name: apikey.is_active for apikey in apikeys}
 
 # Get specific API key state
@@ -73,7 +74,7 @@ def get_apikey_is_active(name: str, db: Session = Depends(get_db)):
     apikey = crud.get_apikey(db, name)
     if apikey is None:
         raise HTTPException(status_code=404, detail="Apikey not found")
-    return apikey.is_active
+    return apikey['is_active']
 
 # Change API key state
 
@@ -83,9 +84,9 @@ def update_apikey_is_active(name: str, is_active: bool, db: Session = Depends(ge
     apikey = crud.get_apikey(db, name)
     if apikey is None:
         raise HTTPException(status_code=404, detail="Apikey not found")
-    apikey.is_active = is_active
+    apikey['is_active'] = is_active
     db.commit()
-    return schemas.ApikeySchema(**apikey.to_dict())
+    return schemas.ApikeySchema(**apikey)
 
 # (File is for smaller files)
 

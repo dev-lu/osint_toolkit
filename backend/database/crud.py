@@ -21,16 +21,10 @@ def get_apikeys(db: Session, skip: int = 0, limit: int = 100):
 
 
 def get_apikey(db: Session, name: str):
-    return db.query(Apikey).filter(Apikey.name == name).first()
-
-
-def update_apikey(db: Session, name: str, apikey: ApikeySchema):
-    db_apikey = db.query(Apikey).filter(Apikey.name == name).first()
-    db_apikey.key = apikey.key
-    db_apikey.is_active = apikey.is_active
-    db.commit()
-    db.refresh(db_apikey)
-    return db_apikey
+    key = db.query(Apikey).filter(Apikey.name == name).first()
+    if key:
+        return key.to_dict()
+    return {"name": "None", "key": "", "is_active": False}
 
 
 def delete_apikey(db: Session, name: str):
@@ -41,7 +35,7 @@ def delete_apikey(db: Session, name: str):
 
 
 # ===========================================================================
-# Module settings CRUD operations (all done)
+# Module settings CRUD operations
 # ===========================================================================
 def get_all_modules_settings(db: Session):
     return db.query(ModuleSettings).all()
@@ -52,9 +46,9 @@ def get_specific_module_setting(db: Session, module_name: str):
 
 
 def update_module_setting(db: Session, setting: ModuleSettings, setting_input: ModuleSettingsCreateSchema):
-    setting.name = setting_input.name
-    setting.description = setting_input.description
-    setting.enabled = setting_input.enabled
+    setattr(setting, 'name', setting_input.name)
+    setattr(setting, 'description', setting_input.description)
+    setattr(setting, 'enabled', setting_input.enabled)
     db.add(setting)
     db.commit()
     db.refresh(setting)
@@ -64,7 +58,7 @@ def update_module_setting(db: Session, setting: ModuleSettings, setting_input: M
 def disable_module(db: Session, module_name: str):
     setting = db.query(ModuleSettings).filter(
         ModuleSettings.name == module_name).first()
-    setting.enabled = False
+    setattr(setting, 'enabled', False)
     db.add(setting)
     db.commit()
     db.refresh(setting)
@@ -88,7 +82,7 @@ def delete_setting(db: Session, setting_name: str):
         ModuleSettings.name == setting_name).first()
     db.delete(setting)
     db.commit()
-    return setting.to_dict()
+    return setting
 
 
 # ===========================================================================
@@ -166,7 +160,7 @@ def delete_newsfeed_settings(db: Session, id: int):
 def disable_feed(db: Session, feedName: str):
     setting = db.query(NewsfeedSettings).filter(
         NewsfeedSettings.name == feedName).first()
-    setting.enabled = False
+    setattr(setting, 'enabled', False)
     db.add(setting)
     db.commit()
     db.refresh(setting)
