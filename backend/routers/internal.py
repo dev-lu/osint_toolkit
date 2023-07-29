@@ -108,8 +108,8 @@ async def create_upload_file(file: UploadFile):
 # ===========================================================================
 # Get all Settings
 @router.get("/api/settings/general/", response_model=list[schemas.SettingsSchema], tags=["OSINT Toolkit modules"])
-def read_settings(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    settings = crud.get_settings(db, skip=skip, limit=limit)
+def read_settings(db: Session = Depends(get_db)):
+    settings = crud.get_settings(db)
     if not settings:
         raise HTTPException(status_code=404, detail="No settings found")
     return settings
