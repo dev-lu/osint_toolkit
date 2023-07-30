@@ -14,8 +14,8 @@ RUN npm install react-scripts --silent
 COPY . ./
 
 # Set React compatible environment variable
-ARG BACKEND_URL
-ENV REACT_APP_BACKEND_URL=$BACKEND_URL
+ARG BACKEND_URL=http://localhost:3000
+ENV REACT_APP_BACKEND_URL=${BACKEND_URL}
 
 # Expose port 3000
 EXPOSE 3000

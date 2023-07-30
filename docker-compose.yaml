@@ -6,11 +6,12 @@ services:
     ports:
       - "8000:8000"
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      #args:
+      #  - BACKEND_URL=http://<IP_ADDRESS>:<PORT>  # Backend URL without trailing slash
     container_name: frontend
     ports:
       - "3000:3000"
-    #environment:
-    #  - BACKEND_URL=http://<IP_ADDRESS>:<PORT> # Backend URL without trailing slash
     stdin_open: true
     tty: true
