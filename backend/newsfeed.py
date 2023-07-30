@@ -4,13 +4,14 @@ import time
 import regex as re
 from database import crud
 from database.database import SessionLocal
+import logging
 
 
 def get_news():
     news = []
     feed_db = crud.get_newsfeed_settings(db=SessionLocal())
     feeds = [feed.to_dict() for feed in feed_db]
-    
+
     for entry in feeds:
         if entry['enabled'] == True:
             try:
@@ -20,12 +21,16 @@ def get_news():
                         'feedname': entry['name'],
                         'icon': entry['icon'],
                         'title': post.title,
-                        'summary': re.compile(r'<[^>]+>').sub('', post.summary),  # Remove HTML tags
-                        'date': time.strftime("%A, %B %d, %Y - %H:%M", post.published_parsed),  # Format date
+                        # Remove HTML tags
+                        'summary': re.compile(r'<[^>]+>').sub('', post.summary),
+                        # Format date
+                        'date': time.strftime("%A, %B %d, %Y - %H:%M", post.published_parsed),
                         'link': post.link
-                        })
+                    })
             except:
+                logging.error("Could not get RSS feed for: " + entry['name'])
                 pass
     # Sort news ascending by date
-    news.sort(key = lambda x: datetime.strptime(x['date'], '%A, %B %d, %Y - %H:%M'), reverse=True)
+    news.sort(key=lambda x: datetime.strptime(
+        x['date'], '%A, %B %d, %Y - %H:%M'), reverse=True)
     return news

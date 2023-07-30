@@ -7,6 +7,7 @@ from database.models import Settings
 from database.schemas import ModuleSettingsSchema, ModuleSettingsCreateSchema
 import ioc_extractor
 import email_analyzer
+import logging
 from typing import Dict, Any
 
 router = APIRouter()
@@ -23,7 +24,10 @@ def create_apikey(apikey: schemas.ApikeySchema, db: Session = Depends(get_db)):
     existing_apikey = crud.get_apikey(db, apikey.name)
     if existing_apikey['name'] == "None":
         db_apikey = crud.create_apikey(db, apikey)
+        logging.info("Added API key: " + str(apikey))
         return db_apikey.to_dict()
+    logging.error(
+        "Could not add API key. API key already exists:  " + str(apikey))
     raise HTTPException(status_code=409, detail="Apikey already exists")
 
 
@@ -34,8 +38,10 @@ def create_apikey(apikey: schemas.ApikeySchema, db: Session = Depends(get_db)):
 def delete_apikey(name: str, db: Session = Depends(get_db)):
     apikey = crud.get_apikey(db, name)
     if apikey['name'] == "None" or not apikey:
-        raise HTTPException(status_code=404, detail="Apikey not found")
+        logging.error("Could not delete API key: API key not found")
+        raise HTTPException(status_code=404, detail="API key not found")
     crud.delete_apikey(db=db, name=name)
+    logging.info("Deleted API key: " + name)
     return schemas.DeleteApikeyResponse(apikey=schemas.ApikeySchema(**apikey), message="API key deleted successfully")
 
 # Get all API keys
@@ -45,7 +51,8 @@ def delete_apikey(name: str, db: Session = Depends(get_db)):
 def read_apikeys(db: Session = Depends(get_db)):
     apikeys = crud.get_apikeys(db)
     if not apikeys:
-        raise HTTPException(status_code=404, detail="No apikeys found")
+        logging.error("Could not get API keys: No API keys found")
+        raise HTTPException(status_code=404, detail="No API keys found")
     return [apikey.to_dict() for apikey in apikeys]
 
 # Get API key by name
@@ -55,6 +62,7 @@ def read_apikeys(db: Session = Depends(get_db)):
 def read_apikey(name: str, db: Session = Depends(get_db)):
     apikey = crud.get_apikey(db, name)
     if apikey is None:
+        logging.error("Could not get API key. API key not found: " + name)
         raise HTTPException(status_code=404, detail="Apikey not found")
     return apikey
 

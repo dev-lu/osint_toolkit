@@ -1,5 +1,6 @@
 import requests
 import json
+import logging
 
 
 def ask_prompt(input: str, apikey: str, prompt: str):
@@ -38,4 +39,6 @@ def ask_prompt(input: str, apikey: str, prompt: str):
         response_text = response_data["choices"][0]["text"]
         return response_text
     else:
-        return "An error occurred"
+        logging.error(
+            "AI Assistant: An error occured while receiving the response")
+        return

@@ -6,6 +6,7 @@ from database import models
 from database.database import SessionLocal, engine
 from database.models import Settings, ModuleSettings, NewsfeedSettings
 import default_strings
+import logging
 import os
 
 
@@ -100,6 +101,7 @@ def add_default_general_settings(db: Session):
     if not existing_settings:
         db.add(default_settings)
         db.commit()
+        logging.info('Created default general settings')
 
 
 # Write default module settings
@@ -141,6 +143,7 @@ def add_default_module_settings(db: Session):
             )
             db.add(new_setting)
     db.commit()
+    logging.info('Created default module settings')
 
 
 def add_default_newsfeeds(db: Session):
@@ -192,6 +195,7 @@ def add_default_newsfeeds(db: Session):
             )
             db.add(new_feed)
     db.commit()
+    logging.info('Created default newsfeeds')
 
 
 # Write default settings on application startup

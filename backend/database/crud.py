@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi.exceptions import HTTPException
 from .models import Apikey, Settings, ModuleSettings, NewsfeedSettings
-from .schemas import ApikeySchema, SettingsSchema, NewsfeedSettingsSchema, ModuleSettingsCreateSchema, ModuleSettingsSchema
+from .schemas import ApikeySchema, SettingsSchema, NewsfeedSettingsSchema, ModuleSettingsCreateSchema
 
 # ===========================================================================
 # API key settings CRUD operations
