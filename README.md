@@ -84,8 +84,9 @@ Customize the descriptions of each module with your own markdown-formatted text.
 ## Deploy with docker
 1. Download the repository and extract the files
 2. Navigate to the directory where the `docker-compose.yaml` file is located
-3. Run the following command: `docker-compose up -d`
-4. Once the container is running, you can access the app in your browser at http://localhost:3000
+3. If you deploy the app on a remote machine, set the `BACKEND_URL` argument in the Compose file to the remote machines IP address
+4. Run the following command: `docker-compose up -d`
+5. Once the container is running, you can access the app in your browser at http://localhost:3000
 
 ## Deploy from source
 ### Prerequisites
