@@ -19,7 +19,6 @@ import Reddit from "./services/Reddit";
 import Twitter from "./services/Twitter";
 import Virustotal from "./services/multi/Virustotal";
 import Pulsedive from "./services/multi/Pulsedive";
-import Maltiverse from "./services/ipv4/Maltiverse";
 import Threatfox from "./services/ipv4/Threatfox";
 import { apiKeysState } from "../../App";
 import NoApikeys from "./NoApikeys";

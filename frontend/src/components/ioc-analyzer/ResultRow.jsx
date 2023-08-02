@@ -13,7 +13,6 @@ import IconButton from "@mui/material/IconButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { TableRow, TableCell } from "@mui/material";
-import Typography from "@mui/material/Typography";
 import useTheme from "@mui/material/styles/useTheme";
 
 export default function ResultRow(props) {

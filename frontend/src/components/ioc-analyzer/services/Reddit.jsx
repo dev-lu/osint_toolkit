@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 
-import { AccessTime, Link, Person, Score } from "@mui/icons-material";
+import { AccessTime, Person, Score } from "@mui/icons-material";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";

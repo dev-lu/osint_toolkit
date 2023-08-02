@@ -14,7 +14,6 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import PersonIcon from "@mui/icons-material/Person";
 import PinterestIcon from "@mui/icons-material/Pinterest";

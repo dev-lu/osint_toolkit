@@ -1,7 +1,7 @@
 import React from "react";
 import api from "../../../../api";
 import { useEffect, useState } from "react";
-import { PieChart, Pie } from 'recharts';
+import { PieChart, Pie } from "recharts";
 
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
@@ -21,7 +21,6 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Stack from "@mui/material/Stack";
 import { Typography } from "@mui/material";
 
 import ResultRow from "../../ResultRow";
@@ -33,19 +32,19 @@ export default function AbuseIpdb(props) {
   const [score, setScore] = useState(null);
 
   const colors = {
-    green: '#00C49F',
-    orange: '#FFA500',
-    red: '#FF0000',
+    green: "#00C49F",
+    orange: "#FFA500",
+    red: "#FF0000",
   };
-  
-  const getCircleFillColor = score => {
+
+  const getCircleFillColor = (score) => {
     if (score === 0) {
       return colors.green;
     } else if (score >= 1 && score <= 59) {
       return colors.orange;
     } else if (score >= 60 && score <= 100) {
       return colors.red;
-    } 
+    }
   };
 
   useEffect(() => {
@@ -86,7 +85,9 @@ export default function AbuseIpdb(props) {
               <List sx={{ mt: 1 }}>
                 <ListItem>
                   <ListItemIcon>
-                    <CheckCircleOutlineIcon sx={{ color: getCircleFillColor(score)}} />
+                    <CheckCircleOutlineIcon
+                      sx={{ color: getCircleFillColor(score) }}
+                    />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Score: ${result.data["abuseConfidenceScore"]}% malicious`}
@@ -118,7 +119,11 @@ export default function AbuseIpdb(props) {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <VerifiedUserOutlinedIcon color={result.data["isWhitelisted"] ? "success" : "primary"} />
+                    <VerifiedUserOutlinedIcon
+                      color={
+                        result.data["isWhitelisted"] ? "success" : "primary"
+                      }
+                    />
                   </ListItemIcon>
                   <ListItemText
                     primary={`Whitelisted: ${
@@ -174,10 +179,16 @@ export default function AbuseIpdb(props) {
             </Card>
           </Box>
 
-          <Card variant="outlined" sx={{ p: 2, borderRadius: 5, boxShadow: 0, margin: "0 auto" }}>
+          <Card
+            variant="outlined"
+            sx={{ p: 2, borderRadius: 5, boxShadow: 0, margin: "0 auto" }}
+          >
             <PieChart width={200} height={200}>
               <Pie
-                data={[{ name: 'Score', value: score }, { name: 'Remaining', value: 100 - score, fill: '#d3d3d3' }]}
+                data={[
+                  { name: "Score", value: score },
+                  { name: "Remaining", value: 100 - score, fill: "#d3d3d3" },
+                ]}
                 dataKey="value"
                 startAngle={90}
                 endAngle={-270}
@@ -189,13 +200,38 @@ export default function AbuseIpdb(props) {
                 strokeWidth={0}
                 fill={getCircleFillColor(score)}
               />
-              <foreignObject width="100%" height="100%" style={{textAlign: "center"}}>
-                <div style={{display: "inline-block", position: "relative", top: "50%", transform: "translateY(-50%)"}}>
-                  <Typography variant="h4" color={getCircleFillColor(score)} sx={{textAlign: "center"}} textAnchor="middle">
-                    <text x="50%" y="50%">{score}%</text>
+              <foreignObject
+                width="100%"
+                height="100%"
+                style={{ textAlign: "center" }}
+              >
+                <div
+                  style={{
+                    display: "inline-block",
+                    position: "relative",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                  }}
+                >
+                  <Typography
+                    variant="h4"
+                    color={getCircleFillColor(score)}
+                    sx={{ textAlign: "center" }}
+                    textAnchor="middle"
+                  >
+                    <text x="50%" y="50%">
+                      {score}%
+                    </text>
                   </Typography>
-                  <Typography variant="h5" color="textSecondary" sx={{textAlign: "center"}} textAnchor="middle">
-                    <text x="50%" y="50%">malicious</text>
+                  <Typography
+                    variant="h5"
+                    color="textSecondary"
+                    sx={{ textAlign: "center" }}
+                    textAnchor="middle"
+                  >
+                    <text x="50%" y="50%">
+                      malicious
+                    </text>
                   </Typography>
                 </div>
               </foreignObject>

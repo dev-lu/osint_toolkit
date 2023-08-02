@@ -1,7 +1,6 @@
 import React from "react";
 
 import Avatar from "@mui/material/Avatar";
-import Badge from "@mui/material/Badge";
 import Card from "@mui/material/Card";
 import Chip from "@mui/material/Chip";
 import ClassIcon from "@mui/icons-material/Class";

@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { atom, useSetRecoilState, useRecoilValue } from "recoil";
-import axios from "axios";
 import api from "./api";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
