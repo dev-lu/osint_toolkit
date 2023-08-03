@@ -1,6 +1,6 @@
 import React from "react";
 import api from "../../../../api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -9,6 +9,7 @@ import NoDetails from "../NoDetails";
 import ResultRow from "../../ResultRow";
 
 export default function Pulsedive(props) {
+  const propsRef = useRef(props);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,9 +20,9 @@ export default function Pulsedive(props) {
       try {
         const url =
           "/api/" +
-          props.type +
+          propsRef.current.type +
           "/pulsedive?ioc=" +
-          encodeURIComponent(props.ioc);
+          encodeURIComponent(propsRef.current.ioc);
         const response = await api.get(url);
         setResult(response.data);
       } catch (e) {

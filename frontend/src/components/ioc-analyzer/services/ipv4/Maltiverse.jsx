@@ -1,6 +1,6 @@
 import React from "react";
 import api from "../../../../api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
@@ -29,6 +29,7 @@ import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 import ResultRow from "../../ResultRow";
 
 export default function Maltiverse(props) {
+  const propsRef = useRef(props);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -49,7 +50,7 @@ export default function Maltiverse(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const url = "/api/ip/maltiverse/" + props.ioc;
+        const url = "/api/ip/maltiverse/" + propsRef.current.ioc;
         const response = await api.get(url);
         setResult(response.data);
       } catch (e) {

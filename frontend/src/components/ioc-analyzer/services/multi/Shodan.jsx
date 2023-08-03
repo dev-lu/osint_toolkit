@@ -1,6 +1,6 @@
 import React from "react";
 import api from "../../../../api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import Box from "@mui/material/Box";
 import BusinessIcon from "@mui/icons-material/Business";
@@ -23,6 +23,7 @@ import Typography from "@mui/material/Typography";
 import ResultRow from "../../ResultRow";
 
 export default function Shodan(props) {
+  const propsRef = useRef(props);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -32,7 +33,10 @@ export default function Shodan(props) {
       setLoading(true);
       try {
         const url =
-          "/api/" + props.type + "/shodan?ioc=" + encodeURIComponent(props.ioc);
+          "/api/" +
+          propsRef.current.type +
+          "/shodan?ioc=" +
+          encodeURIComponent(propsRef.current.ioc);
         const response = await api.get(url);
         setResult(response.data);
       } catch (e) {

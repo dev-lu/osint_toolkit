@@ -1,6 +1,6 @@
 import React from "react";
 import api from "../../../../api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -23,6 +23,7 @@ import Typography from "@mui/material/Typography";
 import ResultRow from "../../ResultRow";
 
 export default function Github(props) {
+  const propsRef = useRef(props);
   const theme = useTheme();
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
@@ -43,7 +44,7 @@ export default function Github(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const url = "/api/multi/github?ioc=" + props.ioc;
+        const url = "/api/multi/github?ioc=" + propsRef.current.ioc;
         const response = await api.get(url);
         setResult(response.data);
       } catch (e) {

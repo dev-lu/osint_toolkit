@@ -1,6 +1,6 @@
 import React from "react";
 import api from "../../../../api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { PieChart, Pie } from "recharts";
 
 import Card from "@mui/material/Card";
@@ -26,6 +26,7 @@ import { Typography } from "@mui/material";
 import ResultRow from "../../ResultRow";
 
 export default function AbuseIpdb(props) {
+  const propsRef = useRef(props);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -51,7 +52,7 @@ export default function AbuseIpdb(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const url = "/api/ip/abuseipdb/" + props.ioc;
+        const url = "/api/ip/abuseipdb/" + propsRef.current.ioc;
         const response = await api.get(url);
         setResult(response.data);
         setScore(response.data["data"]["abuseConfidenceScore"]);

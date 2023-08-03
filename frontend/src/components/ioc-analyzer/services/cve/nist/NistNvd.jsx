@@ -1,6 +1,6 @@
 import React from "react";
 import api from "../../../../../api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -17,6 +17,7 @@ import VendorComments from "./VendorComments";
 import Weaknesses from "./Weaknesses";
 
 export default function NistNvd(props) {
+  const propsRef = useRef(props);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -27,9 +28,9 @@ export default function NistNvd(props) {
       try {
         const url =
           "/api/" +
-          props.type +
+          propsRef.current.type +
           "/nist_nvd/" +
-          encodeURIComponent(props.cve);
+          encodeURIComponent(propsRef.current.cve);
         const response = await api.get(url);
         setResult(response.data);
         response.data.vulnerabilities[0].cve

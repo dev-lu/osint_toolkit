@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import { AccessTime, Person, Score } from "@mui/icons-material";
 
@@ -16,6 +16,7 @@ import ResultRow from "../ResultRow";
 import api from "../../../api";
 
 export default function Reddit(props) {
+  const propsRef = useRef(props);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -44,7 +45,7 @@ export default function Reddit(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const url = "/api/socialmedia/reddit/" + props.ioc;
+        const url = "/api/socialmedia/reddit/" + propsRef.current.ioc;
         const response = await api.get(url);
         setResult(response.data);
       } catch (e) {

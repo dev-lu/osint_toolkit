@@ -1,6 +1,6 @@
 import React from "react";
 import api from "../../../../api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import ResultRow from "../../ResultRow";
 
 export default function Alienvault(props) {
+  const propsRef = useRef(props);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -27,9 +28,9 @@ export default function Alienvault(props) {
       try {
         const url =
           "/api/" +
-          props.type +
+          propsRef.current.type +
           "/alienvault?ioc=" +
-          props.ioc;
+          propsRef.current.ioc;
         const response = await api.get(url);
         setResult(response.data);
         setPulses(response.data.pulse_info.count);
@@ -45,27 +46,47 @@ export default function Alienvault(props) {
     <>
       {result ? (
         <Box sx={{ margin: 1 }}>
-          <Card variant="outlined" sx={{ mb: 2, borderRadius: 5, boxShadow: 0 }}>
+          <Card
+            variant="outlined"
+            sx={{ mb: 2, borderRadius: 5, boxShadow: 0 }}
+          >
             <CardContent>
               <Typography variant="h5" component="h2" gutterBottom>
                 General Information
               </Typography>
               <List sx={{ mb: 2 }}>
                 <ListItem disablePadding>
-                  <ListItemText primary="Indicator" secondary={result.indicator || "N/A"} />
+                  <ListItemText
+                    primary="Indicator"
+                    secondary={result.indicator || "N/A"}
+                  />
                 </ListItem>
-                {result.reputation ? <ListItem disablePadding>
-                  <ListItemText primary="Reputation" secondary={result.reputation} />
-                </ListItem> : null}
-                {result.country_name ? <ListItem disablePadding>
-                  <ListItemText primary="Country" secondary={result.country_name} />
-                </ListItem> : null}
-                {result.type ? <ListItem disablePadding>
-                  <ListItemText primary="Type" secondary={result.type} />
-                </ListItem> : null}
-                {result.asn ? <ListItem disablePadding>
-                  <ListItemText primary="ASN" secondary={result.asn} />
-                </ListItem> : null}
+                {result.reputation ? (
+                  <ListItem disablePadding>
+                    <ListItemText
+                      primary="Reputation"
+                      secondary={result.reputation}
+                    />
+                  </ListItem>
+                ) : null}
+                {result.country_name ? (
+                  <ListItem disablePadding>
+                    <ListItemText
+                      primary="Country"
+                      secondary={result.country_name}
+                    />
+                  </ListItem>
+                ) : null}
+                {result.type ? (
+                  <ListItem disablePadding>
+                    <ListItemText primary="Type" secondary={result.type} />
+                  </ListItem>
+                ) : null}
+                {result.asn ? (
+                  <ListItem disablePadding>
+                    <ListItemText primary="ASN" secondary={result.asn} />
+                  </ListItem>
+                ) : null}
               </List>
             </CardContent>
           </Card>
@@ -92,8 +113,17 @@ export default function Alienvault(props) {
                     <Chip
                       key={pulse.id}
                       label={pulse.name}
-                      icon={pulse.TLP ? <CircleIcon sx={{ "&&": { color: pulse.TLP }, fontSize: "small" }} /> : null}
-                      sx={{ m: 0.5}}
+                      icon={
+                        pulse.TLP ? (
+                          <CircleIcon
+                            sx={{
+                              "&&": { color: pulse.TLP },
+                              fontSize: "small",
+                            }}
+                          />
+                        ) : null
+                      }
+                      sx={{ m: 0.5 }}
                     />
                   ))}
                   {!result.pulse_info.pulses && (
@@ -114,12 +144,12 @@ export default function Alienvault(props) {
             <Typography variant="h5" component="h2" gutterBottom>
               Sections
             </Typography>
-              <br />{" "}
-              {result["sections"]
-                ? result["sections"].map((section) => {
-                    return <Chip key={section} label={section} sx={{ m: 0.5 }} />;
-                  })
-                : "None"}
+            <br />{" "}
+            {result["sections"]
+              ? result["sections"].map((section) => {
+                  return <Chip key={section} label={section} sx={{ m: 0.5 }} />;
+                })
+              : "None"}
           </Card>
         </Box>
       ) : null}

@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import api from "../../../../api";
 
 import Box from "@mui/material/Box";
@@ -28,6 +28,7 @@ import NoDetails from "../NoDetails";
 import ResultRow from "../../ResultRow";
 
 export default function Hunterio(props) {
+  const propsRef = useRef(props);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -50,9 +51,9 @@ export default function Hunterio(props) {
       try {
         const url =
           "/api/" +
-          props.type +
+          propsRef.current.type +
           "/hunterio/" +
-          encodeURIComponent(props.email);
+          encodeURIComponent(propsRef.current.email);
         const response = await api.get(url);
         setResult(response.data);
         setMailStatus(response.data.data.status);
@@ -234,7 +235,9 @@ export default function Hunterio(props) {
                           <TableCell>{source.uri}</TableCell>
                           <TableCell>{source.extracted_on}</TableCell>
                           <TableCell>{source.last_seen_on}</TableCell>
-                          <TableCell>{source.still_on_page ? "Yes" : "No"}</TableCell>
+                          <TableCell>
+                            {source.still_on_page ? "Yes" : "No"}
+                          </TableCell>
                         </TableRow>
                       ))}
                   </TableBody>

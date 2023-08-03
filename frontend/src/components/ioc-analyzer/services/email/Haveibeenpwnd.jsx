@@ -1,15 +1,15 @@
-import React from 'react'
-import api from '../../../../api';
-import { useEffect, useState } from "react";
+import React from "react";
+import api from "../../../../api";
+import { useEffect, useState, useRef } from "react";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import Divider from '@mui/material/Divider';
+import Divider from "@mui/material/Divider";
 
 import ResultRow from "../../ResultRow";
 
-
 export default function Haveibeenpwnd(props) {
+  const propsRef = useRef(props);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,9 +19,9 @@ export default function Haveibeenpwnd(props) {
       try {
         const url =
           "/api/" +
-          props.type +
+          propsRef.current.type +
           "/haveibeenpwnd/" +
-          encodeURIComponent(props.email);
+          encodeURIComponent(propsRef.current.email);
         const response = await api.get(url);
         setResult(response.data);
       } catch (e) {
@@ -45,16 +45,67 @@ export default function Haveibeenpwnd(props) {
             {result.breachedaccount && result.breachedaccount.length > 0 ? (
               result.breachedaccount.map((account) => (
                 <>
-                  {account.Name && <><b>Name: </b> {account.Name}<br /></>}
-                  {account.Title && <><b>Title: </b> {account.Title}<br /></>}
-                  {account.Domain && <><b>Domain: </b> {account.Domain}<br /></>}
-                  {account.BreachDate && <><b>Breach date: </b> {account.BreachDate}<br /></>}
-                  {account.BreachDate && <><b>Breach date: </b> {account.BreachDate}<br /></>}
-                  {account.AddedDate && <><b>Added date: </b> {account.AddedDate}<br /></>}
-                  {account.ModifiedDate && <><b>Modified date: </b> {account.ModifiedDate}<br /></>}
-                  {account.IsMalware && <><b>Breach is sourced from malware: </b> {account.IsMalware}<br /></>}
-                  {account.IsSpamList && <><b>Is a spam list: </b> {account.IsSpamList}<br /></>}
-                  {account.IsFabricated && <><b>Is fabricated: </b> {account.IsFabricated}<br /></>}
+                  {account.Name && (
+                    <>
+                      <b>Name: </b> {account.Name}
+                      <br />
+                    </>
+                  )}
+                  {account.Title && (
+                    <>
+                      <b>Title: </b> {account.Title}
+                      <br />
+                    </>
+                  )}
+                  {account.Domain && (
+                    <>
+                      <b>Domain: </b> {account.Domain}
+                      <br />
+                    </>
+                  )}
+                  {account.BreachDate && (
+                    <>
+                      <b>Breach date: </b> {account.BreachDate}
+                      <br />
+                    </>
+                  )}
+                  {account.BreachDate && (
+                    <>
+                      <b>Breach date: </b> {account.BreachDate}
+                      <br />
+                    </>
+                  )}
+                  {account.AddedDate && (
+                    <>
+                      <b>Added date: </b> {account.AddedDate}
+                      <br />
+                    </>
+                  )}
+                  {account.ModifiedDate && (
+                    <>
+                      <b>Modified date: </b> {account.ModifiedDate}
+                      <br />
+                    </>
+                  )}
+                  {account.IsMalware && (
+                    <>
+                      <b>Breach is sourced from malware: </b>{" "}
+                      {account.IsMalware}
+                      <br />
+                    </>
+                  )}
+                  {account.IsSpamList && (
+                    <>
+                      <b>Is a spam list: </b> {account.IsSpamList}
+                      <br />
+                    </>
+                  )}
+                  {account.IsFabricated && (
+                    <>
+                      <b>Is fabricated: </b> {account.IsFabricated}
+                      <br />
+                    </>
+                  )}
                   <br />
                   <Divider />
                   <br />
@@ -73,10 +124,30 @@ export default function Haveibeenpwnd(props) {
             {result.pasteaccount && result.pasteaccount.length > 0 ? (
               result.pasteaccount.map((paste) => (
                 <>
-                  {paste.Title && <><b>Title: </b> {paste.Title}<br /></>}
-                  {paste.Source && <><b>Source: </b> {paste.Source}<br /></>}
-                  {paste.Date && <><b>Date: </b> {paste.Date}<br /></>}
-                  {paste.EmailCount && <><b>Email count: </b> {paste.EmailCount}<br /></>}
+                  {paste.Title && (
+                    <>
+                      <b>Title: </b> {paste.Title}
+                      <br />
+                    </>
+                  )}
+                  {paste.Source && (
+                    <>
+                      <b>Source: </b> {paste.Source}
+                      <br />
+                    </>
+                  )}
+                  {paste.Date && (
+                    <>
+                      <b>Date: </b> {paste.Date}
+                      <br />
+                    </>
+                  )}
+                  {paste.EmailCount && (
+                    <>
+                      <b>Email count: </b> {paste.EmailCount}
+                      <br />
+                    </>
+                  )}
                   <br />
                   <Divider />
                   <br />
@@ -89,7 +160,7 @@ export default function Haveibeenpwnd(props) {
         </Box>
       ) : null}
     </>
-  )
+  );
 
   return (
     <>
@@ -100,25 +171,32 @@ export default function Haveibeenpwnd(props) {
         loading={loading}
         result={result}
         summary={
-          result && (
-            (result.pasteaccount && result.pasteaccount.length > 0) ||
-              (result.breachedaccount && result.breachedaccount.length > 0)
-              ? <>{(result.breachedaccount ? result.breachedaccount.length : 0)} Breaches and {(result.pasteaccount ? result.pasteaccount.length : 0)} Pastes found </>
-              : <>No pastes or breaches found</>
-          )}
-
-
+          result &&
+          ((result.pasteaccount && result.pasteaccount.length > 0) ||
+          (result.breachedaccount && result.breachedaccount.length > 0) ? (
+            <>
+              {result.breachedaccount ? result.breachedaccount.length : 0}{" "}
+              Breaches and{" "}
+              {result.pasteaccount ? result.pasteaccount.length : 0} Pastes
+              found{" "}
+            </>
+          ) : (
+            <>No pastes or breaches found</>
+          ))
+        }
         summary_color={{ color: null }}
         color={
-          result && (
-            (result.pasteaccount && result.pasteaccount.length > 0) ||
-              (result.breachedaccount && result.breachedaccount.length > 0)
-              ? (result.breachedaccount ? "orange" : "green")
+          result &&
+          ((result.pasteaccount && result.pasteaccount.length > 0) ||
+          (result.breachedaccount && result.breachedaccount.length > 0)
+            ? result.breachedaccount
+              ? "orange"
               : "green"
-          )}
+            : "green")
+        }
         error={error}
         details={details}
       />
     </>
-  )
+  );
 }

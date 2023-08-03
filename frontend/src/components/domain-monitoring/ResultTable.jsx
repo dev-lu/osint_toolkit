@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect, useRef } from "react";
 import api from "../../api";
 import { format, parseISO } from "date-fns";
 import ReactCountryFlag from "react-country-flag";
@@ -24,16 +25,17 @@ import useTheme from "@mui/material/styles/useTheme";
 import Details from "./Details";
 
 export default function ResultTable(props) {
+  const propsRef = useRef(props);
   const theme = useTheme();
   const [response, setResponse] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setLoading(true);
     api
-      .get("/api/url/urlscanio/" + props.domain)
+      .get("/api/url/urlscanio/" + propsRef.current.domain)
       .then((response) => {
         setResponse(response.data);
         setLoading(false);

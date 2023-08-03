@@ -1,6 +1,6 @@
 import React from "react";
 import api from "../../../../api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   BarChart,
   Bar,
@@ -28,6 +28,7 @@ import { Typography } from "@mui/material";
 import ResultRow from "../../ResultRow";
 
 export default function CrowdSec(props) {
+  const propsRef = useRef(props);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -37,7 +38,7 @@ export default function CrowdSec(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const url = "/api/ip/crowdsec/" + props.ioc;
+        const url = "/api/ip/crowdsec/" + propsRef.current.ioc;
         const response = await api.get(url);
         setResult(response.data);
         setScore(response.data["ip_range_score"]);

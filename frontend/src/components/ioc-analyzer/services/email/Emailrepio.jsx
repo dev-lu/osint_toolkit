@@ -1,6 +1,6 @@
 import React from "react";
 import api from "../../../../api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -26,6 +26,7 @@ import NoDetails from "../NoDetails";
 import ResultRow from "../../ResultRow";
 
 export default function Emailrepio(props) {
+  const propsRef = useRef(props);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -36,9 +37,9 @@ export default function Emailrepio(props) {
       try {
         const url =
           "/api/" +
-          props.type +
+          propsRef.current.type +
           "/emailrepio/" +
-          encodeURIComponent(props.email);
+          encodeURIComponent(propsRef.current.email);
         const response = await api.get(url);
         setResult(response.data);
         setMailStatus(response.data.reputation);

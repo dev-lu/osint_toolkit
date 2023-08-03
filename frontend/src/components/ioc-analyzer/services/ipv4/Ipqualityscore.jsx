@@ -1,6 +1,6 @@
 import React from "react";
 import api from "../../../../api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { PieChart, Pie } from "recharts";
 
 import Box from "@mui/material/Box";
@@ -22,6 +22,7 @@ import Typography from "@mui/material/Typography";
 import ResultRow from "../../ResultRow";
 
 export default function IpQualityscore(props) {
+  const propsRef = useRef(props);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -47,7 +48,7 @@ export default function IpQualityscore(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const url = "/api/ip/ipqualityscore/" + props.ioc;
+        const url = "/api/ip/ipqualityscore/" + propsRef.current.ioc;
         const response = await api.get(url);
         setResult(response.data);
         setScore(response.data["fraud_score"]);
