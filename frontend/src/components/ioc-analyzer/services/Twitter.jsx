@@ -17,7 +17,6 @@ import useTheme from "@mui/material/styles/useTheme";
 export default function Twitter(props) {
   const propsRef = useRef(props);
   const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const theme = useTheme();
@@ -32,7 +31,7 @@ export default function Twitter(props) {
         const response = await api.get(url);
         setResult(response.data);
       } catch (e) {
-        setError(e);
+        console.log(e);
       }
       setLoading(false);
     };

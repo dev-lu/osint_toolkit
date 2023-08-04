@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 import { useState } from "react";
 import api from "../../api";
 import { useDropzone } from "react-dropzone";
@@ -25,7 +25,6 @@ import {
 } from "@mui/material";
 import useTheme from "@mui/material/styles/useTheme";
 
-
 export default function Extractor(props) {
   const theme = useTheme();
   const [file, setFile] = useState(" ");
@@ -45,15 +44,15 @@ export default function Extractor(props) {
     outline: "none",
     transition: "border .24s ease-in-out",
   };
-  
+
   const focusedStyle = {
     borderColor: "#2196f3",
   };
-  
+
   const acceptStyle = {
     borderColor: "#00e676",
   };
-  
+
   const rejectStyle = {
     borderColor: "#ff1744",
   };
@@ -99,12 +98,17 @@ export default function Extractor(props) {
       });
   }
 
+  const acceptStyleRef = useRef(acceptStyle);
+  const baseStyleRef = useRef(baseStyle);
+  const focusedStyleRef = useRef(focusedStyle);
+  const rejectStyleRef = useRef(rejectStyle);
+
   const style = useMemo(
     () => ({
-      ...baseStyle,
-      ...(isFocused ? focusedStyle : {}),
-      ...(isDragAccept ? acceptStyle : {}),
-      ...(isDragReject ? rejectStyle : {}),
+      ...baseStyleRef.current,
+      ...(isFocused ? focusedStyleRef.current : {}),
+      ...(isDragAccept ? acceptStyleRef.current : {}),
+      ...(isDragReject ? rejectStyleRef.current : {}),
     }),
     [isFocused, isDragAccept, isDragReject]
   );
@@ -138,116 +142,118 @@ export default function Extractor(props) {
           sx={{
             boxShadow: 0,
             borderRadius: 5,
-
           }}
         >
-          <Alert severity="info" sx={{ backgroundColor: theme.palette.background.tableheader }}>
+          <Alert
+            severity="info"
+            sx={{ backgroundColor: theme.palette.background.tableheader }}
+          >
             <AlertTitle>
               <b>{file["statistics"]["total"]} unique IOCs found</b>
             </AlertTitle>
             <p>Following duplicates were removed:</p>
             <TableContainer>
               <Table>
-              <TableBody>
-              <TableRow>
-                <TableCell>
-                  <p>Domains</p>
-                </TableCell>
-                <TableCell>
-                  <p>IP addresses</p>
-                </TableCell>
-                <TableCell>
-                  <p>URLs</p>
-                </TableCell>
-                <TableCell>
-                  <p>Email addresses</p>
-                </TableCell>
-                <TableCell>
-                  <p>MD5 hashes</p>
-                </TableCell>
-                <TableCell>
-                  <p>SHA1 hashes</p>
-                </TableCell>
-                <TableCell>
-                  <p>SHA256 hashes</p>
-                </TableCell>
-              </TableRow>
-              <TableRow sx={{ alignSelf: "center", textAlign: "center" }}>
-                <TableCell sx={{ textAlign: "center" }}>
-                  <p>{file["statistics"]["domains_rem_dupl"]}</p>
-                </TableCell>
-                <TableCell sx={{ textAlign: "center" }}>
-                  <p>{file["statistics"]["ips_rem_dupl"]}</p>
-                </TableCell>
-                <TableCell sx={{ textAlign: "center" }}>
-                  <p>{file["statistics"]["urls_rem_dupl"]}</p>
-                </TableCell>
-                <TableCell sx={{ textAlign: "center" }}>
-                  <p>{file["statistics"]["emails_rem_dupl"]}</p>
-                </TableCell>
-                <TableCell sx={{ textAlign: "center" }}>
-                  <p>{file["statistics"]["md5_rem_dupl"]}</p>
-                </TableCell>
-                <TableCell sx={{ textAlign: "center" }}>
-                  <p>{file["statistics"]["sha1_rem_dupl"]}</p>
-                </TableCell>
-                <TableCell sx={{ textAlign: "center" }}>
-                  <p>{file["statistics"]["sha256_rem_dupl"]}</p>
-                </TableCell>
-              </TableRow>
-              </TableBody>  
+                <TableBody>
+                  <TableRow>
+                    <TableCell>
+                      <p>Domains</p>
+                    </TableCell>
+                    <TableCell>
+                      <p>IP addresses</p>
+                    </TableCell>
+                    <TableCell>
+                      <p>URLs</p>
+                    </TableCell>
+                    <TableCell>
+                      <p>Email addresses</p>
+                    </TableCell>
+                    <TableCell>
+                      <p>MD5 hashes</p>
+                    </TableCell>
+                    <TableCell>
+                      <p>SHA1 hashes</p>
+                    </TableCell>
+                    <TableCell>
+                      <p>SHA256 hashes</p>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ alignSelf: "center", textAlign: "center" }}>
+                    <TableCell sx={{ textAlign: "center" }}>
+                      <p>{file["statistics"]["domains_rem_dupl"]}</p>
+                    </TableCell>
+                    <TableCell sx={{ textAlign: "center" }}>
+                      <p>{file["statistics"]["ips_rem_dupl"]}</p>
+                    </TableCell>
+                    <TableCell sx={{ textAlign: "center" }}>
+                      <p>{file["statistics"]["urls_rem_dupl"]}</p>
+                    </TableCell>
+                    <TableCell sx={{ textAlign: "center" }}>
+                      <p>{file["statistics"]["emails_rem_dupl"]}</p>
+                    </TableCell>
+                    <TableCell sx={{ textAlign: "center" }}>
+                      <p>{file["statistics"]["md5_rem_dupl"]}</p>
+                    </TableCell>
+                    <TableCell sx={{ textAlign: "center" }}>
+                      <p>{file["statistics"]["sha1_rem_dupl"]}</p>
+                    </TableCell>
+                    <TableCell sx={{ textAlign: "center" }}>
+                      <p>{file["statistics"]["sha256_rem_dupl"]}</p>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
               </Table>
             </TableContainer>
           </Alert>
-          <ResultRows 
-            title="Domains" 
+          <ResultRows
+            title="Domains"
             type="domain"
-            list={file["domains"]} 
-            count={file["statistics"]["domains"]} 
+            list={file["domains"]}
+            count={file["statistics"]["domains"]}
             icon={<PublicIcon sx={{ verticalAlign: "middle" }} />}
-            />
-          <ResultRows 
+          />
+          <ResultRows
             title="IP addresses"
             type="ipv4"
-            list={file["ips"]} 
-            count={file["statistics"]["ips"]} 
+            list={file["ips"]}
+            count={file["statistics"]["ips"]}
             icon={<LanIcon sx={{ verticalAlign: "middle" }} />}
-            />
-          <ResultRows 
+          />
+          <ResultRows
             title="URLs"
             type="url"
-            list={file["urls"]} 
-            count={file["statistics"]["urls"]} 
+            list={file["urls"]}
+            count={file["statistics"]["urls"]}
             icon={<LinkIcon sx={{ verticalAlign: "middle" }} />}
-            />
-          <ResultRows 
+          />
+          <ResultRows
             title="Email addresses"
             type="email"
-            list={file["emails"]} 
-            count={file["statistics"]["emails"]} 
+            list={file["emails"]}
+            count={file["statistics"]["emails"]}
             icon={<AlternateEmailIcon sx={{ verticalAlign: "middle" }} />}
-            />
-          <ResultRows 
+          />
+          <ResultRows
             title="MD5 hashes"
             type="md5"
-            list={file["md5"]} 
-            count={file["statistics"]["md5"]} 
+            list={file["md5"]}
+            count={file["statistics"]["md5"]}
             icon={<InsertDriveFileIcon sx={{ verticalAlign: "middle" }} />}
-            />
-          <ResultRows 
+          />
+          <ResultRows
             title="SHA1 hashes"
             type="sha1"
-            list={file["sha1"]} 
-            count={file["statistics"]["sha1"]} 
+            list={file["sha1"]}
+            count={file["statistics"]["sha1"]}
             icon={<InsertDriveFileIcon sx={{ verticalAlign: "middle" }} />}
-            />
-          <ResultRows 
+          />
+          <ResultRows
             title="SHA256 hashes"
             type="sha256"
-            list={file["sha256"]} 
-            count={file["statistics"]["sha256"]} 
+            list={file["sha256"]}
+            count={file["statistics"]["sha256"]}
             icon={<InsertDriveFileIcon sx={{ verticalAlign: "middle" }} />}
-            />
+          />
         </TableContainer>
       ) : (
         <Introduction moduleName="IOC Extractor" />

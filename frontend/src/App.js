@@ -3,11 +3,10 @@ import { useState, useEffect } from "react";
 import { atom, useSetRecoilState, useRecoilValue } from "recoil";
 import api from "./api";
 
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
 import Main from "./Main";
-
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -51,33 +50,32 @@ function App() {
   const setModules = useSetRecoilState(modulesState);
   const setNewsfeedList = useSetRecoilState(newsfeedListState);
 
-
   const getDesignTokens = (mode) => ({
     palette: {
       mode,
-      ...(mode === 'light'
+      ...(mode === "light"
         ? {
             // Values for light mode
             typography: {
               htmlFontSize: 16,
             },
             background: {
-              default: '#ebebeb', 
-              card: 'aliceblue',
-              cvssCard: 'aliceblue',
-              cvssCircle: 'white',
-              textfieldlarge: 'white',
-              uploadarea: '#fafafa',
-              tableheader: 'whitesmoke',
-              tablecell: 'white',
-              tableborder: '#ebebeb',
+              default: "#ebebeb",
+              card: "aliceblue",
+              cvssCard: "aliceblue",
+              cvssCircle: "white",
+              textfieldlarge: "white",
+              uploadarea: "#fafafa",
+              tableheader: "whitesmoke",
+              tablecell: "white",
+              tableborder: "#ebebeb",
             },
             components: {
               MuiCard: {
                 variants: [
-                  { 
+                  {
                     props: {
-                      variant: 'primary'
+                      variant: "primary",
                     },
                     style: {
                       backgroundColor: "black",
@@ -89,19 +87,21 @@ function App() {
                       padding: "30px",
                       borderRadius: 5,
                       overflow: "auto",
-                      boxShadow: "5"
+                      boxShadow: "5",
                     },
                   },
-                  { props: {variant: 'secondary'},
+                  {
+                    props: { variant: "secondary" },
                     style: {
-                      m:2, p:2,
-                      borderRadius: 5, 
-                      backgroundColor: 'black', 
-                      boxShadow: 0
-                    }
+                      m: 2,
+                      p: 2,
+                      borderRadius: 5,
+                      backgroundColor: "black",
+                      boxShadow: 0,
+                    },
                   },
-                ]
-              }
+                ],
+              },
             },
           }
         : {
@@ -110,16 +110,16 @@ function App() {
               htmlFontSize: 16,
             },
             background: {
-              default: '#333333',
-              paper: '#404040',
-              card: '#6F6F6F',
-              cvssCard: '#404040',
-              cvssCircle: '#6F6F6F',
-              uploadarea: '#6F6F6F',
-              textfieldlarge: '#6F6F6F',
-              tableheader: '#333333',
-              tablecell: '#595959',
-              tableborder: '#333333',
+              default: "#333333",
+              paper: "#404040",
+              card: "#6F6F6F",
+              cvssCard: "#404040",
+              cvssCircle: "#6F6F6F",
+              uploadarea: "#6F6F6F",
+              textfieldlarge: "#6F6F6F",
+              tableheader: "#333333",
+              tablecell: "#595959",
+              tableborder: "#333333",
             },
           }),
     },
@@ -134,59 +134,51 @@ function App() {
         }));
       },
     }),
-    [setGeneralSettings],
+    [setGeneralSettings]
   );
 
-  const mode = generalSettings.darkmode ? 'dark' : 'light';
+  const mode = generalSettings.darkmode ? "dark" : "light";
 
   // Update the theme only if the mode changes
   const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
   useEffect(() => {
     // Get state of API keys
-    api
-      .get("/api/apikeys/is_active")
-      .then((response) => {
-        const result = response.data;
-        setApiKeys(result);
-        setApikeyLoaded(true);
-      });
+    api.get("/api/apikeys/is_active").then((response) => {
+      const result = response.data;
+      setApiKeys(result);
+      setApikeyLoaded(true);
+    });
 
     // Get module settings
-    api
-      .get("/api/settings/modules/")
-      .then((response) => {
-        const result = response.data.reduce((dict, item) => {
-          const { name, ...rest } = item;
-          dict[name] = rest;
-          return dict;
-        }, {});
-        setModules(result);
-        setModulesLoaded(true);
-      });
+    api.get("/api/settings/modules/").then((response) => {
+      const result = response.data.reduce((dict, item) => {
+        const { name, ...rest } = item;
+        dict[name] = rest;
+        return dict;
+      }, {});
+      setModules(result);
+      setModulesLoaded(true);
+    });
 
     // Get general settings
-    api
-      .get("/api/settings/general/")
-      .then((response) => {
-        const result = response.data[0];
-        setGeneralSettings(result);
-        setGeneralSettingsLoaded(true);
-      });
+    api.get("/api/settings/general/").then((response) => {
+      const result = response.data[0];
+      setGeneralSettings(result);
+      setGeneralSettingsLoaded(true);
+    });
 
     // Get list of RSS feeds
-    api
-      .get("/api/settings/modules/newsfeed/")
-      .then((response) => {
-        const result = response.data.reduce((dict, item) => {
-          const { name, ...rest } = item;
-          dict[name] = rest;
-          return dict;
-        }, {});
-        setNewsfeedList(result);
-        setNewsfeedListLoaded(true);
-      });
-  }, []);
+    api.get("/api/settings/modules/newsfeed/").then((response) => {
+      const result = response.data.reduce((dict, item) => {
+        const { name, ...rest } = item;
+        dict[name] = rest;
+        return dict;
+      }, {});
+      setNewsfeedList(result);
+      setNewsfeedListLoaded(true);
+    });
+  }, [setApiKeys, setGeneralSettings, setModules, setNewsfeedList]);
 
   if (
     modulesLoaded &&

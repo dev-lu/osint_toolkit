@@ -48,8 +48,7 @@ export default function ResultRow(props) {
                   sx={{
                     width: 30,
                     height: 30,
-                    border: "solid",
-                    border: 1,
+                    border: "1px solid",
                     borderColor: theme.palette.background.tableborder,
                   }}
                 />
@@ -85,8 +84,7 @@ export default function ResultRow(props) {
                   sx={{
                     width: 30,
                     height: 30,
-                    border: "solid",
-                    border: 1,
+                    border: "1px solid",
                     borderColor: theme.palette.background.tableborder,
                   }}
                 />
@@ -119,8 +117,7 @@ export default function ResultRow(props) {
                   sx={{
                     width: 30,
                     height: 30,
-                    border: "solid",
-                    border: 1,
+                    border: "1px solid",
                     borderColor: theme.palette.background.tableborder,
                   }}
                 />
@@ -153,8 +150,7 @@ export default function ResultRow(props) {
                   sx={{
                     width: 30,
                     height: 30,
-                    border: "solid",
-                    border: 1,
+                    border: "1px solid",
                     borderColor: theme.palette.background.tableborder,
                   }}
                 />
@@ -191,8 +187,7 @@ export default function ResultRow(props) {
                   sx={{
                     width: 30,
                     height: 30,
-                    border: "solid",
-                    border: 1,
+                    border: "1px solid",
                     borderColor: theme.palette.background.tableborder,
                   }}
                 />
@@ -228,8 +223,7 @@ export default function ResultRow(props) {
                 sx={{
                   width: 30,
                   height: 30,
-                  border: "solid",
-                  border: 1,
+                  border: "1px solid",
                   borderColor: theme.palette.background.tableborder,
                 }}
               />

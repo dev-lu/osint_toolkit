@@ -114,6 +114,7 @@ export default function CvssCalculator() {
     cvssScores.environmental.modifiedConfidentialityImpact,
     cvssScores.environmental.modifiedIntegrityImpact,
     cvssScores.environmental.modifiedAvailabilityImpact,
+    setCvssScores,
   ]);
 
   const handleClick = () => {
