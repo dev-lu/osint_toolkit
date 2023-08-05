@@ -27,8 +27,6 @@ class ApikeyStateResponse(BaseModel):
 class SettingsSchema(BaseModel):
     id: int
     darkmode: bool
-    proxy_string: str
-    proxy_enabled: bool
     font: str
 
     class Config:

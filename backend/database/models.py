@@ -23,16 +23,12 @@ class Settings(Base):
     __tablename__ = 'settings'
     id = Column(Integer, primary_key=True)
     darkmode = Column(Boolean, default=False)
-    proxy_enabled = Column(Boolean, default=False)
-    proxy_string = Column(String)
     font = Column(String, default='Poppins')
 
     def to_dict(self):
         return {
             'id': self.id,
             'darkmode': self.darkmode,
-            'proxy_enabled': self.proxy_enabled,
-            'proxy_string': self.proxy_string,
             'font': self.font
         }
 

@@ -104,8 +104,6 @@ def update_settings(db: Session, id: int, settings: SettingsSchema):
     db_settings = db.query(Settings).filter(Settings.id == id).first()
     if db_settings:
         db_settings.darkmode = settings.darkmode
-        db_settings.proxy_string = settings.proxy_string
-        db_settings.proxy_enabled = settings.proxy_enabled
         db_settings.font = settings.font
         db.commit()
         db.refresh(db_settings)

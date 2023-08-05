@@ -111,7 +111,8 @@ export default function Newsfeed() {
     } catch (e) {
       console.log(e);
     }
-  }, [setNewsfeed]); // Empty dependencies array since fetchData has no dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (newsfeed.length === 0) {

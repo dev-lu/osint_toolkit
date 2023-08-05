@@ -96,7 +96,7 @@ app.add_middleware(
 
 def add_default_general_settings(db: Session):
     default_settings = Settings(
-        id=0, darkmode=False, proxy_enabled=False, proxy_string='localhost')
+        id=0, darkmode=False)
     existing_settings = db.query(Settings).filter(Settings.id == 0).first()
     if not existing_settings:
         db.add(default_settings)
