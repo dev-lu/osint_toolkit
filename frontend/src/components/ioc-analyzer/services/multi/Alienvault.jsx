@@ -5,12 +5,16 @@ import { useEffect, useState, useRef } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import CategoryIcon from "@mui/icons-material/Category";
+import Chip from "@mui/material/Chip";
 import CircleIcon from "@mui/icons-material/Circle";
 import Divider from "@mui/material/Divider";
-import Chip from "@mui/material/Chip";
+import Grid from "@mui/material/Grid";
+import InfoIcon from "@mui/icons-material/Info";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import PolicyIcon from "@mui/icons-material/Policy";
 import Typography from "@mui/material/Typography";
 
 import ResultRow from "../../ResultRow";
@@ -51,9 +55,16 @@ export default function Alienvault(props) {
             sx={{ mb: 2, borderRadius: 5, boxShadow: 0 }}
           >
             <CardContent>
-              <Typography variant="h5" component="h2" gutterBottom>
-                General Information
-              </Typography>
+              <Grid container alignItems="center">
+                <Grid mr={1} item>
+                  <InfoIcon />
+                </Grid>
+                <Grid item>
+                  <Typography variant="h5" component="h2" gutterBottom>
+                    General information
+                  </Typography>
+                </Grid>
+              </Grid>
               <List sx={{ mb: 2 }}>
                 <ListItem disablePadding>
                   <ListItemText
@@ -92,9 +103,16 @@ export default function Alienvault(props) {
           </Card>
           <Card variant="outlined" sx={{ borderRadius: 5, boxShadow: 0 }}>
             <CardContent>
-              <Typography variant="h5" component="h2" gutterBottom>
-                Pulse Information
-              </Typography>
+              <Grid container alignItems="center">
+                <Grid mr={1} item>
+                  <PolicyIcon />
+                </Grid>
+                <Grid item>
+                  <Typography variant="h5" component="h2" gutterBottom>
+                    Pulse Information
+                  </Typography>
+                </Grid>
+              </Grid>
               <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                 <Typography variant="h4" component="span" sx={{ mr: 1 }}>
                   {pulses}
@@ -141,9 +159,16 @@ export default function Alienvault(props) {
             key="sections_card"
             sx={{ mt: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
           >
-            <Typography variant="h5" component="h2" gutterBottom>
-              Sections
-            </Typography>
+            <Grid container alignItems="center">
+              <Grid mr={1} item>
+                <CategoryIcon />
+              </Grid>
+              <Grid item>
+                <Typography variant="h5" component="h2" gutterBottom>
+                  Sections
+                </Typography>
+              </Grid>
+            </Grid>
             <br />{" "}
             {result["sections"]
               ? result["sections"].map((section) => {
