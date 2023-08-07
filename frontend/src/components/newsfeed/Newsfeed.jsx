@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import api from "../../api";
 import he from "he";
@@ -95,7 +95,7 @@ export default function Newsfeed() {
     ));
   };
 
-  const fetchData = useCallback(async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
       setNewsfeed([]);
@@ -111,8 +111,7 @@ export default function Newsfeed() {
     } catch (e) {
       console.log(e);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
   useEffect(() => {
     if (newsfeed.length === 0) {
@@ -122,7 +121,8 @@ export default function Newsfeed() {
       setResult(newsfeed);
       setLoading(false);
     }
-  }, [fetchData, newsfeed]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
