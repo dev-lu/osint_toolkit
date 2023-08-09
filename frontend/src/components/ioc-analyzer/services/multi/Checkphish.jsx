@@ -17,7 +17,9 @@ import ListItemText from "@mui/material/ListItemText";
 import NumbersIcon from "@mui/icons-material/Numbers";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
+import ScreenshotMonitorIcon from "@mui/icons-material/ScreenshotMonitor";
 import SecurityIcon from "@mui/icons-material/Security";
+import Stack from "@mui/material/Stack";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import Typography from "@mui/material/Typography";
 
@@ -153,6 +155,42 @@ export default function Checkphish(props) {
                 </ListItem>
               </List>
             </Card>
+
+            {result["screenshot_path"] ? (
+              <Card
+                key="shodan_details"
+                elevation={0}
+                variant="outlined"
+                sx={{ m: 1.5, p: 2, borderRadius: 5 }}
+              >
+                <Stack sx={{ float: "left" }}>
+                  <Grid container alignItems="left">
+                    <Grid mr={1} item>
+                      <ScreenshotMonitorIcon />
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="h5" component="h2" gutterBottom>
+                        Screenshot
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                  <a
+                    href={result["screenshot_path"]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={result["screenshot_path"]}
+                      alt="Website screenshot"
+                      style={{
+                        width: "350px",
+                        borderRadius: "15px",
+                      }}
+                    />
+                  </a>
+                </Stack>
+              </Card>
+            ) : null}
           </Box>
         </>
       )}
