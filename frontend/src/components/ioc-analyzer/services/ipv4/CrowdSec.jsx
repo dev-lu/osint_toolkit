@@ -109,7 +109,11 @@ export default function CrowdSec(props) {
                     </ListItemIcon>
                     <ListItemText
                       primary="IP range"
-                      secondary={`Score: ${result["ip_range"]}`}
+                      secondary={`${
+                        result && result.location && result.location.ip_range
+                          ? result["ip_range"]
+                          : "N/A"
+                      }`}
                     />
                   </ListItem>
                   <ListItem>
@@ -118,7 +122,11 @@ export default function CrowdSec(props) {
                     </ListItemIcon>
                     <ListItemText
                       primary="AS name"
-                      secondary={`Score: ${result["as_name"]}`}
+                      secondary={`${
+                        result && result.location && result.location.as_name
+                          ? result["as_name"]
+                          : "N/A"
+                      }`}
                     />
                   </ListItem>
                   <ListItem>
@@ -127,7 +135,11 @@ export default function CrowdSec(props) {
                     </ListItemIcon>
                     <ListItemText
                       primary="Country"
-                      secondary={`Score: ${result["location"]["country"]}`}
+                      secondary={`${
+                        result && result.location && result.location.country
+                          ? result["location"]["country"]
+                          : "N/A"
+                      }`}
                     />
                   </ListItem>
                   <ListItem>
@@ -136,7 +148,11 @@ export default function CrowdSec(props) {
                     </ListItemIcon>
                     <ListItemText
                       primary="City"
-                      secondary={`Score: ${result["location"]["city"]}`}
+                      secondary={`${
+                        result && result.location && result.location.city
+                          ? result["location"]["city"]
+                          : "N/A"
+                      }`}
                     />
                   </ListItem>
                   <ListItem>
@@ -145,7 +161,11 @@ export default function CrowdSec(props) {
                     </ListItemIcon>
                     <ListItemText
                       primary="Reverse DNS"
-                      secondary={`Score: ${result["location"]["reverse_dns"]}`}
+                      secondary={`${
+                        result && result.location && result.location.reverse_dns
+                          ? result["location"]["reverse_dns"]
+                          : "N/A"
+                      }`}
                     />
                   </ListItem>
                 </List>
