@@ -14,6 +14,7 @@
     "date-fns": "^2.29.3",
     "dompurify": "^3.0.1",
     "html-to-text": "^9.0.3",
+    "js-yaml": "^4.1.0",
     "react": "^18.2.0",
     "react-circle-progress-bar": "^0.1.4",
     "react-country-flag": "^3.0.2",
@@ -26,6 +27,7 @@
     "react-syntax-highlighter": "^15.5.0",
     "recharts": "^2.5.0",
     "recoil": "^0.7.5",
+    "uuid": "^9.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

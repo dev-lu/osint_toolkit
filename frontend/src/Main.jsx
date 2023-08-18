@@ -20,13 +20,14 @@ import MailIcon from "@mui/icons-material/Mail";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 import { Paper } from "@mui/material";
 import PsychologyIcon from "@mui/icons-material/Psychology";
+import RuleIcon from "@mui/icons-material/Rule";
 import SearchIcon from "@mui/icons-material/Search";
 import SettingsIcon from "@mui/icons-material/Settings";
+import Sigma from "./components/rule-creator/Sigma";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import CvssCalculator from "./components/cvss-calculator/CvssCalculator";
-
 
 export default function Main() {
   const modules = useRecoilValue(modulesState);
@@ -46,8 +47,10 @@ export default function Main() {
       return 5;
     } else if (modules["CVSS Calculator"].enabled) {
       return 6;
-    } else {
+    } else if (modules["Rules"].enabled) {
       return 7;
+    } else {
+      return 8;
     }
   }
 
@@ -131,8 +134,11 @@ export default function Main() {
           {modules["CVSS Calculator"].enabled ? (
             <Tab value={6} icon={<CalculateIcon />} label="CVSS Calculator" />
           ) : null}
+          {modules["Rules"].enabled ? (
+            <Tab value={7} icon={<RuleIcon />} label="Rules" />
+          ) : null}
 
-          <Tab value={7} icon={<SettingsIcon />} label="Settings" />
+          <Tab value={8} icon={<SettingsIcon />} label="Settings" />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -157,6 +163,9 @@ export default function Main() {
         <CvssCalculator />
       </TabPanel>
       <TabPanel value={value} index={7}>
+        <Sigma />
+      </TabPanel>
+      <TabPanel value={value} index={8}>
         <Settings />
       </TabPanel>
     </Paper>

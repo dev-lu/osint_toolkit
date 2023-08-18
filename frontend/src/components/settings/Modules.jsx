@@ -13,16 +13,21 @@ import TextField from "@mui/material/TextField";
 import { modulesState } from "../../App";
 import { newsfeedListState } from "../../App";
 
-import { List, ListItem, ListItemAvatar, Avatar, ListItemText } from '@mui/material';
+import {
+  List,
+  ListItem,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
+} from "@mui/material";
 import useTheme from "@mui/material/styles/useTheme";
-
 
 export default function Modules() {
   const modules = useRecoilValue(modulesState);
   const setModules = useSetRecoilState(modulesState);
 
   const newsfeedList = useRecoilValue(newsfeedListState);
-  const setNewsfeedList = useSetRecoilState(newsfeedListState)
+  const setNewsfeedList = useSetRecoilState(newsfeedListState);
 
   const theme = useTheme();
 
@@ -36,18 +41,12 @@ export default function Modules() {
 
   function handleModuleChange(moduleName) {
     if (modules[moduleName].enabled === false) {
-      api.post(
-        "/api/settings/modules/enable/?module_name=" +
-          moduleName
-      );
+      api.post("/api/settings/modules/enable/?module_name=" + moduleName);
       const newState = { ...modules };
       newState[moduleName] = { ...newState[moduleName], enabled: true };
       setModules(newState);
     } else {
-      api.post(
-        "/api/settings/modules/disable/?module_name=" +
-          moduleName
-      );
+      api.post("/api/settings/modules/disable/?module_name=" + moduleName);
       const newState = { ...modules };
       newState[moduleName] = { ...newState[moduleName], enabled: false };
       setModules(newState);
@@ -70,13 +69,13 @@ export default function Modules() {
 
   function handleEnableDisableNewsfeed(feedName) {
     if (newsfeedList[feedName].enabled === false) {
-      api.post("/api/settings/modules/newsfeed/enable?feedName="+feedName);
+      api.post("/api/settings/modules/newsfeed/enable?feedName=" + feedName);
       const newState = { ...newsfeedList };
-        newState[feedName] = { ...newState[feedName], enabled: true };
-        setNewsfeedList(newState);
+      newState[feedName] = { ...newState[feedName], enabled: true };
+      setNewsfeedList(newState);
     } else {
-      api.post("/api/settings/modules/newsfeed/disable?feedName="+feedName);
-    const newState = { ...newsfeedList };
+      api.post("/api/settings/modules/newsfeed/disable?feedName=" + feedName);
+      const newState = { ...newsfeedList };
       newState[feedName] = { ...newState[feedName], enabled: false };
       setNewsfeedList(newState);
     }
@@ -102,17 +101,20 @@ export default function Modules() {
             The news feed is a module that shows the latest news from the
             security community.
           </p>
-          <Card sx={{borderRadius:5, boxShadow: 0, m: 2, maxWidth: '50%'}} >
-            <List dense={true} sx={{
-                                    position: 'relative',
-                                    overflow: 'auto',
-                                    maxHeight: 300,
-                                    '& ul': { padding: 0 },
-                                  }}>
-                {Object.keys(newsfeedList).map((key) => {
+          <Card sx={{ borderRadius: 5, boxShadow: 0, m: 2, maxWidth: "50%" }}>
+            <List
+              dense={true}
+              sx={{
+                position: "relative",
+                overflow: "auto",
+                maxHeight: 300,
+                "& ul": { padding: 0 },
+              }}
+            >
+              {Object.keys(newsfeedList).map((key) => {
                 const item = newsfeedList[key];
                 return (
-                  <ListItem key={'list-' + key}>
+                  <ListItem key={"list-" + key}>
                     <ListItemAvatar>
                       <Avatar alt={key} src={`feedicons/${item.icon}.png`} />
                     </ListItemAvatar>
@@ -124,7 +126,7 @@ export default function Modules() {
                   </ListItem>
                 );
               })}
-            </List>  
+            </List>
           </Card>
         </Card>
         <Card sx={cardStyle}>
@@ -506,8 +508,22 @@ export default function Modules() {
             label={<h3>CVSS Calculator</h3>}
           />
           <p>
-            CVSS Calculator is a module that allows you to calculate the CVSS score of a vulnerability.
+            CVSS Calculator is a module that allows you to calculate the CVSS
+            score of a vulnerability.
           </p>
+          <br />
+        </Card>
+        <Card sx={cardStyle}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={modules["Rules"].enabled}
+                onChange={() => handleModuleChange("Rules")}
+              />
+            }
+            label={<h3>Rules</h3>}
+          />
+          <p>Create Sigma rules using a graphical user interface.</p>
           <br />
         </Card>
       </FormGroup>
