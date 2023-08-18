@@ -18,6 +18,7 @@ OSINT Toolkit is a full-stack web application designed to assist security analys
   * [Domain Monitoring](#domain-monitoring)
   * [AI Assistant](#ai-assistant)
   * [CVSS Calculator](#cvss-calculator)
+  * [GUI to create Sigma rules](#rules)
   * [Customizability](#customizable)
 * [Planned features](#planned-features-for-later-versions)
 * [Deploy with Docker](#deploy-with-docker)
@@ -68,6 +69,11 @@ The AI Assistant module provides powerful AI-based solutions for log data analys
 ### CVSS Calculator
 The CVSS Calculator module allows you to calculate the CVSS 3.1 score of a vulnerability and export the calculation as a markdown or JSON file.
 ![cvss_calc](https://github.com/dev-lu/osint_toolkit/assets/44299200/6700a805-8698-445e-9cfc-e404370f58c0)
+
+### Rules
+The Rules module is a GUI for creating Sigma rules.
+![rules](https://github.com/dev-lu/osint_toolkit/assets/44299200/2422f5f2-7623-4c81-bd29-0ef3fff80067)
+
 
 
 ### Customizable
