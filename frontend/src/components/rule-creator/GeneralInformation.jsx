@@ -255,7 +255,6 @@ export default function GeneralInformation() {
                   onChange={(event) =>
                     updateGeneralInfo("date", event.target.value)
                   }
-                  defaultValue={ruleCreationDate}
                   fullWidth
                 />
 

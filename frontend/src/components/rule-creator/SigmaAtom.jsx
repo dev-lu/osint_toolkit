@@ -25,7 +25,7 @@ export const AuthorAtom = atom({
 
 export const SelectionFieldAtom = atom({
   key: "SelectionFieldAtom",
-  default: [],
+  default: "",
 });
 
 export const SelectionModifierAtom = atom({
@@ -45,7 +45,7 @@ export const SelectionStatementAtom = atom({
 
 export const FilterFieldAtom = atom({
   key: "FilterFieldAtom",
-  default: [],
+  default: "",
 });
 
 export const FilterModifierAtom = atom({

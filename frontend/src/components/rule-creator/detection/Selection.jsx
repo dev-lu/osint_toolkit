@@ -129,7 +129,6 @@ export default function Selection() {
       <Box display="flex" alignItems="center" gap="1rem" marginBottom="1rem">
         <Autocomplete
           options={fields}
-          getOptionLabel={(option) => option}
           margin="normal"
           value={field}
           onChange={(event, newValue) => setField(newValue)}
