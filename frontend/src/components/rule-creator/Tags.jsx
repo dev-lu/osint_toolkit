@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import {
+  Autocomplete,
   Card,
   CardContent,
   Typography,
@@ -13,11 +14,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import StyleIcon from "@mui/icons-material/Style";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { TagsAtom } from "./SigmaAtom";
+import TagData from "./TagData.json";
 
 export default function Tags() {
   const [tagInput, setTagInput] = useState("");
   const setTags = useSetRecoilState(TagsAtom);
   const tags = useRecoilValue(TagsAtom);
+  const tagOptions = Object.values(TagData).flat();
 
   const listStyle = {
     marginLeft: "20px",
@@ -77,31 +80,44 @@ export default function Tags() {
             Replace space with an underscore _
           </Typography>
           <div>
-            <TextField
-              label="Enter tags"
+            <Autocomplete
+              freeSolo
+              options={tagOptions}
               value={tagInput}
-              onChange={handleTagInput}
+              onChange={(event, newValue) => {
+                setTagInput(newValue);
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   handleAddTag();
                 }
               }}
-              size="medium"
-              sx={{ width: "100%", mt: 2 }}
-              InputProps={{
-                endAdornment: (
-                  <Button
-                    variant="text"
-                    disableElevation
-                    size="medium"
-                    onClick={handleAddTag}
-                    startIcon={<AddCircleIcon />}
-                    sx={{ width: "20%" }}
-                  >
-                    Add tag
-                  </Button>
-                ),
-              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Enter tags"
+                  size="medium"
+                  sx={{ width: "100%", mt: 2 }}
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <>
+                        <Button
+                          variant="text"
+                          disableElevation
+                          size="medium"
+                          onClick={handleAddTag}
+                          startIcon={<AddCircleIcon />}
+                          sx={{ width: "20%" }}
+                        >
+                          Add tag
+                        </Button>
+                        {params.InputProps.endAdornment}
+                      </>
+                    ),
+                  }}
+                />
+              )}
             />
 
             {tags.map((tag, index) => (
