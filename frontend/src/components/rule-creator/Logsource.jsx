@@ -12,11 +12,12 @@ import {
 } from "@mui/material";
 import SourceIcon from "@mui/icons-material/Source";
 import { LogsourceAtom } from "./SigmaAtom";
+import LogsourceData from "./LogsourceData.json";
 
 export default function Logsource() {
-  const products = ["Windows", "Linux", "MacOS", "Cisco"];
-  const services = ["sysmon", "ldapd", "dhcp"];
-  const categories = ["process_creation"];
+  const products = Object.values(LogsourceData.product);
+  const services = Object.values(LogsourceData.service);
+  const categories = Object.values(LogsourceData.category);
 
   const setLogsrc = useSetRecoilState(LogsourceAtom);
   const logsrc = useRecoilValue(LogsourceAtom);
