@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import {
+  Autocomplete,
   Card,
   CardContent,
   Typography,
@@ -13,6 +14,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { FieldsAtom } from "./SigmaAtom";
+import FieldData from "./FieldData.json";
 
 export default function Fields() {
   const [fieldInput, setFieldInput] = useState("");
@@ -67,31 +69,42 @@ export default function Fields() {
           </Typography>
         </CardContent>
         <div>
-          <TextField
-            label="Enter field"
+          <Autocomplete
             value={fieldInput}
-            onChange={handleFieldInput}
+            onChange={(_, newValue) => setFieldInput(newValue)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 handleAddField();
               }
             }}
-            size="medium"
-            sx={{ width: "100%", mt: 2 }}
-            InputProps={{
-              endAdornment: (
-                <Button
-                  variant="text"
-                  disableElevation
-                  size="medium"
-                  sx={{ width: "20%" }}
-                  onClick={handleAddField}
-                  startIcon={<AddCircleIcon />}
-                >
-                  Add field
-                </Button>
-              ),
-            }}
+            freeSolo
+            options={FieldData}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Enter field"
+                size="medium"
+                sx={{ width: "100%", mt: 2 }}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <>
+                      {params.InputProps.endAdornment}
+                      <Button
+                        variant="text"
+                        disableElevation
+                        size="medium"
+                        sx={{ width: "20%" }}
+                        onClick={handleAddField}
+                        startIcon={<AddCircleIcon />}
+                      >
+                        Add field
+                      </Button>
+                    </>
+                  ),
+                }}
+              />
+            )}
           />
 
           {fields.map((field, index) => (

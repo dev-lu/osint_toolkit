@@ -29,21 +29,9 @@ import {
   SelectionStatementAtom,
   SelectionKeywordsAtom,
 } from "../SigmaAtom";
+import FieldData from "../FieldData.json";
 
 export default function Selection() {
-  const fields = [
-    "EventLog",
-    "EventID",
-    "ProcessName",
-    "AccessMask",
-    "ObjectType",
-    "TargetProcess",
-    "StartModule",
-    "CommandLine",
-    "ParentImage",
-    "UserName",
-    "SourceWorkstation",
-  ];
   const [keywordInput, setKeywordInput] = useState("");
 
   const setSelectionKeywords = useSetRecoilState(SelectionKeywordsAtom);
@@ -128,7 +116,7 @@ export default function Selection() {
       <Divider textAlign="left">SELECTION</Divider>
       <Box display="flex" alignItems="center" gap="1rem" marginBottom="1rem">
         <Autocomplete
-          options={fields}
+          options={FieldData}
           margin="normal"
           value={field}
           onChange={(event, newValue) => setField(newValue)}

@@ -28,22 +28,9 @@ import {
   FilterStatementAtom,
 } from "../SigmaAtom";
 import GppGoodIcon from "@mui/icons-material/GppGood";
+import FieldData from "../FieldData.json";
 
 export default function Filter() {
-  const fields = [
-    "EventLog",
-    "EventID",
-    "ProcessName",
-    "AccessMask",
-    "ObjectType",
-    "TargetProcess",
-    "StartModule",
-    "CommandLine",
-    "ParentImage",
-    "UserName",
-    "SourceWorkstation",
-  ];
-
   const setField = useSetRecoilState(FilterFieldAtom);
   const field = useRecoilValue(FilterFieldAtom);
 
@@ -101,7 +88,7 @@ export default function Filter() {
       <Divider textAlign="left">FILTER</Divider>
       <Box display="flex" alignItems="center" gap="1rem" marginBottom="1rem">
         <Autocomplete
-          options={fields}
+          options={FieldData}
           getOptionLabel={(option) => option}
           margin="normal"
           value={field}
