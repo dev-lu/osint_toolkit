@@ -47,7 +47,7 @@ export default function Tags() {
       <Divider>
         <Chip
           icon={<StyleIcon />}
-          label="Tags"
+          label="Tags (optional)"
           style={{ fontSize: "20px", padding: "10px", height: "40px" }}
         />
       </Divider>

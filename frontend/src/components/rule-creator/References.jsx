@@ -4,6 +4,7 @@ import {
   Alert,
   Card,
   CardContent,
+  Grid,
   Typography,
   TextField,
   Divider,
@@ -79,24 +80,31 @@ export default function References() {
         }}
       >
         <CardContent sx={{ "& > *": { my: 2 } }}>
-          <Typography>Use links to web pages or documents only.</Typography>
-          <ul style={listStyle}>
-            <li>don't link to EVTX files, PCAPs or other raw content </li>
-            <li>
-              don't include links to MITRE ATT&CK techniques (we use the tags
-              for that){" "}
-            </li>
-          </ul>
-          <Typography>The links used in the list can be, i.e.:</Typography>
-          <ul style={listStyle}>
-            <li>links to a blog post or tweet </li>
-            <li>links to a project page of a certain hack tool </li>
-            <li>links to the manual page of a builtin Windows tool </li>
-            <li>
-              links to advisories links to discussions that better explain the
-              detected threat{" "}
-            </li>
-          </ul>
+          <Grid container spacing={3}>
+            <Grid item xs={6}>
+              <Typography>Use links to web pages or documents only.</Typography>
+              <ul style={listStyle}>
+                <li>don't link to EVTX files, PCAPs or other raw content </li>
+                <li>
+                  don't include links to MITRE ATT&CK techniques (we use the
+                  tags for that){" "}
+                </li>
+              </ul>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Typography>The links used in the list can be, i.e.:</Typography>
+              <ul style={listStyle}>
+                <li>links to a blog post or tweet </li>
+                <li>links to a project page of a certain hack tool </li>
+                <li>links to the manual page of a builtin Windows tool </li>
+                <li>
+                  links to advisories links to discussions that better explain
+                  the detected threat{" "}
+                </li>
+              </ul>
+            </Grid>
+          </Grid>
 
           <div>
             <FormGroup row>

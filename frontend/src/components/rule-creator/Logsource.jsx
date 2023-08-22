@@ -5,6 +5,7 @@ import {
   Autocomplete,
   Card,
   CardContent,
+  Grid,
   Typography,
   Divider,
   Chip,
@@ -52,34 +53,42 @@ export default function Logsource() {
         }}
       >
         <CardContent sx={{ "& > *": { my: 2 } }}>
-          <Typography>
-            Application and the type that is required in the detection. It
-            consists of three attributes that are evaluated automatically by the
-            converters and an arbitrary number of optional elements. We
-            recommend using a "definition" value in cases in which further
-            explanation is necessary.
-          </Typography>
-          <ul style={{ marginLeft: "20px" }}>
-            <li>product (e.g. linux, windows, cisco)</li>
-            <li>service (e.g. sysmon, ldapd, dhcp)</li>
-            <li>category (e.g. process_creation)</li>
-          </ul>
-          <Typography>
-            The "category" value is used to select all log files written by a
-            certain group of products, like firewalls or web server logs. The
-            automatic converter will use the keyword as a selector for multiple
-            indices. The "product" value is used to select all log outputs of a
-            certain product, e.g. all Windows Eventlog types including
-            "Security", "System", "Application" and the new log types like
-            "AppLocker" and "Windows Defender". Use the "service" value to
-            select only a subset of a product's logs, like the "sshd" on Linux
-            or the "Security" Eventlog on Windows systems. The "definition" can
-            be used to describe the log source, including some information on
-            the log verbosity level or configurations that have to be applied.
-            It is not automatically evaluated by the converters but gives useful
-            information to readers on how to configure the source to provide the
-            necessary events used in the detection.
-          </Typography>
+          <Grid container spacing={3}>
+            <Grid item xs={6}>
+              <Typography>
+                Application and the type that is required in the detection. It
+                consists of three attributes that are evaluated automatically by
+                the converters and an arbitrary number of optional elements. We
+                recommend using a "definition" value in cases in which further
+                explanation is necessary.
+              </Typography>
+              <ul style={{ marginLeft: "20px" }}>
+                <li>product (e.g. linux, windows, cisco)</li>
+                <li>service (e.g. sysmon, ldapd, dhcp)</li>
+                <li>category (e.g. process_creation)</li>
+              </ul>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Typography>
+                The "category" value is used to select all log files written by
+                a certain group of products, like firewalls or web server logs.
+                The automatic converter will use the keyword as a selector for
+                multiple indices. The "product" value is used to select all log
+                outputs of a certain product, e.g. all Windows Eventlog types
+                including "Security", "System", "Application" and the new log
+                types like "AppLocker" and "Windows Defender". Use the "service"
+                value to select only a subset of a product's logs, like the
+                "sshd" on Linux or the "Security" Eventlog on Windows systems.
+                The "definition" can be used to describe the log source,
+                including some information on the log verbosity level or
+                configurations that have to be applied. It is not automatically
+                evaluated by the converters but gives useful information to
+                readers on how to configure the source to provide the necessary
+                events used in the detection.
+              </Typography>
+            </Grid>
+          </Grid>
 
           <Autocomplete
             options={products}
@@ -109,7 +118,7 @@ export default function Logsource() {
             )}
           />
           <TextField
-            label="Definition"
+            label="Definition (optional)"
             variant="outlined"
             margin="normal"
             value={logsrc.definition}
