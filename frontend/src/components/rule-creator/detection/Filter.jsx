@@ -137,6 +137,7 @@ export default function Filter() {
         <TextField
           label="Value"
           sx={{ minWidth: "30%" }}
+          fullWidth
           variant="outlined"
           margin="normal"
           value={valueInput}
@@ -168,6 +169,7 @@ export default function Filter() {
           size="medium"
           onClick={handleSaveFilterStatement}
           startIcon={<SaveIcon />}
+          sx={{ width: "30%" }}
         >
           Save filter
         </Button>

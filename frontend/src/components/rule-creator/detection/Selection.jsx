@@ -164,6 +164,7 @@ export default function Selection() {
         <TextField
           label="Value"
           sx={{ minWidth: "30%" }}
+          fullWidth
           variant="outlined"
           margin="normal"
           value={valueInput}
@@ -195,6 +196,7 @@ export default function Selection() {
           size="medium"
           onClick={handleSaveSelectionStatement}
           startIcon={<SaveIcon />}
+          sx={{ width: "30%" }}
         >
           Save selection
         </Button>
