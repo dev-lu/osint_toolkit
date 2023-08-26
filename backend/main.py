@@ -128,7 +128,6 @@ def add_default_module_settings(db: Session):
                        description=default_strings.ai_assistant_cdo['description'], enabled=True),
         ModuleSettings(name="CVSS Calculator", description="", enabled=True),
         ModuleSettings(name="Rules", description="", enabled=True),
-        ModuleSettings(name="Rules", description="", enabled=True),
     ]
     for default in default_settings:
         existing_setting = db.query(ModuleSettings).filter(
