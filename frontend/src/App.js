@@ -166,6 +166,7 @@ function App() {
       const result = response.data[0];
       setGeneralSettings(result);
       setGeneralSettingsLoaded(true);
+      document.body.setAttribute("data-font", result.font);
     });
 
     // Get list of RSS feeds

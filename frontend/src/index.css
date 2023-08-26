@@ -28,6 +28,35 @@
        url('./fonts/Poppins/poppins-v20-latin-regular.svg#Poppins') format('svg'); /* Legacy iOS */
 }
 
+/* roboto-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/Roboto/roboto-v30-latin-regular.eot'); /* IE9 Compat Modes */
+  src: url('./fonts/Roboto/roboto-v30-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./fonts/Roboto/roboto-v30-latin-regular.woff2') format('woff2'), /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+       url('./fonts/Roboto/roboto-v30-latin-regular.woff') format('woff'), /* Chrome 5+, Firefox 3.6+, IE 9+, Safari 5.1+, iOS 5+ */
+       url('./fonts/Roboto/roboto-v30-latin-regular.ttf') format('truetype'), /* Chrome 4+, Firefox 3.5+, IE 9+, Safari 3.1+, iOS 4.2+, Android Browser 2.2+ */
+       url('./fonts/Roboto/roboto-v30-latin-regular.svg#Roboto') format('svg'); /* Legacy iOS */
+}
+
+/* aldrich-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Aldrich';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/Aldrich/aldrich-v17-latin-regular.eot'); /* IE9 Compat Modes */
+  src: url('./fonts/Aldrich/aldrich-v17-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./fonts/Aldrich/aldrich-v17-latin-regular.woff2') format('woff2'), /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+       url('./fonts/Aldrich/aldrich-v17-latin-regular.woff') format('woff'), /* Chrome 5+, Firefox 3.6+, IE 9+, Safari 5.1+, iOS 5+ */
+       url('./fonts/Aldrich/aldrich-v17-latin-regular.ttf') format('truetype'), /* Chrome 4+, Firefox 3.5+, IE 9+, Safari 3.1+, iOS 4.2+, Android Browser 2.2+ */
+       url('./fonts/Aldrich/aldrich-v17-latin-regular.svg#Aldrich') format('svg'); /* Legacy iOS */
+}
+
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -56,6 +85,10 @@ body[data-font="Roboto"] {
 
 body[data-font="Arial"] {
   font-family: 'Arial', sans-serif;
+}
+
+body[data-font="Aldrich"] {
+  font-family: 'Aldrich', sans-serif;
 }
 
 code {

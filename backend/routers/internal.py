@@ -153,6 +153,24 @@ def update_settings_darkmode(darkmode: bool, db: Session = Depends(get_db)):
         return new_settings.to_dict()
 
 
+@router.put("/api/settings/general/font/", response_model=schemas.SettingsSchema, tags=["OSINT Toolkit modules"])
+def update_settings_font(font: str, db: Session = Depends(get_db)):
+    existing_settings = crud.get_settings(db)
+    if existing_settings:
+        # update the existing settings
+        existing_settings[0].font = font
+        db.commit()
+        db.refresh(existing_settings[0])
+        return existing_settings[0].to_dict()
+    else:
+        # create new settings
+        new_settings = Settings(font=font)
+        db.add(new_settings)
+        db.commit()
+        db.refresh(new_settings)
+        return new_settings.to_dict()
+
+
 # ===========================================================================
 # Module settings routes
 # ===========================================================================
