@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-  Divider,
-  Chip,
-} from "@mui/material";
+import { Card, CardContent, Grid, Divider, Chip } from "@mui/material";
 import RadarIcon from "@mui/icons-material/Radar";
 import Selection from "./detection/Selection";
 import Filter from "./detection/Filter";

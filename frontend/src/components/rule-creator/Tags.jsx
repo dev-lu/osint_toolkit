@@ -26,10 +26,6 @@ export default function Tags() {
     marginLeft: "20px",
   };
 
-  const handleTagInput = (event) => {
-    setTagInput(event.target.value);
-  };
-
   const handleAddTag = () => {
     if (tagInput.trim() !== "") {
       setTags([...tags, tagInput]);

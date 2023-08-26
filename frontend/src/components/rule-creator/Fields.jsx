@@ -21,10 +21,6 @@ export default function Fields() {
   const setFields = useSetRecoilState(FieldsAtom);
   const fields = useRecoilValue(FieldsAtom);
 
-  const handleFieldInput = (event) => {
-    setFieldInput(event.target.value);
-  };
-
   const handleAddField = () => {
     if (fieldInput.trim() !== "") {
       setFields([...fields, fieldInput]);

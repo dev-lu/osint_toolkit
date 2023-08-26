@@ -106,7 +106,7 @@ export default function Export() {
         keywords: selectionKeywords.length > 0 ? selectionKeywords : undefined,
       },
       timeframe:
-        timeframe.timeframe != ""
+        timeframe.timeframe !== ""
           ? timeframe.timeframe + timeframe.unit
           : undefined,
       condition: condition || undefined,

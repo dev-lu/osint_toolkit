@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import api from "../../api";
 
@@ -16,12 +16,27 @@ import useTheme from "@mui/material/styles/useTheme";
 export default function General() {
   const generalSettings = useRecoilValue(generalSettingsState);
   const setGeneralSettings = useSetRecoilState(generalSettingsState);
-  const [selectedFont, setSelectedFont] = useState("Poppins");
   const theme = useTheme();
 
   function handleFontChange(event) {
-    setSelectedFont(event.target.value);
-    document.body.setAttribute("data-font", event.target.value);
+    try {
+      api
+        .put("/api/settings/general/font/?font=" + event.target.value)
+        .then((response) => {
+          if (response.status === 200) {
+            setGeneralSettings({
+              ...generalSettings,
+              font: event.target.value,
+            });
+            document.body.setAttribute("data-font", event.target.value);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const cardStyle = {
@@ -85,7 +100,7 @@ export default function General() {
         <p>Custom font</p>
         <FormControl sx={{ m: 1, minWidth: 120 }}>
           <Select
-            value={selectedFont}
+            value={generalSettings.font}
             onChange={handleFontChange}
             displayEmpty
             inputProps={{ "aria-label": "Without label" }}
@@ -95,6 +110,7 @@ export default function General() {
             <MenuItem value="Roboto">Roboto</MenuItem>
             <MenuItem value="Arial">Arial</MenuItem>
             <MenuItem value="Helvetica">Helvetica</MenuItem>
+            <MenuItem value="Aldrich">Aldrich</MenuItem>
           </Select>
           <FormHelperText>
             Change the application wide font for OSINT Toolkit

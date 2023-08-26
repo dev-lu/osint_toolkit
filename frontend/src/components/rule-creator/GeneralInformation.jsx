@@ -33,7 +33,7 @@ export default function GeneralInformation() {
     "Unsupported",
   ];
   const LEVELS = ["None", "Informational", "Low", "Medium", "High", "Critical"];
-  const [ruleCreationDate, setRuleCreationDate] = useState(
+  const ruleCreationDate = useState(
     new Date()
       .toLocaleDateString("en-CA", {
         year: "numeric",
