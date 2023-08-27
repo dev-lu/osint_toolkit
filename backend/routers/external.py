@@ -265,10 +265,11 @@ async def nistnvd(cve):
     '''
     Get information about a CVE from the NIST NVD
     '''
-    if not hasattr(crud.get_apikey(name="nist_nvd", db=SessionLocal()), 'key'):
-        return {"error": "No API key found for NIST NVD"}
-    else:
-        apikey = crud.get_apikey(name="nist_nvd", db=SessionLocal())
+    apikey = crud.get_apikey(name="nist_nvd", db=SessionLocal())
+
+    if not apikey or 'key' not in apikey or not apikey['is_active']:
+        return {"error": "No active API key found for NIST NVD"}
+
     return ioc_analyzer.search_nist_nvd(cve, apikey['key'])
 
 
