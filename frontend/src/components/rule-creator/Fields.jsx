@@ -9,6 +9,7 @@ import {
   Divider,
   Button,
   Chip,
+  useTheme,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ViewListIcon from "@mui/icons-material/ViewList";
@@ -17,6 +18,7 @@ import { FieldsAtom } from "./SigmaAtom";
 import FieldData from "./FieldData.json";
 
 export default function Fields() {
+  const theme = useTheme();
   const [fieldInput, setFieldInput] = useState("");
   const setFields = useSetRecoilState(FieldsAtom);
   const fields = useRecoilValue(FieldsAtom);
@@ -53,6 +55,7 @@ export default function Fields() {
           borderRadius: 5,
           boxShadow: 0,
           height: "100%",
+          backgroundColor: theme.palette.background.cvssCard,
         }}
       >
         <CardContent sx={{ "& > *": { my: 2 } }}>
@@ -80,7 +83,11 @@ export default function Fields() {
                 {...params}
                 label="Enter field"
                 size="medium"
-                sx={{ width: "100%", mt: 2 }}
+                sx={{
+                  width: "100%",
+                  mt: 2,
+                  backgroundColor: theme.palette.background.tablecell,
+                }}
                 InputProps={{
                   ...params.InputProps,
                   endAdornment: (

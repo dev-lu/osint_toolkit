@@ -17,6 +17,7 @@ import {
   TextField,
   Button,
   Chip,
+  useTheme,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
@@ -32,6 +33,7 @@ import {
 import FieldData from "../FieldData.json";
 
 export default function Selection() {
+  const theme = useTheme();
   const [keywordInput, setKeywordInput] = useState("");
 
   const setSelectionKeywords = useSetRecoilState(SelectionKeywordsAtom);
@@ -126,7 +128,10 @@ export default function Selection() {
               {...params}
               margin="normal"
               label="Field"
-              sx={{ minWidth: "25ch" }}
+              sx={{
+                minWidth: "25ch",
+                backgroundColor: theme.palette.background.tablecell,
+              }}
             />
           )}
         />
@@ -141,6 +146,7 @@ export default function Selection() {
             value={modifier}
             onChange={(event) => setModifier(event.target.value)}
             label="Modifier"
+            sx={{ backgroundColor: theme.palette.background.tablecell }}
           >
             <ListSubheader>Wildcards</ListSubheader>
             <MenuItem value={"contains"}>contains</MenuItem>
@@ -163,7 +169,10 @@ export default function Selection() {
         </FormControl>
         <TextField
           label="Value"
-          sx={{ minWidth: "30%" }}
+          sx={{
+            minWidth: "30%",
+            backgroundColor: theme.palette.background.tablecell,
+          }}
           fullWidth
           variant="outlined"
           margin="normal"
@@ -255,7 +264,11 @@ export default function Selection() {
             }
           }}
           size="medium"
-          sx={{ width: "100%", mt: 2 }}
+          sx={{
+            width: "100%",
+            mt: 2,
+            backgroundColor: theme.palette.background.tablecell,
+          }}
           InputProps={{
             endAdornment: (
               <Button

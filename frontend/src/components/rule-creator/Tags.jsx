@@ -9,6 +9,7 @@ import {
   Divider,
   Button,
   Chip,
+  useTheme,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import StyleIcon from "@mui/icons-material/Style";
@@ -17,6 +18,7 @@ import { TagsAtom } from "./SigmaAtom";
 import TagData from "./TagData.json";
 
 export default function Tags() {
+  const theme = useTheme();
   const [tagInput, setTagInput] = useState("");
   const setTags = useSetRecoilState(TagsAtom);
   const tags = useRecoilValue(TagsAtom);
@@ -58,6 +60,7 @@ export default function Tags() {
           borderRadius: 5,
           boxShadow: 0,
           height: "100%",
+          backgroundColor: theme.palette.background.cvssCard,
         }}
       >
         <CardContent sx={{ "& > *": { my: 2 } }}>
@@ -93,7 +96,11 @@ export default function Tags() {
                   {...params}
                   label="Enter tags"
                   size="medium"
-                  sx={{ width: "100%", mt: 2 }}
+                  sx={{
+                    width: "100%",
+                    mt: 2,
+                    backgroundColor: theme.palette.background.tablecell,
+                  }}
                   InputProps={{
                     ...params.InputProps,
                     endAdornment: (

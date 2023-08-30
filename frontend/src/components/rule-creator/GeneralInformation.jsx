@@ -14,6 +14,7 @@ import {
   Select,
   MenuItem,
   InputLabel,
+  useTheme,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -24,6 +25,7 @@ import { GeneralInfoAtom } from "./SigmaAtom";
 import { AuthorAtom } from "./SigmaAtom";
 
 export default function GeneralInformation() {
+  const theme = useTheme();
   const STATUSES = [
     "None",
     "Experimental",
@@ -100,6 +102,7 @@ export default function GeneralInformation() {
           borderRadius: 5,
           boxShadow: 0,
           height: "100%",
+          backgroundColor: theme.palette.background.cvssCard,
         }}
       >
         <CardContent>
@@ -115,6 +118,7 @@ export default function GeneralInformation() {
                   onChange={(e) => updateGeneralInfo("title", e.target.value)}
                   inputProps={{ maxLength: 50 }}
                   fullWidth
+                  sx={{ backgroundColor: theme.palette.background.tablecell }}
                 />
 
                 {/* Description */}
@@ -127,6 +131,7 @@ export default function GeneralInformation() {
                     updateGeneralInfo("description", e.target.value)
                   }
                   fullWidth
+                  sx={{ backgroundColor: theme.palette.background.tablecell }}
                 />
 
                 {/* Author */}
@@ -142,6 +147,7 @@ export default function GeneralInformation() {
                     }
                   }}
                   fullWidth
+                  sx={{ backgroundColor: theme.palette.background.tablecell }}
                   InputProps={{
                     endAdornment: (
                       <Button
@@ -168,6 +174,7 @@ export default function GeneralInformation() {
                       margin: "5px",
                       justifyContent: "space-between",
                       alignItems: "center",
+                      backgroundColor: theme.palette.background.tablecell,
                     }}
                   />
                 ))}
@@ -186,6 +193,9 @@ export default function GeneralInformation() {
                       {...params}
                       label="License (optional)"
                       margin="normal"
+                      sx={{
+                        backgroundColor: theme.palette.background.tablecell,
+                      }}
                     />
                   )}
                 />
@@ -207,6 +217,7 @@ export default function GeneralInformation() {
                     onChange={(event) =>
                       updateGeneralInfo("status", event.target.value)
                     }
+                    sx={{ backgroundColor: theme.palette.background.tablecell }}
                   >
                     {STATUSES.map((status) => (
                       <MenuItem
@@ -232,6 +243,7 @@ export default function GeneralInformation() {
                     onChange={(event) =>
                       updateGeneralInfo("level", event.target.value)
                     }
+                    sx={{ backgroundColor: theme.palette.background.tablecell }}
                   >
                     {LEVELS.map((level) => (
                       <MenuItem
@@ -254,6 +266,7 @@ export default function GeneralInformation() {
                     updateGeneralInfo("date", event.target.value)
                   }
                   fullWidth
+                  sx={{ backgroundColor: theme.palette.background.tablecell }}
                 />
 
                 {/* Modified */}
@@ -266,6 +279,7 @@ export default function GeneralInformation() {
                     updateGeneralInfo("modifiedDate", event.target.value)
                   }
                   fullWidth
+                  sx={{ backgroundColor: theme.palette.background.tablecell }}
                 />
               </Box>
             </Grid>

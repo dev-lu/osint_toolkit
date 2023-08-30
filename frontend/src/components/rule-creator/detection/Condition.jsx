@@ -6,10 +6,12 @@ import {
   Select,
   FormControl,
   InputLabel,
+  useTheme,
 } from "@mui/material";
 import { ConditionAtom } from "../SigmaAtom";
 
 export default function Condition() {
+  const theme = useTheme();
   const setCondition = useSetRecoilState(ConditionAtom);
   const condition = useRecoilValue(ConditionAtom);
 
@@ -25,6 +27,7 @@ export default function Condition() {
           autoWidth
           label="Condition"
           value={condition}
+          sx={{ backgroundColor: theme.palette.background.tablecell }}
           onChange={(event) => setCondition(event.target.value)}
         >
           <MenuItem value={"selection"}>selection</MenuItem>

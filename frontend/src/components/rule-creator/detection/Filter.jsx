@@ -17,6 +17,7 @@ import {
   TextField,
   Button,
   Chip,
+  useTheme,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
@@ -31,6 +32,7 @@ import GppGoodIcon from "@mui/icons-material/GppGood";
 import FieldData from "../FieldData.json";
 
 export default function Filter() {
+  const theme = useTheme();
   const setField = useSetRecoilState(FilterFieldAtom);
   const field = useRecoilValue(FilterFieldAtom);
 
@@ -99,7 +101,10 @@ export default function Filter() {
               {...params}
               margin="normal"
               label="Field"
-              sx={{ minWidth: "25ch" }}
+              sx={{
+                minWidth: "25ch",
+                backgroundColor: theme.palette.background.tablecell,
+              }}
             />
           )}
         />
@@ -114,6 +119,7 @@ export default function Filter() {
             value={modifier}
             onChange={(event) => setModifier(event.target.value)}
             label="Modifier"
+            sx={{ backgroundColor: theme.palette.background.tablecell }}
           >
             <ListSubheader>Wildcards</ListSubheader>
             <MenuItem value={"contains"}>contains</MenuItem>
@@ -136,7 +142,10 @@ export default function Filter() {
         </FormControl>
         <TextField
           label="Value"
-          sx={{ minWidth: "30%" }}
+          sx={{
+            minWidth: "30%",
+            backgroundColor: theme.palette.background.tablecell,
+          }}
           fullWidth
           variant="outlined"
           margin="normal"

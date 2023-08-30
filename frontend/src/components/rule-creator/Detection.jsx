@@ -1,5 +1,12 @@
 import React from "react";
-import { Card, CardContent, Grid, Divider, Chip } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Grid,
+  Divider,
+  Chip,
+  useTheme,
+} from "@mui/material";
 import RadarIcon from "@mui/icons-material/Radar";
 import Selection from "./detection/Selection";
 import Filter from "./detection/Filter";
@@ -7,6 +14,7 @@ import Timeframe from "./detection/Timeframe";
 import Condition from "./detection/Condition";
 
 export default function Detection() {
+  const theme = useTheme();
   const listStyle = {
     marginLeft: "20px",
   };
@@ -31,6 +39,7 @@ export default function Detection() {
           borderRadius: 5,
           boxShadow: 0,
           height: "100%",
+          backgroundColor: theme.palette.background.cvssCard,
         }}
       >
         <CardContent sx={{ "& > *": { my: 2 } }}>

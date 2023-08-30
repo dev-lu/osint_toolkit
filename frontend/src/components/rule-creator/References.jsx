@@ -12,6 +12,7 @@ import {
   Chip,
   FormGroup,
   Stack,
+  useTheme,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LinkIcon from "@mui/icons-material/Link";
@@ -19,6 +20,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { ReferencesAtom } from "./SigmaAtom";
 
 export default function References() {
+  const theme = useTheme();
   const [referenceInput, setReferenceInput] = useState("");
   const [showAlert, setShowAlert] = useState(false);
 
@@ -77,6 +79,7 @@ export default function References() {
           borderRadius: 5,
           boxShadow: 0,
           height: "100%",
+          backgroundColor: theme.palette.background.cvssCard,
         }}
       >
         <CardContent sx={{ "& > *": { my: 2 } }}>
@@ -118,7 +121,11 @@ export default function References() {
                   }
                 }}
                 size="medium"
-                sx={{ width: "100%", mt: 2 }}
+                sx={{
+                  width: "100%",
+                  mt: 2,
+                  backgroundColor: theme.palette.background.tablecell,
+                }}
                 InputProps={{
                   endAdornment: (
                     <Button

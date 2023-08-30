@@ -10,6 +10,7 @@ import {
   Chip,
   FormGroup,
   Stack,
+  useTheme,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BlockIcon from "@mui/icons-material/Block";
@@ -17,6 +18,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { FalsepositivesAtom } from "./SigmaAtom";
 
 export default function Falsepositives() {
+  const theme = useTheme();
   const [fpInput, setFpInput] = useState("");
   const setFps = useSetRecoilState(FalsepositivesAtom);
   const fps = useRecoilValue(FalsepositivesAtom);
@@ -57,6 +59,7 @@ export default function Falsepositives() {
           borderRadius: 5,
           boxShadow: 0,
           height: "100%",
+          backgroundColor: theme.palette.background.cvssCard,
         }}
       >
         <CardContent sx={{ "& > *": { my: 2 } }}>
@@ -81,7 +84,11 @@ export default function Falsepositives() {
                   }
                 }}
                 size="medium"
-                sx={{ width: "100%", mt: 2 }}
+                sx={{
+                  width: "100%",
+                  mt: 2,
+                  backgroundColor: theme.palette.background.tablecell,
+                }}
                 InputProps={{
                   endAdornment: (
                     <Button

@@ -10,12 +10,14 @@ import {
   Divider,
   Chip,
   TextField,
+  useTheme,
 } from "@mui/material";
 import SourceIcon from "@mui/icons-material/Source";
 import { LogsourceAtom } from "./SigmaAtom";
 import LogsourceData from "./LogsourceData.json";
 
 export default function Logsource() {
+  const theme = useTheme();
   const products = Object.values(LogsourceData.product);
   const services = Object.values(LogsourceData.service);
   const categories = Object.values(LogsourceData.category);
@@ -50,6 +52,7 @@ export default function Logsource() {
           borderRadius: 5,
           boxShadow: 0,
           height: "100%",
+          backgroundColor: theme.palette.background.cvssCard,
         }}
       >
         <CardContent sx={{ "& > *": { my: 2 } }}>
@@ -96,7 +99,12 @@ export default function Logsource() {
             onChange={(_, newValue) => updateField("product", newValue)}
             freeSolo
             renderInput={(params) => (
-              <TextField margin="normal" {...params} label="Product" />
+              <TextField
+                margin="normal"
+                {...params}
+                label="Product"
+                sx={{ backgroundColor: theme.palette.background.tablecell }}
+              />
             )}
           />
           <Autocomplete
@@ -105,7 +113,12 @@ export default function Logsource() {
             onChange={(_, newValue) => updateField("service", newValue)}
             freeSolo
             renderInput={(params) => (
-              <TextField margin="normal" {...params} label="Service" />
+              <TextField
+                margin="normal"
+                {...params}
+                label="Service"
+                sx={{ backgroundColor: theme.palette.background.tablecell }}
+              />
             )}
           />
           <Autocomplete
@@ -114,7 +127,12 @@ export default function Logsource() {
             onChange={(_, newValue) => updateField("category", newValue)}
             freeSolo
             renderInput={(params) => (
-              <TextField margin="normal" {...params} label="Category" />
+              <TextField
+                margin="normal"
+                {...params}
+                label="Category"
+                sx={{ backgroundColor: theme.palette.background.tablecell }}
+              />
             )}
           />
           <TextField
@@ -124,6 +142,7 @@ export default function Logsource() {
             value={logsrc.definition}
             onChange={(event) => updateField("definition", event.target.value)}
             fullWidth
+            sx={{ backgroundColor: theme.palette.background.tablecell }}
           />
         </CardContent>
       </Card>

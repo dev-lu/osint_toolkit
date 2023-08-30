@@ -8,10 +8,12 @@ import {
   InputLabel,
   TextField,
   MenuItem,
+  useTheme,
 } from "@mui/material";
 import { TimeframeAtom } from "../SigmaAtom";
 
 export default function Timeframe() {
+  const theme = useTheme();
   const setTimeframe = useSetRecoilState(TimeframeAtom);
   const timeframe = useRecoilValue(TimeframeAtom);
 
@@ -39,6 +41,7 @@ export default function Timeframe() {
           onChange={(event) => updateTime(event.target.value)}
           variant="outlined"
           margin="normal"
+          sx={{ backgroundColor: theme.palette.background.tablecell }}
         />
         <FormControl margin="normal" sx={{ minWidth: "10%" }}>
           <InputLabel id="time-unit-select-input-label">Unit</InputLabel>
@@ -49,6 +52,7 @@ export default function Timeframe() {
             onChange={(event) => updateUnit(event.target.value)}
             autoWidth
             label="Unit"
+            sx={{ backgroundColor: theme.palette.background.tablecell }}
           >
             <MenuItem value={"s"}>Seconds</MenuItem>
             <MenuItem value={"m"}>Minutes</MenuItem>
