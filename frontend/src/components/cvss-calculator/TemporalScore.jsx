@@ -14,7 +14,6 @@ import TimerIcon from "@mui/icons-material/Timer";
 import { Typography } from "@mui/material";
 import useTheme from "@mui/material/styles/useTheme";
 
-
 export default function TemporalScore() {
   const theme = useTheme();
   const [cvssScores, setCvssScores] = useRecoilState(cvssScoresAtom);
@@ -24,10 +23,10 @@ export default function TemporalScore() {
       <br />
       <br />
       <Divider>
-        <Chip 
-            icon={<TimerIcon />} 
-            label="Temporal Score Metrics"
-            style={{ fontSize: "20px", padding: "10px", height: "40px" }}
+        <Chip
+          icon={<TimerIcon />}
+          label="Temporal Score Metrics"
+          style={{ fontSize: "20px", padding: "10px", height: "40px" }}
         />
       </Divider>
       <br />
@@ -132,7 +131,7 @@ export default function TemporalScore() {
                   },
                 }))
               }
-              sx={{ m: 1 }}
+              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
             >
               <MenuItem value="X">Not defined</MenuItem>
               <MenuItem value="U">Unproven that exploit exists</MenuItem>
@@ -156,7 +155,7 @@ export default function TemporalScore() {
                   },
                 }))
               }
-              sx={{ m: 1 }}
+              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
             >
               <MenuItem value="X">Not defined</MenuItem>
               <MenuItem value="O">Official fix</MenuItem>
@@ -180,7 +179,7 @@ export default function TemporalScore() {
                   },
                 }))
               }
-              sx={{ m: 1 }}
+              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
             >
               <MenuItem value="X">Not defined</MenuItem>
               <MenuItem value="U">Unknown</MenuItem>

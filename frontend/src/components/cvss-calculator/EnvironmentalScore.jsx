@@ -14,7 +14,6 @@ import TextField from "@mui/material/TextField";
 import { Typography } from "@mui/material";
 import useTheme from "@mui/material/styles/useTheme";
 
-
 export default function EnvironmentalScore() {
   const theme = useTheme();
   const [cvssScores, setCvssScores] = useRecoilState(cvssScoresAtom);
@@ -25,8 +24,8 @@ export default function EnvironmentalScore() {
         <br />
         <br />
         <Divider>
-          <Chip 
-            icon={<ForestIcon />} 
+          <Chip
+            icon={<ForestIcon />}
             label="Environmental Score Metrics"
             style={{ fontSize: "20px", padding: "10px", height: "40px" }}
           />
@@ -141,7 +140,7 @@ export default function EnvironmentalScore() {
                   },
                 }))
               }
-              sx={{ m: 1 }}
+              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
             >
               <MenuItem value="X">Not defined</MenuItem>
               <MenuItem value="N">Network</MenuItem>
@@ -163,7 +162,7 @@ export default function EnvironmentalScore() {
                   },
                 }))
               }
-              sx={{ m: 1 }}
+              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
             >
               <MenuItem value="X">Not defined</MenuItem>
               <MenuItem value="L">Low</MenuItem>
@@ -183,7 +182,7 @@ export default function EnvironmentalScore() {
                   },
                 }))
               }
-              sx={{ m: 1 }}
+              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
             >
               <MenuItem value="X">Not defined</MenuItem>
               <MenuItem value="N">None</MenuItem>
@@ -204,7 +203,7 @@ export default function EnvironmentalScore() {
                   },
                 }))
               }
-              sx={{ m: 1 }}
+              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
             >
               <MenuItem value="X">Not defined</MenuItem>
               <MenuItem value="N">None</MenuItem>
@@ -224,7 +223,7 @@ export default function EnvironmentalScore() {
                   },
                 }))
               }
-              sx={{ m: 1 }}
+              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
             >
               <MenuItem value="X">Not defined</MenuItem>
               <MenuItem value="U">Unchanged</MenuItem>
@@ -250,7 +249,7 @@ export default function EnvironmentalScore() {
                   },
                 }))
               }
-              sx={{ m: 1 }}
+              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
             >
               <MenuItem value="X">Not defined</MenuItem>
               <MenuItem value="N">None</MenuItem>
@@ -271,7 +270,7 @@ export default function EnvironmentalScore() {
                   },
                 }))
               }
-              sx={{ m: 1 }}
+              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
             >
               <MenuItem value="X">Not defined</MenuItem>
               <MenuItem value="N">None</MenuItem>
@@ -292,7 +291,7 @@ export default function EnvironmentalScore() {
                   },
                 }))
               }
-              sx={{ m: 1 }}
+              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
             >
               <MenuItem value="X">Not defined</MenuItem>
               <MenuItem value="N">None</MenuItem>
@@ -319,7 +318,7 @@ export default function EnvironmentalScore() {
                   },
                 }))
               }
-              sx={{ m: 1 }}
+              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
             >
               <MenuItem value="X">Not defined</MenuItem>
               <MenuItem value="L">Low</MenuItem>
@@ -340,7 +339,7 @@ export default function EnvironmentalScore() {
                   },
                 }))
               }
-              sx={{ m: 1 }}
+              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
             >
               <MenuItem value="X">Not defined</MenuItem>
               <MenuItem value="L">Low</MenuItem>
@@ -361,7 +360,7 @@ export default function EnvironmentalScore() {
                   },
                 }))
               }
-              sx={{ m: 1 }}
+              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
             >
               <MenuItem value="X">Not defined</MenuItem>
               <MenuItem value="L">Low</MenuItem>

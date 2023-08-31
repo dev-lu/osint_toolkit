@@ -70,14 +70,13 @@ export default function References() {
       </Divider>
 
       <Card
-        variant="outlined"
         key={"sigma_rule_card"}
+        elevation={0}
         sx={{
           m: 1,
           mb: 3,
           p: 2,
           borderRadius: 5,
-          boxShadow: 0,
           height: "100%",
           backgroundColor: theme.palette.background.cvssCard,
         }}

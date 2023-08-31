@@ -158,7 +158,10 @@ export default function BaseScore() {
                     },
                   }))
                 }
-                sx={{ m: 1 }}
+                sx={{
+                  m: 1,
+                  backgroundColor: theme.palette.background.tablecell,
+                }}
               >
                 <MenuItem value="N">Network</MenuItem>
                 <MenuItem value="A">Adjacent Network</MenuItem>
@@ -191,7 +194,10 @@ export default function BaseScore() {
                     },
                   }))
                 }
-                sx={{ m: 1 }}
+                sx={{
+                  m: 1,
+                  backgroundColor: theme.palette.background.tablecell,
+                }}
               >
                 <MenuItem value="L">Low</MenuItem>
                 <MenuItem value="H">High</MenuItem>
@@ -223,7 +229,10 @@ export default function BaseScore() {
                     },
                   }))
                 }
-                sx={{ m: 1 }}
+                sx={{
+                  m: 1,
+                  backgroundColor: theme.palette.background.tablecell,
+                }}
               >
                 <MenuItem value="N">None</MenuItem>
                 <MenuItem value="L">Low</MenuItem>
@@ -256,7 +265,10 @@ export default function BaseScore() {
                     },
                   }))
                 }
-                sx={{ m: 1 }}
+                sx={{
+                  m: 1,
+                  backgroundColor: theme.palette.background.tablecell,
+                }}
               >
                 <MenuItem value="N">None</MenuItem>
                 <MenuItem value="R">Required</MenuItem>
@@ -293,7 +305,10 @@ export default function BaseScore() {
                     },
                   }))
                 }
-                sx={{ m: 1 }}
+                sx={{
+                  m: 1,
+                  backgroundColor: theme.palette.background.tablecell,
+                }}
               >
                 <MenuItem value="N">None</MenuItem>
                 <MenuItem value="L">Low</MenuItem>
@@ -326,7 +341,10 @@ export default function BaseScore() {
                     },
                   }))
                 }
-                sx={{ m: 1 }}
+                sx={{
+                  m: 1,
+                  backgroundColor: theme.palette.background.tablecell,
+                }}
               >
                 <MenuItem value="N">None</MenuItem>
                 <MenuItem value="L">Low</MenuItem>
@@ -359,7 +377,10 @@ export default function BaseScore() {
                     },
                   }))
                 }
-                sx={{ m: 1 }}
+                sx={{
+                  m: 1,
+                  backgroundColor: theme.palette.background.tablecell,
+                }}
               >
                 <MenuItem value="N">None</MenuItem>
                 <MenuItem value="L">Low</MenuItem>
@@ -393,7 +414,10 @@ export default function BaseScore() {
                     },
                   }))
                 }
-                sx={{ m: 1 }}
+                sx={{
+                  m: 1,
+                  backgroundColor: theme.palette.background.tablecell,
+                }}
               >
                 <MenuItem value="U">Unchanged</MenuItem>
                 <MenuItem value="C">Changed</MenuItem>
