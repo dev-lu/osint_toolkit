@@ -21,12 +21,14 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  LinearProgress,
   Paper,
 } from "@mui/material";
 import useTheme from "@mui/material/styles/useTheme";
 
 export default function Extractor(props) {
   const theme = useTheme();
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [file, setFile] = useState(" ");
 
   const baseStyle = {
@@ -83,18 +85,30 @@ export default function Extractor(props) {
   ));
 
   function uploadFiles(file) {
-    const config = { headers: { "Content-Type": "multipart/form-data" } };
+    const config = {
+      headers: { "Content-Type": "multipart/form-data" },
+      onUploadProgress: function (progressEvent) {
+        const percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        setUploadProgress(percentCompleted);
+      },
+    };
+
     let fd = new FormData();
     fd.append("file", file);
+
     api
       .post(`/api/extractor/`, fd, config)
       .then((response) => {
         const result = response.data;
         setFile(result);
         handleShowTable();
+        setUploadProgress(0); // Reset progress bar
       })
       .catch((error) => {
         console.log(error);
+        setUploadProgress(0); // Reset progress bar on error
       });
   }
 
@@ -135,6 +149,13 @@ export default function Extractor(props) {
         </Button>
         <br />
         <br />
+        {uploadProgress > 0 && (
+          <LinearProgress
+            sx={{ mb: 2 }}
+            variant="determinate"
+            value={uploadProgress}
+          />
+        )}
       </div>
       {showTable ? (
         <TableContainer

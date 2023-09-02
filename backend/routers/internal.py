@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, status
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from dependencies import get_db
 from database import crud, models, schemas
@@ -100,8 +101,13 @@ def update_apikey_is_active(name: str, is_active: bool, db: Session = Depends(ge
 
 
 @router.post("/api/extractor/", tags=["OSINT Toolkit modules"])
-async def create_file(file: bytes = File()):
-    return ioc_extractor.extract_iocs(file)
+async def create_file(file: UploadFile = File(...)):
+    try:
+        file_contents = await file.read()
+        result = ioc_extractor.extract_iocs(file_contents)
+        return result
+    except Exception as e:
+        return JSONResponse(status_code=400, content={"error": str(e)})
 
 # (UploadFile is for larger files)
 
