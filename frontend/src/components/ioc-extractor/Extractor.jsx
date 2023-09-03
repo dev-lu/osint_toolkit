@@ -3,19 +3,20 @@ import { useState } from "react";
 import api from "../../api";
 import { useDropzone } from "react-dropzone";
 
+import Introduction from "../Introduction";
 import ResultRows from "./ResultRows";
 
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
-import Button from "@mui/material/Button";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import Introduction from "../Introduction";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import LanIcon from "@mui/icons-material/Lan";
 import LinkIcon from "@mui/icons-material/Link";
 import PublicIcon from "@mui/icons-material/Public";
 import SystemUpdateAltIcon from "@mui/icons-material/SystemUpdateAlt";
 import {
+  Alert,
+  AlertTitle,
+  Button,
+  CircularProgress,
   TableContainer,
   Table,
   TableBody,
@@ -29,6 +30,7 @@ import useTheme from "@mui/material/styles/useTheme";
 export default function Extractor(props) {
   const theme = useTheme();
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState(" ");
 
   const baseStyle = {
@@ -85,6 +87,7 @@ export default function Extractor(props) {
   ));
 
   function uploadFiles(file) {
+    setIsLoading(true);
     const config = {
       headers: { "Content-Type": "multipart/form-data" },
       onUploadProgress: function (progressEvent) {
@@ -105,10 +108,12 @@ export default function Extractor(props) {
         setFile(result);
         handleShowTable();
         setUploadProgress(0); // Reset progress bar
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
         setUploadProgress(0); // Reset progress bar on error
+        setIsLoading(false);
       });
   }
 
@@ -136,6 +141,13 @@ export default function Extractor(props) {
         <p>(Only .txt and .csv files will be accepted)</p>
         <SystemUpdateAltIcon sx={{ fontSize: "40px" }} />
       </div>
+      {uploadProgress > 0 && (
+        <LinearProgress
+          sx={{ mb: 2 }}
+          variant="determinate"
+          value={uploadProgress}
+        />
+      )}
       <div align="center">
         <br />
         <p>{acceptedFileItems}</p>
@@ -144,18 +156,12 @@ export default function Extractor(props) {
           disableElevation
           size="large"
           onClick={() => uploadFiles(acceptedFiles[0])}
+          disabled={isLoading} //
         >
-          Extract
+          {isLoading ? <CircularProgress size={24} /> : "Extract"}
         </Button>
         <br />
         <br />
-        {uploadProgress > 0 && (
-          <LinearProgress
-            sx={{ mb: 2 }}
-            variant="determinate"
-            value={uploadProgress}
-          />
-        )}
       </div>
       {showTable ? (
         <TableContainer
