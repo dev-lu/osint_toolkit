@@ -2,8 +2,7 @@ import React, { useMemo, useState, useRef } from "react";
 import api from "../../api";
 import { useDropzone } from "react-dropzone";
 
-import Button from "@mui/material/Button";
-import useTheme from "@mui/material/styles/useTheme";
+import { Button, LinearProgress, useTheme } from "@mui/material";
 
 import Introduction from "../Introduction";
 import Result from "./Result";
@@ -12,6 +11,7 @@ import SystemUpdateAltIcon from "@mui/icons-material/SystemUpdateAlt";
 
 export default function FileUpload(props) {
   const theme = useTheme();
+  const [uploadProgress, setUploadProgress] = useState(0);
   const baseStyle = {
     flex: 1,
     display: "flex",
@@ -82,7 +82,16 @@ export default function FileUpload(props) {
   };
 
   function uploadFiles(file) {
-    const config = { headers: { "Content-Type": "multipart/form-data" } };
+    setUploadProgress(0);
+    const config = {
+      headers: { "Content-Type": "multipart/form-data" },
+      onUploadProgress: (progressEvent) => {
+        const percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        setUploadProgress(percentCompleted);
+      },
+    };
     let fd = new FormData();
     fd.append("file", file);
     api
@@ -94,6 +103,7 @@ export default function FileUpload(props) {
       })
       .catch((error) => {
         console.log(error);
+        setUploadProgress(0);
       });
   }
 
@@ -106,6 +116,13 @@ export default function FileUpload(props) {
         <p>(Only .eml files will be accepted)</p>
         <SystemUpdateAltIcon sx={{ fontSize: "40px" }} />
       </div>
+      {uploadProgress > 0 && uploadProgress < 100 && (
+        <LinearProgress
+          sx={{ mb: 2 }}
+          variant="determinate"
+          value={uploadProgress}
+        />
+      )}
       <div align="center">
         <br />
         {acceptedFileItems}
