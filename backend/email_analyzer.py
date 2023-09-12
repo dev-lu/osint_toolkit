@@ -3,6 +3,7 @@ from email import policy
 import hashlib
 import re
 import logging
+import unicodedata as ud
 
 response = {}
 
@@ -26,6 +27,21 @@ def get_basic_info(msg):
         'domainkey': msg['domainkey-signature'],
         'message-id': msg['message-id']
     }
+
+
+def check_homograph_attack(s):
+    s = re.sub(r'[<@.,>]', '', s)  # Remove safe characters
+    scripts = set()
+    for char in s:
+        script = ud.name(char).split(' ')[0]
+        scripts.add(script)
+    scripts.discard('LATIN')  # Latin should be safe
+    if len(scripts) > 1:
+        # return true if more than 1 script is detected
+        # print(', '.join(scripts))
+        return True
+    else:
+        return False
 
 
 def basic_security_checks(msg):
@@ -68,6 +84,19 @@ def basic_security_checks(msg):
             'warning_tlp': 'green',
             'warning_title': "Message ID found",
             'warning_message': "Message ID field is not empty"
+        })
+    # Check for possible homograph attack
+    if check_homograph_attack(msg['return-path']) or check_homograph_attack(msg['from']):
+        warnings.append({
+            'warning_tlp': 'red',
+            'warning_title': "Possible homograph attack detected",
+            'warning_message': "The header fields 'From' and 'Return-Path' use more than one Unicode script, making it possible that a homograph attack is performed"
+        })
+    else:
+        warnings.append({
+            'warning_tlp': 'green',
+            'warning_title': "No indicators for homograph attack detected",
+            'warning_message': "The header fields 'From' and 'Return-Path' use only one Unicode script, making it unlikely that a homograph attack is performed"
         })
     return warnings
 
