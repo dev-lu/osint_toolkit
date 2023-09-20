@@ -30,7 +30,7 @@ def get_basic_info(msg):
 
 
 def check_homograph_attack(s):
-    s = re.sub(r'[<@.,>]', '', s)  # Remove safe characters
+    s = re.sub(r'[<@.,-_> "]', '', s)  # Remove safe characters
     scripts = set()
     for char in s:
         script = ud.name(char).split(' ')[0]
