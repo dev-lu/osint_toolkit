@@ -2,6 +2,8 @@ FROM python:latest
 
 WORKDIR /backend
 
+RUN mkdir -p /backend/database/data
+
 COPY ./requirements.txt /backend/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /backend/requirements.txt

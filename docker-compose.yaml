@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./:/database/data
+      - ./data:/backend/database/data
   frontend:
     build:
       context: ./frontend
