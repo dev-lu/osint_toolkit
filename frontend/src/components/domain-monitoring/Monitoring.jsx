@@ -1,26 +1,29 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
+
+import Alert from "@mui/material/Alert";
+import { AlertTitle } from "@mui/material";
+import Grow from "@mui/material/Grow";
 
 import Introduction from "../Introduction";
 import ResultTable from "./ResultTable";
-
-import Button from "@mui/material/Button";
-import FormGroup from "@mui/material/FormGroup";
-import SearchIcon from "@mui/icons-material/Search";
-import TextField from "@mui/material/TextField";
-
+import SearchBar from "../styled/SearchBar";
 
 export default function Monitoring() {
-  const [domain, setDomain] = useState(" ");
-  const handleInput = (event) => {
-    setDomain(event.target.value);
-  };
-
-  const [key, setKey] = useState(" ");
-
+  const inputRef = useRef(null);
+  const [invalidInput, setInvalidInput] = useState(false);
+  const [searchKey, setSearchKey] = useState("");
   const [showTable, setshowTable] = useState(false);
-  const handleShowTable = (event) => {
-    setKey(domain);
+
+  const handleShowTable = () => {
+    const inputValue = inputRef.current?.value.trim() || "";
+    if (!inputValue) {
+      setInvalidInput(true);
+      setshowTable(false);
+      return;
+    }
+    setInvalidInput(false);
+    setSearchKey(inputValue);
     setshowTable(true);
   };
 
@@ -31,36 +34,37 @@ export default function Monitoring() {
   };
 
   return (
-    <div>
+    <>
       <br />
-      <FormGroup row>
-        <TextField
-          id="domain-input-textfield"
-          label="Please enter a domain pattern..."
-          onChange={handleInput}
-          onKeyPress={handleKeypress}
-          variant="filled"
-          size="small"
-          sx={{ width: "80%" }}
-        />
-        <Button
-          variant="contained"
-          sx={{ width: "20%" }}
-          disableElevation
-          size="large"
-          startIcon={<SearchIcon />}
-          onClick={() => handleShowTable()}
-        >
-          Search
-        </Button>
-      </FormGroup>
+      <SearchBar
+        ref={inputRef}
+        placeholder="Please enter a domain pattern to search for..."
+        buttonLabel="Search"
+        onKeyDown={handleKeypress}
+        onSearchClick={handleShowTable}
+      />
       <br />
       <br />
+      {invalidInput && (
+        <Grow in={true}>
+          <Alert
+            severity="error"
+            variant="filled"
+            onClose={() => setInvalidInput(false)}
+            sx={{ borderRadius: 5 }}
+          >
+            <AlertTitle>
+              <b>Error</b>
+            </AlertTitle>
+            Please enter a domain pattern to search for
+          </Alert>
+        </Grow>
+      )}
       {showTable ? (
-        <ResultTable key={key} domain={domain} />
+        <ResultTable key={searchKey} domain={searchKey} />
       ) : (
         <Introduction moduleName="Domain Monitoring" />
       )}
-    </div>
+    </>
   );
 }
