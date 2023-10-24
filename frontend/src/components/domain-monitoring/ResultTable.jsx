@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 import useTheme from "@mui/material/styles/useTheme";
 import Details from "./Details";
+import NoResults from "./NoResults";
 
 export default function ResultTable(props) {
   const propsRef = useRef(props);
@@ -61,6 +62,9 @@ export default function ResultTable(props) {
       </>
     );
   if (!response) return null;
+  if (response.length === 0) {
+    return <NoResults searchterm={propsRef.current.domain} />;
+  }
 
   function Row(props) {
     const section = props.row;
