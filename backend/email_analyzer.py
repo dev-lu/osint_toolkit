@@ -20,6 +20,9 @@ def get_basic_info(msg):
     return {
         'from': msg['from'],
         'to': msg['to'],
+        'delivered-to': msg['delivered-to'],
+        'rcpt-to': msg['rcpt-to'],
+        'cc': msg['cc'],
         'return-path': msg['return-path'],
         'subject': msg['subject'],
         'date': msg['date'],
@@ -30,6 +33,11 @@ def get_basic_info(msg):
 
 
 def check_homograph_attack(s):
+    if not isinstance(s, (str, bytes)):
+        logging.error(
+            f"Expected string or bytes-like object, got {type(s).__name__}")
+        return False
+
     s = re.sub(r'[<@.,-_> "]', '', s)  # Remove safe characters
     scripts = set()
     for char in s:
@@ -168,11 +176,13 @@ def get_hops(msg):
     for key, value in msg.items():
         if key == "Received":
             hops.append(value)
-    hop_number = len(hops)+1
+    hop_number = len(hops) + 1
     for hop in hops:
         hop_number -= 1
-        if "from" in hop and "by" in hop:
-            from_value = hop.split("from ")[1].split("by")[0].strip()
+        if "by" in hop:
+            from_value = None
+            if "from" in hop:
+                from_value = hop.split("from ")[1].split("by")[0].strip()
             by_value = hop.split("by ")[1].split(" ")[0].strip()
             if "with" in hop:
                 with_value = hop.split("with ")[1].split(";")[0].strip()
@@ -180,7 +190,7 @@ def get_hops(msg):
                 with_value = None
             date_value = hop.split(";", 1)[1].strip()
             hops_parsed.append({'number': hop_number, 'from': from_value,
-                               'by': by_value, 'with': with_value, 'date': date_value})
+                                'by': by_value, 'with': with_value, 'date': date_value})
         else:
             logging.warning(
                 f"hop does not contain all the required substrings: {hop}")
