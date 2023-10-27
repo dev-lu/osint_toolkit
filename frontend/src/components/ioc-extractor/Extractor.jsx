@@ -39,8 +39,8 @@ export default function Extractor(props) {
     flexDirection: "column",
     alignItems: "center",
     padding: "20px",
-    borderWidth: 2,
-    borderRadius: 5,
+    borderWidth: 3,
+    borderRadius: 15,
     borderColor: "lightgrey",
     borderStyle: "dashed",
     backgroundColor: theme.palette.background.uploadarea,
@@ -151,6 +151,7 @@ export default function Extractor(props) {
       <div align="center">
         <br />
         <p>{acceptedFileItems}</p>
+        <br />
         <Button
           variant="contained"
           disableElevation
