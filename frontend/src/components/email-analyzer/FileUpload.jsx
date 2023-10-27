@@ -2,7 +2,8 @@ import React, { useMemo, useState, useRef } from "react";
 import api from "../../api";
 import { useDropzone } from "react-dropzone";
 
-import { Button, LinearProgress, useTheme } from "@mui/material";
+import { Button, Chip, LinearProgress, useTheme } from "@mui/material";
+import MailIcon from "@mui/icons-material/Mail";
 
 import Introduction from "../Introduction";
 import Result from "./Result";
@@ -54,9 +55,16 @@ export default function FileUpload(props) {
   });
 
   const acceptedFileItems = acceptedFiles.map((file) => (
-    <h4 key={file.path}>
-      File: {file.path} - {file.size} bytes
-    </h4>
+    <Chip
+      icon={<MailIcon />}
+      label={`File: ${file.path} - Size: ${file.size} bytes`}
+      style={{
+        fontSize: "15px",
+        padding: "10px",
+        height: "40px",
+        marginBottom: "20px",
+      }}
+    />
   ));
 
   const acceptStyleRef = useRef(acceptStyle);
@@ -126,6 +134,7 @@ export default function FileUpload(props) {
       <div align="center">
         <br />
         {acceptedFileItems}
+        <br />
         <Button
           variant="contained"
           disableElevation
