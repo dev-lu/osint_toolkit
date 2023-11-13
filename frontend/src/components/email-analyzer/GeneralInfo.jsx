@@ -80,6 +80,53 @@ export default function GeneralInfo(props) {
     }
   };
 
+  function RenderText({ text }) {
+    const emailRegex = /("[^"]+" <[^>]+>)/g;
+    const emailMatches = text.match(emailRegex);
+
+    const [expanded, setExpanded] = useState(false);
+
+    if (emailMatches) {
+      const items = emailMatches.map((item, index) => (
+        <li key={index}>{item}</li>
+      ));
+
+      if (items.length > 3) {
+        const toggleExpansion = () => {
+          setExpanded(!expanded);
+        };
+
+        return (
+          <div>
+            <ListItemText
+              secondary="CC"
+              primary={
+                <div>
+                  <ul>{expanded ? items : items.slice(0, 3)}</ul>
+                  <Button variant="text" size="small" onClick={toggleExpansion}>
+                    {expanded ? "Show less" : "Show more"}
+                  </Button>
+                </div>
+              }
+            />
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <ListItemText secondary="CC" primary="Secondary Text (List)" />
+            <ul>{items}</ul>
+          </div>
+        );
+      }
+    } else {
+      return <ListItemText primary={text} secondary="CC" />;
+    }
+  }
+
+  const text = props.result["cc"] ? props.result["cc"] : "N/A";
+  const renderedText = <RenderText text={text} />;
+
   return (
     <>
       {/* General information card */}
@@ -158,10 +205,7 @@ export default function GeneralInfo(props) {
                       {" "}
                       <GroupsIcon />{" "}
                     </ListItemIcon>
-                    <ListItemText
-                      primary={props.result["cc"] ? props.result["cc"] : "N/A"}
-                      secondary="CC"
-                    />
+                    {renderedText}
                   </ListItem>
                   <ListItem>
                     <ListItemIcon>
