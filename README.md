@@ -74,8 +74,6 @@ The CVSS Calculator module allows you to calculate the CVSS 3.1 score of a vulne
 The Rules module is a GUI for creating Sigma rules.
 ![rules](https://github.com/dev-lu/osint_toolkit/assets/44299200/2422f5f2-7623-4c81-bd29-0ef3fff80067)
 
-
-
 ### Customizable
 Customize the descriptions of each module with your own markdown-formatted text. Disable any modules that are not needed, and they will not be shown. Tailor the toolkit to your specific requirements.
 <img width="1233" alt="settings" src="https://user-images.githubusercontent.com/44299200/223217991-1bd45aee-a8ea-4bfc-a3fa-1723fee75c73.png">
@@ -86,6 +84,8 @@ Customize the descriptions of each module with your own markdown-formatted text.
 - Export reports
 - Save history and generate statistics
 - Metadata viewer
+- Add custom RSS feeds
+- More AI features
 
 ## Deploy with docker
 1. Download the repository and extract the files
@@ -93,24 +93,3 @@ Customize the descriptions of each module with your own markdown-formatted text.
 3. If you deploy the app on a remote machine, set the `BACKEND_URL` argument in the Compose file to the remote machines IP address
 4. Run the following command: `docker-compose up -d`
 5. Once the container is running, you can access the app in your browser at http://localhost:3000
-
-## Deploy from source
-### Prerequisites
-- Python 3.10 or higher
-- Pip (Python package installer)
-- Node.js 17 or higher with NPM
-- Port 3000 and 8000 available
-
-### Backend
-#### Windows
-1. Install Python requirements: `py -m pip install -r requirements.txt`
-2. Start the backend: `py -m uvicorn main:app`
-
-#### Linux / MacOS
-1. Install Python requirements: `pip install -r requirements.txt`
-2. Start the backend: `uvicorn main:app`
-
-### Frontend
-1. Install required packages: `npm install`
-2. Start frontend: `npm start`
-3. Access the app in your browser at http://localhost:3000
