@@ -396,3 +396,14 @@ async def analyze_code_endpoint(input: dict = Body(..., example={"input": "YOUR_
     analysis_result = ask_prompt(
         inputdata, apikey['key'], 'codeexpert')
     return {"analysis_result": analysis_result}
+
+@router.post("/api/aiassistant/deobfuscator", tags=["AI Assistant"])
+async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
+    '''
+    Analyze source code with OpenAI
+    '''
+    inputdata = str(input["input"].encode('utf-8'))
+    apikey = crud.get_apikey(name="openai", db=SessionLocal())
+    analysis_result = ask_prompt(
+        inputdata, apikey['key'], 'deobfuscator')
+    return {"analysis_result": analysis_result}

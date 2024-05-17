@@ -83,11 +83,28 @@ def ask_prompt(input: str, apikey: str, prompt: str):
             "including the purpose of each key section. Highlight any areas of potential concern, such as vulnerabilities "
             "or inefficient code practices: " + str(input)
         ),
-        'deobfuscater': (
+        'deobfuscator': (
             "Simplify the given obfuscated code and analyze it for potential security threats. Provide a clear, deobfuscated "
             "version of the code as a snippet. Additionally, list any indicators of compromise or suspicious elements you "
             "identify, explaining their potential impact and relevance in bullet points: " +
             str(input)
+        ),
+        'incidentreport': (
+            "Review the following incident report. Summarize the key details of the incident, including the timeline, nature "
+            "of the attack, and affected systems. Provide a thorough analysis of the incident's impact and suggest potential "
+            "improvements to prevent future occurrences: " + str(input)
+        ),
+        'configreview': (
+            "Analyze the provided configuration file for any security misconfigurations or best practice violations. "
+            "Explain the significance of each finding and provide recommendations for secure configuration settings: " + str(input)
+        ),
+        'patchanalysis': (
+            "Evaluate the given patch notes or update description. Identify the key security improvements or fixes included in the update. "
+            "Assess the potential impact of these changes on system security and provide recommendations for deployment: " + str(input)
+        ),
+        'accesscontrol': (
+            "Analyze the provided access control list (ACL) or permissions settings. Identify any potential security risks or misconfigurations. "
+            "Provide recommendations for improving access control and ensuring proper security measures are in place: " + str(input)
         ),
     }
 
@@ -115,4 +132,4 @@ def ask_prompt(input: str, apikey: str, prompt: str):
     }
 
     response = requests.post(endpoint, headers=headers, data=json.dumps(data))
-    handle_response(response)
+    return handle_response(response)

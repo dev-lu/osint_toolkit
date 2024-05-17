@@ -1,0 +1,104 @@
+.markdown-container {
+    width: 100%;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .markdown-content.light-mode {
+    line-height: 1.6;
+    color: #333;
+  }
+  
+  .markdown-content.light-mode h1,
+  .markdown-content.light-mode h2,
+  .markdown-content.light-mode h3,
+  .markdown-content.light-mode h4,
+  .markdown-content.light-mode h5,
+  .markdown-content.light-mode h6 {
+    color: #2c3e50;
+  }
+  
+  .markdown-content.light-mode a {
+    color: #3498db;
+    text-decoration: none;
+  }
+  
+  .markdown-content.light-mode a:hover {
+    text-decoration: underline;
+  }
+  
+  .markdown-content.light-mode pre {
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+  }
+  
+  .markdown-content.light-mode code {
+    background: #f4f4f4;
+    padding: 2px 4px;
+    border-radius: 4px;
+  }
+  
+  .markdown-content.light-mode ul,
+  .markdown-content.light-mode ol {
+    padding-left: 20px;
+  }
+  
+  .markdown-content.light-mode blockquote {
+    border-left: 4px solid #ddd;
+    padding-left: 10px;
+    color: #666;
+    margin: 0;
+  }
+  
+  .markdown-content.dark-mode {
+    line-height: 1.6;
+    color: #ddd;
+  }
+  
+  .markdown-content.dark-mode h1,
+  .markdown-content.dark-mode h2,
+  .markdown-content.dark-mode h3,
+  .markdown-content.dark-mode h4,
+  .markdown-content.dark-mode h5,
+  .markdown-content.dark-mode h6 {
+    color: #fff;
+  }
+  
+  .markdown-content.dark-mode a {
+    color: #66b2ff;
+    text-decoration: none;
+  }
+  
+  .markdown-content.dark-mode a:hover {
+    text-decoration: underline;
+  }
+  
+  .markdown-content.dark-mode pre {
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+  }
+  
+  .markdown-content.dark-mode code {
+    background: #1e1e1e;
+    padding: 2px 4px;
+    border-radius: 4px;
+  }
+  
+  .markdown-content.dark-mode ul,
+  .markdown-content.dark-mode ol {
+    padding-left: 20px;
+  }
+  
+  .markdown-content.dark-mode blockquote {
+    border-left: 4px solid #555;
+    padding-left: 10px;
+    color: #aaa;
+    margin: 0;
+  }
+  
+  .center-text {
+    text-align: center;
+  }
+  

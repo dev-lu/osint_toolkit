@@ -1,25 +1,17 @@
 import React from "react";
 import { atom, useSetRecoilState, useRecoilValue } from "recoil";
 import api from "../../api";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { materialOceanic } from "react-syntax-highlighter/dist/esm/styles/prism";
-import ReactMarkdown from "react-markdown";
-
-import { apiKeysState } from '../../App';
+import { apiKeysState } from "../../App";
+import InputCard from "./InputCard";
 import Introduction from "../Introduction";
 import NoApikeys from "../ioc-analyzer/NoApikeys";
+import ResultCard from "./ResultCard";
 
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import Grow from "@mui/material/Grow";
-import { LinearProgress } from "@mui/material";
 import PropTypes from "prop-types";
 import Stack from "@mui/material/Stack";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import TextField from "@mui/material/TextField";
 import useTheme from "@mui/material/styles/useTheme";
-
 
 export const aiassistantTabIndex = atom({
   key: "AiassistantTabIndexState",
@@ -77,57 +69,15 @@ export default function AiAssistant() {
     } else {
       setLoading(true);
       try {
-        const response = await api.post(
-          "/api/aiassistant/" + endpoint,
-          { input: input }
-        );
+        const response = await api.post("/api/aiassistant/" + endpoint, {
+          input: input,
+        });
         setResult(response.data.analysis_result);
       } catch (error) {
         console.error(error);
       }
       setLoading(false);
     }
-  }
-
-  function showResult(answer) {
-    return (
-      <>
-        <Grow in={true}>
-          <Card
-            sx={{
-              m: 2,
-              p: 3,
-              borderRadius: 5,
-              backgroundColor: theme.palette.background.card,
-              boxShadow: 0,
-            }}
-          >
-            <h2>Analysis Result</h2>
-            <ReactMarkdown
-              children={answer.toString()}
-              components={{
-                code({ node, inline, className, children, ...props }) {
-                  const match = /language-(\w+)/.exec(className || "");
-                  return !inline && match ? (
-                    <SyntaxHighlighter
-                      children={String(children).replace(/\n$/, "")}
-                      style={materialOceanic}
-                      language={match[1]}
-                      PreTag="div"
-                      {...props}
-                    />
-                  ) : (
-                    <code className={className} {...props}>
-                      {children}
-                    </code>
-                  );
-                },
-              }}
-            />
-          </Card>
-        </Grow>
-      </>
-    );
   }
 
   return (
@@ -145,170 +95,82 @@ export default function AiAssistant() {
       </Tabs>
       <AiassistantTabPanel value={tabIndex} index={0}>
         <Stack>
-          <Card sx={cardStyle}>
-            <TextField
-              id="aiassistant_la-input-textfield"
-              label="Paste logs here"
-              fullWidth
-              multiline
-              rows={10}
-            />
-            <Stack spacing={2} justifyContent="center">
-              <Button
-                variant="contained"
-                color="primary"
-                align="center"
-                disableElevation
-                size="large"
-                type="submit"
-                sx={{ borderRadius: 5, mt: 2, ml: 1 }}
-                onClick={() =>
-                  callOpenAI(
-                    document.getElementById("aiassistant_la-input-textfield")
-                      .value,
-                    "loganalysis"
-                  )
-                }
-              >
-                <Stack spacing={2} justifyContent="center">
-                  Send logs to OpenAI
-                  {loading ? <LinearProgress color="inherit" /> : null}
-                </Stack>
-              </Button>
-            </Stack>
-          </Card>
-
-          {!apiKeys.openai && buttonClicked ? <><NoApikeys /></> : result ? (
-            showResult(result)
-          ) : (
-            <Introduction moduleName="AI Assistant LA" />
-          )}
+          <InputCard
+            inputId="aiassistant_la-input-textfield"
+            inputLabel="Paste logs here"
+            buttonLabel="logs"
+            callType="loganalysis"
+            callOpenAI={callOpenAI}
+            loading={loading}
+            cardStyle={cardStyle}
+            apiKeys={apiKeys}
+            buttonClicked={buttonClicked}
+            result={result}
+            NoApikeys={NoApikeys}
+            ResultCard={ResultCard}
+            Introduction={Introduction}
+            moduleName="AI Assistant LA"
+          />
         </Stack>
       </AiassistantTabPanel>
       <AiassistantTabPanel value={tabIndex} index={1}>
         <Stack>
-          <Card sx={cardStyle}>
-            <TextField
-              id="aiassistant_pa-input-textfield"
-              label="Paste email body here"
-              fullWidth
-              multiline
-              rows={10}
-            />
-            <Stack spacing={2} justifyContent="center">
-              <Button
-                variant="contained"
-                color="primary"
-                align="center"
-                disableElevation
-                size="large"
-                type="submit"
-                sx={{ borderRadius: 5, mt: 2, ml: 1 }}
-                onClick={() => 
-                  callOpenAI(
-                    document.getElementById("aiassistant_pa-input-textfield")
-                      .value,
-                    "mailanalysis"
-                  )
-                }
-              >
-                <Stack spacing={2} justifyContent="center">
-                  Send email text to OpenAI
-                  {loading ? <LinearProgress color="inherit" /> : null}
-                </Stack>
-              </Button>
-            </Stack>
-          </Card>
-
-          {!apiKeys.openai && buttonClicked ? <><NoApikeys /></> : result ? (
-            showResult(result)
-          ) : (
-            <Introduction moduleName="AI Assistant PA" />
-          )}
+          <InputCard
+            inputId="aiassistant_pa-input-textfield"
+            inputLabel="Paste email body here"
+            buttonLabel="email body"
+            callType="mailanalysis"
+            callOpenAI={callOpenAI}
+            loading={loading}
+            cardStyle={cardStyle}
+            apiKeys={apiKeys}
+            buttonClicked={buttonClicked}
+            result={result}
+            NoApikeys={NoApikeys}
+            ResultCard={ResultCard}
+            Introduction={Introduction}
+            moduleName="AI Assistant PA"
+          />
         </Stack>
       </AiassistantTabPanel>
       <AiassistantTabPanel value={tabIndex} index={2}>
         <Stack>
-          <Card sx={cardStyle}>
-            <TextField
-              id="aiassistant_ce-input-textfield"
-              label="Paste code snippet here"
-              fullWidth
-              multiline
-              rows={10}
-            />
-            <Stack spacing={2} justifyContent="center">
-              <Button
-                variant="contained"
-                color="primary"
-                align="center"
-                disableElevation
-                size="large"
-                type="submit"
-                sx={{ borderRadius: 5, mt: 2, ml: 1 }}
-                onClick={() =>
-                  callOpenAI(
-                    document.getElementById("aiassistant_ce-input-textfield")
-                      .value,
-                    "codeexpert"
-                  )
-                }
-              >
-                <Stack spacing={2} justifyContent="center">
-                  Send code snippet to OpenAI
-                  {loading ? <LinearProgress color="inherit" /> : null}
-                </Stack>
-              </Button>
-            </Stack>
-          </Card>
-
-          {!apiKeys.openai && buttonClicked ? <><NoApikeys /></> : result ? (
-            showResult(result)
-          ) : (
-            <Introduction moduleName="AI Assistant CE" />
-          )}
+          <InputCard
+            inputId="aiassistant_ce-input-textfield"
+            inputLabel="Paste code snippet here"
+            buttonLabel="code snippet"
+            callType="codeexpert"
+            callOpenAI={callOpenAI}
+            loading={loading}
+            cardStyle={cardStyle}
+            apiKeys={apiKeys}
+            buttonClicked={buttonClicked}
+            result={result}
+            NoApikeys={NoApikeys}
+            ResultCard={ResultCard}
+            Introduction={Introduction}
+            moduleName="AI Assistant CE"
+          />
         </Stack>
       </AiassistantTabPanel>
       <AiassistantTabPanel value={tabIndex} index={3}>
         <Stack>
-          <Card sx={cardStyle}>
-            <TextField
-              id="aiassistant_cdo-input-textfield"
-              label="Paste code snippet here"
-              fullWidth
-              multiline
-              rows={10}
-            />
-            <Stack spacing={2} justifyContent="center">
-              <Button
-                variant="contained"
-                color="primary"
-                align="center"
-                disableElevation
-                size="large"
-                type="submit"
-                sx={{ borderRadius: 5, mt: 2, ml: 1 }}
-                onClick={() =>
-                  callOpenAI(
-                    document.getElementById("aiassistant_cdo-input-textfield")
-                      .value,
-                    "codeexpert"
-                  )
-                }
-              >
-                <Stack spacing={2} justifyContent="center">
-                  Send code snippet to OpenAI
-                  {loading ? <LinearProgress color="inherit" /> : null}
-                </Stack>
-              </Button>
-            </Stack>
-          </Card>
-
-          {!apiKeys.openai && buttonClicked ? <><NoApikeys /></> : result ? (
-            showResult(result)
-          ) : (
-            <Introduction moduleName="AI Assistant CDO" />
-          )}
+          <InputCard
+            inputId="aiassistant_cdo-input-textfield"
+            inputLabel="Paste code snippet here"
+            buttonLabel="code snippet"
+            callType="deobfuscator"
+            callOpenAI={callOpenAI}
+            loading={loading}
+            cardStyle={cardStyle}
+            apiKeys={apiKeys}
+            buttonClicked={buttonClicked}
+            result={result}
+            NoApikeys={NoApikeys}
+            ResultCard={ResultCard}
+            Introduction={Introduction}
+            moduleName="AI Assistant CDO"
+          />
         </Stack>
       </AiassistantTabPanel>
     </>

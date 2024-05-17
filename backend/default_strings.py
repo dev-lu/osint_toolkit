@@ -1,11 +1,11 @@
 ai_assistant = dict(
     description="""
-    AI Assistant allows you to use the power of ChatGPT.
+    I Assistant allows you to leverage the power of OpenAI's advanced GPT models. These cutting-edge large language models (LLMs) are designed to provide intelligent, context-aware responses, helping you with a wide range of tasks. 
     """
 )
 
 ai_assistant_la = dict(
-    description="""### Log Analyzer can analyze log data with the powerful AI from OpenAI. Simply paste your logs here and click "Send to OpenAI".
+    description="""### Log Analyzer utilizes advanced AI from OpenAI to interpret and analyze log data. Paste your logs into the input field and click "Send to OpenAI" to start the analysis.
 \
 Example:
 ```bash
@@ -15,7 +15,7 @@ Example:
 )
 
 ai_assistant_pa = dict(
-    description="""### Phishing Analyzer can analyze email texts with the AI from OpenAI. Simply paste your email body here and click "Send to OpenAI".
+    description="""### Phishing Analyzer leverages large language models from OpenAI to scrutinize email texts for potential phishing content. To use the tool, simply paste the body of the email into the provided text box and click "Send to OpenAI".
 \
 Example:
 > REQUEST FOR ASSISTANCE-STRICTLY CONFIDENTIAL  
@@ -30,7 +30,7 @@ Example:
 )
 
 ai_assistant_ce = dict(
-    description="""### Code Explainer can use the powerful AI of OpenAI to explain source code to you.
+    description="""### Code Explainer utilizes the advanced AI capabilities of OpenAI to provide detailed explanations of source code. Simply input your code, and the AI will help you understand its functionality.
 \
 Example:
 ```c
@@ -47,7 +47,7 @@ int main() {
 )
 
 ai_assistant_cdo = dict(
-    description="""### Code Deobfuscator uses OpenAI to deobfuscate source code and extraxt possible IOCs for you.
+    description="""### Code Deobfuscator employs large language models from OpenAI to deobfuscate source code and extract possible Indicators of Compromise (IOCs) for you. Simply paste your obfuscated code to get started.
 \
 Example:
 ```javascript

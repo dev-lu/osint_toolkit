@@ -3,19 +3,24 @@ import { useRecoilValue } from "recoil";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialOceanic } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { modulesState } from "../App";
-
+import { modulesState, generalSettingsState } from "../App";
+import "./Introduction.css"; // Import the CSS file
 
 function Introduction(props) {
   const modules = useRecoilValue(modulesState);
+  const generalSettings = useRecoilValue(generalSettingsState);
+  const { moduleName, centerText } = props;
+  const isDarkMode = generalSettings.darkmode;
+
+  const contentClass = `${isDarkMode ? 'markdown-content dark-mode' : 'markdown-content light-mode'} ${centerText ? 'center-text' : ''}`;
 
   return (
-    <div  align="center">
-      <br></br>
+    <div className="markdown-container">
+      <div className={contentClass}>
         <ReactMarkdown
           children={
-            modules[props.moduleName]
-              ? modules[props.moduleName].description.toString()
+            modules[moduleName]
+              ? modules[moduleName].description.toString()
               : ""
           }
           components={{
@@ -37,6 +42,7 @@ function Introduction(props) {
             },
           }}
         />
+      </div>
     </div>
   );
 }
