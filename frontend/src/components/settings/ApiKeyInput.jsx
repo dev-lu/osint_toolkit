@@ -1,117 +1,124 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSetRecoilState } from "recoil";
+import { apiKeysState } from "../../App";
 import api from "../../api";
 
-import { apiKeysState } from "../../App";
-
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
+import IconButton from "@mui/material/IconButton";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import FormGroup from "@mui/material/FormGroup";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import Link from "@mui/material/Link";
 import SaveIcon from "@mui/icons-material/Save";
 import TextField from "@mui/material/TextField";
-
+import InputAdornment from "@mui/material/InputAdornment";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function ApiKeyInput(props) {
   const setApiKeys = useSetRecoilState(apiKeysState);
-
-  function updateApikeys() {
-    api
-      .get("/api/apikeys/is_active")
-      .then((response) => {
-        const result = response.data;
-        setApiKeys(result);
-      });
-  }
-
   const [serviceKey, setServiceKey] = useState("");
+
+  useEffect(() => {
+    if (!props.apiKeys[props.name]) {
+      setServiceKey("");
+    }
+  }, [props.apiKeys, props.name]);
+
   const handleServiceKeyInput = (event) => {
     setServiceKey(event.target.value);
   };
 
-  function handleApiKey(method, name, key) {
-    let url = `/api/apikeys/`;
-    let json = {};
+  const updateApikeys = () => {
+    api.get("/api/apikeys/is_active")
+      .then((response) => {
+        setApiKeys(response.data);
+      })
+      .catch((error) => console.log("Error updating API keys:", error));
+  };
+
+  const handleApiKey = (method, name, key) => {
+    let url = `/api/apikeys`;
+    let data = {};
     if (method === "delete") {
-      url = `/api/apikeys?name=${name}`;
-    } else {
-      json = { name: name, key: key, is_active: true };
+      url += `?name=${name}`;
+    } else if (method === "post") {
+      url += `/`;
+      data = { name: name, key: key, is_active: true };
     }
-    api[method](url, json)
-      .then(() => updateApikeys())
-      .catch((error) => console.log(error));
-  }
+    api({
+      method: method,
+      url: url,
+      data: data
+    })
+      .then(() => {
+        updateApikeys();
+        if (method === "delete") {
+          setServiceKey("");
+        }
+      })
+      .catch((error) => console.log("Error processing API key:", error));
+  };
 
-  function deleteApiKey(name) {
+  const deleteApiKey = (name) => {
     handleApiKey("delete", name, null);
-    updateApikeys();
-  }
+  };
 
-  function createApiKey(key) {
+  const createApiKey = (key) => {
     if (key === "") {
       alert("Please enter a valid API key");
       return;
     }
     handleApiKey("post", props.name, key);
-    updateApikeys();
-  }
+  };
 
   return (
-    <>
-      <FormGroup row>
-        <Button
-          variant="contained"
-          color="primary"
-          endIcon={<OpenInNewIcon />}
-          disableElevation
-          size="small"
-          href={props.link}
-          target="_blank"
-        >
-          Get API key
-        </Button>
-        <TextField
-          id={props.name + "_textfield"}
-          label={props.description}
-          defaultValue={props.apiKeys[props.name] ? "**************" : ""}
-          type="password"
-          onChange={handleServiceKeyInput}
-          disabled={props.apiKeys[props.name] ? true : false}
-          variant="filled"
-          size="small"
-          sx={{ width: "50%" }}
-        />
-        <ButtonGroup
-          disableElevation
-          variant="contained"
-          aria-label="Disabled elevation buttons"
-        >
-          {props.apiKeys[props.name] ? (
-            <Button
-              variant="contained"
-              color="error"
-              disableElevation
-              size="small"
-              onClick={() => deleteApiKey(props.name)}
-            >
-              <DeleteForeverIcon />
-            </Button>
-          ) : null}
-          {!props.apiKeys[props.name] ? (
-            <Button
-              variant="contained"
-              color="success"
-              disableElevation
-              size="small"
-              onClick={() => createApiKey(serviceKey)}
-            >
-              <SaveIcon />
-            </Button>
-          ) : null}
-        </ButtonGroup>
-      </FormGroup>
-    </>
+    <FormGroup row>
+      <TextField
+        id={`${props.name}_textfield`}
+        label={props.description}
+        value={props.apiKeys[props.name] ? "**************" : serviceKey}
+        type="password"
+        onChange={handleServiceKeyInput}
+        disabled={props.apiKeys[props.name]}
+        variant="outlined"
+        size="small"
+        fullWidth
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              {props.apiKeys[props.name] ? (
+                <Tooltip title="Delete API Key">
+                  <IconButton
+                    color="error"
+                    onClick={() => deleteApiKey(props.name)}
+                  >
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <>
+                  <Link
+                    href={props.link}
+                    underline="hover"
+                    target="_blank"
+                    rel="noopener"
+                    sx={{mr: 5}}
+                  >
+                    {"Get API key"}
+                  </Link>
+                  <Tooltip title="Save API Key">
+                    <IconButton
+                      color="primary"
+                      onClick={() => createApiKey(serviceKey)}
+                    >
+                      <SaveIcon />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              )}
+            </InputAdornment>
+          )
+        }}
+        sx={{ m: 1 }}
+      />
+    </FormGroup>
   );
 }
