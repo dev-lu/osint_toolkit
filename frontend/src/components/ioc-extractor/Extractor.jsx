@@ -284,7 +284,7 @@ export default function Extractor(props) {
           />
         </TableContainer>
       ) : (
-        <Introduction moduleName="IOC Extractor" />
+        <Introduction moduleName="IOC Extractor" centerText={true} />
       )}
     </React.Fragment>
   );

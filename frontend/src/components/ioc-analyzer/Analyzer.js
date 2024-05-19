@@ -83,6 +83,8 @@ export default function Analyzer() {
         buttonLabel="Analyze"
         onKeyDown={handleKeypress}
         onSearchClick={validateIocFromInput}
+        sx={{ fontSize: '8px' }}
+        size="small"
       />
       <br />
       <br />
@@ -109,7 +111,7 @@ export default function Analyzer() {
           iocType={iocType}
         />
       ) : (
-        <Introduction moduleName="IOC Analyzer" />
+        <Introduction moduleName="IOC Analyzer" centerText={true} />
       )}
     </>
   );

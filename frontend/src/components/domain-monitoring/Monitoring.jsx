@@ -63,7 +63,7 @@ export default function Monitoring() {
       {showTable ? (
         <ResultTable key={searchKey} domain={searchKey} />
       ) : (
-        <Introduction moduleName="Domain Monitoring" />
+        <Introduction moduleName="Domain Monitoring" centerText={true} />
       )}
     </>
   );

@@ -28,7 +28,7 @@ export default function Urls(props) {
   const [open, setOpen] = useState(false);
 
   const card_style = {
-    p: 2,
+    p: 1,
     mt: 2,
     backgroundColor: theme.palette.background.tablecell,
     boxShadow: 0,
@@ -105,8 +105,8 @@ export default function Urls(props) {
       {/* URL card */}
       <Grow in={true}>
         <Card key={"ema_url_card"} sx={card_style}>
-          <CardActionArea onClick={() => setOpen(!open)}>
-            <CardContent>
+        <CardActionArea onClick={() => setOpen(!open)} sx={{ padding: '4px' }}>
+            <CardContent sx={{ padding: '2px' }}>
               <Box
                 display="flex"
                 alignItems="center"

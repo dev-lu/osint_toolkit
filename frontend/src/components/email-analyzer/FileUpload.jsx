@@ -149,7 +149,7 @@ export default function FileUpload(props) {
       {showResult ? (
         <Result result={file} />
       ) : (
-        <Introduction moduleName="Email Analyzer" />
+        <Introduction moduleName="Email Analyzer" centerText={true} />
       )}
     </div>
   );

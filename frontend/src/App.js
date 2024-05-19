@@ -71,6 +71,13 @@ function App() {
               tableborder: "#ebebeb",
             },
             components: {
+              MuiButton: {
+                styleOverrides: {
+                  root: {
+                    fontSize: '0.875rem',
+                  },
+                },
+              },
               MuiCard: {
                 variants: [
                   {

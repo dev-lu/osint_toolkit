@@ -10,7 +10,7 @@ function Header() {
     <div>
       <img
         src={theme.palette.mode === 'dark' ? ot_logo_dark : ot_logo_light}
-        height={80}
+        height={60}
         alt="OSINT Toolkit logo"
       />
     </div>

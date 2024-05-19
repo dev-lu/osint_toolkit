@@ -22,7 +22,7 @@ export default function SecurityCheck(props) {
   const [open, setOpen] = useState(true);
 
   const card_style = {
-    p: 2,
+    p: 1,
     mt: 2,
     backgroundColor: theme.palette.background.tablecell,
     boxShadow: 0,
@@ -46,7 +46,7 @@ export default function SecurityCheck(props) {
                   : "info"
               }
               variant="filled"
-              sx={{ mt: 1, borderRadius: 5 }}
+              sx={{ m: 1, borderRadius: 5 }}
             >
               <AlertTitle>
                 <b>{row["warning_title"]}</b>
@@ -66,8 +66,8 @@ export default function SecurityCheck(props) {
       {/* Basic security checks card */}
       <Grow in={true}>
         <Card key={"ema_basic_checks_card"} sx={card_style}>
-          <CardActionArea onClick={() => setOpen(!open)}>
-            <CardContent>
+        <CardActionArea onClick={() => setOpen(!open)} sx={{ padding: '4px' }}>
+            <CardContent sx={{ padding: '2px' }}>
               <Box
                 display="flex"
                 alignItems="center"
