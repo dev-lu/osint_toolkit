@@ -25,7 +25,7 @@ def create_apikey(apikey: schemas.ApikeySchema, db: Session = Depends(get_db)):
     existing_apikey = crud.get_apikey(db, apikey.name)
     if existing_apikey['name'] == "None":
         db_apikey = crud.create_apikey(db, apikey)
-        logging.info("Added API key: " + str(apikey))
+        logging.debug("Added API key: " + str(apikey))
         return db_apikey.to_dict()
     logging.error(
         "Could not add API key. API key already exists:  " + str(apikey))
@@ -46,8 +46,6 @@ def delete_apikey(name: str, db: Session = Depends(get_db)):
     return schemas.DeleteApikeyResponse(apikey=schemas.ApikeySchema(**apikey), message="API key deleted successfully")
 
 # Get all API keys
-
-
 @router.get("/api/apikeys/", response_model=list[schemas.ApikeySchema], tags=["OSINT Toolkit modules"])
 def read_apikeys(db: Session = Depends(get_db)):
     apikeys = crud.get_apikeys(db)

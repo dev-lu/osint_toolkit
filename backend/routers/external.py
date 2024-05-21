@@ -407,3 +407,47 @@ async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "
     analysis_result = ask_prompt(
         inputdata, apikey['key'], 'deobfuscator')
     return {"analysis_result": analysis_result}
+
+@router.post("/api/aiassistant/incidentreport", tags=["AI Assistant"])
+async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
+    '''
+    Analyze source code with OpenAI
+    '''
+    inputdata = str(input["input"].encode('utf-8'))
+    apikey = crud.get_apikey(name="openai", db=SessionLocal())
+    analysis_result = ask_prompt(
+        inputdata, apikey['key'], 'incidentreport')
+    return {"analysis_result": analysis_result}
+
+@router.post("/api/aiassistant/configreview", tags=["AI Assistant"])
+async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
+    '''
+    Analyze source code with OpenAI
+    '''
+    inputdata = str(input["input"].encode('utf-8'))
+    apikey = crud.get_apikey(name="openai", db=SessionLocal())
+    analysis_result = ask_prompt(
+        inputdata, apikey['key'], 'configreview')
+    return {"analysis_result": analysis_result}
+
+@router.post("/api/aiassistant/patchanalysis", tags=["AI Assistant"])
+async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
+    '''
+    Analyze source code with OpenAI
+    '''
+    inputdata = str(input["input"].encode('utf-8'))
+    apikey = crud.get_apikey(name="openai", db=SessionLocal())
+    analysis_result = ask_prompt(
+        inputdata, apikey['key'], 'patchanalysis')
+    return {"analysis_result": analysis_result}
+
+@router.post("/api/aiassistant/accesscontrol", tags=["AI Assistant"])
+async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
+    '''
+    Analyze source code with OpenAI
+    '''
+    inputdata = str(input["input"].encode('utf-8'))
+    apikey = crud.get_apikey(name="openai", db=SessionLocal())
+    analysis_result = ask_prompt(
+        inputdata, apikey['key'], 'accesscontrol')
+    return {"analysis_result": analysis_result}

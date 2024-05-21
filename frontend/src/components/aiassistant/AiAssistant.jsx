@@ -86,15 +86,24 @@ export default function AiAssistant() {
         value={tabIndex}
         onChange={handleTabIndexChange}
         orientation="vertical"
-        style={{ float: "left" }}
+        sx={{
+          float: "left",
+          '.MuiTabs-indicator': {
+            left: 0,
+          },
+        }}
       >
-        <Tab label="Log Analyzer" />
-        <Tab label="Phishing Analyzer" />
-        <Tab label="Code Expert" />
-        <Tab label="Code Deobfuscator" />
+        <Tab label="Log Analysis" sx={{ alignSelf: 'start', padding: '8px 16px', minHeight: 'auto' }} />
+        <Tab label="Phishing Check" sx={{ alignSelf: 'start', padding: '8px 16px', minHeight: 'auto' }} />
+        <Tab label="Code Explain" sx={{ alignSelf: 'start', padding: '8px 16px', minHeight: 'auto' }} />
+        <Tab label="Code Deobfuscate" sx={{ alignSelf: 'start', padding: '8px 16px', minHeight: 'auto' }} />
+        <Tab label="Incident Review" sx={{ alignSelf: 'start', padding: '8px 16px', minHeight: 'auto' }} />
+        <Tab label="Config Analysis" sx={{ alignSelf: 'start', padding: '8px 16px', minHeight: 'auto' }} />
+        <Tab label="Patchnote Review" sx={{ alignSelf: 'start', padding: '8px 16px', minHeight: 'auto' }} />
+        <Tab label="Access Control Check" sx={{ alignSelf: 'start', padding: '8px 16px', minHeight: 'auto' }} />
       </Tabs>
-      <AiassistantTabPanel value={tabIndex} index={0}>
-        <Stack>
+      <AiassistantTabPanel value={tabIndex} index={0} >
+        <Stack sx={{mt: 2}}>
           <InputCard
             inputId="aiassistant_la-input-textfield"
             inputLabel="Paste logs here"
@@ -114,7 +123,7 @@ export default function AiAssistant() {
         </Stack>
       </AiassistantTabPanel>
       <AiassistantTabPanel value={tabIndex} index={1}>
-        <Stack>
+        <Stack sx={{mt: 2}}>
           <InputCard
             inputId="aiassistant_pa-input-textfield"
             inputLabel="Paste email body here"
@@ -134,7 +143,7 @@ export default function AiAssistant() {
         </Stack>
       </AiassistantTabPanel>
       <AiassistantTabPanel value={tabIndex} index={2}>
-        <Stack>
+        <Stack sx={{mt: 2}}>
           <InputCard
             inputId="aiassistant_ce-input-textfield"
             inputLabel="Paste code snippet here"
@@ -154,7 +163,7 @@ export default function AiAssistant() {
         </Stack>
       </AiassistantTabPanel>
       <AiassistantTabPanel value={tabIndex} index={3}>
-        <Stack>
+        <Stack sx={{mt: 2}}>
           <InputCard
             inputId="aiassistant_cdo-input-textfield"
             inputLabel="Paste code snippet here"
@@ -170,6 +179,86 @@ export default function AiAssistant() {
             ResultCard={ResultCard}
             Introduction={Introduction}
             moduleName="AI Assistant CDO"
+          />
+        </Stack>
+      </AiassistantTabPanel>
+      <AiassistantTabPanel value={tabIndex} index={4}>
+        <Stack sx={{mt: 2}}>
+          <InputCard
+            inputId="aiassistant_inca-input-textfield"
+            inputLabel="Paste incident text here"
+            buttonLabel="incident text"
+            callType="incidentreport"
+            callOpenAI={callOpenAI}
+            loading={loading}
+            cardStyle={cardStyle}
+            apiKeys={apiKeys}
+            buttonClicked={buttonClicked}
+            result={result}
+            NoApikeys={NoApikeys}
+            ResultCard={ResultCard}
+            Introduction={Introduction}
+            moduleName="AI Assistant INCA"
+          />
+        </Stack>
+      </AiassistantTabPanel>
+      <AiassistantTabPanel value={tabIndex} index={5}>
+        <Stack sx={{mt: 2}}>
+          <InputCard
+            inputId="aiassistant_confreview-input-textfield"
+            inputLabel="Paste config text here"
+            buttonLabel="config text"
+            callType="configreview"
+            callOpenAI={callOpenAI}
+            loading={loading}
+            cardStyle={cardStyle}
+            apiKeys={apiKeys}
+            buttonClicked={buttonClicked}
+            result={result}
+            NoApikeys={NoApikeys}
+            ResultCard={ResultCard}
+            Introduction={Introduction}
+            moduleName="AI Assistant CONFREVIEW"
+          />
+        </Stack>
+      </AiassistantTabPanel>
+      <AiassistantTabPanel value={tabIndex} index={6}>
+        <Stack sx={{mt: 2}}>
+          <InputCard
+            inputId="aiassistant_patchnotes-input-textfield"
+            inputLabel="Paste patch notes here"
+            buttonLabel="patch notes"
+            callType="patchanalysis"
+            callOpenAI={callOpenAI}
+            loading={loading}
+            cardStyle={cardStyle}
+            apiKeys={apiKeys}
+            buttonClicked={buttonClicked}
+            result={result}
+            NoApikeys={NoApikeys}
+            ResultCard={ResultCard}
+            Introduction={Introduction}
+            moduleName="AI Assistant PATCHNOTES"
+          />
+        </Stack>
+      </AiassistantTabPanel>
+      <AiassistantTabPanel value={tabIndex} index={7}>
+        <Stack sx={{mt: 2}}>
+          <InputCard
+            inputId="aiassistant_acreview-input-textfield"
+            inputLabel="Paste access control list here"
+            buttonLabel="access control list"
+            callType="accesscontrol"
+            callOpenAI={callOpenAI}
+            loading={loading}
+            cardStyle={cardStyle}
+            apiKeys={apiKeys}
+            buttonClicked={buttonClicked}
+            result={result}
+            NoApikeys={NoApikeys}
+            ResultCard={ResultCard}
+            Introduction={Introduction}
+            moduleName="AI Assistant ACREVIEW"
           />
         </Stack>
       </AiassistantTabPanel>

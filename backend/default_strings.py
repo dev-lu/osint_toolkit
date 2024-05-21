@@ -5,7 +5,7 @@ ai_assistant = dict(
 )
 
 ai_assistant_la = dict(
-    description="""### Log Analyzer utilizes advanced AI from OpenAI to interpret and analyze log data. Paste your logs into the input field and click "Send to OpenAI" to start the analysis.
+    description="""### Log Analysis uses AI to interpret and analyze log data. Paste your logs into the input field and click "Send to OpenAI" to start the analysis.
 \
 Example:
 ```bash
@@ -15,7 +15,7 @@ Example:
 )
 
 ai_assistant_pa = dict(
-    description="""### Phishing Analyzer leverages large language models from OpenAI to scrutinize email texts for potential phishing content. To use the tool, simply paste the body of the email into the provided text box and click "Send to OpenAI".
+    description="""### Phishing Check uses AI to scrutinize email texts for potential phishing content. Paste the body of the email into the provided text box and click "Send to OpenAI".
 \
 Example:
 > REQUEST FOR ASSISTANCE-STRICTLY CONFIDENTIAL  
@@ -30,7 +30,7 @@ Example:
 )
 
 ai_assistant_ce = dict(
-    description="""### Code Explainer utilizes the advanced AI capabilities of OpenAI to provide detailed explanations of source code. Simply input your code, and the AI will help you understand its functionality.
+    description="""### Code Explain utilizes the advanced AI capabilities of OpenAI to provide detailed explanations of source code. Simply input your code, and the AI will help you understand its functionality.
 \
 Example:
 ```c
@@ -47,12 +47,120 @@ int main() {
 )
 
 ai_assistant_cdo = dict(
-    description="""### Code Deobfuscator employs large language models from OpenAI to deobfuscate source code and extract possible Indicators of Compromise (IOCs) for you. Simply paste your obfuscated code to get started.
+    description="""### Code Deobfuscate uses AI to deobfuscate source code and extract possible Indicators of Compromise (IOCs). Simply paste your obfuscated code to get started.
 \
 Example:
 ```javascript
 eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0("1, 2!");',3,3,'console|log|Hello|OSINT'.split('|'),0,{}));
 
+```
+    """
+)
+
+ai_assistant_inca = dict(
+    description="""### Incident Review allows users to review detailed incident reports and generate comprehensive summaries.
+\
+Example:
+```markdown
+Date of Incident: May 20, 2024
+
+Reported By: John Doe, IT Security Analyst
+
+Summary
+On May 20, 2024, at approximately 10:00 AM, an unauthorized access attempt was detected on the company’s primary database server. The intrusion was identified through anomalous activity alerts triggered by the Security Information and Event Management (SIEM) system.
+
+Details
+Description of the Incident
+At 10:00 AM, the SIEM system flagged multiple failed login attempts to the database server from an external IP address (192.168.1.100). Following the failed attempts, a successful login was recorded using an administrative account.
+
+Impact
+Data Accessed: Customer records including names, addresses, and email addresses.
+Systems Affected: Primary database server (DB1).
+Downtime: No downtime reported, but increased server load was observed during the incident.
+Actions Taken
+Initial Response:
+
+The compromised administrative account was immediately disabled.
+Network access for the external IP address was blocked.
+Investigation:
+
+Log files were reviewed to trace the source and method of intrusion.
+Affected systems were isolated for further analysis.
+Mitigation:
+
+All administrative passwords were reset.
+Multi-Factor Authentication (MFA) was enforced for all administrative accounts.
+Additional network monitoring was implemented to detect any further suspicious activity.
+Resolution
+The incident was resolved by 1:00 PM on the same day. No further unauthorized access attempts have been detected. A thorough security audit is scheduled to ensure all potential vulnerabilities are addressed.
+
+Recommendations
+Enhance Monitoring: Implement continuous monitoring and advanced threat detection systems.
+User Training: Conduct regular security awareness training for employees.
+Policy Review: Review and update the company’s security policies and incident response plan.
+Conclusion
+The prompt detection and response to the security incident minimized potential damage. Continued vigilance and proactive security measures are essential to protect the organization from future threats.
+```
+    """
+)
+
+ai_assistant_confreview = dict(
+    description="""### Config Analysis enables users to analyze configuration files for security misconfigurations or violations of best practices.
+\
+Example:
+```markdown
+[server]
+port = 8080
+host = 0.0.0.0
+
+[security]
+password_min_length = 6
+password_complexity = false
+
+[logging]
+enable_logging = false
+
+[firewall]
+allow_inbound = *
+```
+    """
+)
+
+ai_assistant_patchnotes = dict(
+    description="""### Patchnote Review helps users evaluate patch notes or update descriptions for key security improvements or fixes. 
+\
+Example:
+```markdown
+Patch Notes - Version 1.2.3
+
+Security Improvements
+- Fixed a critical vulnerability (CVE-2024-1234) that allowed remote code execution.
+- Updated encryption algorithms to more secure versions.
+- Enhanced user authentication by adding support for multi-factor authentication (MFA).
+
+Bug Fixes
+- Resolved issue causing application crashes on startup.
+- Improved performance of database queries.
+```
+    """
+)
+
+ai_assistant_acreview = dict(
+    description="""### Access Control Check allows users to analyze access control lists (ACL) or permissions settings.
+\
+Example:
+```markdown
+[user:admin]
+permissions = read, write, execute
+
+[user:guest]
+permissions = read
+
+[user:inactive_user]
+permissions = read, write
+
+[role:developer]
+permissions = read, write, execute
 ```
     """
 )
