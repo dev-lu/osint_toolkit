@@ -416,9 +416,9 @@ __________
 ## Base Score Metrics (Score: ${cvssScores.base.baseScore})
 The Base metric group represents the intrinsic characteristics of a vulnerability that are constant over time and across user environments. It is composed of two sets of metrics: the Exploitability metrics and the Impact metrics. The Exploitability metrics reflect the ease and technical means by which the vulnerability can be exploited. That is, they represent characteristics of the thing that is vulnerable, which we refer to formally as the vulnerable component. On the other hand, the Impact metrics reflect the direct consequence of a successful exploit, and represent the consequence to the thing that suffers the impact, which we refer to formally as the impacted component.
 
-###  Exploitability Metrics (Score: ${Math.round(
-      cvssScores.base.exploitabilityScore * 10
-    ) / 10})
+###  Exploitability Metrics (Score: ${
+      Math.round(cvssScores.base.exploitabilityScore * 10) / 10
+    })
 - Attack Vector (AV): ${
       cvssScores.base.attackVector === "N"
         ? "Network"
@@ -492,9 +492,9 @@ The Base metric group represents the intrinsic characteristics of a vulnerabilit
     }
 __________
 
-## Temporal Score Metrics (Score: ${Math.round(
-      cvssScores.temporal.temporalScore * 10
-    ) / 10})
+## Temporal Score Metrics (Score: ${
+      Math.round(cvssScores.temporal.temporalScore * 10) / 10
+    })
 The Temporal metrics measure the current state of exploit techniques or code availability, the existence of any patches or workarounds, or the confidence that one has in the description of a vulnerability. Temporal metrics will almost certainly change over time.
 
 - Exploit Code Maturity (E): ${
@@ -536,14 +536,14 @@ The Temporal metrics measure the current state of exploit techniques or code ava
     }
 __________
 
-## Environmental Score Metrics (Score: ${Math.round(
-      cvssScores.environmental.environmentalScore * 10
-    ) / 10})
+## Environmental Score Metrics (Score: ${
+      Math.round(cvssScores.environmental.environmentalScore * 10) / 10
+    })
 These metrics enable the analyst to customize the CVSS score depending on the importance of the affected IT asset to a user's organization, measured in terms of complementary/alternative security controls in place, Confidentiality, Integrity, and Availability. The metrics are the modified equivalent of base metrics and are assigned metrics value based on the component placement in organization infrastructure.
 
-### Exploitability Metrics (Score: ${Math.round(
-      cvssScores.environmental.modifiedExploitabilityScore * 10
-    ) / 10})
+### Exploitability Metrics (Score: ${
+      Math.round(cvssScores.environmental.modifiedExploitabilityScore * 10) / 10
+    })
 - Attack Vector (MAV): ${
       cvssScores.environmental.modifiedAttackVector === "X"
         ? "Not Defined"
@@ -596,9 +596,9 @@ These metrics enable the analyst to customize the CVSS score depending on the im
         : "Unknown"
     }
 
-### Impact Metrics (Score: ${Math.round(
-      cvssScores.environmental.modifiedImpactScore * 10
-    ) / 10})
+### Impact Metrics (Score: ${
+      Math.round(cvssScores.environmental.modifiedImpactScore * 10) / 10
+    })
 - Confidentiality Impact (MC): ${
       cvssScores.environmental.modifiedConfidentialityImpact === "X"
         ? "Not Defined"
@@ -633,9 +633,9 @@ These metrics enable the analyst to customize the CVSS score depending on the im
         : "Unknown"
     }
 
-### Impact Subscore Modifiers (Score: ${Math.round(
-      cvssScores.environmental.modifiedImpactSubScore * 10
-    ) / 10})
+### Impact Subscore Modifiers (Score: ${
+      Math.round(cvssScores.environmental.modifiedImpactSubScore * 10) / 10
+    })
 - Confidentiality Requirement (CR): ${
       cvssScores.environmental.confidentialityRequirement === "X"
         ? "Not Defined"
@@ -671,9 +671,9 @@ These metrics enable the analyst to customize the CVSS score depending on the im
     }
 __________
 
-# Overall Score: ${Math.round(
-      cvssScores.environmental.environmentalScore * 10
-    ) / 10}
+# Overall Score: ${
+      Math.round(cvssScores.environmental.environmentalScore * 10) / 10
+    }
 `;
 
     const blob = new Blob([cvssMarkdown], { type: "text/markdown" });
@@ -692,11 +692,16 @@ __________
       <EnvironmentalScore />
       <br />
       <br />
-      <Divider>
+      <Divider sx={{ mb: 2 }}>
         <Chip
           icon={<DataUsageIcon />}
           label="Overall CVSS 3.1 Score"
-          style={{ fontSize: "20px", padding: "10px", height: "40px" }}
+          style={{
+            fontSize: "20px",
+            padding: "10px",
+            height: "40px",
+            backgroundColor: theme.palette.background.cvssCard,
+          }}
         />
       </Divider>
       <br />

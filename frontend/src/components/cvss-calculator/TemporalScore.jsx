@@ -1,41 +1,121 @@
 import React from "react";
 import { useRecoilState } from "recoil";
-
 import Circle from "./Circle";
 import { cvssScoresAtom } from "./CvssScoresAtom";
-
-import Card from "@mui/material/Card";
-import Chip from "@mui/material/Chip";
-import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
-import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
+import {
+  Card,
+  Chip,
+  Divider,
+  Grid,
+  MenuItem,
+  TextField,
+  Typography,
+  useTheme,
+  Box,
+} from "@mui/material";
 import TimerIcon from "@mui/icons-material/Timer";
-import { Typography } from "@mui/material";
-import useTheme from "@mui/material/styles/useTheme";
+
+const MetricSelect = ({ label, value, options, onChange }) => (
+  <Box display="flex" alignItems="center" sx={{ my: 2, mx: 4 }}>
+    <TextField
+      select
+      fullWidth
+      label={label}
+      value={value}
+      onChange={onChange}
+      InputProps={{
+        sx: {
+          borderRadius: "10px",
+          backgroundColor: useTheme().palette.background.paper,
+        },
+      }}
+    >
+      {options.map((option) => (
+        <MenuItem key={option.value} value={option.value}>
+          {option.label}
+        </MenuItem>
+      ))}
+    </TextField>
+  </Box>
+);
 
 export default function TemporalScore() {
   const theme = useTheme();
   const [cvssScores, setCvssScores] = useRecoilState(cvssScoresAtom);
 
+  const handleSelectChange = (key) => (e) => {
+    setCvssScores((prev) => ({
+      ...prev,
+      temporal: {
+        ...prev.temporal,
+        [key]: e.target.value,
+      },
+    }));
+  };
+
+  const temporalMetrics = [
+    {
+      key: "exploitCodeMaturity",
+      label: "Exploit Code Maturity (E)",
+      options: [
+        { value: "X", label: "Not defined" },
+        { value: "U", label: "Unproven that exploit exists" },
+        { value: "P", label: "Proof of concept code" },
+        { value: "F", label: "Functional exploit exists" },
+        { value: "H", label: "High" },
+      ],
+    },
+    {
+      key: "remediationLevel",
+      label: "Remediation Level (RL)",
+      options: [
+        { value: "X", label: "Not defined" },
+        { value: "O", label: "Official fix" },
+        { value: "T", label: "Temporary fix" },
+        { value: "W", label: "Workaround" },
+        { value: "U", label: "Unavailable" },
+      ],
+    },
+    {
+      key: "reportConfidence",
+      label: "Report Confidence (RC)",
+      options: [
+        { value: "X", label: "Not defined" },
+        { value: "U", label: "Unknown" },
+        { value: "R", label: "Reasonable" },
+        { value: "C", label: "Confirmed" },
+      ],
+    },
+  ];
+
+  const renderMetricSelect = (metrics) => {
+    return metrics.map((metric) => (
+      <Grid item xs={12} md={4} key={metric.key}>
+        <MetricSelect
+          label={metric.label}
+          value={cvssScores.temporal[metric.key]}
+          options={metric.options}
+          onChange={handleSelectChange(metric.key)}
+        />
+      </Grid>
+    ));
+  };
+
   return (
     <>
-      <br />
-      <br />
-      <Divider>
+      <Divider sx={{ mt: 4 }}>
         <Chip
           icon={<TimerIcon />}
           label="Temporal Score Metrics"
-          style={{ fontSize: "20px", padding: "10px", height: "40px" }}
+          sx={{
+            fontSize: "20px",
+            padding: "10px",
+            height: "40px",
+            backgroundColor: theme.palette.background.cvssCard,
+          }}
         />
       </Divider>
-      <br />
-      <Grid
-        direction="row"
-        container
-        spacing={2}
-        sx={{ alignItems: "stretch" }}
-      >
+      <Grid container spacing={2} sx={{ alignItems: "stretch", mt: 2 }}>
         <Card
           elevation={0}
           sx={{
@@ -47,13 +127,13 @@ export default function TemporalScore() {
             backgroundColor: theme.palette.background.cvssCard,
           }}
         >
-          <p>
+          <Typography variant="body1" paragraph>
             The Temporal metrics measure the current state of exploit techniques
             or code availability, the existence of any patches or workarounds,
             or the confidence that one has in the description of a
             vulnerability. Temporal metrics will almost certainly change over
             time.
-          </p>
+          </Typography>
         </Card>
         <Card
           elevation={0}
@@ -64,19 +144,25 @@ export default function TemporalScore() {
             borderRadius: 5,
             minWidth: 0,
             backgroundColor: theme.palette.background.cvssCard,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <div
-            style={{
-              width: "120px",
-              height: "120px",
+          <Box
+            sx={{
+              width: 120,
+              height: 120,
+              display: "flex",
               alignItems: "center",
+              justifyContent: "center",
               backgroundColor: theme.palette.background.cvssCircle,
               borderRadius: "50%",
             }}
           >
             <Circle value={cvssScores.temporal.temporalScore} />
-          </div>
+          </Box>
           <Typography
             variant="h6"
             fontWeight={
@@ -116,77 +202,7 @@ export default function TemporalScore() {
         }}
       >
         <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
-          <Grid item xs={true}>
-            <TextField
-              select
-              fullWidth
-              label="Exploit Code Maturity (E)"
-              value={cvssScores.temporal.exploitCodeMaturity}
-              onChange={(e) =>
-                setCvssScores((prevCvssScores) => ({
-                  ...prevCvssScores,
-                  temporal: {
-                    ...prevCvssScores.temporal,
-                    exploitCodeMaturity: e.target.value,
-                  },
-                }))
-              }
-              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
-            >
-              <MenuItem value="X">Not defined</MenuItem>
-              <MenuItem value="U">Unproven that exploit exists</MenuItem>
-              <MenuItem value="P">Proof of concept code</MenuItem>
-              <MenuItem value="F">Functional exploit exists</MenuItem>
-              <MenuItem value="H">High</MenuItem>
-            </TextField>
-          </Grid>
-          <Grid item xs={true}>
-            <TextField
-              select
-              fullWidth
-              label="Remediation Level (RL)"
-              value={cvssScores.temporal.remediationLevel}
-              onChange={(e) =>
-                setCvssScores((prevCvssScores) => ({
-                  ...prevCvssScores,
-                  temporal: {
-                    ...prevCvssScores.temporal,
-                    remediationLevel: e.target.value,
-                  },
-                }))
-              }
-              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
-            >
-              <MenuItem value="X">Not defined</MenuItem>
-              <MenuItem value="O">Official fix</MenuItem>
-              <MenuItem value="T">Temporary fix</MenuItem>
-              <MenuItem value="W">Workaround</MenuItem>
-              <MenuItem value="U">Unavailable</MenuItem>
-            </TextField>
-          </Grid>
-          <Grid item xs={true}>
-            <TextField
-              select
-              fullWidth
-              label="Report Confidence (RC)"
-              value={cvssScores.temporal.reportConfidence}
-              onChange={(e) =>
-                setCvssScores((prevCvssScores) => ({
-                  ...prevCvssScores,
-                  temporal: {
-                    ...prevCvssScores.temporal,
-                    reportConfidence: e.target.value,
-                  },
-                }))
-              }
-              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
-            >
-              <MenuItem value="X">Not defined</MenuItem>
-              <MenuItem value="U">Unknown</MenuItem>
-              <MenuItem value="R">Reasonable</MenuItem>
-              <MenuItem value="C">Confirmed</MenuItem>
-            </TextField>
-          </Grid>
+          {renderMetricSelect(temporalMetrics)}
         </Grid>
       </Card>
     </>

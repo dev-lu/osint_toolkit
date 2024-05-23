@@ -1,58 +1,232 @@
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
-
 import { cvssScoresAtom } from "./CvssScoresAtom";
 import Circle from "./Circle";
-
-import BarChartIcon from "@mui/icons-material/BarChart";
-import Card from "@mui/material/Card";
-import Chip from "@mui/material/Chip";
-import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
-import IconButton from "@mui/material/IconButton";
-import InfoIcon from "@mui/icons-material/Info";
+import {
+  BarChart as BarChartIcon,
+  Info as InfoIcon,
+} from "@mui/icons-material";
+import {
+  Box,
+  Card,
+  Chip,
+  Divider,
+  Grid,
+  IconButton,
+  MenuItem,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import InfoModal from "./InfoModal";
-import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
-import { Typography } from "@mui/material";
-import useTheme from "@mui/material/styles/useTheme";
+
+const MetricSelect = ({ label, value, options, onChange, onInfoClick }) => (
+  <Box display="flex" alignItems="center" sx={{ my: 2, mx: 4 }}>
+    <TextField
+      select
+      fullWidth
+      label={label}
+      value={value}
+      onChange={onChange}
+      InputProps={{
+        sx: {
+          borderRadius: "10px",
+        },
+      }}
+    >
+      {options.map((option) => (
+        <MenuItem key={option.value} value={option.value}>
+          {option.label}
+        </MenuItem>
+      ))}
+    </TextField>
+    <IconButton onClick={onInfoClick}>
+      <InfoIcon />
+    </IconButton>
+  </Box>
+);
 
 export default function BaseScore() {
   const theme = useTheme();
   const [cvssScores, setCvssScores] = useRecoilState(cvssScoresAtom);
   const [openModal, setOpenModal] = useState(false);
-  const [modalTitle, setModalTitle] = useState(null);
-  const [modalText, setModalText] = useState(null);
+  const [modalContent, setModalContent] = useState({ title: "", text: "" });
 
   const handleOpenModal = (title, text) => {
-    setModalTitle(title);
-    setModalText(text);
+    setModalContent({ title, text });
     setOpenModal(true);
   };
 
   const handleCloseModal = () => {
-    setModalTitle(null);
-    setModalText(null);
     setOpenModal(false);
   };
 
+  const handleSelectChange = (key) => (e) => {
+    setCvssScores((prev) => ({
+      ...prev,
+      base: {
+        ...prev.base,
+        [key]: e.target.value,
+      },
+    }));
+  };
+
+  const renderCard = (title, score, metrics) => (
+    <Grid item xs={6}>
+      <Typography variant="h6" align="center">
+        {title} (Score: {Math.round(score * 10) / 10})
+      </Typography>
+      {metrics.map((metric) => (
+        <MetricSelect
+          key={metric.key}
+          label={metric.label}
+          value={cvssScores.base[metric.key]}
+          options={metric.options}
+          onChange={handleSelectChange(metric.key)}
+          onInfoClick={() => handleOpenModal(metric.label, metric.info)}
+        />
+      ))}
+    </Grid>
+  );
+
+  const exploitabilityMetrics = [
+    {
+      key: "attackVector",
+      label: "Attack Vector (AV)",
+      options: [
+        { value: "N", label: "Network" },
+        { value: "A", label: "Adjacent Network" },
+        { value: "L", label: "Local" },
+        { value: "P", label: "Physical" },
+      ],
+      info: "The Attack Vector (AV) metric measures the context by which a vulnerability is exploited. The more remote the attack, the higher the value of AV. The AV metric is based on the assumption that an attacker who can exploit the vulnerability must be able to reach the vulnerable component.",
+    },
+    {
+      key: "attackComplexity",
+      label: "Attack Complexity (AC)",
+      options: [
+        { value: "L", label: "Low" },
+        { value: "H", label: "High" },
+      ],
+      info: "This metric describes the conditions beyond the attacker’s control that must exist in order to exploit the vulnerability. The Base Score is greatest for the least complex attacks.",
+    },
+    {
+      key: "privilegesRequired",
+      label: "Privileges Required (PR)",
+      options: [
+        { value: "N", label: "None" },
+        { value: "L", label: "Low" },
+        { value: "H", label: "High" },
+      ],
+      info: "This metric describes the level of privileges an attacker must possess before successfully exploiting the vulnerability. The Base Score is greatest if no privileges are required.",
+    },
+    {
+      key: "userInteraction",
+      label: "User Interaction (UI)",
+      options: [
+        { value: "N", label: "None" },
+        { value: "R", label: "Required" },
+      ],
+      info: "This metric captures the requirement for a human user, other than the attacker, to participate in the successful compromise of the vulnerable component. The Base Score is greatest when no user interaction is required.",
+    },
+  ];
+
+  const impactMetrics = [
+    {
+      key: "confidentialityImpact",
+      label: "Confidentiality Impact (C)",
+      options: [
+        { value: "N", label: "None" },
+        { value: "L", label: "Low" },
+        { value: "H", label: "High" },
+      ],
+      info: "This metric measures the impact to the confidentiality of the information resources managed by a software component due to a successfully exploited vulnerability. The Base Score is greatest when the loss to the impacted component is highest.",
+    },
+    {
+      key: "integrityImpact",
+      label: "Integrity Impact (I)",
+      options: [
+        { value: "N", label: "None" },
+        { value: "L", label: "Low" },
+        { value: "H", label: "High" },
+      ],
+      info: "This metric measures the impact to integrity of a successfully exploited vulnerability. The Base Score is greatest when the consequence to the impacted component is highest.",
+    },
+    {
+      key: "availabilityImpact",
+      label: "Availability Impact (A)",
+      options: [
+        { value: "N", label: "None" },
+        { value: "L", label: "Low" },
+        { value: "H", label: "High" },
+      ],
+      info: "This metric measures the impact to the availability of the impacted component resulting from a successfully exploited vulnerability. The Base Score is greatest when the consequence to the impacted component is highest.",
+    },
+  ];
+
+  const renderScoreCard = (title, score, label) => (
+    <Card
+      elevation={0}
+      sx={{
+        mb: 2,
+        mt: 2,
+        p: 2,
+        borderRadius: 5,
+        minWidth: 0,
+        backgroundColor: theme.palette.background.cvssCard,
+      }}
+    >
+      <Box
+        sx={{
+          width: 120,
+          height: 120,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: theme.palette.background.cvssCircle,
+          borderRadius: "50%",
+          mx: "auto",
+        }}
+      >
+        <Circle value={score} />
+      </Box>
+      <Typography
+        variant="h6"
+        fontWeight={score >= 9.0 ? "bold" : "normal"}
+        color={
+          score >= 7.0
+            ? "red"
+            : score >= 4.0
+            ? "orange"
+            : score === 0
+            ? "green"
+            : "low"
+        }
+        align="center"
+        gutterBottom
+        sx={{ display: "block", marginBottom: 1 }}
+      >
+        {label}
+      </Typography>
+    </Card>
+  );
+
   return (
     <>
-      <br />
-      <Divider>
+      <Divider sx={{ mt: 1, mb: 4 }}>
         <Chip
           icon={<BarChartIcon />}
           label="Base Score Metrics (required)"
-          style={{ fontSize: "20px", padding: "10px", height: "40px" }}
+          style={{
+            fontSize: "20px",
+            padding: "10px",
+            height: "40px",
+            backgroundColor: theme.palette.background.cvssCard,
+          }}
         />
       </Divider>
-      <br />
-      <Grid
-        direction="row"
-        container
-        spacing={2}
-        sx={{ alignItems: "stretch" }}
-      >
+
+      <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
         <Card
           elevation={0}
           sx={{
@@ -64,7 +238,7 @@ export default function BaseScore() {
             backgroundColor: theme.palette.background.cvssCard,
           }}
         >
-          <p>
+          <Typography variant="body1">
             The Base metric group represents the intrinsic characteristics of a
             vulnerability that are constant over time and across user
             environments. It is composed of two sets of metrics: the
@@ -76,56 +250,21 @@ export default function BaseScore() {
             metrics reflect the direct consequence of a successful exploit, and
             represent the consequence to the thing that suffers the impact,
             which we refer to formally as the impacted component.
-          </p>
-        </Card>
-        <Card
-          elevation={0}
-          sx={{
-            mb: 2,
-            mt: 2,
-            p: 2,
-            borderRadius: 5,
-            minWidth: 0,
-            backgroundColor: theme.palette.background.cvssCard,
-          }}
-        >
-          {" "}
-          <div
-            style={{
-              width: "120px",
-              height: "120px",
-              alignItems: "center",
-              backgroundColor: theme.palette.background.cvssCircle,
-              borderRadius: "50%",
-            }}
-          >
-            <Circle value={cvssScores.base.baseScore} />
-          </div>
-          <Typography
-            variant="h6"
-            fontWeight={cvssScores.base.baseScore >= 9.0 ? "bold" : "normal"}
-            color={
-              cvssScores.base.baseScore >= 7.0
-                ? "red"
-                : cvssScores.base.baseScore >= 4.0
-                ? "orange"
-                : "green"
-            }
-            align="center"
-            gutterBottom
-            sx={{ display: "block", marginBottom: 1 }}
-          >
-            {cvssScores.base.baseScore >= 9.0
-              ? "Critical"
-              : cvssScores.base.baseScore >= 7.0
-              ? "High"
-              : cvssScores.base.baseScore >= 4.0
-              ? "Medium"
-              : cvssScores.base.baseScore === 0
-              ? "None"
-              : "Low"}
           </Typography>
         </Card>
+        {renderScoreCard(
+          "Base Score",
+          cvssScores.base.baseScore,
+          cvssScores.base.baseScore >= 9.0
+            ? "Critical"
+            : cvssScores.base.baseScore >= 7.0
+            ? "High"
+            : cvssScores.base.baseScore >= 4.0
+            ? "Medium"
+            : cvssScores.base.baseScore === 0
+            ? "None"
+            : "Low"
+        )}
       </Grid>
 
       <Card
@@ -138,310 +277,41 @@ export default function BaseScore() {
         }}
       >
         <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <Typography variant="h6" align="center">
-              Exploitability Metrics (Score:{" "}
-              {Math.round(cvssScores.base.exploitabilityScore * 10) / 10})
-            </Typography>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <TextField
-                select
-                fullWidth
-                label="Attack Vector (AV)"
-                value={cvssScores.base.attackVector}
-                onChange={(e) =>
-                  setCvssScores((prevCvssScores) => ({
-                    ...prevCvssScores,
-                    base: {
-                      ...prevCvssScores.base,
-                      attackVector: e.target.value,
-                    },
-                  }))
-                }
-                sx={{
-                  m: 1,
-                  backgroundColor: theme.palette.background.tablecell,
-                }}
-              >
-                <MenuItem value="N">Network</MenuItem>
-                <MenuItem value="A">Adjacent Network</MenuItem>
-                <MenuItem value="L">Local</MenuItem>
-                <MenuItem value="P">Physical</MenuItem>
-              </TextField>
-              <IconButton
-                onClick={() =>
-                  handleOpenModal(
-                    "Attack Vector (AV)",
-                    "The Attack Vector (AV) metric measures the context by which a vulnerability is exploited. The more remote the attack, the higher the value of AV. The AV metric is based on the assumption that an attacker who can exploit the vulnerability must be able to reach the vulnerable component."
-                  )
-                }
-              >
-                <InfoIcon />
-              </IconButton>
-            </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <TextField
-                select
-                fullWidth
-                label="Attack Complexity (AC)"
-                value={cvssScores.base.attackComplexity}
-                onChange={(e) =>
-                  setCvssScores((prevCvssScores) => ({
-                    ...prevCvssScores,
-                    base: {
-                      ...prevCvssScores.base,
-                      attackComplexity: e.target.value,
-                    },
-                  }))
-                }
-                sx={{
-                  m: 1,
-                  backgroundColor: theme.palette.background.tablecell,
-                }}
-              >
-                <MenuItem value="L">Low</MenuItem>
-                <MenuItem value="H">High</MenuItem>
-              </TextField>
-              <IconButton
-                onClick={() =>
-                  handleOpenModal(
-                    "Attack Complexity (AC)",
-                    "This metric describes the conditions beyond the attacker’s control that must exist in order to exploit the vulnerability. As described below, such conditions may require the collection of more information about the target, or computational exceptions. Importantly, the assessment of this metric excludes any requirements for user interaction in order to exploit the vulnerability (such conditions are captured in the User Interaction metric). If a specific configuration is required for an attack to succeed, the Base metrics should be scored assuming the vulnerable component is in that configuration. The Base Score is greatest for the least complex attacks."
-                  )
-                }
-              >
-                <InfoIcon />
-              </IconButton>
-            </div>
-
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <TextField
-                select
-                fullWidth
-                label="Privileges Required (PR)"
-                value={cvssScores.base.privilegesRequired}
-                onChange={(e) =>
-                  setCvssScores((prevCvssScores) => ({
-                    ...prevCvssScores,
-                    base: {
-                      ...prevCvssScores.base,
-                      privilegesRequired: e.target.value,
-                    },
-                  }))
-                }
-                sx={{
-                  m: 1,
-                  backgroundColor: theme.palette.background.tablecell,
-                }}
-              >
-                <MenuItem value="N">None</MenuItem>
-                <MenuItem value="L">Low</MenuItem>
-                <MenuItem value="H">High</MenuItem>
-              </TextField>
-              <IconButton
-                onClick={() =>
-                  handleOpenModal(
-                    "Privileges Required (PR)",
-                    "This metric describes the level of privileges an attacker must possess before successfully exploiting the vulnerability. The Base Score is greatest if no privileges are required."
-                  )
-                }
-              >
-                <InfoIcon />
-              </IconButton>
-            </div>
-
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <TextField
-                select
-                fullWidth
-                label="User Interaction (UI)"
-                value={cvssScores.base.userInteraction}
-                onChange={(e) =>
-                  setCvssScores((prevCvssScores) => ({
-                    ...prevCvssScores,
-                    base: {
-                      ...prevCvssScores.base,
-                      userInteraction: e.target.value,
-                    },
-                  }))
-                }
-                sx={{
-                  m: 1,
-                  backgroundColor: theme.palette.background.tablecell,
-                }}
-              >
-                <MenuItem value="N">None</MenuItem>
-                <MenuItem value="R">Required</MenuItem>
-              </TextField>
-              <IconButton
-                onClick={() =>
-                  handleOpenModal(
-                    "User Interaction (UI)",
-                    "This metric captures the requirement for a human user, other than the attacker, to participate in the successful compromise of the vulnerable component. This metric determines whether the vulnerability can be exploited solely at the will of the attacker, or whether a separate user (or user-initiated process) must participate in some manner. The Base Score is greatest when no user interaction is required."
-                  )
-                }
-              >
-                <InfoIcon />
-              </IconButton>
-            </div>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography variant="h6" align="center">
-              Impact Metrics (Score:{" "}
-              {Math.round(cvssScores.base.impactScore * 10) / 10})
-            </Typography>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <TextField
-                select
-                fullWidth
-                label="Confidentiality Impact (C)"
-                value={cvssScores.base.confidentialityImpact}
-                onChange={(e) =>
-                  setCvssScores((prevCvssScores) => ({
-                    ...prevCvssScores,
-                    base: {
-                      ...prevCvssScores.base,
-                      confidentialityImpact: e.target.value,
-                    },
-                  }))
-                }
-                sx={{
-                  m: 1,
-                  backgroundColor: theme.palette.background.tablecell,
-                }}
-              >
-                <MenuItem value="N">None</MenuItem>
-                <MenuItem value="L">Low</MenuItem>
-                <MenuItem value="H">High</MenuItem>
-              </TextField>
-              <IconButton
-                onClick={() =>
-                  handleOpenModal(
-                    "Confidentiality Impact (C)",
-                    "This metric measures the impact to the confidentiality of the information resources managed by a software component due to a successfully exploited vulnerability. Confidentiality refers to limiting information access and disclosure to only authorized users, as well as preventing access by, or disclosure to, unauthorized ones. The Base Score is greatest when the loss to the impacted component is highest."
-                  )
-                }
-              >
-                <InfoIcon />
-              </IconButton>
-            </div>
-
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <TextField
-                select
-                fullWidth
-                label="Integrity Impact (I)"
-                value={cvssScores.base.integrityImpact}
-                onChange={(e) =>
-                  setCvssScores((prevCvssScores) => ({
-                    ...prevCvssScores,
-                    base: {
-                      ...prevCvssScores.base,
-                      integrityImpact: e.target.value,
-                    },
-                  }))
-                }
-                sx={{
-                  m: 1,
-                  backgroundColor: theme.palette.background.tablecell,
-                }}
-              >
-                <MenuItem value="N">None</MenuItem>
-                <MenuItem value="L">Low</MenuItem>
-                <MenuItem value="H">High</MenuItem>
-              </TextField>
-              <IconButton
-                onClick={() =>
-                  handleOpenModal(
-                    "Integrity Impact (I)",
-                    "This metric measures the impact to integrity of a successfully exploited vulnerability. Integrity refers to the trustworthiness and veracity of information. The Base Score is greatest when the consequence to the impacted component is highest."
-                  )
-                }
-              >
-                <InfoIcon />
-              </IconButton>
-            </div>
-
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <TextField
-                select
-                fullWidth
-                label="Availability Impact (A)"
-                value={cvssScores.base.availabilityImpact}
-                onChange={(e) =>
-                  setCvssScores((prevCvssScores) => ({
-                    ...prevCvssScores,
-                    base: {
-                      ...prevCvssScores.base,
-                      availabilityImpact: e.target.value,
-                    },
-                  }))
-                }
-                sx={{
-                  m: 1,
-                  backgroundColor: theme.palette.background.tablecell,
-                }}
-              >
-                <MenuItem value="N">None</MenuItem>
-                <MenuItem value="L">Low</MenuItem>
-                <MenuItem value="H">High</MenuItem>
-              </TextField>
-              <IconButton
-                onClick={() =>
-                  handleOpenModal(
-                    "Availability Impact (A)",
-                    "This metric measures the impact to the availability of the impacted component resulting from a successfully exploited vulnerability. While the Confidentiality and Integrity impact metrics apply to the loss of confidentiality or integrity of data (e.g., information, files) used by the impacted component, this metric refers to the loss of availability of the impacted component itself, such as a networked service (e.g., web, database, email). Since availability refers to the accessibility of information resources, attacks that consume network bandwidth, processor cycles, or disk space all impact the availability of an impacted component. The Base Score is greatest when the consequence to the impacted component is highest."
-                  )
-                }
-              >
-                <InfoIcon />
-              </IconButton>
-            </div>
-          </Grid>
-          <div style={{ margin: "auto", width: "40%" }}>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <TextField
-                select
-                fullWidth
-                label="Scope (S)"
-                value={cvssScores.base.scope}
-                onChange={(e) =>
-                  setCvssScores((prevCvssScores) => ({
-                    ...prevCvssScores,
-                    base: {
-                      ...prevCvssScores.base,
-                      scope: e.target.value,
-                    },
-                  }))
-                }
-                sx={{
-                  m: 1,
-                  backgroundColor: theme.palette.background.tablecell,
-                }}
-              >
-                <MenuItem value="U">Unchanged</MenuItem>
-                <MenuItem value="C">Changed</MenuItem>
-              </TextField>
-              <IconButton
-                onClick={() =>
-                  handleOpenModal(
-                    "Scope (S)",
-                    "The Scope metric captures whether a vulnerability in one vulnerable component impacts resources in components beyond its security scope. Formally, a security authority is a mechanism (e.g., an application, an operating system, firmware, a sandbox environment) that defines and enforces access control in terms of how certain subjects/actors (e.g., human users, processes) can access certain restricted objects/resources (e.g., files, CPU, memory) in a controlled manner. All the subjects and objects under the jurisdiction of a single security authority are considered to be under one security scope. If a vulnerability in a vulnerable component can affect a component which is in a different security scope than the vulnerable component, a Scope change occurs. Intuitively, whenever the impact of a vulnerability breaches a security/trust boundary and impacts components outside the security scope in which vulnerable component resides, a Scope change occurs. The security scope of a component encompasses other components that provide functionality solely to that component, even if these other components have their own security authority. For example, a database used solely by one application is considered part of that application’s security scope even if the database has its own security authority, e.g., a mechanism controlling access to database records based on database users and associated database privileges. The Base Score is greatest when a scope change occurs."
-                  )
-                }
-              >
-                <InfoIcon />
-              </IconButton>
-            </div>
-          </div>
+          {renderCard(
+            "Exploitability Metrics",
+            cvssScores.base.exploitabilityScore,
+            exploitabilityMetrics
+          )}
+          {renderCard(
+            "Impact Metrics",
+            cvssScores.base.impactScore,
+            impactMetrics
+          )}
+          <Box sx={{ mx: "auto", width: "40%" }}>
+            <MetricSelect
+              label="Scope (S)"
+              value={cvssScores.base.scope}
+              options={[
+                { value: "U", label: "Unchanged" },
+                { value: "C", label: "Changed" },
+              ]}
+              onChange={handleSelectChange("scope")}
+              onInfoClick={() =>
+                handleOpenModal(
+                  "Scope (S)",
+                  "The Scope metric captures whether a vulnerability in one vulnerable component impacts resources in components beyond its security scope. The Base Score is greatest when a scope change occurs."
+                )
+              }
+            />
+          </Box>
         </Grid>
       </Card>
       {openModal && (
         <InfoModal
           open={openModal}
           onClose={handleCloseModal}
-          title={modalTitle}
-          text={modalText}
+          title={modalContent.title}
+          text={modalContent.text}
         />
       )}
     </>

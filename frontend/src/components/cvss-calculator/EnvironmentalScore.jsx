@@ -1,41 +1,205 @@
 import React from "react";
 import { useRecoilState } from "recoil";
-
 import Circle from "./Circle";
 import { cvssScoresAtom } from "./CvssScoresAtom";
-
-import Card from "@mui/material/Card";
-import Chip from "@mui/material/Chip";
-import Divider from "@mui/material/Divider";
+import {
+  Card,
+  Chip,
+  Divider,
+  Grid,
+  MenuItem,
+  TextField,
+  Typography,
+  useTheme,
+  Box,
+} from "@mui/material";
 import ForestIcon from "@mui/icons-material/Forest";
-import Grid from "@mui/material/Grid";
-import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
-import { Typography } from "@mui/material";
-import useTheme from "@mui/material/styles/useTheme";
+
+const MetricSelect = ({ label, value, options, onChange }) => (
+  <Box display="flex" alignItems="center" sx={{ my: 2, mx: 4 }}>
+    <TextField
+      select
+      fullWidth
+      label={label}
+      value={value}
+      onChange={onChange}
+      InputProps={{
+        sx: {
+          borderRadius: "10px",
+        },
+      }}
+    >
+      {options.map((option) => (
+        <MenuItem key={option.value} value={option.value}>
+          {option.label}
+        </MenuItem>
+      ))}
+    </TextField>
+  </Box>
+);
 
 export default function EnvironmentalScore() {
   const theme = useTheme();
   const [cvssScores, setCvssScores] = useRecoilState(cvssScoresAtom);
 
+  const handleSelectChange = (key) => (e) => {
+    setCvssScores((prev) => ({
+      ...prev,
+      environmental: {
+        ...prev.environmental,
+        [key]: e.target.value,
+      },
+    }));
+  };
+
+  const renderMetricSelect = (metrics) => {
+    return metrics.map((metric) => (
+      <MetricSelect
+        key={metric.key}
+        label={metric.label}
+        value={cvssScores.environmental[metric.key]}
+        options={metric.options}
+        onChange={handleSelectChange(metric.key)}
+      />
+    ));
+  };
+
+  const exploitabilityMetrics = [
+    {
+      key: "modifiedAttackVector",
+      label: "Attack Vector (MAV)",
+      options: [
+        { value: "X", label: "Not defined" },
+        { value: "N", label: "Network" },
+        { value: "A", label: "Adjacent Network" },
+        { value: "L", label: "Local" },
+        { value: "P", label: "Physical" },
+      ],
+    },
+    {
+      key: "modifiedAttackComplexity",
+      label: "Attack Complexity (MAC)",
+      options: [
+        { value: "X", label: "Not defined" },
+        { value: "L", label: "Low" },
+        { value: "H", label: "High" },
+      ],
+    },
+    {
+      key: "modifiedPrivilegesRequired",
+      label: "Privileges Required (MPR)",
+      options: [
+        { value: "X", label: "Not defined" },
+        { value: "N", label: "None" },
+        { value: "L", label: "Low" },
+        { value: "H", label: "High" },
+      ],
+    },
+    {
+      key: "modifiedUserInteraction",
+      label: "User Interaction (MUI)",
+      options: [
+        { value: "X", label: "Not defined" },
+        { value: "N", label: "None" },
+        { value: "R", label: "Required" },
+      ],
+    },
+    {
+      key: "modifiedScope",
+      label: "Scope (MS)",
+      options: [
+        { value: "X", label: "Not defined" },
+        { value: "U", label: "Unchanged" },
+        { value: "C", label: "Changed" },
+      ],
+    },
+  ];
+
+  const impactMetrics = [
+    {
+      key: "modifiedConfidentialityImpact",
+      label: "Confidentiality Impact (MC)",
+      options: [
+        { value: "X", label: "Not defined" },
+        { value: "N", label: "None" },
+        { value: "L", label: "Low" },
+        { value: "H", label: "High" },
+      ],
+    },
+    {
+      key: "modifiedIntegrityImpact",
+      label: "Integrity Impact (MI)",
+      options: [
+        { value: "X", label: "Not defined" },
+        { value: "N", label: "None" },
+        { value: "L", label: "Low" },
+        { value: "H", label: "High" },
+      ],
+    },
+    {
+      key: "modifiedAvailabilityImpact",
+      label: "Availability Impact (MA)",
+      options: [
+        { value: "X", label: "Not defined" },
+        { value: "N", label: "None" },
+        { value: "L", label: "Low" },
+        { value: "H", label: "High" },
+      ],
+    },
+  ];
+
+  const impactSubscoreModifiers = [
+    {
+      key: "confidentialityRequirement",
+      label: "Confidentiality Requirement (CR)",
+      options: [
+        { value: "X", label: "Not defined" },
+        { value: "L", label: "Low" },
+        { value: "M", label: "Medium" },
+        { value: "H", label: "High" },
+      ],
+    },
+    {
+      key: "integrityRequirement",
+      label: "Integrity Requirement (IR)",
+      options: [
+        { value: "X", label: "Not defined" },
+        { value: "L", label: "Low" },
+        { value: "M", label: "Medium" },
+        { value: "H", label: "High" },
+      ],
+    },
+    {
+      key: "availabilityRequirement",
+      label: "Availability Requirement (AR)",
+      options: [
+        { value: "X", label: "Not defined" },
+        { value: "L", label: "Low" },
+        { value: "M", label: "Medium" },
+        { value: "H", label: "High" },
+      ],
+    },
+  ];
+
   return (
     <>
       <Grid item xs={12}>
-        <br />
-        <br />
-        <Divider>
+        <Divider sx={{ mt: 4 }}>
           <Chip
             icon={<ForestIcon />}
             label="Environmental Score Metrics"
-            style={{ fontSize: "20px", padding: "10px", height: "40px" }}
+            sx={{
+              fontSize: "20px",
+              padding: "10px",
+              height: "40px",
+              backgroundColor: theme.palette.background.cvssCard,
+            }}
           />
         </Divider>
-        <br />
         <Grid
-          direction="row"
           container
           spacing={2}
-          sx={{ alignItems: "stretch" }}
+          sx={{ alignItems: "stretch", marginTop: 2 }}
         >
           <Card
             elevation={0}
@@ -48,7 +212,7 @@ export default function EnvironmentalScore() {
               backgroundColor: theme.palette.background.cvssCard,
             }}
           >
-            <p>
+            <Typography variant="body1" paragraph>
               These metrics enable the analyst to customize the CVSS score
               depending on the importance of the affected IT asset to a user's
               organization, measured in terms of complementary/alternative
@@ -56,7 +220,7 @@ export default function EnvironmentalScore() {
               Availability. The metrics are the modified equivalent of base
               metrics and are assigned metrics value based on the component
               placement in organization infrastructure.
-            </p>
+            </Typography>
           </Card>
           <Card
             elevation={0}
@@ -67,19 +231,25 @@ export default function EnvironmentalScore() {
               borderRadius: 5,
               minWidth: 0,
               backgroundColor: theme.palette.background.cvssCard,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <div
-              style={{
-                width: "120px",
-                height: "120px",
+            <Box
+              sx={{
+                width: 120,
+                height: 120,
+                display: "flex",
                 alignItems: "center",
+                justifyContent: "center",
                 backgroundColor: theme.palette.background.cvssCircle,
                 borderRadius: "50%",
               }}
             >
               <Circle value={cvssScores.environmental.environmentalScore} />
-            </div>
+            </Box>
             <Typography
               variant="h6"
               fontWeight={
@@ -122,251 +292,25 @@ export default function EnvironmentalScore() {
         }}
       >
         <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
-          <Grid item xs={true}>
-            <Typography variant="h6" align="center">
+          <Grid item xs={12} md={4}>
+            <Typography variant="h6" align="center" gutterBottom>
               Exploitability Metrics
             </Typography>
-            <TextField
-              select
-              fullWidth
-              label="Attack Vector (MAV)"
-              value={cvssScores.environmental.modifiedAttackVector}
-              onChange={(e) =>
-                setCvssScores((prevCvssScores) => ({
-                  ...prevCvssScores,
-                  environmental: {
-                    ...prevCvssScores.environmental,
-                    modifiedAttackVector: e.target.value,
-                  },
-                }))
-              }
-              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
-            >
-              <MenuItem value="X">Not defined</MenuItem>
-              <MenuItem value="N">Network</MenuItem>
-              <MenuItem value="A">Adjacent network</MenuItem>
-              <MenuItem value="L">Local</MenuItem>
-              <MenuItem value="P">Physical</MenuItem>
-            </TextField>
-            <TextField
-              select
-              fullWidth
-              label="Attack Complexity (MAC)"
-              value={cvssScores.environmental.modifiedAttackComplexity}
-              onChange={(e) =>
-                setCvssScores((prevCvssScores) => ({
-                  ...prevCvssScores,
-                  environmental: {
-                    ...prevCvssScores.environmental,
-                    modifiedAttackComplexity: e.target.value,
-                  },
-                }))
-              }
-              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
-            >
-              <MenuItem value="X">Not defined</MenuItem>
-              <MenuItem value="L">Low</MenuItem>
-              <MenuItem value="H">High</MenuItem>
-            </TextField>
-            <TextField
-              select
-              fullWidth
-              label="Privileges Required (MPR)"
-              value={cvssScores.environmental.modifiedPrivilegesRequired}
-              onChange={(e) =>
-                setCvssScores((prevCvssScores) => ({
-                  ...prevCvssScores,
-                  environmental: {
-                    ...prevCvssScores.environmental,
-                    modifiedPrivilegesRequired: e.target.value,
-                  },
-                }))
-              }
-              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
-            >
-              <MenuItem value="X">Not defined</MenuItem>
-              <MenuItem value="N">None</MenuItem>
-              <MenuItem value="L">Low</MenuItem>
-              <MenuItem value="H">High</MenuItem>
-            </TextField>
-            <TextField
-              select
-              fullWidth
-              label="User Interaction (MUI)"
-              value={cvssScores.environmental.modifiedUserInteraction}
-              onChange={(e) =>
-                setCvssScores((prevCvssScores) => ({
-                  ...prevCvssScores,
-                  environmental: {
-                    ...prevCvssScores.environmental,
-                    modifiedUserInteraction: e.target.value,
-                  },
-                }))
-              }
-              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
-            >
-              <MenuItem value="X">Not defined</MenuItem>
-              <MenuItem value="N">None</MenuItem>
-              <MenuItem value="R">Required</MenuItem>
-            </TextField>
-            <TextField
-              select
-              fullWidth
-              label="Scope (MS)"
-              value={cvssScores.environmental.modifiedScope}
-              onChange={(e) =>
-                setCvssScores((prevCvssScores) => ({
-                  ...prevCvssScores,
-                  environmental: {
-                    ...prevCvssScores.environmental,
-                    modifiedScope: e.target.value,
-                  },
-                }))
-              }
-              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
-            >
-              <MenuItem value="X">Not defined</MenuItem>
-              <MenuItem value="U">Unchanged</MenuItem>
-              <MenuItem value="C">Changed</MenuItem>
-            </TextField>
+            {renderMetricSelect(exploitabilityMetrics)}
           </Grid>
 
-          <Grid item xs={true}>
-            <Typography variant="h6" align="center">
+          <Grid item xs={12} md={4}>
+            <Typography variant="h6" align="center" gutterBottom>
               Impact Metrics
             </Typography>
-            <TextField
-              select
-              fullWidth
-              label="Confidentiality Impact (MC)"
-              value={cvssScores.environmental.modifiedConfidentialityImpact}
-              onChange={(e) =>
-                setCvssScores((prevCvssScores) => ({
-                  ...prevCvssScores,
-                  environmental: {
-                    ...prevCvssScores.environmental,
-                    modifiedConfidentialityImpact: e.target.value,
-                  },
-                }))
-              }
-              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
-            >
-              <MenuItem value="X">Not defined</MenuItem>
-              <MenuItem value="N">None</MenuItem>
-              <MenuItem value="L">Low</MenuItem>
-              <MenuItem value="H">High</MenuItem>
-            </TextField>
-            <TextField
-              select
-              fullWidth
-              label="Integrity Impact (MI)"
-              value={cvssScores.environmental.modifiedIntegrityImpact}
-              onChange={(e) =>
-                setCvssScores((prevCvssScores) => ({
-                  ...prevCvssScores,
-                  environmental: {
-                    ...prevCvssScores.environmental,
-                    modifiedIntegrityImpact: e.target.value,
-                  },
-                }))
-              }
-              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
-            >
-              <MenuItem value="X">Not defined</MenuItem>
-              <MenuItem value="N">None</MenuItem>
-              <MenuItem value="L">Low</MenuItem>
-              <MenuItem value="H">High</MenuItem>
-            </TextField>
-            <TextField
-              select
-              fullWidth
-              label="Availability Impact (MA)"
-              value={cvssScores.environmental.modifiedAvailabilityImpact}
-              onChange={(e) =>
-                setCvssScores((prevCvssScores) => ({
-                  ...prevCvssScores,
-                  environmental: {
-                    ...prevCvssScores.environmental,
-                    modifiedAvailabilityImpact: e.target.value,
-                  },
-                }))
-              }
-              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
-            >
-              <MenuItem value="X">Not defined</MenuItem>
-              <MenuItem value="N">None</MenuItem>
-              <MenuItem value="L">Low</MenuItem>
-              <MenuItem value="H">High</MenuItem>
-            </TextField>
+            {renderMetricSelect(impactMetrics)}
           </Grid>
 
-          <Grid item xs={true}>
-            <Typography variant="h6" align="center">
+          <Grid item xs={12} md={4}>
+            <Typography variant="h6" align="center" gutterBottom>
               Impact Subscore Modifiers
             </Typography>
-            <TextField
-              select
-              fullWidth
-              label="Confidentiality Requirement (CR)"
-              value={cvssScores.environmental.confidentialityRequirement}
-              onChange={(e) =>
-                setCvssScores((prevCvssScores) => ({
-                  ...prevCvssScores,
-                  environmental: {
-                    ...prevCvssScores.environmental,
-                    confidentialityRequirement: e.target.value,
-                  },
-                }))
-              }
-              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
-            >
-              <MenuItem value="X">Not defined</MenuItem>
-              <MenuItem value="L">Low</MenuItem>
-              <MenuItem value="M">Medium</MenuItem>
-              <MenuItem value="H">High</MenuItem>
-            </TextField>
-            <TextField
-              select
-              fullWidth
-              label="Integrity Requirement (IR)"
-              value={cvssScores.environmental.integrityRequirement}
-              onChange={(e) =>
-                setCvssScores((prevCvssScores) => ({
-                  ...prevCvssScores,
-                  environmental: {
-                    ...prevCvssScores.environmental,
-                    integrityRequirement: e.target.value,
-                  },
-                }))
-              }
-              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
-            >
-              <MenuItem value="X">Not defined</MenuItem>
-              <MenuItem value="L">Low</MenuItem>
-              <MenuItem value="M">Medium</MenuItem>
-              <MenuItem value="H">High</MenuItem>
-            </TextField>
-            <TextField
-              select
-              fullWidth
-              label="Availability Requirement (AR)"
-              value={cvssScores.environmental.availabilityRequirement}
-              onChange={(e) =>
-                setCvssScores((prevCvssScores) => ({
-                  ...prevCvssScores,
-                  environmental: {
-                    ...prevCvssScores.environmental,
-                    availabilityRequirement: e.target.value,
-                  },
-                }))
-              }
-              sx={{ m: 1, backgroundColor: theme.palette.background.tablecell }}
-            >
-              <MenuItem value="X">Not defined</MenuItem>
-              <MenuItem value="L">Low</MenuItem>
-              <MenuItem value="M">Medium</MenuItem>
-              <MenuItem value="H">High</MenuItem>
-            </TextField>
+            {renderMetricSelect(impactSubscoreModifiers)}
           </Grid>
         </Grid>
       </Card>

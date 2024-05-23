@@ -16,7 +16,6 @@ export default function InfoModal(props) {
           width: "70%",
           transform: "translate(-50%, -50%)",
           bgcolor: "background.paper",
-          border: "2px solid #000",
           boxShadow: 24,
           p: 4,
           borderRadius: 5,
