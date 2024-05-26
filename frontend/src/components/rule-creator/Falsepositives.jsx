@@ -45,7 +45,12 @@ export default function Falsepositives() {
         <Chip
           icon={<BlockIcon />}
           label="Falsepositives (optional)"
-          style={{ fontSize: "20px", padding: "10px", height: "40px" }}
+          style={{
+            fontSize: "20px",
+            padding: "10px",
+            height: "40px",
+            backgroundColor: theme.palette.background.cvssCard,
+          }}
         />
       </Divider>
 
@@ -86,7 +91,6 @@ export default function Falsepositives() {
                 sx={{
                   width: "100%",
                   mt: 2,
-                  backgroundColor: theme.palette.background.tablecell,
                 }}
                 InputProps={{
                   endAdornment: (
@@ -103,6 +107,9 @@ export default function Falsepositives() {
                       Add false positive
                     </Button>
                   ),
+                  sx: {
+                    borderRadius: "10px",
+                  },
                 }}
               />
             </FormGroup>

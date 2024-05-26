@@ -18,7 +18,6 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-
 import InfoIcon from "@mui/icons-material/Info";
 import licensesData from "./licenses.json";
 import { GeneralInfoAtom } from "./SigmaAtom";
@@ -88,7 +87,12 @@ export default function GeneralInformation() {
         <Chip
           icon={<InfoIcon />}
           label="General information"
-          style={{ fontSize: "20px", padding: "10px", height: "40px" }}
+          style={{
+            fontSize: "20px",
+            padding: "10px",
+            height: "40px",
+            backgroundColor: theme.palette.background.cvssCard,
+          }}
         />
       </Divider>
 
@@ -115,9 +119,16 @@ export default function GeneralInformation() {
                   margin="normal"
                   value={generalInfo.title}
                   onChange={(e) => updateGeneralInfo("title", e.target.value)}
-                  inputProps={{ maxLength: 50 }}
+                  inputProps={{
+                    maxLength: 50,
+                  }}
                   fullWidth
-                  sx={{ backgroundColor: theme.palette.background.tablecell }}
+                  sx={{
+                    borderRadius: "10px",
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "10px",
+                    },
+                  }}
                 />
 
                 {/* Description */}
@@ -130,7 +141,12 @@ export default function GeneralInformation() {
                     updateGeneralInfo("description", e.target.value)
                   }
                   fullWidth
-                  sx={{ backgroundColor: theme.palette.background.tablecell }}
+                  sx={{
+                    borderRadius: "10px",
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "10px",
+                    },
+                  }}
                 />
 
                 {/* Author */}
@@ -146,7 +162,6 @@ export default function GeneralInformation() {
                     }
                   }}
                   fullWidth
-                  sx={{ backgroundColor: theme.palette.background.tablecell }}
                   InputProps={{
                     endAdornment: (
                       <Button
@@ -160,6 +175,9 @@ export default function GeneralInformation() {
                         Add
                       </Button>
                     ),
+                    sx: {
+                      borderRadius: "10px",
+                    },
                   }}
                 />
                 {author.map((author, index) => (
@@ -193,7 +211,10 @@ export default function GeneralInformation() {
                       label="License (optional)"
                       margin="normal"
                       sx={{
-                        backgroundColor: theme.palette.background.tablecell,
+                        borderRadius: "10px",
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "10px",
+                        },
                       }}
                     />
                   )}
@@ -204,7 +225,11 @@ export default function GeneralInformation() {
             <Grid item xs={4}>
               <Box width="100%">
                 {/* Status */}
-                <FormControl fullWidth margin="normal">
+                <FormControl
+                  fullWidth
+                  margin="normal"
+                  sx={{ borderRadius: "10px" }}
+                >
                   <InputLabel id="rule-status-select-input-label">
                     Status (optional)
                   </InputLabel>
@@ -216,7 +241,12 @@ export default function GeneralInformation() {
                     onChange={(event) =>
                       updateGeneralInfo("status", event.target.value)
                     }
-                    sx={{ backgroundColor: theme.palette.background.tablecell }}
+                    sx={{
+                      borderRadius: "10px",
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "10px",
+                      },
+                    }}
                   >
                     {STATUSES.map((status) => (
                       <MenuItem
@@ -230,7 +260,11 @@ export default function GeneralInformation() {
                 </FormControl>
 
                 {/* Level */}
-                <FormControl fullWidth margin="normal">
+                <FormControl
+                  fullWidth
+                  margin="normal"
+                  sx={{ borderRadius: "10px" }}
+                >
                   <InputLabel id="rule-level-select-input-label">
                     Level (optional)
                   </InputLabel>
@@ -242,7 +276,12 @@ export default function GeneralInformation() {
                     onChange={(event) =>
                       updateGeneralInfo("level", event.target.value)
                     }
-                    sx={{ backgroundColor: theme.palette.background.tablecell }}
+                    sx={{
+                      borderRadius: "10px",
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "10px",
+                      },
+                    }}
                   >
                     {LEVELS.map((level) => (
                       <MenuItem
@@ -265,7 +304,12 @@ export default function GeneralInformation() {
                     updateGeneralInfo("date", event.target.value)
                   }
                   fullWidth
-                  sx={{ backgroundColor: theme.palette.background.tablecell }}
+                  sx={{
+                    borderRadius: "10px",
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "10px",
+                    },
+                  }}
                 />
 
                 {/* Modified */}
@@ -278,7 +322,12 @@ export default function GeneralInformation() {
                     updateGeneralInfo("modifiedDate", event.target.value)
                   }
                   fullWidth
-                  sx={{ backgroundColor: theme.palette.background.tablecell }}
+                  sx={{
+                    borderRadius: "10px",
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "10px",
+                    },
+                  }}
                 />
               </Box>
             </Grid>

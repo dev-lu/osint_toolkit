@@ -27,7 +27,7 @@ export default function Condition() {
           autoWidth
           label="Condition"
           value={condition}
-          sx={{ backgroundColor: theme.palette.background.tablecell }}
+          sx={{ borderRadius: "10px" }}
           onChange={(event) => setCondition(event.target.value)}
         >
           <MenuItem value={"selection"}>selection</MenuItem>

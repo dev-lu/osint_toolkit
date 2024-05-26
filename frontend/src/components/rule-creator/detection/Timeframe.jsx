@@ -41,7 +41,11 @@ export default function Timeframe() {
           onChange={(event) => updateTime(event.target.value)}
           variant="outlined"
           margin="normal"
-          sx={{ backgroundColor: theme.palette.background.tablecell }}
+          InputProps={{
+            sx: {
+              borderRadius: "10px",
+            },
+          }}
         />
         <FormControl margin="normal" sx={{ minWidth: "10%" }}>
           <InputLabel id="time-unit-select-input-label">Unit</InputLabel>
@@ -52,7 +56,7 @@ export default function Timeframe() {
             onChange={(event) => updateUnit(event.target.value)}
             autoWidth
             label="Unit"
-            sx={{ backgroundColor: theme.palette.background.tablecell }}
+            sx={{ borderRadius: "10px" }}
           >
             <MenuItem value={"s"}>Seconds</MenuItem>
             <MenuItem value={"m"}>Minutes</MenuItem>

@@ -38,7 +38,12 @@ export default function Logsource() {
         <Chip
           icon={<SourceIcon />}
           label="Logsource"
-          style={{ fontSize: "20px", padding: "10px", height: "40px" }}
+          style={{
+            fontSize: "20px",
+            padding: "10px",
+            height: "40px",
+            backgroundColor: theme.palette.background.cvssCard,
+          }}
         />
       </Divider>
 
@@ -102,7 +107,11 @@ export default function Logsource() {
                 margin="normal"
                 {...params}
                 label="Product"
-                sx={{ backgroundColor: theme.palette.background.tablecell }}
+                InputProps={{
+                  sx: {
+                    borderRadius: "10px",
+                  },
+                }}
               />
             )}
           />
@@ -116,7 +125,11 @@ export default function Logsource() {
                 margin="normal"
                 {...params}
                 label="Service"
-                sx={{ backgroundColor: theme.palette.background.tablecell }}
+                InputProps={{
+                  sx: {
+                    borderRadius: "10px",
+                  },
+                }}
               />
             )}
           />
@@ -130,7 +143,11 @@ export default function Logsource() {
                 margin="normal"
                 {...params}
                 label="Category"
-                sx={{ backgroundColor: theme.palette.background.tablecell }}
+                InputProps={{
+                  sx: {
+                    borderRadius: "10px",
+                  },
+                }}
               />
             )}
           />
@@ -141,7 +158,11 @@ export default function Logsource() {
             value={logsrc.definition}
             onChange={(event) => updateField("definition", event.target.value)}
             fullWidth
-            sx={{ backgroundColor: theme.palette.background.tablecell }}
+            InputProps={{
+              sx: {
+                borderRadius: "10px",
+              },
+            }}
           />
         </CardContent>
       </Card>

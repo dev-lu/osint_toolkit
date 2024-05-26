@@ -130,7 +130,7 @@ export default function Selection() {
               label="Field"
               sx={{
                 minWidth: "25ch",
-                backgroundColor: theme.palette.background.tablecell,
+                borderRadius: "10px",
               }}
             />
           )}
@@ -146,7 +146,7 @@ export default function Selection() {
             value={modifier}
             onChange={(event) => setModifier(event.target.value)}
             label="Modifier"
-            sx={{ backgroundColor: theme.palette.background.tablecell }}
+            sx={{ borderRadius: "10px" }}
           >
             <ListSubheader>Wildcards</ListSubheader>
             <MenuItem value={"contains"}>contains</MenuItem>
@@ -171,7 +171,6 @@ export default function Selection() {
           label="Value"
           sx={{
             minWidth: "30%",
-            backgroundColor: theme.palette.background.tablecell,
           }}
           fullWidth
           variant="outlined"
@@ -196,6 +195,9 @@ export default function Selection() {
                 Add value
               </Button>
             ),
+            sx: {
+              borderRadius: "10px",
+            },
           }}
         />
 
@@ -267,7 +269,6 @@ export default function Selection() {
           sx={{
             width: "100%",
             mt: 2,
-            backgroundColor: theme.palette.background.tablecell,
           }}
           InputProps={{
             endAdornment: (
@@ -282,6 +283,9 @@ export default function Selection() {
                 Add keyword
               </Button>
             ),
+            sx: {
+              borderRadius: "10px",
+            },
           }}
         />
 

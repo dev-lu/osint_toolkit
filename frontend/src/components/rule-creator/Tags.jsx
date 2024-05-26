@@ -46,7 +46,12 @@ export default function Tags() {
         <Chip
           icon={<StyleIcon />}
           label="Tags (optional)"
-          style={{ fontSize: "20px", padding: "10px", height: "40px" }}
+          style={{
+            fontSize: "20px",
+            padding: "10px",
+            height: "40px",
+            backgroundColor: theme.palette.background.cvssCard,
+          }}
         />
       </Divider>
 
@@ -98,7 +103,6 @@ export default function Tags() {
                   sx={{
                     width: "100%",
                     mt: 2,
-                    backgroundColor: theme.palette.background.tablecell,
                   }}
                   InputProps={{
                     ...params.InputProps,
@@ -117,6 +121,9 @@ export default function Tags() {
                         {params.InputProps.endAdornment}
                       </>
                     ),
+                    sx: {
+                      borderRadius: "10px",
+                    },
                   }}
                 />
               )}

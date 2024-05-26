@@ -103,7 +103,11 @@ export default function Filter() {
               label="Field"
               sx={{
                 minWidth: "25ch",
-                backgroundColor: theme.palette.background.tablecell,
+              }}
+              InputProps={{
+                sx: {
+                  borderRadius: "10px",
+                },
               }}
             />
           )}
@@ -119,7 +123,7 @@ export default function Filter() {
             value={modifier}
             onChange={(event) => setModifier(event.target.value)}
             label="Modifier"
-            sx={{ backgroundColor: theme.palette.background.tablecell }}
+            sx={{ borderRadius: "10px" }}
           >
             <ListSubheader>Wildcards</ListSubheader>
             <MenuItem value={"contains"}>contains</MenuItem>
@@ -144,7 +148,6 @@ export default function Filter() {
           label="Value"
           sx={{
             minWidth: "30%",
-            backgroundColor: theme.palette.background.tablecell,
           }}
           fullWidth
           variant="outlined"
@@ -169,6 +172,9 @@ export default function Filter() {
                 Add value
               </Button>
             ),
+            sx: {
+              borderRadius: "10px",
+            },
           }}
         />
 

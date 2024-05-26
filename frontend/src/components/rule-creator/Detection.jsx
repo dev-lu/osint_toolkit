@@ -25,7 +25,12 @@ export default function Detection() {
         <Chip
           icon={<RadarIcon />}
           label="Detection"
-          style={{ fontSize: "20px", padding: "10px", height: "40px" }}
+          style={{
+            fontSize: "20px",
+            padding: "10px",
+            height: "40px",
+            backgroundColor: theme.palette.background.cvssCard,
+          }}
         />
       </Divider>
 

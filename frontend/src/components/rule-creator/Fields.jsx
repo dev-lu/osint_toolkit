@@ -41,7 +41,12 @@ export default function Fields() {
         <Chip
           icon={<ViewListIcon />}
           label="Fields (optional)"
-          style={{ fontSize: "20px", padding: "10px", height: "40px" }}
+          style={{
+            fontSize: "20px",
+            padding: "10px",
+            height: "40px",
+            backgroundColor: theme.palette.background.cvssCard,
+          }}
         />
       </Divider>
 
@@ -84,7 +89,6 @@ export default function Fields() {
                 size="medium"
                 sx={{
                   mt: 2,
-                  backgroundColor: theme.palette.background.tablecell,
                 }}
                 InputProps={{
                   ...params.InputProps,
@@ -103,6 +107,9 @@ export default function Fields() {
                       </Button>
                     </>
                   ),
+                  sx: {
+                    borderRadius: "10px",
+                  },
                 }}
               />
             )}
