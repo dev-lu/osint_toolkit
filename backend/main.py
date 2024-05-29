@@ -175,6 +175,8 @@ def add_default_newsfeeds(db: Session):
                          icon="securityweek", enabled=True),
         NewsfeedSettings(name="TechCrunch", url="https://techcrunch.com/category/security/feed",
                          icon="techcrunch", enabled=True),
+        NewsfeedSettings(name="The DFIR Report", url="https://thedfirreport.com/feed/atom",
+                         icon="thedfirreport", enabled=True),               
         NewsfeedSettings(name="The Hacker News", url="https://feeds.feedburner.com/TheHackersNews",
                          icon="thehackernews", enabled=True),
         NewsfeedSettings(name="threatpost", url="https://threatpost.com/feed/",
