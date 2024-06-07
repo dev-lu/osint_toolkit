@@ -151,6 +151,12 @@ export default function Modules() {
             fullWidth
             multiline
             rows={4}
+            sx={{
+              borderRadius: "10px",
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "10px",
+              },
+            }}
             defaultValue={
               modules["IOC Analyzer"]
                 ? modules["IOC Analyzer"].description.toString()
@@ -199,6 +205,12 @@ export default function Modules() {
             fullWidth
             multiline
             rows={4}
+            sx={{
+              borderRadius: "10px",
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "10px",
+              },
+            }}
             defaultValue={
               modules["IOC Extractor"]
                 ? modules["IOC Extractor"].description
@@ -247,6 +259,12 @@ export default function Modules() {
             fullWidth
             multiline
             rows={4}
+            sx={{
+              borderRadius: "10px",
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "10px",
+              },
+            }}
             defaultValue={
               modules["Domain Monitoring"]
                 ? modules["Domain Monitoring"].description
@@ -295,6 +313,12 @@ export default function Modules() {
             fullWidth
             multiline
             rows={4}
+            sx={{
+              borderRadius: "10px",
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "10px",
+              },
+            }}
             defaultValue={
               modules["Email Analyzer"]
                 ? modules["Email Analyzer"].description
@@ -340,6 +364,13 @@ export default function Modules() {
             fullWidth
             multiline
             rows={4}
+            sx={{
+              mt: 2,
+              borderRadius: "10px",
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "10px",
+              },
+            }}
             defaultValue={
               modules["AI Assistant"] ? modules["AI Assistant"].description : ""
             }
@@ -371,7 +402,13 @@ export default function Modules() {
             fullWidth
             multiline
             rows={4}
-            sx={{ mt: 2 }}
+            sx={{
+              mt: 2,
+              borderRadius: "10px",
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "10px",
+              },
+            }}
             defaultValue={
               modules["AI Assistant LA"]
                 ? modules["AI Assistant LA"].description
@@ -404,7 +441,13 @@ export default function Modules() {
             fullWidth
             multiline
             rows={4}
-            sx={{ mt: 2 }}
+            sx={{
+              mt: 2,
+              borderRadius: "10px",
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "10px",
+              },
+            }}
             defaultValue={
               modules["AI Assistant PA"]
                 ? modules["AI Assistant PA"].description
@@ -437,7 +480,13 @@ export default function Modules() {
             fullWidth
             multiline
             rows={4}
-            sx={{ mt: 2 }}
+            sx={{
+              mt: 2,
+              borderRadius: "10px",
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "10px",
+              },
+            }}
             defaultValue={
               modules["AI Assistant CE"]
                 ? modules["AI Assistant CE"].description
@@ -470,7 +519,13 @@ export default function Modules() {
             fullWidth
             multiline
             rows={4}
-            sx={{ mt: 2 }}
+            sx={{
+              mt: 2,
+              borderRadius: "10px",
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "10px",
+              },
+            }}
             defaultValue={
               modules["AI Assistant CDO"]
                 ? modules["AI Assistant CDO"].description
