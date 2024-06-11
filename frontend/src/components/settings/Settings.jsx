@@ -50,18 +50,87 @@ export default function Settings() {
   };
 
   return (
-    <div>
-      <Tabs
-        value={tabIndex}
-        onChange={handleTabIndexChange}
-        orientation="vertical"
-        style={{ float: "left" }}
-      >
-        <Tab label="General" />
-        <Tab label="API Keys" />
-        <Tab label="Modules" />
-        <Tab label="About" />
-      </Tabs>
+    <>
+<Tabs
+  value={tabIndex}
+  onChange={handleTabIndexChange}
+  orientation="vertical"
+  sx={{
+    mt: 2,
+    float: "left",
+    '.MuiTabs-indicator': {
+      left: 0,
+    },
+  }}
+>
+  <Tab 
+    label="General" 
+    sx={{ 
+      justifyContent: 'flex-start',
+      textAlign: 'left',
+      width: '100%',
+      padding: '8px 16px',
+      minHeight: 'auto',
+      alignItems: 'flex-start',
+      '.MuiTab-wrapper': {
+        alignItems: 'flex-start',
+        textAlign: 'left',
+        width: '100%',
+      },
+    }} 
+  />
+  <Tab 
+    label="API Keys" 
+    sx={{ 
+      justifyContent: 'flex-start',
+      textAlign: 'left',
+      width: '100%',
+      padding: '8px 16px',
+      minHeight: 'auto',
+      alignItems: 'flex-start',
+      '.MuiTab-wrapper': {
+        alignItems: 'flex-start',
+        textAlign: 'left',
+        width: '100%',
+      },
+    }} 
+  />
+  <Tab 
+    label="Modules" 
+    sx={{ 
+      justifyContent: 'flex-start',
+      textAlign: 'left',
+      width: '100%',
+      padding: '8px 16px',
+      minHeight: 'auto',
+      alignItems: 'flex-start',
+      '.MuiTab-wrapper': {
+        alignItems: 'flex-start',
+        textAlign: 'left',
+        width: '100%',
+      },
+    }} 
+  />
+  <Tab 
+    label="About" 
+    sx={{ 
+      justifyContent: 'flex-start',
+      textAlign: 'left',
+      width: '100%',
+      padding: '8px 16px',
+      minHeight: 'auto',
+      alignItems: 'flex-start',
+      '.MuiTab-wrapper': {
+        alignItems: 'flex-start',
+        textAlign: 'left',
+        width: '100%',
+      },
+    }} 
+  />
+</Tabs>
+
+
+
       <SettingsTabPanel value={tabIndex} index={0}>
         <Card sx={cardStyle}>
           <General />
@@ -82,6 +151,6 @@ export default function Settings() {
           <About />
         </Card>
       </SettingsTabPanel>
-    </div>
+    </>
   );
 }
