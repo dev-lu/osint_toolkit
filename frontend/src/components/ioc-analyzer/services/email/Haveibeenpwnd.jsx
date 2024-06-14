@@ -4,15 +4,16 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import api from "../../../../api";
 import {
   Box,
+  Button,
   Card,
-  Divider,
-  Typography,
-  Grid,
-  TextField,
-  TablePagination,
   CardContent,
+  Divider,
+  Grid,
   Stack,
+  TablePagination,
+  TextField,
   Tooltip,
+  Typography
 } from "@mui/material";
 import ResultRow from "../../ResultRow";
 
@@ -47,6 +48,21 @@ const Breaches = ({ breaches }) => {
 
   const paginate = (array, page, itemsPerPage) => {
     return array.slice(page * itemsPerPage, page * itemsPerPage + itemsPerPage);
+  };
+
+  const handleDownload = (data, filename) => {
+    const blob = new Blob([data], { type: "text/plain;charset=utf-8" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const downloadBreaches = () => {
+    const breachText = breaches.map((account) => `${account.Name}`).join("\n");
+    handleDownload(breachText, "breaches.txt");
   };
 
   const filteredBreaches = filterResults(breaches, searchTerm);
@@ -116,51 +132,6 @@ const Breaches = ({ breaches }) => {
                   {account.Name && (
                     <Typography variant="body1">{account.Name}</Typography>
                   )}
-                  {account.Title && (
-                    <Typography variant="body1">
-                      <b>Title:</b> {account.Title}
-                    </Typography>
-                  )}
-                  {account.Description && (
-                    <Typography variant="body1">
-                      <b>Title:</b> {account.Description}
-                    </Typography>
-                  )}
-                  {account.Domain && (
-                    <Typography variant="body1">
-                      <b>Domain:</b> {account.Domain}
-                    </Typography>
-                  )}
-                  {account.BreachDate && (
-                    <Typography variant="body1">
-                      <b>Breach date:</b> {account.BreachDate}
-                    </Typography>
-                  )}
-                  {account.AddedDate && (
-                    <Typography variant="body1">
-                      <b>Added date:</b> {account.AddedDate}
-                    </Typography>
-                  )}
-                  {account.ModifiedDate && (
-                    <Typography variant="body1">
-                      <b>Modified date:</b> {account.ModifiedDate}
-                    </Typography>
-                  )}
-                  {account.IsMalware && (
-                    <Typography variant="body1">
-                      <b>Breach is sourced from malware:</b> {account.IsMalware}
-                    </Typography>
-                  )}
-                  {account.IsSpamList && (
-                    <Typography variant="body1">
-                      <b>Is a spam list:</b> {account.IsSpamList}
-                    </Typography>
-                  )}
-                  {account.IsFabricated && (
-                    <Typography variant="body1">
-                      <b>Is fabricated:</b> {account.IsFabricated}
-                    </Typography>
-                  )}
                   <Divider sx={{ my: 1 }} />
                 </Box>
               )
@@ -169,15 +140,31 @@ const Breaches = ({ breaches }) => {
             <Typography>No breaches found</Typography>
           )}
         </CardContent>
-        <TablePagination
-          component="div"
-          count={filteredBreaches.length}
-          page={page}
-          onPageChange={handlePageChange}
-          rowsPerPage={itemsPerPage}
-          onRowsPerPageChange={handleItemsPerPageChange}
-          rowsPerPageOptions={[10, 15, 25]}
-        />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            p: 2,
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={downloadBreaches}
+          >
+            Export Breaches
+          </Button>
+          <TablePagination
+            component="div"
+            count={filteredBreaches.length}
+            page={page}
+            onPageChange={handlePageChange}
+            rowsPerPage={itemsPerPage}
+            onRowsPerPageChange={handleItemsPerPageChange}
+            rowsPerPageOptions={[10, 15, 25]}
+          />
+        </Box>
       </Card>
     </Box>
   );
@@ -214,6 +201,26 @@ const Pastes = ({ pastes }) => {
 
   const paginate = (array, page, itemsPerPage) => {
     return array.slice(page * itemsPerPage, page * itemsPerPage + itemsPerPage);
+  };
+
+  const handleDownload = (data, filename) => {
+    const blob = new Blob([data], { type: "text/plain;charset=utf-8" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const downloadPastes = () => {
+    const pasteText = pastes
+      .map(
+        (paste) =>
+          `Title: ${paste.Title}\nSource: ${paste.Source}\nDate: ${paste.Date}\nEmailCount: ${paste.EmailCount}\n\n`
+      )
+      .join("\n");
+    handleDownload(pasteText, "pastes.txt");
   };
 
   const filteredPastes = filterResults(pastes, searchTerm);
@@ -322,15 +329,31 @@ const Pastes = ({ pastes }) => {
             <Typography>No pastes found</Typography>
           )}
         </CardContent>
-        <TablePagination
-          component="div"
-          count={filteredPastes.length}
-          page={page}
-          onPageChange={handlePageChange}
-          rowsPerPage={itemsPerPage}
-          onRowsPerPageChange={handleItemsPerPageChange}
-          rowsPerPageOptions={[5, 10, 15]}
-        />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            p: 2,
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={downloadPastes}
+          >
+            Export Pastes
+          </Button>
+          <TablePagination
+            component="div"
+            count={filteredPastes.length}
+            page={page}
+            onPageChange={handlePageChange}
+            rowsPerPage={itemsPerPage}
+            onRowsPerPageChange={handleItemsPerPageChange}
+            rowsPerPageOptions={[5, 10, 15]}
+          />
+        </Box>
       </Card>
     </Box>
   );
