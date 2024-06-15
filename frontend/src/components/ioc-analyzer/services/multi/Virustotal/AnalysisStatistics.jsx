@@ -42,6 +42,15 @@ export default function AnalysisStatistics(props) {
     },
   }));
 
+  const textColor =
+    props.malCount > 0
+      ? "red"
+      : props.result["data"]["attributes"]["last_analysis_stats"][
+          "suspicious"
+        ] > 0
+      ? "#F5BB00"
+      : "#6AAB8E";
+
   return (
     <Card
       key={"statistics_card"}
@@ -225,39 +234,19 @@ export default function AnalysisStatistics(props) {
               >
                 <div
                   style={{
-                    display: "inline-block",
-                    position: "relative",
-                    top: "50%",
-                    transform: "translateY(-50%)",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                    width: "100%",
                   }}
                 >
-                  <Typography
-                    variant="h3"
-                    color={
-                      props.malCount > 0
-                        ? "red"
-                        : props.result["data"]["attributes"][
-                            "last_analysis_stats"
-                          ]["suspicious"] > 0
-                        ? "#F5BB00"
-                        : "#6AAB8E"
-                    }
-                    sx={{ textAlign: "center" }}
-                    textAnchor="middle"
-                  >
-                    <text x="50%" y="50%">
-                      {props.malCount}
-                    </text>
+                  <Typography variant="h3" color={textColor} align="center">
+                    {props.malCount}
                   </Typography>
-                  <Typography
-                    variant="h5"
-                    color="textSecondary"
-                    sx={{ textAlign: "center" }}
-                    textAnchor="middle"
-                  >
-                    <text x="50%" y="50%">
-                      / {props.totalEngines}
-                    </text>
+                  <Typography variant="h5" color="textSecondary" align="center">
+                    / {props.totalEngines}
                   </Typography>
                 </div>
               </foreignObject>
@@ -285,18 +274,16 @@ export default function AnalysisStatistics(props) {
           <List>
             <ListItem alignItems="flex-start">
               <ListItemIcon>
-                <ThumbUpOutlinedIcon color="primary" />
+                <PollOutlinedIcon color="primary" />
               </ListItemIcon>
               <ListItemText
-                primary="Voted harmless"
-                secondary={
-                  props.result["data"]["attributes"]["total_votes"]["harmless"]
-                }
+                primary="Reputation"
+                secondary={props.result["data"]["attributes"]["reputation"]}
               />
             </ListItem>
             <ListItem alignItems="flex-start">
               <ListItemIcon>
-                <ThumbDownOutlinedIcon color="primary" />
+                <ThumbDownOutlinedIcon htmlColor="red" />
               </ListItemIcon>
               <ListItemText
                 primary="Voted malicious"
@@ -312,15 +299,6 @@ export default function AnalysisStatistics(props) {
           <List>
             <ListItem alignItems="flex-start">
               <ListItemIcon>
-                <PollOutlinedIcon color="primary" />
-              </ListItemIcon>
-              <ListItemText
-                primary="Reputation"
-                secondary={props.result["data"]["attributes"]["reputation"]}
-              />
-            </ListItem>
-            <ListItem alignItems="flex-start">
-              <ListItemIcon>
                 <CalendarMonthOutlinedIcon color="primary" />
               </ListItemIcon>
               <ListItemText
@@ -331,6 +309,17 @@ export default function AnalysisStatistics(props) {
                   props.result["data"]["attributes"]["last_modification_date"] *
                     1000
                 ).toLocaleTimeString()}`}
+              />
+            </ListItem>
+            <ListItem alignItems="flex-start">
+              <ListItemIcon>
+                <ThumbUpOutlinedIcon htmlColor="#6AAB8E" />
+              </ListItemIcon>
+              <ListItemText
+                primary="Voted harmless"
+                secondary={
+                  props.result["data"]["attributes"]["total_votes"]["harmless"]
+                }
               />
             </ListItem>
           </List>
