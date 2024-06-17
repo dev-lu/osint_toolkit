@@ -30,37 +30,44 @@ export default function ResultRow(props) {
     - details
   */
 
+  const cellStyle = {
+    padding: "16px",
+    verticalAlign: "middle",
+  };
+
+  const avatarStyle = {
+    width: 30,
+    height: 30,
+    border: "1px solid",
+    borderColor: theme.palette.background.tableborder,
+  };
+
   if (props.loading) {
     return (
       <>
         <TableRow key={props.id + "_row"}>
-          <TableCell>
-            <IconButton aria-label="expand row" size="large">
+          <TableCell style={cellStyle}>
+            <IconButton aria-label="expand row" size="small">
               <KeyboardArrowDownIcon />
             </IconButton>
           </TableCell>
-          <TableCell>
+          <TableCell style={cellStyle}>
             <CardHeader
               avatar={
                 <Avatar
                   alt={`${props.icon} icon`}
                   src={require(`./icons/${props.icon}.png`)}
-                  sx={{
-                    width: 30,
-                    height: 30,
-                    border: "1px solid",
-                    borderColor: theme.palette.background.tableborder,
-                  }}
+                  sx={avatarStyle}
                 />
               }
               title={props.name}
+              sx={{ padding: 0 }}
             />
           </TableCell>
-          <TableCell>
-            {" "}
-            <CircularProgress />{" "}
+          <TableCell style={cellStyle}>
+            <CircularProgress size={24} />
           </TableCell>
-          <TableCell></TableCell>
+          <TableCell style={cellStyle}></TableCell>
         </TableRow>
       </>
     );
@@ -70,30 +77,26 @@ export default function ResultRow(props) {
     return (
       <>
         <TableRow key={props.id + "_row"}>
-          <TableCell>
-            <IconButton aria-label="expand row" size="large">
+          <TableCell style={cellStyle}>
+            <IconButton aria-label="expand row" size="small">
               <KeyboardArrowDownIcon />
             </IconButton>
           </TableCell>
-          <TableCell>
+          <TableCell style={cellStyle}>
             <CardHeader
               avatar={
                 <Avatar
                   alt={`${props.icon} icon`}
                   src={require(`./icons/${props.icon}.png`)}
-                  sx={{
-                    width: 30,
-                    height: 30,
-                    border: "1px solid",
-                    borderColor: theme.palette.background.tableborder,
-                  }}
+                  sx={avatarStyle}
                 />
               }
               title={props.name}
+              sx={{ padding: 0 }}
             />
           </TableCell>
-          <TableCell> Error </TableCell>
-          <TableCell bgcolor="black"></TableCell>
+          <TableCell style={cellStyle}> Error </TableCell>
+          <TableCell style={cellStyle} bgcolor="black"></TableCell>
         </TableRow>
       </>
     );
@@ -103,30 +106,28 @@ export default function ResultRow(props) {
     return (
       <>
         <TableRow key={props.id + "_row"}>
-          <TableCell>
-            <IconButton aria-label="expand row" size="large">
+          <TableCell style={cellStyle}>
+            <IconButton aria-label="expand row" size="small">
               <KeyboardArrowDownIcon />
             </IconButton>
           </TableCell>
-          <TableCell>
+          <TableCell style={cellStyle}>
             <CardHeader
               avatar={
                 <Avatar
                   alt={`${props.icon} icon`}
                   src={require(`./icons/${props.icon}.png`)}
-                  sx={{
-                    width: 30,
-                    height: 30,
-                    border: "1px solid",
-                    borderColor: theme.palette.background.tableborder,
-                  }}
+                  sx={avatarStyle}
                 />
               }
               title={props.name}
+              sx={{ padding: 0 }}
             />
           </TableCell>
-          <TableCell>Invalid API key (401 Unauthorized) </TableCell>
-          <TableCell bgcolor="black"></TableCell>
+          <TableCell style={cellStyle}>
+            Invalid API key (401 Unauthorized){" "}
+          </TableCell>
+          <TableCell style={cellStyle} bgcolor="black"></TableCell>
         </TableRow>
       </>
     );
@@ -136,30 +137,28 @@ export default function ResultRow(props) {
     return (
       <>
         <TableRow key={props.id + "_row"}>
-          <TableCell>
-            <IconButton aria-label="expand row" size="large">
+          <TableCell style={cellStyle}>
+            <IconButton aria-label="expand row" size="small">
               <KeyboardArrowDownIcon />
             </IconButton>
           </TableCell>
-          <TableCell>
+          <TableCell style={cellStyle}>
             <CardHeader
               avatar={
                 <Avatar
                   alt={`${props.icon} icon`}
                   src={require(`./icons/${props.icon}.png`)}
-                  sx={{
-                    width: 30,
-                    height: 30,
-                    border: "1px solid",
-                    borderColor: theme.palette.background.tableborder,
-                  }}
+                  sx={avatarStyle}
                 />
               }
               title={props.name}
+              sx={{ padding: 0 }}
             />
           </TableCell>
-          <TableCell>API limits exceeded (429 Too Many Requests) </TableCell>
-          <TableCell bgcolor="black"></TableCell>
+          <TableCell style={cellStyle}>
+            API limits exceeded (429 Too Many Requests){" "}
+          </TableCell>
+          <TableCell style={cellStyle} bgcolor="black"></TableCell>
         </TableRow>
       </>
     );
@@ -173,30 +172,26 @@ export default function ResultRow(props) {
     return (
       <>
         <TableRow key={props.id + "_row"}>
-          <TableCell>
-            <IconButton aria-label="expand row" size="large">
+          <TableCell style={cellStyle}>
+            <IconButton aria-label="expand row" size="small">
               <KeyboardArrowDownIcon />
             </IconButton>
           </TableCell>
-          <TableCell>
+          <TableCell style={cellStyle}>
             <CardHeader
               avatar={
                 <Avatar
                   alt={`${props.icon} icon`}
                   src={require(`./icons/${props.icon}.png`)}
-                  sx={{
-                    width: 30,
-                    height: 30,
-                    border: "1px solid",
-                    borderColor: theme.palette.background.tableborder,
-                  }}
+                  sx={avatarStyle}
                 />
               }
               title={props.name}
+              sx={{ padding: 0 }}
             />
           </TableCell>
-          <TableCell> Error: {props.result.error} </TableCell>
-          <TableCell bgcolor="black"></TableCell>
+          <TableCell style={cellStyle}> Error: {props.result.error} </TableCell>
+          <TableCell style={cellStyle} bgcolor="black"></TableCell>
         </TableRow>
       </>
     );
@@ -205,39 +200,37 @@ export default function ResultRow(props) {
   return (
     <>
       <TableRow key={props.id + "_row"}>
-        <TableCell>
+        <TableCell style={cellStyle}>
           <IconButton
             aria-label="expand row"
-            size="large"
+            size="small"
             onClick={() => setOpen(!open)}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell>
+        <TableCell style={cellStyle}>
           <CardHeader
             avatar={
               <Avatar
                 alt={`${props.icon} icon`}
                 src={require(`./icons/${props.icon}.png`)}
-                sx={{
-                  width: 30,
-                  height: 30,
-                  border: "1px solid",
-                  borderColor: theme.palette.background.tableborder,
-                }}
+                sx={avatarStyle}
               />
             }
             title={props.name}
+            sx={{ padding: 0 }}
           />
         </TableCell>
-        <TableCell>
+        <TableCell style={cellStyle}>
           {" "}
           <>
             <p style={props.summary_color}> {props.summary} </p>
           </>
         </TableCell>
-        <TableCell bgcolor={props.color}></TableCell>
+        <TableCell
+          style={{ ...cellStyle, backgroundColor: props.color }}
+        ></TableCell>
       </TableRow>
       <TableRow>
         <TableCell
