@@ -1,7 +1,6 @@
 import React from "react";
 import api from "../../../../api";
 import { useEffect, useState, useRef } from "react";
-import { ResponsiveContainer } from "recharts";
 import { ResponsiveBar } from "@nivo/bar";
 import { ResponsivePie } from "@nivo/pie";
 import { ResponsiveChoropleth } from "@nivo/geo";
@@ -432,7 +431,7 @@ export default function CrowdSec(props) {
                   padding={0.3}
                   innerPadding={3}
                   groupMode="stacked"
-                  colors={{ scheme: "set2" }}
+                  colors={{ scheme: "reds" }}
                   borderColor={{ from: "color", modifiers: [["darker", 1.6]] }}
                   borderWidth={2}
                   borderRadius={4}
@@ -528,19 +527,21 @@ export default function CrowdSec(props) {
               <Box sx={{ height: "400px" }}>
                 <ResponsivePie
                   data={transformData(result["target_countries"])}
+                  sortByValue={true}
                   margin={{ top: 40, right: 50, bottom: 50, left: 50 }}
                   innerRadius={0.5}
                   padAngle={2}
                   cornerRadius={4}
-                  colors={{ scheme: "set2" }}
+                  colors={{ scheme: 'reds' }}
                   borderWidth={2}
                   borderColor={{ from: "color", modifiers: [["darker", 1.6]] }}
                   radialLabelsSkipAngle={10}
                   radialLabelsTextColor={null}
                   radialLabelsLinkColor={null}
                   sliceLabelsSkipAngle={10}
+                  arcLinkLabelsTextColor={{ from: 'color', modifiers: [] }}
+                  arcLinkLabelsColor={{ from: 'color', modifiers: [] }}
                   sliceLabel={({ id, value }) => `${id}: ${value}`}
-                  sliceLabelsTextColor="#ffffff"
                   sliceLabelsTextStyle={{
                     fontWeight: "bold",
                   }}
@@ -551,7 +552,7 @@ export default function CrowdSec(props) {
                         color: "#ffffff",
                         fontSize: "14px",
                       },
-                    },
+                    }                  
                   }}
                   legends={[]}
                 />
@@ -559,12 +560,12 @@ export default function CrowdSec(props) {
             </Grid>
             <Grid item xs={6}>
               {result && result.target_countries ? (
-                <Box sx={{ height: "400px" }}>
+                <Box sx={{ height: "400px" }} marginTop={4}>
                   <ResponsiveChoropleth
                     data={transformMapData(result.target_countries)}
                     features={worldCountries.features}
                     margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-                    colors="nivo"
+                    colors='YlOrRd'
                     domain={[
                       0,
                       Math.max(...Object.values(result.target_countries)),
