@@ -18,8 +18,10 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Box, Typography } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
 
 import ResultRow from "../../ResultRow";
+import InfoModal from "../../../infoModal";
 
 export default function CrowdSec(props) {
   const propsRef = useRef(props);
@@ -27,6 +29,17 @@ export default function CrowdSec(props) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [score, setScore] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [modalContent, setModalContent] = useState({ title: "", text: "" });
+
+  const handleOpenModal = (title, text) => {
+    setModalContent({ title, text });
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -417,6 +430,49 @@ export default function CrowdSec(props) {
                 </List>
               </Grid>
               <Grid item xs={6} style={{ height: "400px" }}>
+                <Typography variant="h6" component="h3" gutterBottom>
+                  CTI Scores
+                  <InfoIcon
+                    sx={{ ml: 1, cursor: "pointer" }}
+                    onClick={() =>
+                      handleOpenModal(
+                        "Score Data Information",
+                        `The scores are indicators of malevolence associated with an IP address, computed over several periods of time: 1 day, 1 week, 1 month and overall.
+
+For a given period, the indicator of malevolence is summarized under the total key with a value ranging from 0 (no reports) to 5 (high malevolence).
+
+This value is a summary based on 4 components (see below) also ranging from 0 (Not Applicable/ Missing) to 5 (High), comparing to all the signals reported by the community.
+
+
+**Aggressiveness**  
+What is the intensity of the attack? This component measures the number of attacks reported over a period of time.
+
+**Threat Level**  
+How serious is the type of threats reported? The category of attacks reported by the community defines the danger induced by the attacks. An IP known for crawling and scanning will have a lower threat level than an IP reported for brute-force and exploits. This score ranges from 1 (mainly crawling) to 5 (exploit). 0 is the default for unknown scenarios.
+
+
+**Trust**  
+What is the level of confidence in the actors which reported the IP address? This component is based on the reputation (age, number of reports) and the diversity (number of IP ranges, AS Numbers) of all the actors reporting the IP. It ranges from 0 (low confidence) to 5 (high confidence).
+
+
+**Anomaly**  
+What are the red flags associated with this IP address? It analyzes the static description of the reported IP address and checks for red flags which can be linked to evidence of malicious activities.
+
+
+**Total**  
+Aggregation of 4 components calculated on threats reported by the community and described below.`
+)                      
+                    }
+                  />
+                </Typography>
+                {openModal && (
+                  <InfoModal
+                    open={openModal}
+                    onClose={handleCloseModal}
+                    title={modalContent.title}
+                    text={modalContent.text}
+                  />
+                )}
                 <ResponsiveBar
                   data={scoreData}
                   keys={[
@@ -427,7 +483,7 @@ export default function CrowdSec(props) {
                     "total",
                   ]}
                   indexBy="name"
-                  margin={{ top: 50, right: 50, bottom: 50, left: 60 }}
+                  margin={{ top: 10, right: 50, bottom: 70, left: 60 }}
                   padding={0.3}
                   innerPadding={3}
                   groupMode="stacked"
@@ -532,15 +588,15 @@ export default function CrowdSec(props) {
                   innerRadius={0.5}
                   padAngle={2}
                   cornerRadius={4}
-                  colors={{ scheme: 'reds' }}
+                  colors={{ scheme: "reds" }}
                   borderWidth={2}
                   borderColor={{ from: "color", modifiers: [["darker", 1.6]] }}
                   radialLabelsSkipAngle={10}
                   radialLabelsTextColor={null}
                   radialLabelsLinkColor={null}
                   sliceLabelsSkipAngle={10}
-                  arcLinkLabelsTextColor={{ from: 'color', modifiers: [] }}
-                  arcLinkLabelsColor={{ from: 'color', modifiers: [] }}
+                  arcLinkLabelsTextColor={{ from: "color", modifiers: [] }}
+                  arcLinkLabelsColor={{ from: "color", modifiers: [] }}
                   sliceLabel={({ id, value }) => `${id}: ${value}`}
                   sliceLabelsTextStyle={{
                     fontWeight: "bold",
@@ -552,7 +608,7 @@ export default function CrowdSec(props) {
                         color: "#ffffff",
                         fontSize: "14px",
                       },
-                    }                  
+                    },
                   }}
                   legends={[]}
                 />
@@ -565,7 +621,7 @@ export default function CrowdSec(props) {
                     data={transformMapData(result.target_countries)}
                     features={worldCountries.features}
                     margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-                    colors='YlOrRd'
+                    colors="YlOrRd"
                     domain={[
                       0,
                       Math.max(...Object.values(result.target_countries)),
