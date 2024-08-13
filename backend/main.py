@@ -157,8 +157,6 @@ def add_default_module_settings(db: Session):
 
 def add_default_newsfeeds(db: Session):
     default_newsfeeds = [
-        NewsfeedSettings(name="Computerworld", url="https://www.computerworld.com/category/security/feed",
-                         icon="computerworld", enabled=True),
         NewsfeedSettings(name="CyberScoop", url="https://www.cyberscoop.com/news/threats/feed",
                          icon="cyberscoop", enabled=True),
         NewsfeedSettings(name="Dark Reading", url="https://www.darkreading.com/rss_simple.asp",
