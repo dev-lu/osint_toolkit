@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import internal, external
+from routers import external
+from routers.internal import newsfeed, api_key_settings, general_settings, module_settings, mail_analyzer, ioc_extractor
 from sqlalchemy.orm import Session
 from database import models
 from database.database import SessionLocal, engine
@@ -76,8 +77,13 @@ app = FastAPI(
     openapi_tags=tags_metadata
 )
 
-app.include_router(internal.router)
 app.include_router(external.router)
+app.include_router(newsfeed.router)
+app.include_router(api_key_settings.router)
+app.include_router(general_settings.router)
+app.include_router(module_settings.router)
+app.include_router(mail_analyzer.router)
+app.include_router(ioc_extractor.router)
 
 app.add_middleware(
     CORSMiddleware,

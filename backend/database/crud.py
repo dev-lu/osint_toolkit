@@ -6,8 +6,6 @@ from .schemas import ApikeySchema, SettingsSchema, NewsfeedSettingsSchema, Modul
 # ===========================================================================
 # API key settings CRUD operations
 # ===========================================================================
-
-
 def create_apikey(db: Session, apikey: ApikeySchema):
     db_apikey = Apikey(**apikey.dict())
     db.add(db_apikey)
