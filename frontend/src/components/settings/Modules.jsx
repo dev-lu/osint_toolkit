@@ -1,25 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import api from "../../api";
 
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import FormGroup from "@mui/material/FormGroup";
-import { FormControlLabel } from "@mui/material";
+import { Box, FormControlLabel } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
-import Switch from "@mui/material/Switch";
-import TextField from "@mui/material/TextField";
+import KeywordSettings from "./KeywordSettings";
+import CTISettings from "./CTISettings";
+import ManageNewsfeeds from "./ManageNewsfeeds";
 
 import { modulesState } from "../../App";
 import { newsfeedListState } from "../../App";
 
 import {
-  List,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
+  Alert,
+  Snackbar,
+  Button,
+  TextField,
+  Switch,
+  Stack,
 } from "@mui/material";
+
 import useTheme from "@mui/material/styles/useTheme";
 
 export default function Modules() {
@@ -28,6 +30,11 @@ export default function Modules() {
 
   const newsfeedList = useRecoilValue(newsfeedListState);
   const setNewsfeedList = useSetRecoilState(newsfeedListState);
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    severity: "info",
+  });
 
   const theme = useTheme();
 
@@ -37,6 +44,10 @@ export default function Modules() {
     borderRadius: 5,
     backgroundColor: theme.palette.background.card,
     boxShadow: 0,
+  };
+
+  const showAlert = (message, severity = "info") => {
+    setAlert({ open: true, message, severity });
   };
 
   function handleModuleChange(moduleName) {
@@ -88,47 +99,44 @@ export default function Modules() {
       </Card>
       <FormGroup>
         <Card sx={cardStyle}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={modules["Newsfeed"].enabled}
-                onChange={() => handleModuleChange("Newsfeed")}
+          <Stack direction="row" spacing={2}>
+            <Box>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={modules["Newsfeed"].enabled}
+                    onChange={() => handleModuleChange("Newsfeed")}
+                  />
+                }
+                label={<h3>Newsfeed</h3>}
               />
-            }
-            label={<h3>Newsfeed</h3>}
-          />
-          <p>
-            The news feed is a module that shows the latest news from the
-            security community.
-          </p>
-          <Card sx={{ borderRadius: 5, boxShadow: 0, m: 2, maxWidth: "50%" }}>
-            <List
-              dense={true}
-              sx={{
-                position: "relative",
-                overflow: "auto",
-                maxHeight: 300,
-                "& ul": { padding: 0 },
-              }}
-            >
-              {Object.keys(newsfeedList).map((key) => {
-                const item = newsfeedList[key];
-                return (
-                  <ListItem key={"list-" + key}>
-                    <ListItemAvatar>
-                      <Avatar alt={key} src={`feedicons/${item.icon}.png`} />
-                    </ListItemAvatar>
-                    <ListItemText primary={key} secondary={item.url} />
-                    <Switch
-                      checked={item.enabled}
-                      onChange={() => handleEnableDisableNewsfeed(key)}
-                    />
-                  </ListItem>
-                );
-              })}
-            </List>
-          </Card>
+              <p>
+                The news feed is a module that shows the latest news from the
+                security community.
+              </p>
+            </Box>
+          </Stack>
+          <Stack
+            direction="row"
+            sx={{
+              width: "100%",
+              "& > *": {
+                width: "50%",
+                maxWidth: "50%",
+              },
+            }}
+          >
+            <ManageNewsfeeds
+              newsfeedList={newsfeedList}
+              setNewsfeedList={setNewsfeedList}
+              showAlert={showAlert}
+              handleEnableDisableNewsfeed={handleEnableDisableNewsfeed}
+            />
+            <KeywordSettings />
+          </Stack>
+          <CTISettings />
         </Card>
+
         <Card sx={cardStyle}>
           <FormControlLabel
             control={
@@ -582,6 +590,19 @@ export default function Modules() {
           <br />
         </Card>
       </FormGroup>
+      <Snackbar
+        open={alert.open}
+        autoHideDuration={6000}
+        onClose={() => setAlert({ ...alert, open: false })}
+      >
+        <Alert
+          onClose={() => setAlert({ ...alert, open: false })}
+          severity={alert.severity}
+          sx={{ width: "100%" }}
+        >
+          {alert.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import external
-from routers.internal import newsfeed, api_key_settings, general_settings, module_settings, mail_analyzer, ioc_extractor
+from routers.internal import newsfeed_routes, api_key_settings, general_settings, module_settings, mail_analyzer, ioc_extractor
 from sqlalchemy.orm import Session
 from database import models
 from database.database import SessionLocal, engine
@@ -9,6 +9,14 @@ from database.models import Settings, ModuleSettings, NewsfeedSettings
 import default_strings
 import logging
 import os
+from scheduler import start_scheduler, shutdown_scheduler
+import newsfeed
+
+from database.database import SessionLocal
+from database import crud
+from database.schemas import NewsArticleSchema
+from datetime import datetime
+from routers.internal import cti_settings_routes
 
 
 models.Base.metadata.create_all(bind=engine)
@@ -78,12 +86,14 @@ app = FastAPI(
 )
 
 app.include_router(external.router)
-app.include_router(newsfeed.router)
+app.include_router(newsfeed_routes.router)
 app.include_router(api_key_settings.router)
 app.include_router(general_settings.router)
 app.include_router(module_settings.router)
 app.include_router(mail_analyzer.router)
 app.include_router(ioc_extractor.router)
+app.include_router(cti_settings_routes.router)
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -98,8 +108,6 @@ app.add_middleware(
 # Defaults
 # ===========================================================================
 # Write default general settings
-
-
 def add_default_general_settings(db: Session):
     default_settings = Settings(
         id=0, darkmode=False)
@@ -213,6 +221,7 @@ def add_default_newsfeeds(db: Session):
     logging.info('Created default newsfeeds')
 
 
+
 # Write default settings on application startup
 @app.on_event("startup")
 async def startup_event():
@@ -220,3 +229,9 @@ async def startup_event():
     add_default_module_settings(db)
     add_default_general_settings(db)
     add_default_newsfeeds(db)
+    db.close()
+    start_scheduler()
+
+@app.on_event("shutdown")
+def shutdown_event():
+    shutdown_scheduler()

@@ -11,7 +11,6 @@ import Card from "@mui/material/Card";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 
-
 export const settingsTabIndex = atom({
   key: "SettingsTabIndexState",
   default: 0,
@@ -51,85 +50,83 @@ export default function Settings() {
 
   return (
     <>
-<Tabs
-  value={tabIndex}
-  onChange={handleTabIndexChange}
-  orientation="vertical"
-  sx={{
-    mt: 2,
-    float: "left",
-    '.MuiTabs-indicator': {
-      left: 0,
-    },
-  }}
->
-  <Tab 
-    label="General" 
-    sx={{ 
-      justifyContent: 'flex-start',
-      textAlign: 'left',
-      width: '100%',
-      padding: '8px 16px',
-      minHeight: 'auto',
-      alignItems: 'flex-start',
-      '.MuiTab-wrapper': {
-        alignItems: 'flex-start',
-        textAlign: 'left',
-        width: '100%',
-      },
-    }} 
-  />
-  <Tab 
-    label="API Keys" 
-    sx={{ 
-      justifyContent: 'flex-start',
-      textAlign: 'left',
-      width: '100%',
-      padding: '8px 16px',
-      minHeight: 'auto',
-      alignItems: 'flex-start',
-      '.MuiTab-wrapper': {
-        alignItems: 'flex-start',
-        textAlign: 'left',
-        width: '100%',
-      },
-    }} 
-  />
-  <Tab 
-    label="Modules" 
-    sx={{ 
-      justifyContent: 'flex-start',
-      textAlign: 'left',
-      width: '100%',
-      padding: '8px 16px',
-      minHeight: 'auto',
-      alignItems: 'flex-start',
-      '.MuiTab-wrapper': {
-        alignItems: 'flex-start',
-        textAlign: 'left',
-        width: '100%',
-      },
-    }} 
-  />
-  <Tab 
-    label="About" 
-    sx={{ 
-      justifyContent: 'flex-start',
-      textAlign: 'left',
-      width: '100%',
-      padding: '8px 16px',
-      minHeight: 'auto',
-      alignItems: 'flex-start',
-      '.MuiTab-wrapper': {
-        alignItems: 'flex-start',
-        textAlign: 'left',
-        width: '100%',
-      },
-    }} 
-  />
-</Tabs>
-
-
+      <Tabs
+        value={tabIndex}
+        onChange={handleTabIndexChange}
+        orientation="vertical"
+        sx={{
+          mt: 2,
+          float: "left",
+          ".MuiTabs-indicator": {
+            left: 0,
+          },
+        }}
+      >
+        <Tab
+          label="General"
+          sx={{
+            justifyContent: "flex-start",
+            textAlign: "left",
+            width: "100%",
+            padding: "8px 16px",
+            minHeight: "auto",
+            alignItems: "flex-start",
+            ".MuiTab-wrapper": {
+              alignItems: "flex-start",
+              textAlign: "left",
+              width: "100%",
+            },
+          }}
+        />
+        <Tab
+          label="API Keys"
+          sx={{
+            justifyContent: "flex-start",
+            textAlign: "left",
+            width: "100%",
+            padding: "8px 16px",
+            minHeight: "auto",
+            alignItems: "flex-start",
+            ".MuiTab-wrapper": {
+              alignItems: "flex-start",
+              textAlign: "left",
+              width: "100%",
+            },
+          }}
+        />
+        <Tab
+          label="Modules"
+          sx={{
+            justifyContent: "flex-start",
+            textAlign: "left",
+            width: "100%",
+            padding: "8px 16px",
+            minHeight: "auto",
+            alignItems: "flex-start",
+            ".MuiTab-wrapper": {
+              alignItems: "flex-start",
+              textAlign: "left",
+              width: "100%",
+            },
+          }}
+        />
+        <Tab
+          label="About"
+          sx={{
+            justifyContent: "flex-start",
+            textAlign: "left",
+            width: "100%",
+            padding: "8px 16px",
+            minHeight: "auto",
+            alignItems: "flex-start",
+            ".MuiTab-wrapper": {
+              alignItems: "flex-start",
+              textAlign: "left",
+              width: "100%",
+            },
+          }}
+        />
+      </Tabs>
 
       <SettingsTabPanel value={tabIndex} index={0}>
         <Card sx={cardStyle}>

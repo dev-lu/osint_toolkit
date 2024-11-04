@@ -11,3 +11,4 @@ SQLAlchemy==1.4.36
 tweepy==4.9.0
 uvicorn==0.18.3
 email-validator==2.0.0
+openai==1.52.2

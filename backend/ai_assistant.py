@@ -3,38 +3,8 @@ import json
 import logging
 from datetime import datetime
 
-logging.basicConfig(
-    filename='response_logs.log',
-    level=logging.ERROR,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
 
-
-def log_response_data(response_data):
-    try:
-        choices = response_data.get("choices", [])
-        if choices:
-            choice = choices[0]
-            message_content = choice["message"]["content"]
-            finish_reason = choice["finish_reason"]
-            logprobs = choice["logprobs"]
-            index = choice["index"]
-
-            logging.info(
-                f"Response ID: {response_data.get('id')}\n"
-                f"Model: {response_data.get('model')}\n"
-                f"Object: {response_data.get('object')}\n"
-                f"Created: {datetime.fromtimestamp(response_data.get('created')).isoformat()}\n"
-                f"Completion Tokens: {response_data['usage'].get('completion_tokens')}\n"
-                f"Prompt Tokens: {response_data['usage'].get('prompt_tokens')}\n"
-                f"Total Tokens: {response_data['usage'].get('total_tokens')}\n"
-                f"Message Content: {message_content}\n"
-                f"Finish Reason: {finish_reason}\n"
-                f"Logprobs: {logprobs}\n"
-                f"Index: {index}\n"
-            )
-    except Exception as e:
-        logging.error(f"An error occurred while logging response data: {e}")
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def handle_response(response):
@@ -44,7 +14,6 @@ def handle_response(response):
                 try:
                     response_data = response.json()
                     response_text = response_data["choices"][0]["message"]["content"]
-                    log_response_data(response_data)
                     return response_text
                 except (ValueError, KeyError, TypeError) as e:
                     logging.error(f"Error parsing JSON response: {e}")

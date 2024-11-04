@@ -3,8 +3,8 @@ from database import crud, models
 from database.database import SessionLocal, engine
 import ioc_analyzer
 from ai_assistant import ask_prompt
-import domain_monitoring
 import newsfeed
+import domain_monitoring
 
 router = APIRouter()
 models.Base.metadata.create_all(bind=engine)
@@ -154,11 +154,31 @@ async def malwarebazaar(hash):
 
 
 @router.get("/api/newsfeed", tags=["OSINT Toolkit modules"])
-async def news():
-    '''
-    Get news articles from various RSS feeds
-    '''
-    return newsfeed.get_news()
+async def get_news():
+    """
+    Get news articles from the database
+    """
+    news_list = newsfeed.get_news_from_db()
+    return news_list
+
+
+@router.post("/api/newsfeed/fetch", tags=["OSINT Toolkit modules"])
+async def fetch_news():
+    """
+    Fetch new news and store them in the database
+    """
+    newsfeed.fetch_and_store_news()
+    return {"message": "News fetched and stored"}
+
+
+@router.post("/api/newsfeed/fetch_and_get", tags=["OSINT Toolkit modules"])
+async def fetch_and_get_news():
+    """
+    Fetch new news, store them in the database, and return the latest news
+    """
+    newsfeed.fetch_and_store_news()
+    news_list = newsfeed.get_news_from_db()
+    return news_list
 
 
 @router.get("/api/ip/pulsedive", tags=["IP addresses"])
@@ -397,6 +417,7 @@ async def analyze_code_endpoint(input: dict = Body(..., example={"input": "YOUR_
         inputdata, apikey['key'], 'codeexpert')
     return {"analysis_result": analysis_result}
 
+
 @router.post("/api/aiassistant/deobfuscator", tags=["AI Assistant"])
 async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
     '''
@@ -407,6 +428,7 @@ async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "
     analysis_result = ask_prompt(
         inputdata, apikey['key'], 'deobfuscator')
     return {"analysis_result": analysis_result}
+
 
 @router.post("/api/aiassistant/incidentreport", tags=["AI Assistant"])
 async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
@@ -419,6 +441,7 @@ async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "
         inputdata, apikey['key'], 'incidentreport')
     return {"analysis_result": analysis_result}
 
+
 @router.post("/api/aiassistant/configreview", tags=["AI Assistant"])
 async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
     '''
@@ -430,6 +453,7 @@ async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "
         inputdata, apikey['key'], 'configreview')
     return {"analysis_result": analysis_result}
 
+
 @router.post("/api/aiassistant/patchanalysis", tags=["AI Assistant"])
 async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
     '''
@@ -440,6 +464,7 @@ async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "
     analysis_result = ask_prompt(
         inputdata, apikey['key'], 'patchanalysis')
     return {"analysis_result": analysis_result}
+
 
 @router.post("/api/aiassistant/accesscontrol", tags=["AI Assistant"])
 async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):

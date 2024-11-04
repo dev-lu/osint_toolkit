@@ -1,22 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, status
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from dependencies import get_db
-from database import crud, models, schemas
-from database.database import engine
-from database.models import Settings
-from database.schemas import ModuleSettingsSchema, ModuleSettingsCreateSchema
-import ioc_extractor
-import email_analyzer
+from database import crud, schemas
 import logging
 from typing import Dict, Any
 
-router = APIRouter()
-models.Base.metadata.create_all(bind=engine)
 
-# ===========================================================================
-# Routes for internal API calls
-# ===========================================================================
+router = APIRouter()
+
 # Create API key
 @router.post("/api/apikeys/", response_model=schemas.ApikeySchema, tags=["OSINT Toolkit modules"], status_code=status.HTTP_201_CREATED)
 def create_apikey(apikey: schemas.ApikeySchema, db: Session = Depends(get_db)):
