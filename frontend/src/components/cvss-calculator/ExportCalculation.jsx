@@ -530,7 +530,7 @@ __________
   }
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+    <div style={{ display: "flex", justifyContent: "center", marginTop: "20px", marginBottom: "15px" }}>
       <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
         <Button onClick={handleClick} startIcon={<DownloadIcon />}>
           Export calculation

@@ -25,9 +25,8 @@ export default function MessageBody(props) {
   const card_style = {
     p: 1,
     mt: 2,
-    backgroundColor: theme.palette.background.tablecell,
     boxShadow: 0,
-    borderRadius: 5,
+    borderRadius: 1,
   };
 
   const toggleExpanded = () => {
@@ -36,11 +35,10 @@ export default function MessageBody(props) {
 
   return (
     <>
-      {/* Message text card */}
       <Grow in={true}>
         <Card key={"ema_message_text_card"} sx={card_style}>
-        <CardActionArea onClick={() => setOpen(!open)} sx={{ padding: '4px' }}>
-            <CardContent sx={{ padding: '2px' }}>
+        <CardActionArea onClick={() => setOpen(!open)} sx={{ padding: '2px' }}>
+            <CardContent sx={{ padding: '1px' }}>
               <Box
                 display="flex"
                 alignItems="center"

@@ -47,7 +47,7 @@ export default function InfoModal(props) {
           bgcolor: "background.paper",
           boxShadow: 24,
           p: 4,
-          borderRadius: 5,
+          borderRadius: 1,
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>

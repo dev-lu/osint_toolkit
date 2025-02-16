@@ -2,7 +2,7 @@ import React, { useMemo, useState, useRef } from "react";
 import api from "../../api";
 import { useDropzone } from "react-dropzone";
 
-import { Button, Chip, LinearProgress, useTheme } from "@mui/material";
+import { Button, Box, Chip, Grid, LinearProgress, Typography, Paper, useTheme } from "@mui/material";
 import MailIcon from "@mui/icons-material/Mail";
 
 import Introduction from "../Introduction";
@@ -18,9 +18,9 @@ export default function FileUpload(props) {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: "20px",
+    padding: "10px",
     borderWidth: 3,
-    borderRadius: 15,
+    borderRadius: 1,
     borderColor: "lightgrey",
     borderStyle: "dashed",
     backgroundColor: theme.palette.background.uploadarea,
@@ -149,7 +149,60 @@ export default function FileUpload(props) {
       {showResult ? (
         <Result result={file} />
       ) : (
-        <Introduction moduleName="Email Analyzer" centerText={true} />
+        <Paper sx={{ p: 3 }}>
+      <Box sx={{ mb: 4 }}>
+        <Typography paragraph>
+          Email Analyzer is a module that allows you to analyze .eml files for potential threats. 
+          To use the module, simply drag an .eml file into it. The module will then parse the file 
+          and perform basic security checks to identify any potential risks.
+        </Typography>
+        <Typography>
+          It also extracts all indicators of compromise (IOCs) from the file and makes it possible 
+          to analyze them using various open source intelligence (OSINT) services. In addition, 
+          Email Analyzer generates hash values for every attachment in the file, allowing you to 
+          perform a privacy-friendly analysis of these files.
+        </Typography>
+      </Box>
+
+      <Typography variant="h6" sx={{ mb: 2 }}>
+        Capabilities
+      </Typography>
+
+      <Grid container spacing={1}>
+        <Grid item xs={12} sm={6}>
+          <Paper elevation={0} sx={{ p: 1 }}>
+            <Typography color="primary" fontWeight="medium">Security Analysis</Typography>
+            <Typography variant="body2" color="text.secondary">
+              Performs basic security checks on .eml files
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Paper elevation={0} sx={{ p: 1 }}>
+            <Typography color="primary" fontWeight="medium">IOC Extraction</Typography>
+            <Typography variant="body2" color="text.secondary">
+              Extracts and analyzes IOCs using OSINT services
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Paper elevation={0} sx={{ p: 1 }}>
+            <Typography color="primary" fontWeight="medium">Attachment Analysis</Typography>
+            <Typography variant="body2" color="text.secondary">
+              Generates hash values for all email attachments
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Paper elevation={0} sx={{ p: 1 }}>
+            <Typography color="primary" fontWeight="medium">Privacy-Friendly</Typography>
+            <Typography variant="body2" color="text.secondary">
+              Analyze attachments without exposing original files
+            </Typography>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Paper>
       )}
     </div>
   );

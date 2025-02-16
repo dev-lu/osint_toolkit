@@ -1,9 +1,8 @@
 import React, { useState, useRef } from "react";
 import Alert from "@mui/material/Alert";
-import { AlertTitle } from "@mui/material";
+import { AlertTitle, Box, Paper, Typography, Grid } from "@mui/material";
 import Grow from "@mui/material/Grow";
 import ResultTable from "./ResultTable";
-import Introduction from "../Introduction";
 import SearchBar from "../styled/SearchBar";
 
 export default function Analyzer() {
@@ -76,14 +75,13 @@ export default function Analyzer() {
 
   return (
     <>
-      <br />
       <SearchBar
         ref={inputRef}
         placeholder="Please enter an IOC..."
-        buttonLabel="Analyze"
+        buttonLabel="Find"
         onKeyDown={handleKeypress}
         onSearchClick={validateIocFromInput}
-        sx={{ fontSize: '8px' }}
+        sx={{ fontSize: "8px" }}
         size="small"
       />
       <br />
@@ -94,7 +92,7 @@ export default function Analyzer() {
             severity="error"
             variant="filled"
             onClose={() => setInvalidInput(false)}
-            sx={{ borderRadius: 5 }}
+            sx={{ borderRadius: 1 }}
           >
             <AlertTitle>
               <b>Error</b>
@@ -111,7 +109,89 @@ export default function Analyzer() {
           iocType={iocType}
         />
       ) : (
-        <Introduction moduleName="IOC Analyzer" centerText={true} />
+        <Paper sx={{ p: 3 }}>
+          <Box sx={{ mb: 4 }}>
+            <Typography paragraph>
+              IOC Lookup is an analysis tool for investigating various
+              Indicators of Compromise (IOCs). By leveraging multiple threat
+              intelligence sources including VirusTotal, AlienVault, AbuseIPDB,
+              and more, it provides detailed insights into potential security
+              threats.
+            </Typography>
+            <Typography>
+              The tool automatically identifies the IOC type and correlates data
+              from relevant sources, enabling rapid threat assessment and
+              informed security decision-making.
+            </Typography>
+          </Box>
+
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Supported IOC Types
+          </Typography>
+
+          <Grid container spacing={1}>
+            <Grid item xs={12} sm={6}>
+              <Paper elevation={0} sx={{ p: 1 }}>
+                <Typography color="primary" fontWeight="medium">
+                  IP Addresses
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  IPv4 and IPv6 addresses for threat analysis
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Paper elevation={0} sx={{ p: 1 }}>
+                <Typography color="primary" fontWeight="medium">
+                  Domains
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Domain names and subdomains
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Paper elevation={0} sx={{ p: 1 }}>
+                <Typography color="primary" fontWeight="medium">
+                  URLs
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Web addresses and endpoints
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Paper elevation={0} sx={{ p: 1 }}>
+                <Typography color="primary" fontWeight="medium">
+                  Email Addresses
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Known malicious or suspicious email addresses
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Paper elevation={0} sx={{ p: 1 }}>
+                <Typography color="primary" fontWeight="medium">
+                  Hashes
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  MD5, SHA1, and SHA256 file hashes
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Paper elevation={0} sx={{ p: 1 }}>
+                <Typography color="primary" fontWeight="medium">
+                  CVEs
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Common Vulnerabilities and Exposures identifiers
+                </Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Paper>
       )}
     </>
   );

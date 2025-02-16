@@ -23,12 +23,11 @@ import { Typography } from "@mui/material";
 export default function Details(props) {
   return (
     <Card
-      variant="outlined"
       sx={{
         mb: 1,
         mr: 1,
         p: 2,
-        borderRadius: 5,
+        borderRadius: 1,
         boxShadow: 0,
         width: "calc(50% - 10px)",
       }}
@@ -43,7 +42,7 @@ export default function Details(props) {
           </Typography>
         </Grid>
       </Grid>
-      <List>
+      <List dense>
         <ListItem alignItems="flex-start">
           <ListItemIcon>
             <GppMaybeOutlinedIcon

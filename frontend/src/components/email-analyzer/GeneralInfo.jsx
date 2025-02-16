@@ -39,9 +39,8 @@ export default function GeneralInfo(props) {
   const card_style = {
     p: 1,
     mt: 2,
-    backgroundColor: theme.palette.background.tablecell,
     boxShadow: 0,
-    borderRadius: 5,
+    borderRadius: 1,
   };
 
   const [showHashAnalysisEml, setShowHashAnalysisEml] = React.useState(false);
@@ -82,11 +81,10 @@ export default function GeneralInfo(props) {
 
   return (
     <>
-      {/* General information card */}
       <Grow in={true}>
         <Card key={"ema_general_info_card"} sx={card_style}>
-          <CardActionArea onClick={() => setOpen(!open)} sx={{ padding: '4px' }}>
-            <CardContent sx={{ padding: '2px' }}>
+          <CardActionArea onClick={() => setOpen(!open)} sx={{ padding: '2px' }}>
+            <CardContent sx={{ padding: '1px' }}>
               <Box
                 display="flex"
                 alignItems="center"
@@ -101,7 +99,7 @@ export default function GeneralInfo(props) {
             </CardContent>
           </CardActionArea>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Grid container spacing={2}>
+            <Grid container spacing={1}>
               <Grid item xs={6}>
                 <List>
                   <ListItem>

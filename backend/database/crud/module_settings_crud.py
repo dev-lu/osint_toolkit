@@ -12,10 +12,7 @@ def get_specific_module_setting(db: Session, module_name: str):
 
 
 def update_module_setting(db: Session, setting: ModuleSettings, setting_input: ModuleSettingsCreateSchema):
-    setattr(setting, 'name', setting_input.name)
-    setattr(setting, 'description', setting_input.description)
-    setattr(setting, 'enabled', setting_input.enabled)
-    db.add(setting)
+    setting.enabled = setting_input.enabled
     db.commit()
     db.refresh(setting)
     return setting
@@ -49,3 +46,24 @@ def delete_setting(db: Session, setting_name: str):
     db.delete(setting)
     db.commit()
     return setting
+
+def get_keywords(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Keyword).offset(skip).limit(limit).all()
+
+
+def create_keyword(db: Session, keyword: str):
+    db_keyword = Keyword(keyword=keyword)
+    db.add(db_keyword)
+    db.commit()
+    db.refresh(db_keyword)
+    return db_keyword
+
+
+def delete_keyword(db: Session, keyword_id: int):
+    db_keyword = db.query(Keyword).filter(Keyword.id == keyword_id).first()
+    if db_keyword:
+        db.delete(db_keyword)
+        db.commit()
+        return True
+    else:
+        return false

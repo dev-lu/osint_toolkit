@@ -19,8 +19,8 @@ import Reddit from "./services/Reddit";
 import Twitter from "./services/Twitter";
 import Virustotal from "./services/multi/Virustotal";
 import Pulsedive from "./services/multi/Pulsedive";
-import Threatfox from "./services/ipv4/Threatfox";
-import { apiKeysState } from "../../App";
+import Malwarebazaar from './services/hash/Malwarebazaar'
+import { apiKeysState } from "../../state";
 import NoApikeys from "./NoApikeys";
 
 export default function Hash(props) {
@@ -49,9 +49,7 @@ export default function Hash(props) {
               component={Paper}
               sx={{
                 boxShadow: 0,
-                borderRadius: 5,
-                border: 1,
-                borderColor: theme.palette.background.tableborder,
+                borderRadius: 1,
               }}
             >
               <Table aria-label="result_table">
@@ -92,16 +90,15 @@ export default function Hash(props) {
                   ) : (
                     <></>
                   )}
-                  {apiKeys.threatfox ? (
-                    <Threatfox ioc={props.ioc} type="hash" />
-                  ) : (
-                    <></>
-                  )}
                   {apiKeys.virustotal ? (
                     <Virustotal ioc={props.ioc} type="hash" />
                   ) : (
                     <></>
                   )}
+                  {
+                    <Malwarebazaar ioc={props.ioc} type="hash" />
+                  
+                  }
                   {apiKeys.github ? (
                     <Github ioc={props.ioc} type="hash" />
                   ) : (

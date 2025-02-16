@@ -2,7 +2,7 @@ import React from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import api from "../../api";
 
-import { generalSettingsState } from "../../App";
+import { generalSettingsState } from "../../state";
 
 import Card from "@mui/material/Card";
 import FormControl from "@mui/material/FormControl";
@@ -45,7 +45,7 @@ export default function General() {
     m: 1,
     boxShadow: "0",
     backgroundColor: theme.palette.background.card,
-    borderRadius: 5,
+    borderRadius: 1,
   };
 
   function handleDarkmodeChange() {

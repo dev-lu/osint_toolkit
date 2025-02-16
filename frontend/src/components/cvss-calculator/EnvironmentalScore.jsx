@@ -1,31 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 import Circle from "./Circle";
 import { cvssScoresAtom } from "./CvssScoresAtom";
 import {
-  Card,
-  Chip,
-  Divider,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
   Grid,
   MenuItem,
   TextField,
   Typography,
   useTheme,
-  Box,
 } from "@mui/material";
 import ForestIcon from "@mui/icons-material/Forest";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const MetricSelect = ({ label, value, options, onChange }) => (
   <Box display="flex" alignItems="center" sx={{ my: 2, mx: 4 }}>
     <TextField
       select
       fullWidth
+      size="small"
       label={label}
       value={value}
       onChange={onChange}
       InputProps={{
         sx: {
-          borderRadius: "10px",
+          borderRadius: "1",
         },
       }}
     >
@@ -41,6 +43,7 @@ const MetricSelect = ({ label, value, options, onChange }) => (
 export default function EnvironmentalScore() {
   const theme = useTheme();
   const [cvssScores, setCvssScores] = useRecoilState(cvssScoresAtom);
+  const [expanded, setExpanded] = useState(true);
 
   const handleSelectChange = (key) => (e) => {
     setCvssScores((prev) => ({
@@ -182,36 +185,33 @@ export default function EnvironmentalScore() {
   ];
 
   return (
-    <>
-      <Grid item xs={12}>
-        <Divider sx={{ mt: 4 }}>
-          <Chip
-            icon={<ForestIcon />}
-            label="Environmental Score Metrics"
-            sx={{
-              fontSize: "20px",
-              padding: "10px",
-              height: "40px",
-              backgroundColor: theme.palette.background.cvssCard,
-            }}
-          />
-        </Divider>
-        <Grid
-          container
-          spacing={2}
-          sx={{ alignItems: "stretch", marginTop: 2 }}
-        >
-          <Card
-            elevation={0}
-            sx={{
-              m: 2,
-              p: 2,
-              borderRadius: 5,
-              flex: 1,
-              minWidth: 0,
-              backgroundColor: theme.palette.background.cvssCard,
-            }}
-          >
+    <Accordion 
+      sx={{ 
+        borderRadius: 1,
+        backgroundColor: 'transparent',
+        '&:before': {
+          display: 'none',
+        },
+      }}
+    >
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        sx={{
+          backgroundColor: theme.palette.background.cvssCard,
+          borderRadius: 1,
+          minHeight: 64,
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <ForestIcon />
+          <Typography variant="h6" sx={{ fontSize: 20 }}>
+            Environmental Score Metrics
+          </Typography>
+        </Box>
+      </AccordionSummary>
+      <AccordionDetails sx={{ p: 0 }}>
+        <Grid container spacing={2} sx={{ alignItems: "stretch", mt: 1 }}>
+          <Box sx={{ m: 2, p: 2, flex: 1, minWidth: 0 }}>
             <Typography variant="body1" paragraph>
               These metrics enable the analyst to customize the CVSS score
               depending on the importance of the affected IT asset to a user's
@@ -221,42 +221,29 @@ export default function EnvironmentalScore() {
               metrics and are assigned metrics value based on the component
               placement in organization infrastructure.
             </Typography>
-          </Card>
-          <Card
-            elevation={0}
-            sx={{
-              mb: 2,
-              mt: 2,
-              p: 2,
-              borderRadius: 5,
-              minWidth: 0,
-              backgroundColor: theme.palette.background.cvssCard,
+          </Box>
+          
+          <Box sx={{ 
+            display: "flex", 
+            flexDirection: "column", 
+            alignItems: "center", 
+            justifyContent: "center",
+            m: 2
+          }}>
+            <Box sx={{
+              width: 120,
+              height: 120,
               display: "flex",
-              flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-            }}
-          >
-            <Box
-              sx={{
-                width: 120,
-                height: 120,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: theme.palette.background.cvssCircle,
-                borderRadius: "50%",
-              }}
-            >
+              backgroundColor: theme.palette.background.cvssCircle,
+              borderRadius: "50%",
+            }}>
               <Circle value={cvssScores.environmental.environmentalScore} />
             </Box>
             <Typography
               variant="h6"
-              fontWeight={
-                cvssScores.environmental.environmentalScore >= 9.0
-                  ? "bold"
-                  : "normal"
-              }
+              fontWeight={cvssScores.environmental.environmentalScore >= 9.0 ? "bold" : "normal"}
               color={
                 cvssScores.environmental.environmentalScore >= 7.0
                   ? "red"
@@ -278,42 +265,34 @@ export default function EnvironmentalScore() {
                 ? "None"
                 : "Low"}
             </Typography>
-          </Card>
+          </Box>
         </Grid>
-      </Grid>
 
-      <Card
-        elevation={0}
-        sx={{
-          p: 2,
-          borderRadius: 5,
-          minWidth: 0,
-          backgroundColor: theme.palette.background.cvssCard,
-        }}
-      >
-        <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
-          <Grid item xs={12} md={4}>
-            <Typography variant="h6" align="center" gutterBottom>
-              Exploitability Metrics
-            </Typography>
-            {renderMetricSelect(exploitabilityMetrics)}
-          </Grid>
+        <Box sx={{ p: 2, minWidth: 0 }}>
+          <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
+            <Grid item xs={12} md={4}>
+              <Typography variant="h6" align="center" gutterBottom>
+                Exploitability Metrics
+              </Typography>
+              {renderMetricSelect(exploitabilityMetrics)}
+            </Grid>
 
-          <Grid item xs={12} md={4}>
-            <Typography variant="h6" align="center" gutterBottom>
-              Impact Metrics
-            </Typography>
-            {renderMetricSelect(impactMetrics)}
-          </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography variant="h6" align="center" gutterBottom>
+                Impact Metrics
+              </Typography>
+              {renderMetricSelect(impactMetrics)}
+            </Grid>
 
-          <Grid item xs={12} md={4}>
-            <Typography variant="h6" align="center" gutterBottom>
-              Impact Subscore Modifiers
-            </Typography>
-            {renderMetricSelect(impactSubscoreModifiers)}
+            <Grid item xs={12} md={4}>
+              <Typography variant="h6" align="center" gutterBottom>
+                Impact Subscore Modifiers
+              </Typography>
+              {renderMetricSelect(impactSubscoreModifiers)}
+            </Grid>
           </Grid>
-        </Grid>
-      </Card>
-    </>
+        </Box>
+      </AccordionDetails>
+    </Accordion>
   );
 }

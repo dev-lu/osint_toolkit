@@ -73,7 +73,7 @@ export default function Details(props) {
         sx={{
           m: 1,
           p: 2,
-          borderRadius: 5,
+          borderRadius: 1,
           boxShadow: 0,
           float: "right",
           height: "100%",
@@ -94,7 +94,7 @@ export default function Details(props) {
               style={{
                 width: "250px",
                 float: "right",
-                borderRadius: "15px",
+                borderRadius: "1",
               }}
             />
           </a>
@@ -106,7 +106,7 @@ export default function Details(props) {
         sx={{
           m: 1,
           p: 1,
-          borderRadius: 5,
+          borderRadius: 1,
           boxShadow: 0,
           height: "100%",
         }}
@@ -194,7 +194,7 @@ export default function Details(props) {
 
       <Card
         variant="outlined"
-        sx={{ m: 1, p: 1, borderRadius: 5, boxShadow: 0 }}
+        sx={{ m: 1, p: 1, borderRadius: 1, boxShadow: 0 }}
       >
         <CardContent>
           <Grid container spacing={2}>

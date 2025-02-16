@@ -1,16 +1,17 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Dict
 import datetime
 
 
 class NewsfeedSettingsSchema(BaseModel):
     name: str
     url: str
-    icon: str = "default_icon.png"
+    icon: str = "default.png"
+    icon_id: Optional[str] = None
     enabled: bool = True
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class NewsfeedSettingsCreateSchema(BaseModel):
@@ -25,24 +26,20 @@ class NewsArticleSchema(BaseModel):
     icon: str
     title: str
     summary: str
+    full_text: Optional[str] = ''
     date: datetime.datetime
     link: str
     fetched_at: datetime.datetime
     matches: Optional[List[str]] = None
+    iocs: Optional[Dict[str, List[str]]] = None
+    relevant_iocs: Optional[List[str]] = None
     analysis_result: Optional[str] = None
     note: Optional[str] = None
     tlp: Optional[str] = "TLP:CLEAR"
     read: bool = False
-    ips: Optional[List[str]] = []
-    md5_hashes: Optional[List[str]] = []
-    sha1_hashes: Optional[List[str]] = []
-    sha256_hashes: Optional[List[str]] = []
-    urls: Optional[List[str]] = []
-    domains: Optional[List[str]] = []
-    emails: Optional[List[str]] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class NewsfeedConfigSchema(BaseModel):
     id: int
@@ -53,7 +50,7 @@ class NewsfeedConfigSchema(BaseModel):
     keyword_matching_enabled: bool = False
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class UpdateArticleRequest(BaseModel):

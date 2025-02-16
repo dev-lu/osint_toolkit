@@ -6,44 +6,39 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import Stack from "@mui/material/Stack";
 import useTheme from "@mui/material/styles/useTheme";
 
-import liberapay from './images/donate_liberapay.png';
-import kofi from './images/donate_kofi.png';
-import patreon from './images/donate_patreon.png';
-
+import liberapay from "./images/donate_liberapay.png";
+import kofi from "./images/donate_kofi.png";
+import patreon from "./images/donate_patreon.png";
 
 export default function About() {
   const theme = useTheme();
   const cardStyle = {
     m: 1,
     p: 2,
-    borderRadius: 5,
+    borderRadius: 1,
     backgroundColor: theme.palette.background.card,
     boxShadow: 0,
   };
 
   return (
     <>
-      {/* Version card */}
       <Card sx={cardStyle}>
         <h2>About - OSINT Toolkit v0.1 (beta)</h2>
         <p>
-          OSINT Toolkit is a web application designed to make the life of
-          security analysts easier by combining many functions and services into
-          a single tool. Written in React and FastAPI, the toolkit provides a
-          range of features to help you identify potential threats and stay
-          informed about the latest developments in the field of cyber security.
-          With OSINT Toolkit, you can analyze indicators of compromise (IOCs)
-          such as IP addresses, hashes, email addresses, domains, and URLs using
-          services like VirusTotal, AlienVault, and AbuseIPDB, as well as social
-          media platforms like Twitter. You can also search for recently
-          registered domains that match a specific pattern, view screenshots of
-          websites to see what is behind them, check domains and IPs against
-          threat intelligence services, extract and organize IOCs from
-          unstructured files, and stay up to date on the latest cyber security
-          news. All of these features are designed to help you save time and
-          effort while protecting your organization from potential threats and
-          staying informed about the latest developments in the field of cyber
-          security.
+          OSINT Toolkit is a self-hostable, on-demand analysis platform designed
+          for security specialists. It consolidates various security tools into
+          a single, easy-to-use environment, streamlining everyday investigative
+          tasks. Optimized for single-user operation, OSINT Toolkit runs locally
+          in a Docker container and is not intended for long-term data storage
+          or management. Instead, it focuses on accelerating daily workflows,
+          such as news aggregation and analysis, IOC and email investigations,
+          and the creation of threat detection rules. To further enhance
+          efficiency, OSINT Toolkit integrates generative AI capabilities,
+          providing additional support for analysis and decision-making. Beyond
+          its practical applications, the project also serves as a personal
+          playground for experimenting with new technologies and automation
+          possibilities — potentially laying the foundation for a future
+          commercial cloud platform.
         </p>
         <p>
           The name OSINT Toolkit is a temporary name. The name may be changed in
@@ -68,31 +63,23 @@ export default function About() {
       <Card sx={cardStyle}>
         <h2>Donate to support the development</h2>
         <p>
-          If you want to support the development of OSINT Toolkit, you can donate using
-          a service of your choice.
+          If you want to support the development of OSINT Toolkit, you can
+          donate using a service of your choice.
         </p>
         <br />
         <Stack direction="row" spacing={4} sx={{ mb: 1 }}>
-          <a href="https://liberapay.com/Dev-LU/donate" target="_blank" rel="noreferrer">
-            <img
-              alt="Donate using Liberapay"
-              height={60}
-              src={liberapay}
-            />
+          <a
+            href="https://liberapay.com/Dev-LU/donate"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img alt="Donate using Liberapay" height={60} src={liberapay} />
           </a>
           <a href="https://ko-fi.com/devlu" target="_blank" rel="noreferrer">
-            <img
-              alt="Donate using Ko-fi"
-              height={60}
-              src={kofi}
-            />
+            <img alt="Donate using Ko-fi" height={60} src={kofi} />
           </a>
           <a href="https://patreon.com/devlu" target="_blank" rel="noreferrer">
-            <img
-              alt="Donate using Patreon"
-              height={60}
-              src={patreon}
-            />
+            <img alt="Donate using Patreon" height={60} src={patreon} />
           </a>
         </Stack>
       </Card>

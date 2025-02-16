@@ -355,13 +355,13 @@ export default function CrowdSec(props) {
     <>
       {result && (
         <>
-          <Card variant="outlined" sx={{ p: 2, borderRadius: 5, boxShadow: 0 }}>
+          <Card sx={{ p: 2, borderRadius: 1, boxShadow: 0 }}>
             <Typography variant="h5" component="h3" gutterBottom>
               Details
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <List sx={{ mt: 1 }}>
+                <List dense sx={{ mt: 1 }}>
                   <ListItem>
                     <ListItemIcon>
                       <LanIcon />
@@ -572,8 +572,7 @@ Aggregation of 4 components calculated on threats reported by the community and 
 
       {result && result["target_countries"] && (
         <Card
-          variant="outlined"
-          sx={{ mt: 2, p: 2, borderRadius: 5, boxShadow: 0 }}
+          sx={{ mt: 2, p: 2, borderRadius: 1, boxShadow: 0 }}
         >
           <Grid container spacing={2}>
             <Grid item xs={6}>

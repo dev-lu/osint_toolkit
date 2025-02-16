@@ -1,32 +1,25 @@
-import React from "react";
-import api from "../../../../api";
-import { useEffect, useState, useRef } from "react";
-import { PieChart, Pie } from "recharts";
+import React, { useEffect, useState } from 'react';
+import {
+  Card,
+  Box,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from '@mui/material';
+import {
+  FileCopyOutlined as FileCopyIcon,
+  PeopleOutlined as PeopleIcon,
+  ScheduleOutlined as ScheduleIcon,
+  VerifiedUserOutlined as VerifiedUserIcon,
+} from '@mui/icons-material';
+import { PieChart, Pie } from 'recharts';
+import api from '../../../../api';
+import GeneralInfo from './common/GeneralInfo';
+import ResultRow from '../../ResultRow';
 
-import Card from "@mui/material/Card";
-import Box from "@mui/material/Box";
-
-import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import VerifiedUserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
-import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
-import RouterOutlinedIcon from "@mui/icons-material/RouterOutlined";
-import DomainOutlinedIcon from "@mui/icons-material/DomainOutlined";
-import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
-import DnsOutlinedIcon from "@mui/icons-material/DnsOutlined";
-import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import { Typography } from "@mui/material";
-
-import ResultRow from "../../ResultRow";
-
-export default function AbuseIpdb(props) {
-  const propsRef = useRef(props);
+export default function AbuseIpdb({ ioc }) {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -39,224 +32,159 @@ export default function AbuseIpdb(props) {
   };
 
   const getCircleFillColor = (score) => {
-    if (score === 0) {
-      return colors.green;
-    } else if (score >= 1 && score <= 59) {
-      return colors.orange;
-    } else if (score >= 60 && score <= 100) {
-      return colors.red;
-    }
+    if (score === 0) return colors.green;
+    if (score >= 1 && score <= 59) return colors.orange;
+    return colors.red;
   };
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const url = "/api/ip/abuseipdb/" + propsRef.current.ioc;
-        const response = await api.get(url);
+        const response = await api.get(`/api/ip/abuseipdb/${ioc}`);
         setResult(response.data);
-        setScore(response.data["data"]["abuseConfidenceScore"]);
+        setScore(response.data.data.abuseConfidenceScore);
       } catch (e) {
         setError(e);
       }
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [ioc]);
 
-  const details = (
-    <>
-      {result && (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: "1rem",
-          }}
-        >
-          <Box sx={{ width: "65%" }}>
-            <Card
-              variant="outlined"
-              sx={{ p: 2, borderRadius: 5, boxShadow: 0 }}
-            >
-              <Typography variant="h5" component="h3" gutterBottom>
-                Details
-              </Typography>
-              <List sx={{ mt: 1 }}>
-                <ListItem>
-                  <ListItemIcon>
-                    <CheckCircleOutlineIcon
-                      sx={{ color: getCircleFillColor(score) }}
-                    />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={`Score: ${result.data["abuseConfidenceScore"]}% malicious`}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <FileCopyOutlinedIcon color="primary" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={`Total reports: ${result.data["totalReports"]}`}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <PeopleOutlinedIcon color="primary" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={`Number of reporting users: ${result.data["numDistinctUsers"]}`}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <ScheduleOutlinedIcon color="primary" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={`Last report: ${result.data["lastReportedAt"]}`}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <VerifiedUserOutlinedIcon
-                      color={
-                        result.data["isWhitelisted"] ? "success" : "primary"
-                      }
-                    />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={`Whitelisted: ${
-                      result.data["isWhitelisted"] ? "Yes" : "No"
-                    }`}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <LanguageOutlinedIcon color="primary" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={`Country code: ${result.data["countryCode"]}`}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <RouterOutlinedIcon color="primary" />
-                  </ListItemIcon>
-                  <ListItemText primary={`ISP: ${result.data["isp"]}`} />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <DomainOutlinedIcon color="primary" />
-                  </ListItemIcon>
-                  <ListItemText primary={`Domain: ${result.data["domain"]}`} />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <CategoryOutlinedIcon color="primary" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={`Type: ${
-                      result.data["usageType"]
-                        ? result.data["usageType"]
-                        : "Unknown"
-                    }`}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <DnsOutlinedIcon color="primary" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={`Hostnames: ${
-                      result.data["hostnames"].length > 0
-                        ? result.data["hostnames"].join(", ")
-                        : "None"
-                    }`}
-                  />
-                </ListItem>
-              </List>
-            </Card>
-          </Box>
+  const transformedData = result?.data ? {
+    ip: result.data.ipAddress,
+    ipType: result.data.usageType,
+    domain: result.data.domain,
+    hostnames: result.data.hostnames || [],
+    country: result.data.countryName,
+    countryCode: result.data.countryCode,
+    isp: result.data.isp,
+  } : {};
 
-          <Card
-            variant="outlined"
-            sx={{ p: 2, borderRadius: 5, boxShadow: 0, margin: "0 auto" }}
-          >
+  const details = result && (
+    <Box sx={{ 
+      display: 'flex', 
+      flexDirection: { xs: 'column', md: 'row' },
+      gap: 1 
+    }}>
+      <Box sx={{ flex: { xs: '1', md: '1' } }}>
+        <GeneralInfo
+          data={transformedData}
+          loading={loading}
+          error={error}
+        />
+      </Box>
+      
+      <Card  sx={{ 
+        flex: { xs: '1', md: '1' },
+        p: 1, 
+        borderRadius: 1
+      }}>
+        <Box sx={{ 
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          gap: 2,
+          alignItems: 'center'
+        }}>
+          <Box sx={{ width: { xs: '100%', md: '50%' } }}>
             <PieChart width={200} height={200}>
               <Pie
                 data={[
                   { name: "Score", value: score },
-                  { name: "Remaining", value: 100 - score, fill: "#d3d3d3" },
+                  { name: "Remaining", value: 100 - score, fill: "#d3d3d3" }
                 ]}
                 dataKey="value"
                 startAngle={90}
                 endAngle={-270}
                 innerRadius="80%"
                 outerRadius="100%"
-                minAngle={1}
-                domain={[0, 100]}
                 stroke="none"
-                strokeWidth={0}
                 fill={getCircleFillColor(score)}
               />
-              <foreignObject
-                width="100%"
-                height="100%"
-                style={{ textAlign: "center" }}
-              >
-                <div
-                  style={{
-                    display: "inline-block",
-                    position: "relative",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                  }}
-                >
-                  <Typography
-                    variant="h4"
-                    color={getCircleFillColor(score)}
-                    sx={{ textAlign: "center" }}
-                    textAnchor="middle"
+              <foreignObject width="100%" height="100%">
+                <Box sx={{ 
+                  height: '100%', 
+                  display: 'flex', 
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <Typography 
+                    variant="h4" 
+                    sx={{ color: getCircleFillColor(score) }}
                   >
-                    <text x="50%" y="50%">
-                      {score}%
-                    </text>
+                    {score}%
                   </Typography>
-                  <Typography
-                    variant="h5"
+                  <Typography 
+                    variant="body1" 
                     color="textSecondary"
-                    sx={{ textAlign: "center" }}
-                    textAnchor="middle"
                   >
-                    <text x="50%" y="50%">
-                      malicious
-                    </text>
+                    malicious
                   </Typography>
-                </div>
+                </Box>
               </foreignObject>
             </PieChart>
-          </Card>
+          </Box>
+
+          <Box sx={{ width: { xs: '100%', md: '50%' } }}>
+            <List disablePadding>
+              <ListItem dense>
+                <ListItemIcon>
+                  <FileCopyIcon color="primary" />
+                </ListItemIcon>
+                <ListItemText 
+                  primary="Total Reports" 
+                  secondary={result.data.totalReports} 
+                />
+              </ListItem>
+              <ListItem dense>
+                <ListItemIcon>
+                  <PeopleIcon color="primary" />
+                </ListItemIcon>
+                <ListItemText 
+                  primary="Distinct Users" 
+                  secondary={result.data.numDistinctUsers} 
+                />
+              </ListItem>
+              <ListItem dense>
+                <ListItemIcon>
+                  <ScheduleIcon color="primary" />
+                </ListItemIcon>
+                <ListItemText 
+                  primary="Last Report" 
+                  secondary={result.data.lastReportedAt} 
+                />
+              </ListItem>
+              <ListItem dense>
+                <ListItemIcon>
+                  <VerifiedUserIcon 
+                    color={result.data.isWhitelisted ? "success" : "primary"} 
+                  />
+                </ListItemIcon>
+                <ListItemText 
+                  primary="Whitelisted" 
+                  secondary={result.data.isWhitelisted ? "Yes" : "No"} 
+                />
+              </ListItem>
+            </List>
+          </Box>
         </Box>
-      )}
-    </>
+      </Card>
+    </Box>
   );
 
   return (
-    <>
-      <ResultRow
-        name="AbuseIPDB"
-        id="abuseipdb"
-        icon="aipdb_logo_small"
-        loading={loading}
-        result={result}
-        summary={score + "% malicious"}
-        summary_color={{ color: null }}
-        color={score === 0 ? "green" : score <= 60 ? "orange" : "red"}
-        error={error}
-        details={details}
-      />
-    </>
+    <ResultRow
+      name="AbuseIPDB"
+      id="abuseipdb"
+      icon="aipdb_logo_small"
+      loading={loading}
+      result={result}
+      summary={`${score}% malicious`}
+      color={score === 0 ? "green" : score <= 60 ? "orange" : "red"}
+      error={error}
+      details={details}
+    />
   );
 }

@@ -16,7 +16,7 @@ import useTheme from "@mui/material/styles/useTheme";
 import Github from "./services/multi/Github";
 import Reddit from "./services/Reddit";
 import Twitter from "./services/Twitter";
-import { apiKeysState } from "../../App";
+import { apiKeysState } from "../../state";
 import NoApikeys from "./NoApikeys";
 
 export default function Ipv6(props) {

@@ -26,7 +26,7 @@ import Ipqualityscore from "./services/ipv4/Ipqualityscore.jsx";
 import Shodan from "./services/multi/Shodan.jsx";
 import Reddit from "./services/Reddit";
 import Twitter from "./services/Twitter.jsx";
-import { apiKeysState } from "../../App";
+import { apiKeysState } from "../../state";
 import NoApikeys from "./NoApikeys";
 
 export default function Ipv4(props) {
@@ -64,35 +64,31 @@ export default function Ipv4(props) {
               component={Paper}
               sx={{
                 boxShadow: 0,
-                borderRadius: 5,
-                border: 1,
-                borderColor: theme.palette.background.tableborder,
+                borderRadius: 1,
               }}
             >
-              <Table aria-label="result_table">
-                <TableHead>
-                  <TableRow>
+              <Table aria-label="result_table" >
+                <TableHead >
+                  <TableRow >
                     <TableCell
-                      sx={{ bgcolor: theme.palette.background.tablecell }}
                     />
                     <TableCell
                       sx={{
-                        bgcolor: theme.palette.background.tablecell,
                         fontWeight: "bold",
+                        fontSize: 17
                       }}
                     >
                       Service
                     </TableCell>
                     <TableCell
                       sx={{
-                        bgcolor: theme.palette.background.tablecell,
                         fontWeight: "bold",
+                        fontSize: 17
                       }}
                     >
                       Result
                     </TableCell>
                     <TableCell
-                      sx={{ bgcolor: theme.palette.background.tablecell }}
                     ></TableCell>
                   </TableRow>
                 </TableHead>

@@ -7,4 +7,4 @@ class SettingsSchema(BaseModel):
     font: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True

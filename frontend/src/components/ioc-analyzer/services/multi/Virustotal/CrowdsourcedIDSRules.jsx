@@ -33,9 +33,8 @@ export default function CrowdsourcedIDSRules(props) {
 
   return (
     <Card
-      variant="outlined"
       key="tags_card"
-      sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
+      sx={{ m: 1, p: 2, borderRadius: 1, boxShadow: 0 }}
     >
       <Grid container alignItems="center">
         <Grid mr={1} item>
@@ -51,7 +50,7 @@ export default function CrowdsourcedIDSRules(props) {
         component={Paper}
         sx={{
           boxShadow: 0,
-          borderRadius: 5,
+          borderRadius: 1,
           border: 1,
           borderColor: theme.palette.background.tableborder,
         }}

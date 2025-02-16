@@ -3,16 +3,14 @@ from pydantic import BaseModel
 
 class ModuleSettingsSchema(BaseModel):
     name: str
-    description: str = ""
-    enabled: bool
+    enabled: bool = True
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class ModuleSettingsCreateSchema(BaseModel):
     name: str
-    description: str = ""
     enabled: bool
 
 

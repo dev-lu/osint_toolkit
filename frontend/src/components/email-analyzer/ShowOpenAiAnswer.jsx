@@ -5,7 +5,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialOceanic } from "react-syntax-highlighter/dist/esm/styles/prism";
 import ReactMarkdown from "react-markdown";
 
-import { apiKeysState } from '../../App';
+import { apiKeysState } from '../../state';
 
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -43,9 +43,8 @@ export default function ShowOpenAiAnswer(props) {
               <Card
                 sx={{
                   m: 2,
-                  p: 3,
-                  borderRadius: 5,
-                  backgroundColor: theme.palette.background.card,
+                  p: 2,
+                  borderRadius: 1,
                   boxShadow: 0,
                   textAlign: "left",
                 }}

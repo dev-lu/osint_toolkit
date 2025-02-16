@@ -1,173 +1,232 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useRecoilValue } from "recoil";
-import { modulesState } from "./App";
-import PropTypes from "prop-types";
-
-import AiAssistant from "./components/aiassistant/AiAssistant";
-import Analyzer from "./components/ioc-analyzer/Analyzer";
-import EmailAnalyzer from "./components/email-analyzer/EmailAnalyzer";
-import Extractor from "./components/ioc-extractor/Extractor";
-import Header from "./components/Header";
-import Monitoring from "./components/domain-monitoring/Monitoring";
-import Newsfeed from "./components/newsfeed/Newsfeed";
-import Settings from "./components/settings/Settings";
-
+import { modulesState, generalSettingsState, apiKeysState } from "./state";
+import { Outlet, Link, useLocation } from "react-router-dom";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
-import CalculateIcon from "@mui/icons-material/Calculate";
-import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
-import MailIcon from "@mui/icons-material/Mail";
-import NewspaperIcon from "@mui/icons-material/Newspaper";
-import { Paper } from "@mui/material";
-import PsychologyIcon from "@mui/icons-material/Psychology";
-import RuleIcon from "@mui/icons-material/Rule";
-import SearchIcon from "@mui/icons-material/Search";
+import Divider from "@mui/material/Divider";
+import Button from "@mui/material/Button";
+import MenuIcon from "@mui/icons-material/Menu";
 import SettingsIcon from "@mui/icons-material/Settings";
-import Sigma from "./components/rule-creator/Sigma";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import TravelExploreIcon from "@mui/icons-material/TravelExplore";
-import CvssCalculator from "./components/cvss-calculator/CvssCalculator";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { ColorModeContext } from "./App";
+import SidebarTabs from "./components/SidebarTabs";
+import {
+  mainMenuItems,
+  aiTemplatesTabs,
+  newsfeedTabs,
+  settingsTabs,
+  rulesTabs,
+} from "./sidebarConfig";
+import ot_logo_dark from "./images/ot_logo_dark.png";
+
+const drawerWidth = 240;
+const menuItems = mainMenuItems;
 
 export default function Main() {
   const modules = useRecoilValue(modulesState);
+  const apiKeys = useRecoilValue(apiKeysState);
+  const generalSettings = useRecoilValue(generalSettingsState);
+  const colorMode = useContext(ColorModeContext);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
 
-  function getLowestTabIndex() {
-    if (modules["Newsfeed"].enabled) {
-      return 0;
-    } else if (modules["IOC Analyzer"].enabled) {
-      return 1;
-    } else if (modules["Email Analyzer"].enabled) {
-      return 2;
-    } else if (modules["IOC Extractor"].enabled) {
-      return 3;
-    } else if (modules["Domain Monitoring"].enabled) {
-      return 4;
-    } else if (modules["AI Assistant"].enabled) {
-      return 5;
-    } else if (modules["CVSS Calculator"].enabled) {
-      return 6;
-    } else if (modules["Rules"].enabled) {
-      return 7;
-    } else {
-      return 8;
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const getSidebarContent = () => {
+    if (location.pathname.startsWith("/ai-templates") && apiKeys.openai) {
+      return <SidebarTabs title="AI Templates" tabs={aiTemplatesTabs} />;
     }
-  }
-
-  // State for tab value
-  const [value, setValue] = useState(getLowestTabIndex());
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+    if (location.pathname.startsWith("/newsfeed")) {
+      const filteredTabs = newsfeedTabs.filter(tab => 
+        tab.path !== "/newsfeed/report" || apiKeys.openai
+      );
+      return <SidebarTabs title="" tabs={filteredTabs} />;
+    }
+    if (location.pathname.startsWith("/settings")) {
+      return <SidebarTabs title="" tabs={settingsTabs} />;
+    }
+    if (location.pathname.startsWith("/rules")) {
+      return <SidebarTabs title="" tabs={rulesTabs} />;
+    }
+    return null;
   };
 
-  function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+  const filteredMenuItems = menuItems.filter(item => {
+    if (item.name === "AI Templates") {
+      return apiKeys.openai;
+    }
+    return modules[item.name]?.enabled ?? item.enabled;
+  });
 
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        key={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
-        {...other}
-      >
-        {value === index && <div>{children}</div>}
-      </div>
-    );
-  }
+  const sidebarContent = getSidebarContent();
+  const showSidebar = sidebarContent !== null;
 
-  TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-  };
+  const drawer = showSidebar ? (
+    <div>
+      <Toolbar>
+        <Box
+          component="img"
+          sx={{
+            height: 40,
+            mr: 2,
+          }}
+          alt="Logo"
+          src={ot_logo_dark}
+        />
+        <Typography variant="h6" noWrap>
+          Dashboard
+        </Typography>
+      </Toolbar>
+      <Divider />
+      {sidebarContent}
+    </div>
+  ) : null;
 
   return (
-    <Paper
-      sx={{
-        minWidth: "450px",
-        minHeight: "300px",
-        maxWidth: "1450px",
-        margin: "30px auto",
-        padding: "30px",
-        borderRadius: 5,
-        overflow: "auto",
-        boxShadow: "5",
-      }}
-    >
-      <Header />
+    <Box sx={{ display: "flex" }}>
+      <AppBar
+        position="fixed"
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          width: "100%",
+        }}
+      >
+        <Toolbar>
+          {showSidebar && (
+            <IconButton
+              color="inherit"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { md: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
 
-      <Box display="flex" justifyContent="center" width="100%">
-        <Tabs
-          variant="scrollable"
-          scrollButtons="auto"
-          value={value}
-          onChange={handleChange}
-        >
-          {modules["Newsfeed"].enabled ? (
-            <Tab value={0} icon={<NewspaperIcon />} label="Newsfeed" />
-          ) : null}
-          {modules["IOC Analyzer"].enabled ? (
-            <Tab value={1} icon={<SearchIcon />} label="IOC Analyzer" />
-          ) : null}
-          {modules["Email Analyzer"].enabled ? (
-            <Tab value={2} icon={<MailIcon />} label="Email Analyzer" />
-          ) : null}
-          {modules["IOC Extractor"].enabled ? (
-            <Tab
-              value={3}
-              icon={<DocumentScannerIcon />}
-              label="IOC Extractor"
-            />
-          ) : null}
-          {modules["Domain Monitoring"].enabled ? (
-            <Tab
-              value={4}
-              icon={<TravelExploreIcon />}
-              label="Domain Monitoring"
-            />
-          ) : null}
-          {modules["AI Assistant"].enabled ? (
-            <Tab value={5} icon={<PsychologyIcon />} label="AI Assistant" />
-          ) : null}
-          {modules["CVSS Calculator"].enabled ? (
-            <Tab value={6} icon={<CalculateIcon />} label="CVSS Calculator" />
-          ) : null}
-          {modules["Rules"].enabled ? (
-            <Tab value={7} icon={<RuleIcon />} label="Rules" />
-          ) : null}
+          <Box
+            component="img"
+            sx={{
+              height: 40,
+              mr: 2,
+            }}
+            alt="Logo"
+            src={ot_logo_dark}
+          />
 
-          <Tab value={8} icon={<SettingsIcon />} label="Settings" />
-        </Tabs>
+          <Box sx={{ display: { xs: "none", md: "flex" }, flexGrow: 1 }}>
+            {filteredMenuItems.map((item, index) => {
+              console.log(`Menu item: ${item.name}`, {
+                modules,
+                moduleEnabled: modules[item.name]?.enabled,
+              });
+
+              const isEnabled = modules[item.name]?.enabled ?? item.enabled;
+
+              return (
+                isEnabled && (
+                  <Button
+                    key={index}
+                    color="inherit"
+                    component={Link}
+                    to={item.path}
+                    startIcon={item.icon}
+                    sx={{
+                      ml: 2,
+                      bgcolor: location.pathname.startsWith(item.path)
+                        ? "rgba(255,255,255,0.2)"
+                        : "transparent",
+                      "&:hover": {
+                        bgcolor: "rgba(255,255,255,0.3)",
+                      },
+                    }}
+                  >
+                    {item.name}
+                  </Button>
+                )
+              );
+            })}
+          </Box>
+          {/*
+          <IconButton color="inherit" component={Link} to="/alerts" sx={{ mr: 2 }}>
+            <NotificationsIcon />
+          </IconButton>
+          */}
+          <IconButton color="inherit" onClick={colorMode.toggleColorMode}>
+            {generalSettings.darkmode ? (
+              <Brightness7Icon />
+            ) : (
+              <Brightness4Icon />
+            )}
+          </IconButton>
+
+          <IconButton
+            color="inherit"
+            component={Link}
+            to="/settings"
+            sx={{ mr: 2 }}
+          >
+            <SettingsIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+
+      {showSidebar && (
+        <>
+          <Drawer
+            variant="permanent"
+            sx={{
+              width: drawerWidth,
+              flexShrink: 0,
+              [`& .MuiDrawer-paper`]: {
+                width: drawerWidth,
+                boxSizing: "border-box",
+              },
+              display: { xs: "none", md: "block" },
+            }}
+            open
+          >
+            {drawer}
+          </Drawer>
+
+          <Drawer
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true,
+            }}
+            sx={{
+              display: { xs: "block", md: "none" },
+              [`& .MuiDrawer-paper`]: {
+                width: drawerWidth,
+                boxSizing: "border-box",
+              },
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </>
+      )}
+
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: !location.pathname.startsWith("/reporting") ? 3 : 0,
+          width: showSidebar ? { md: `calc(100% - ${drawerWidth}px)` } : "100%",
+          mt: 8,
+        }}
+      >
+        <Outlet />
       </Box>
-      <TabPanel value={value} index={0}>
-        <Newsfeed />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <Analyzer />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <EmailAnalyzer />
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        <Extractor />
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        <Monitoring />
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        <AiAssistant />
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        <CvssCalculator />
-      </TabPanel>
-      <TabPanel value={value} index={7}>
-        <Sigma />
-      </TabPanel>
-      <TabPanel value={value} index={8}>
-        <Settings />
-      </TabPanel>
-    </Paper>
+    </Box>
   );
 }

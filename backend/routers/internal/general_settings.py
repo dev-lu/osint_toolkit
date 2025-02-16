@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from dependencies import get_db
+from utils.dependencies import get_db
 from database import crud, schemas
 from database.models import Settings
 import logging
@@ -8,7 +8,7 @@ import logging
 
 router = APIRouter()
 
-@router.get("/api/settings/general/", response_model=list[schemas.SettingsSchema], tags=["OSINT Toolkit modules"])
+@router.get("/api/settings/general/", response_model=list[schemas.SettingsSchema], tags=["Settings"])
 def read_settings(db: Session = Depends(get_db)):
     settings = crud.get_settings(db)
     if not settings:
@@ -16,7 +16,7 @@ def read_settings(db: Session = Depends(get_db)):
     return settings
 
 
-@router.put("/api/settings/general/", response_model=schemas.SettingsSchema, tags=["OSINT Toolkit modules"])
+@router.put("/api/settings/general/", response_model=schemas.SettingsSchema, tags=["Settings"])
 def update_settings(settings: schemas.SettingsSchema, db: Session = Depends(get_db)):
     existing_settings = crud.get_settings(db)
     if existing_settings:
@@ -27,7 +27,7 @@ def update_settings(settings: schemas.SettingsSchema, db: Session = Depends(get_
         crud.create_settings(db, settings)
 
 
-@router.put("/api/settings/general/darkmode/", response_model=schemas.SettingsSchema, tags=["OSINT Toolkit modules"])
+@router.put("/api/settings/general/darkmode/", response_model=schemas.SettingsSchema, tags=["Settings"])
 def update_settings_darkmode(darkmode: bool, db: Session = Depends(get_db)):
     existing_settings = crud.get_settings(db)
     if existing_settings:
@@ -43,7 +43,7 @@ def update_settings_darkmode(darkmode: bool, db: Session = Depends(get_db)):
         return new_settings.to_dict()
 
 
-@router.put("/api/settings/general/font/", response_model=schemas.SettingsSchema, tags=["OSINT Toolkit modules"])
+@router.put("/api/settings/general/font/", response_model=schemas.SettingsSchema, tags=["Settings"])
 def update_settings_font(font: str, db: Session = Depends(get_db)):
     existing_settings = crud.get_settings(db)
     if existing_settings:

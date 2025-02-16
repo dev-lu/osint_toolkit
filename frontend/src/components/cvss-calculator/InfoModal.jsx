@@ -17,8 +17,8 @@ export default function InfoModal(props) {
           transform: "translate(-50%, -50%)",
           bgcolor: "background.paper",
           boxShadow: 24,
-          p: 4,
-          borderRadius: 5,
+          p: 2,
+          borderRadius: 1,
         }}
       >
         <Typography variant="h4" sx={{ p: 2 }}>

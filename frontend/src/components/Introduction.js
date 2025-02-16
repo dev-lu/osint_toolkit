@@ -3,8 +3,7 @@ import { useRecoilValue } from "recoil";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialOceanic } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { modulesState, generalSettingsState } from "../App";
-import "./Introduction.css"; // Import the CSS file
+import { modulesState, generalSettingsState } from '../state';
 
 function Introduction(props) {
   const modules = useRecoilValue(modulesState);

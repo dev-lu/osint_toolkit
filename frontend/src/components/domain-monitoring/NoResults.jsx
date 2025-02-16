@@ -23,7 +23,7 @@ export default function NoApikeys(props) {
         <Card
           variant="outlined"
           elevation={0}
-          sx={{ maxWidth: "80%", m: 2, p: 2, borderRadius: 5 }}
+          sx={{ maxWidth: "80%", m: 2, p: 2, borderRadius: 1 }}
         >
           <Grid container>
             <Grid

@@ -18,7 +18,7 @@ import Reddit from "./services/Reddit";
 import Twitter from "./services/Twitter";
 import Virustotal from "./services/multi/Virustotal";
 import Safebrowsing from "./services/multi/Safebrowsing";
-import { apiKeysState } from "../../App";
+import { apiKeysState } from "../../state";
 import NoApikeys from "./NoApikeys";
 
 export default function Url(props) {

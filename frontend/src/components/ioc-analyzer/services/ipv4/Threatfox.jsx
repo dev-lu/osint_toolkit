@@ -1,15 +1,31 @@
-import React from "react";
-import api from "../../../../api";
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from 'react';
+import {
+  Box,
+  Card,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+  Chip,
+  Link,
+} from '@mui/material';
+import {
+  Security as SecurityIcon,
+  Assignment as AssignmentIcon,
+  BugReport as MalwareIcon,
+  Language as UrlIcon,
+  Schedule as TimeIcon,
+  Person as PersonIcon,
+  Label as TagIcon,
+  Info as InfoIcon,
+  Link as LinkIcon,
+} from '@mui/icons-material';
+import api from '../../../../api';
+import ResultRow from '../../ResultRow';
+import NoDetails from '../NoDetails';
 
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-
-import NoDetails from "../NoDetails";
-import ResultRow from "../../ResultRow";
-
-export default function Threatfox(props) {
-  const propsRef = useRef(props);
+export default function Threatfox({ ioc }) {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,8 +34,7 @@ export default function Threatfox(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const url = "/api/ip/threatfox/" + propsRef.current.ioc;
-        const response = await api.get(url);
+        const response = await api.get(`/api/ip/threatfox/${ioc}`);
         setResult(response.data);
       } catch (e) {
         setError(e);
@@ -27,96 +42,163 @@ export default function Threatfox(props) {
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [ioc]);
+
+  const renderSection = (icon, title, content) => content && (
+    <ListItem dense>
+      <ListItemIcon>
+        {icon}
+      </ListItemIcon>
+      <ListItemText
+        primary={title}
+        secondary={content}
+      />
+    </ListItem>
+  );
 
   const details = (
-    <>
-      {result ? (
-        <Box sx={{ margin: 1 }}>
-          {Array.isArray(result["data"]) ? (
-            <>
-              <h3>Details</h3>
-              <br />
-            </>
-          ) : null}
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+      {typeof result?.data === 'string' ? (
+        <NoDetails message={result.data} />
+      ) : result?.data?.length > 0 ? (
+        result.data.map((data, index) => (
+          <Card key={index} sx={{ borderRadius: 1 }}>
+            <Box sx={{ p: 1 }}>
+              <List disablePadding>
+                {/* Basic Info */}
+                {renderSection(
+                  <AssignmentIcon color="primary" />,
+                  "Identifier",
+                  `ID: ${data.id}`
+                )}
+                {renderSection(
+                  <UrlIcon color="primary" />,
+                  "IOC",
+                  data.ioc
+                )}
 
-          {Array.isArray(result["data"]) ? (
-            result["data"].map((data, index) => {
-              return (
-                <>
-                  <b>IOC #{index + 1}</b>
-                  <p>ID: {data["id"]}</p>
-                  <br />
-                  <b>Threat</b>
-                  <p>Threat type: {data["threat_type"]}</p>
-                  <p>Description: {data["threat_type_desc"]}</p>
-                  <br />
-                  <b>IOC</b>
-                  <p>IOC type: {data["ioc_type"]}</p>
-                  <p>Description: {data["ioc_type_desc"]}</p>
-                  <br />
-                  <b>Malware</b>
-                  <p>Malware identifier: {data["malware"]}</p>
-                  <p>Malware: {data["malware_printable"]}</p>
-                  <p>Alias: {data["malware_alias"]}</p>
-                  <p>Malpedia: {data["malware_malpedia"]}</p>
-                  <p>Confidence: {data["confidence_level"]}</p>
-                  <br />
-                  <b>Additional information</b>
-                  <p>First seen: {data["first_seen"]}</p>
-                  <p>Last seend: {data["last_seen"]}</p>
-                  <p>Reference: {data["reference"]}</p>
-                  <p>Reporter: {data["reporter"]}</p>
-                  <br />
-                  <b>Tags</b>
-                  {Array.isArray(data["tags"]) ? (
-                    data["tags"].map((tags) => {
-                      return (
-                        <>
-                          <li key={tags}>{tags}</li>
-                        </>
-                      );
-                    })
-                  ) : (
-                    <>
-                      <li key={"none"}>None</li>
-                    </>
-                  )}
+                {/* Threat Info */}
+                {renderSection(
+                  <SecurityIcon color="primary" />,
+                  "Threat Type",
+                  <Box>
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      {data.threat_type}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      {data.threat_type_desc}
+                    </Typography>
+                  </Box>
+                )}
 
-                  <br />
-                  <hr />
-                  <br />
-                </>
-              );
-            })
-          ) : (
-            <Grid display="flex" justifyContent="center" alignItems="center">
-              <NoDetails />
-            </Grid>
-          )}
-        </Box>
-      ) : null}
-    </>
+                {/* IOC Info */}
+                {renderSection(
+                  <InfoIcon color="primary" />,
+                  "IOC Type",
+                  <Box>
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      {data.ioc_type}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      {data.ioc_type_desc}
+                    </Typography>
+                  </Box>
+                )}
+
+                {/* Malware Info */}
+                {renderSection(
+                  <MalwareIcon color="primary" />,
+                  "Malware",
+                  <Box>
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      {data.malware_printable} ({data.malware})
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Alias: {data.malware_alias}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Confidence: {data.confidence_level}%
+                    </Typography>
+                    {data.malware_malpedia && (
+                      <Link 
+                        href={data.malware_malpedia} 
+                        target="_blank" 
+                        rel="noopener"
+                        sx={{ 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          gap: 0.5,
+                          typography: 'body2'
+                        }}
+                      >
+                        <LinkIcon sx={{ fontSize: 16 }} />
+                        Malpedia Entry
+                      </Link>
+                    )}
+                  </Box>
+                )}
+
+                {/* Time Info */}
+                {renderSection(
+                  <TimeIcon color="primary" />,
+                  "Timeline",
+                  <Box>
+                    <Typography variant="body2" color="textSecondary">
+                      First seen: {data.first_seen}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Last seen: {data.last_seen || 'N/A'}
+                    </Typography>
+                  </Box>
+                )}
+
+                {/* Reporter */}
+                {renderSection(
+                  <PersonIcon color="primary" />,
+                  "Reporter",
+                  data.reporter
+                )}
+
+                {/* Tags */}
+                {data.tags?.length > 0 && renderSection(
+                  <TagIcon color="primary" />,
+                  "Tags",
+                  <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap', mt: 0.5 }}>
+                    {data.tags.map((tag, idx) => (
+                      <Chip
+                        key={idx}
+                        label={tag}
+                        size="small"
+                        variant="outlined"
+                        sx={{ 
+                          borderRadius: 1,
+                          '& .MuiChip-label': { px: 1 }
+                        }}
+                      />
+                    ))}
+                  </Box>
+                )}
+              </List>
+            </Box>
+          </Card>
+        ))
+      ) : (
+        <NoDetails />
+      )}
+    </Box>
   );
 
   return (
-    <>
-      <ResultRow
-        name="ThreatFox (abuse.ch)"
-        id="threatfox"
-        icon="threatfox_logo_small"
-        loading={loading}
-        result={result}
-        summary={
-          result && result["query_status"] === "ok"
-            ? "Malicious"
-            : "Not Malicious"
-        }
-        summary_color={{ color: null }}
-        color={result && result["query_status"] === "ok" ? "red" : "green"}
-        error={error}
-        details={details}
-      />
-    </>
+    <ResultRow
+      name="ThreatFox (abuse.ch)"
+      id="threatfox"
+      icon="threatfox_logo_small"
+      loading={loading}
+      result={result}
+      summary={result?.query_status === "ok" ? "Malicious" : "Not Malicious"}
+      color={result?.query_status === "ok" ? "red" : "green"}
+      error={error}
+      details={details}
+    />
   );
 }

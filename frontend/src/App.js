@@ -1,208 +1,130 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { atom, useSetRecoilState, useRecoilValue } from "recoil";
+import React, { useEffect, useMemo, createContext, useState } from "react";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { Routes, Route, Navigate } from 'react-router-dom';
 import api from "./api";
 
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
 import Main from "./Main";
+import NotFound from "./components/NotFound";
+import AiAssistant from "./components/aiassistant/AiAssistant";
+import CvssCalculator from "./components/cvss-calculator/CvssCalculator";
+import Monitoring from "./components/domain-monitoring/Monitoring";
+import EmailAnalyzer from "./components/email-analyzer/EmailAnalyzer";
+import Analyzer from "./components/ioc-analyzer/Analyzer";
+import Extractor from "./components/ioc-extractor/Extractor";
+import Newsfeed from "./components/newsfeed/Newsfeed";
+import Settings from "./components/settings/Settings";
+import Rules from "./components/rule-creator/Rules";
 
-const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+import {
+  apiKeysState,
+  modulesState,
+  generalSettingsState,
+  newsfeedListState,
+} from "./state";
 
-// Recoil state for API keys
-export const apiKeysState = atom({
-  key: "KeysState",
-  default: [],
-});
+import { lightTheme, darkTheme } from "./theme";
 
-// Recoil state for module settings
-export const modulesState = atom({
-  key: "ModulesState",
-  default: [],
-});
-
-// Recoil state for general settings
-export const generalSettingsState = atom({
-  key: "GeneralSettingsState",
-  default: [],
-});
-
-export const newsfeedState = atom({
-  key: "NewsfeedState",
-  default: [],
-});
-
-export const newsfeedListState = atom({
-  key: "NewsfeedListState",
-  default: [],
-});
+export const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 function App() {
-  const [apikeyLoaded, setApikeyLoaded] = useState(false);
-  const [modulesLoaded, setModulesLoaded] = useState(false);
-  const [generalSettingsLoaded, setGeneralSettingsLoaded] = useState(false);
-  const [newsfeedListLoaded, setNewsfeedListLoaded] = useState(false);
-
   const setApiKeys = useSetRecoilState(apiKeysState);
-  const generalSettings = useRecoilValue(generalSettingsState);
-  const setGeneralSettings = useSetRecoilState(generalSettingsState);
   const setModules = useSetRecoilState(modulesState);
+  const setGeneralSettings = useSetRecoilState(generalSettingsState);
   const setNewsfeedList = useSetRecoilState(newsfeedListState);
 
-  const getDesignTokens = (mode) => ({
-    palette: {
-      mode,
-      ...(mode === "light"
-        ? {
-            // Values for light mode
-            typography: {
-              htmlFontSize: 16,
-            },
-            background: {
-              default: "#ebebeb",
-              card: "aliceblue",
-              cvssCard: "aliceblue",
-              cvssCircle: "white",
-              textfieldlarge: "white",
-              uploadarea: "#fafafa",
-              tableheader: "whitesmoke",
-              tablecell: "white",
-              tableborder: "#ebebeb",
-            },
-            components: {
-              MuiButton: {
-                styleOverrides: {
-                  root: {
-                    fontSize: '0.875rem',
-                  },
-                },
-              },
-              MuiCard: {
-                variants: [
-                  {
-                    props: {
-                      variant: "primary",
-                    },
-                    style: {
-                      backgroundColor: "black",
-                      minWidth: "450px",
-                      minHeight: "300px",
-                      maxWidth: "1450px",
-                      margin: "30px auto",
-                      border: "1px solid rgb(192, 192, 192)",
-                      padding: "30px",
-                      borderRadius: 5,
-                      overflow: "auto",
-                      boxShadow: "5",
-                    },
-                  },
-                  {
-                    props: { variant: "secondary" },
-                    style: {
-                      m: 2,
-                      p: 2,
-                      borderRadius: 5,
-                      backgroundColor: "black",
-                      boxShadow: 0,
-                    },
-                  },
-                ],
-              },
-            },
-          }
-        : {
-            // Values for dark mode
-            typography: {
-              htmlFontSize: 16,
-            },
-            background: {
-              default: "#333333",
-              paper: "#404040",
-              card: "#6F6F6F",
-              cvssCard: "#404040",
-              cvssCircle: "#6F6F6F",
-              uploadarea: "#6F6F6F",
-              textfieldlarge: "#6F6F6F",
-              tableheader: "#333333",
-              tablecell: "#595959",
-              tableborder: "#333333",
-            },
-          }),
-    },
+  const generalSettings = useRecoilValue(generalSettingsState);
+
+  // Initialize theme mode from local storage or default to light
+  const [mode, setMode] = useState(() => {
+    const savedMode = localStorage.getItem("themeMode");
+    return savedMode ? savedMode : "light";
   });
 
-  const colorMode = React.useMemo(
+  const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
+        setMode((prevMode) => {
+          const newMode = prevMode === "light" ? "dark" : "light";
+          localStorage.setItem("themeMode", newMode); 
+          return newMode;
+        });
         setGeneralSettings((prevSettings) => ({
           ...prevSettings,
           darkmode: !prevSettings.darkmode,
         }));
       },
     }),
-    [setGeneralSettings]
+    [setMode, setGeneralSettings]
   );
 
-  const mode = generalSettings.darkmode ? "dark" : "light";
-
-  // Update the theme only if the mode changes
-  const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
+  const theme = useMemo(() => (mode === "light" ? lightTheme : darkTheme), [mode]);
 
   useEffect(() => {
-    // Get state of API keys
-    api.get("/api/apikeys/is_active").then((response) => {
-      const result = response.data;
-      setApiKeys(result);
-      setApikeyLoaded(true);
-    });
-
-    // Get module settings
-    api.get("/api/settings/modules/").then((response) => {
-      const result = response.data.reduce((dict, item) => {
-        const { name, ...rest } = item;
-        dict[name] = rest;
-        return dict;
-      }, {});
-      setModules(result);
-      setModulesLoaded(true);
-    });
-
-    // Get general settings
-    api.get("/api/settings/general/").then((response) => {
-      const result = response.data[0];
-      setGeneralSettings(result);
-      setGeneralSettingsLoaded(true);
-      document.body.setAttribute("data-font", result.font);
-    });
-
-    // Get list of RSS feeds
-    api.get("/api/settings/modules/newsfeed/").then((response) => {
-      const result = response.data.reduce((dict, item) => {
-        const { name, ...rest } = item;
-        dict[name] = rest;
-        return dict;
-      }, {});
-      setNewsfeedList(result);
-      setNewsfeedListLoaded(true);
-    });
+    const fetchData = async () => {
+      try {
+        const [
+          apikeysResponse,
+          modulesResponse,
+          generalSettingsResponse,
+          newsfeedListResponse,
+        ] = await Promise.all([
+          api.get("/api/apikeys/is_active"),
+          api.get("/api/settings/modules/"),
+          api.get("/api/settings/general/"),
+          api.get("/api/settings/modules/newsfeed/"),
+        ]);
+  
+        setApiKeys(apikeysResponse.data);
+  
+        const modulesData = modulesResponse.data.reduce((dict, item) => {
+          dict[item.name] = { enabled: item.enabled };
+          return dict;
+        }, {});
+        setModules(modulesData);
+  
+        const generalData = generalSettingsResponse.data[0];
+        setGeneralSettings(generalData);
+        document.body.setAttribute("data-font", generalData.font);
+  
+        const newsfeedListData = newsfeedListResponse.data.reduce((dict, item) => {
+          const { name, ...rest } = item;
+          dict[name] = rest;
+          return dict;
+        }, {});
+        setNewsfeedList(newsfeedListData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    fetchData();
   }, [setApiKeys, setGeneralSettings, setModules, setNewsfeedList]);
 
-  if (
-    modulesLoaded &&
-    apikeyLoaded &&
-    generalSettingsLoaded &&
-    newsfeedListLoaded
-  ) {
-    return (
-      <ColorModeContext.Provider value={colorMode}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Main />
-        </ThemeProvider>
-      </ColorModeContext.Provider>
-    );
-  }
+  return (
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Routes>
+          <Route path="/" element={<Main />}>
+            <Route index element={<Navigate to="/newsfeed" replace />} />
+            <Route path="newsfeed/*" element={<Newsfeed />} />
+            <Route path="settings/*" element={<Settings />} />
+            <Route path="ai-templates/*" element={<AiAssistant />} />
+            <Route path="ioc-analyzer/*" element={<Analyzer />} />
+            <Route path="ioc-extractor/*" element={<Extractor />} />
+            <Route path="email-analyzer/*" element={<EmailAnalyzer />} />
+            <Route path="domain-monitoring/*" element={<Monitoring />} />
+            <Route path="cvss-calculator/*" element={<CvssCalculator />} />
+            <Route path="rules/*" element={<Rules />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </ThemeProvider>
+    </ColorModeContext.Provider>
+  );
 }
 
 export default App;

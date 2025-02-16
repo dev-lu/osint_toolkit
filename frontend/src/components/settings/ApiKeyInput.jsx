@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import { apiKeysState } from "../../App";
+import { apiKeysState } from "../../state";
 import api from "../../api";
 
 import IconButton from "@mui/material/IconButton";

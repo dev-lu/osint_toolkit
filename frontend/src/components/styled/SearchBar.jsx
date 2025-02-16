@@ -21,8 +21,7 @@ const SearchBar = forwardRef(
 
     const CustomTextField = styled(TextField)({
       "& .MuiOutlinedInput-root": {
-        borderRadius: 5,
-        backgroundColor: theme.palette.background.card,
+        borderRadius: 1,
         border: "none",
         "& fieldset": {
           border: "none",
@@ -38,7 +37,7 @@ const SearchBar = forwardRef(
 
     const SearchButton = styled(Button)({
       marginLeft: "10px",
-      borderRadius: 5,
+      borderRadius: 1,
       boxShadow: "none",
       "&:hover": {
         boxShadow: "none",

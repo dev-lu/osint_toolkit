@@ -51,8 +51,7 @@ export default function Alienvault(props) {
       {result ? (
         <Box sx={{ margin: 1 }}>
           <Card
-            variant="outlined"
-            sx={{ mb: 2, borderRadius: 5, boxShadow: 0 }}
+            sx={{ mb: 2, borderRadius: 1, boxShadow: 0 }}
           >
             <CardContent>
               <Grid container alignItems="center">
@@ -101,7 +100,7 @@ export default function Alienvault(props) {
               </List>
             </CardContent>
           </Card>
-          <Card variant="outlined" sx={{ borderRadius: 5, boxShadow: 0 }}>
+          <Card sx={{ borderRadius: 1, boxShadow: 0 }}>
             <CardContent>
               <Grid container alignItems="center">
                 <Grid mr={1} item>
@@ -155,9 +154,8 @@ export default function Alienvault(props) {
           </Card>
 
           <Card
-            variant="outlined"
             key="sections_card"
-            sx={{ mt: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
+            sx={{ mt: 1, p: 2, borderRadius: 1, boxShadow: 0 }}
           >
             <Grid container alignItems="center">
               <Grid mr={1} item>

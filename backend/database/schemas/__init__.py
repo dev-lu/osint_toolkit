@@ -30,3 +30,10 @@ from .keyword_schema import (
 from .cti_settings_schema import (
     CTISettingsSchema
 )
+
+from .alerts_schema import (
+    AlertBaseSchema, 
+    AlertCreateSchema, 
+    AlertUpdateSchema,
+    AlertSchema
+)

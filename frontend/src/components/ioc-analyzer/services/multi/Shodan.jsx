@@ -1,29 +1,79 @@
-import React from "react";
-import api from "../../../../api";
-import { useEffect, useState, useRef } from "react";
+import React, { useState, useEffect } from 'react';
+import {
+  Box,
+  Card,
+  Chip,
+  Collapse,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ListItemButton,
+  Typography,
+  Divider,
+} from '@mui/material';
+import {
+  Business as BusinessIcon,
+  LocationCity as LocationIcon,
+  Public as PublicIcon,
+  Language as DomainIcon,
+  Router as PortIcon,
+  DNS as HostIcon,
+  Label as TagIcon,
+  ExpandMore as ExpandMoreIcon,
+  ExpandLess as ExpandLessIcon,
+  Storage as DataIcon,
+} from '@mui/icons-material';
 
-import Box from "@mui/material/Box";
-import BusinessIcon from "@mui/icons-material/Business";
-import Card from "@mui/material/Card";
-import Chip from "@mui/material/Chip";
-import DnsIcon from "@mui/icons-material/Dns";
-import EventIcon from "@mui/icons-material/Event";
-import LocationCityIcon from "@mui/icons-material/LocationCity";
-import Grid from "@mui/material/Grid";
-import LanIcon from "@mui/icons-material/Lan";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import { ListItemIcon } from "@mui/material";
-import ListItemText from "@mui/material/ListItemText";
-import PlaceIcon from "@mui/icons-material/Place";
-import PublicIcon from "@mui/icons-material/Public";
-import TagIcon from "@mui/icons-material/Tag";
-import Typography from "@mui/material/Typography";
+import api from '../../../../api';
+import ResultRow from '../../ResultRow';
 
-import ResultRow from "../../ResultRow";
+const CollapsibleSection = ({ title, icon: Icon, children, defaultExpanded = false }) => {
+  const [expanded, setExpanded] = useState(defaultExpanded);
 
-export default function Shodan(props) {
-  const propsRef = useRef(props);
+  return (
+    <Box sx={{ mb: 2 }}>
+      <ListItemButton onClick={() => setExpanded(!expanded)} sx={{ borderRadius: 1 }}>
+        <ListItemIcon>
+          <Icon color="primary" />
+        </ListItemIcon>
+        <ListItemText primary={title} />
+        {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+      </ListItemButton>
+      <Collapse in={expanded}>
+        <Box sx={{ pl: 2 }}>
+          {children}
+        </Box>
+      </Collapse>
+    </Box>
+  );
+};
+
+const DataDisplay = ({ data }) => {
+  if (typeof data === 'object' && data !== null) {
+    return (
+      <List dense sx={{ width: '100%', overflowX: 'hidden' }}>
+        {Object.entries(data).map(([key, value]) => (
+          <ListItem key={key} sx={{ flexDirection: 'column', alignItems: 'flex-start', width: '100%' }}>
+            <Typography variant="subtitle2" color="primary" noWrap>
+              {key}
+            </Typography>
+            <Box sx={{ pl: 2, width: '100%', overflowWrap: 'break-word' }}>
+              {typeof value === 'object' ? (
+                <DataDisplay data={value} />
+              ) : (
+                <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>{String(value)}</Typography>
+              )}
+            </Box>
+          </ListItem>
+        ))}
+      </List>
+    );
+  }
+  return <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>{String(data)};</Typography>;
+};
+
+export default function Shodan({ ioc, type }) {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -32,11 +82,7 @@ export default function Shodan(props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const url =
-          "/api/" +
-          propsRef.current.type +
-          "/shodan?ioc=" +
-          encodeURIComponent(propsRef.current.ioc);
+        const url = `/api/${type}/shodan?ioc=${encodeURIComponent(ioc)}`;
         const response = await api.get(url);
         setResult(response.data);
       } catch (e) {
@@ -45,296 +91,144 @@ export default function Shodan(props) {
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [ioc, type]);
 
-  function renderValue(value) {
-    if (Array.isArray(value)) {
-      return value.map((item, index) => (
-        <div key={`value_${index}`}>{renderValue(item)}</div>
-      ));
-    } else if (typeof value === "object" && value !== null) {
-      return Object.entries(value).map(([key, val], index) => (
-        <div key={`value_${key}_${index}`}>
-          <span>{key}: </span>
-          {renderValue(val)}
-        </div>
-      ));
-    } else {
-      return value;
-    }
-  }
-
-  const details = (
-    <>
-      {result && !result["shodan_error"] && (
-        <Box sx={{ margin: 1 }}>
-          <Card
-            key="shodan_details"
-            elevation={0}
-            variant="outlined"
-            sx={{ m: 1.5, p: 2, borderRadius: 5 }}
-          >
-            <Typography variant="h5" component="h2" gutterBottom>
-              Details
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <LocationCityIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="City"
-                      secondary={result["city"] ? result["city"] : "N/A"}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <PlaceIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Region code"
-                      secondary={
-                        result["region_code"] ? result["region_code"] : "N/A"
-                      }
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <TagIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Country code"
-                      secondary={
-                        result["country_code"] ? result["country_code"] : "N/A"
-                      }
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <PublicIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Country"
-                      secondary={
-                        result["country_name"] ? result["country_name"] : "N/A"
-                      }
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <BusinessIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Organisation"
-                      secondary={result["org"] ? result["org"] : "N/A"}
-                    />
-                  </ListItem>
-                </List>
-              </Grid>
-              <Grid item xs={6}>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <LanIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="ISP"
-                      secondary={result["isp"] ? result["isp"] : "N/A"}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <BusinessIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="ASN"
-                      secondary={result["asn"] ? result["asn"] : "N/A"}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <DnsIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Domain"
-                      secondary={result["domain"] ? result["domain"] : "N/A"}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <EventIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Last update"
-                      secondary={
-                        result["last_update"] ? result["last_update"] : "N/A"
-                      }
-                    />
-                  </ListItem>
-                </List>
-              </Grid>
-            </Grid>
-          </Card>
-
-          {result["data"] && (
-            <Card
-              key="shodan_data"
-              elevation={0}
-              variant="outlined"
-              sx={{ m: 1.5, p: 2, borderRadius: 5 }}
-            >
-              <Typography variant="h5" component="h2" gutterBottom>
-                Data
-              </Typography>
-              {result["data"].map((item, index) => (
-                <List key={`shodan_data_${index}`}>
-                  {Object.entries(item).map(
-                    ([key, value]) =>
-                      value && (
-                        <ListItem key={`shodan_data_${index}_${key}`}>
-                          <ListItemText
-                            primary={key}
-                            secondary={renderValue(value)}
-                          />
-                        </ListItem>
-                      )
-                  )}
-                </List>
-              ))}
-            </Card>
-          )}
-
-          {result["ports"] && result["ports"].length > 0 && (
-            <Card
-              key="shodan_ports"
-              elevation={0}
-              variant="outlined"
-              sx={{ m: 1.5, p: 2, borderRadius: 5 }}
-            >
-              <Typography variant="h5" component="h2" gutterBottom>
-                Open ports
-              </Typography>
-              <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-                {result["ports"].map((port, index) => (
-                  <Chip
-                    key={index}
-                    label={port}
-                    variant="outlined"
-                    sx={{ m: 0.5 }}
-                  />
-                ))}
-              </Box>
-            </Card>
-          )}
-
-          {result["domains"] && result["domains"].length > 0 && (
-            <Card
-              key="shodan_domains"
-              elevation={0}
-              variant="outlined"
-              sx={{ m: 1.5, p: 2, borderRadius: 5 }}
-            >
-              <Typography variant="h5" component="h2" gutterBottom>
-                Domains
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                {result["domains"].map((domain, index) => (
-                  <React.Fragment key={index}>
-                    {domain}
-                    <br />
-                  </React.Fragment>
-                ))}
-              </Typography>
-            </Card>
-          )}
-
-          {result["subdomains"] && result["subdomains"].length > 0 && (
-            <Card
-              key="shodan_subdomains"
-              elevation={0}
-              variant="outlined"
-              sx={{ m: 1.5, p: 2, borderRadius: 5 }}
-            >
-              <Typography variant="h5" component="h2" gutterBottom>
-                Subdomains
-              </Typography>
-              <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-                {result["subdomains"].map((subdomain, index) => (
-                  <Chip
-                    key={index}
-                    label={subdomain}
-                    variant="outlined"
-                    sx={{ m: 0.5 }}
-                  />
-                ))}
-              </Box>
-            </Card>
-          )}
-
-          {result["hostnames"] && result["hostnames"].length > 0 && (
-            <Card
-              key="shodan_hostnames"
-              elevation={0}
-              variant="outlined"
-              sx={{ m: 1.5, p: 2, borderRadius: 5 }}
-            >
-              <Typography variant="h5" component="h2" gutterBottom>
-                Hostnames
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                {result["hostnames"].map((hostname, index) => (
-                  <React.Fragment key={index}>
-                    {hostname}
-                    <br />
-                  </React.Fragment>
-                ))}
-              </Typography>
-            </Card>
-          )}
-
-          {result["tags"] && result["tags"].length > 0 && (
-            <Card
-              key="shodan_tags"
-              elevation={0}
-              variant="outlined"
-              sx={{ m: 1.5, p: 2, borderRadius: 5 }}
-            >
-              <Typography variant="h5" component="h2" gutterBottom>
-                Tags
-              </Typography>
-              <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-                {result["tags"].map((tag, index) => (
-                  <Chip
-                    key={index}
-                    label={tag}
-                    variant="outlined"
-                    sx={{ m: 0.5 }}
-                  />
-                ))}
-              </Box>
-            </Card>
-          )}
-        </Box>
-      )}
-    </>
+  const generalInfo = result && (
+    <List dense>
+      <ListItem>
+        <ListItemIcon><LocationIcon /></ListItemIcon>
+        <ListItemText 
+          primary="Location" 
+          secondary={[
+            result.city,
+            result.region_code,
+            result.country_name,
+            result.postal_code
+          ].filter(Boolean).join(', ') || 'N/A'} 
+        />
+      </ListItem>
+      <ListItem>
+        <ListItemIcon><BusinessIcon /></ListItemIcon>
+        <ListItemText 
+          primary="Organization" 
+          secondary={`${result.org || 'N/A'} (${result.asn || 'N/A'})`} 
+        />
+      </ListItem>
+      <ListItem>
+        <ListItemIcon><PublicIcon /></ListItemIcon>
+        <ListItemText 
+          primary="ISP" 
+          secondary={result.isp || 'N/A'} 
+        />
+      </ListItem>
+    </List>
   );
 
+  const details = result && !result.shodan_error && (
+    <Card sx={{ p: 2, maxWidth: '100%', overflow: 'hidden' }}>
+      <Box sx={{ mb: 3 }}>
+        {generalInfo}
+      </Box>
+      
+      <Divider sx={{ mb: 2 }} />
+
+      {result.ports?.length > 0 && (
+        <CollapsibleSection title="Open Ports" icon={PortIcon} defaultExpanded>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+            {result.ports.map((port, idx) => (
+              <Chip 
+                key={idx}
+                label={port}
+                size="small"
+                variant="outlined"
+              />
+            ))}
+          </Box>
+        </CollapsibleSection>
+      )}
+
+      {(result.domains?.length > 0 || result.hostnames?.length > 0) && (
+        <CollapsibleSection title="Domains & Hostnames" icon={DomainIcon} defaultExpanded>
+          {result.domains?.length > 0 && (
+            <Box sx={{ mb: 2, mt: 1 }}>
+              <Typography variant="subtitle2" color="primary">Domains</Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {result.domains.map((domain, idx) => (
+                  <Chip 
+                    key={idx}
+                    label={domain}
+                    size="small"
+                    variant="outlined"
+                  />
+                ))}
+              </Box>
+            </Box>
+          )}
+          
+          {result.hostnames?.length > 0 && (
+            <Box>
+              <Typography variant="subtitle2" color="primary">Hostnames</Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {result.hostnames.map((hostname, idx) => (
+                  <Chip 
+                    key={idx}
+                    label={hostname}
+                    size="small"
+                    variant="outlined"
+                  />
+                ))}
+              </Box>
+            </Box>
+          )}
+        </CollapsibleSection>
+      )}
+
+      {result.data?.length > 0 && (
+        <CollapsibleSection title="Detailed Data" icon={DataIcon}>
+          {result.data.map((item, idx) => (
+            <Card key={idx} variant="outlined" sx={{ mb: 1, p: 1, mt: 1 }}>
+              <DataDisplay data={item} />
+            </Card>
+          ))}
+        </CollapsibleSection>
+      )}
+
+      {result.tags?.length > 0 && (
+        <CollapsibleSection title="Tags" defaultExpanded icon={TagIcon}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+            {result.tags.map((tag, idx) => (
+              <Chip 
+                key={idx}
+                label={tag}
+                size="small"
+                variant="outlined"
+              />
+            ))}
+          </Box>
+        </CollapsibleSection>
+      )}
+    </Card>
+  );
+
+  const getSummary = () => {
+    if (!result || result.shodan_error) return "No data available";
+    const parts = [];
+    if (result.org) parts.push(result.org);
+    if (result.ports?.length) parts.push(`${result.ports.length} open ports`);
+    return parts.join(' • ') || "See details";
+  };
+
   return (
-    <>
-      <ResultRow
-        name="Shodan"
-        id="shodan"
-        icon="shodan_logo_small"
-        loading={loading}
-        result={result}
-        summary={"Expand this row for details"}
-        summary_color={{ color: "grey" }}
-        color={"lightgrey"}
-        error={error}
-        details={details}
-      />
-    </>
+    <ResultRow
+      name="Shodan"
+      id="shodan"
+      icon="shodan_logo_small"
+      loading={loading}
+      result={result}
+      summary={getSummary()}
+      color="primary"
+      error={error}
+      details={details}
+    />
   );
 }

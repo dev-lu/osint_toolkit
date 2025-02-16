@@ -25,7 +25,7 @@ const InputCard = ({
           label={inputLabel}
           InputProps={{
             style: {
-              borderRadius: 10,
+              borderRadius: 1,
               mb: 2
             }
           }}
@@ -42,7 +42,7 @@ const InputCard = ({
             disableElevation
             size="large"
             type="submit"
-            sx={{ borderRadius: 3, mt: 2, ml: 1 }}
+            sx={{ borderRadius: 1, mt: 2, ml: 1 }}
             onClick={() =>
               callOpenAI(
                 document.getElementById(inputId).value,

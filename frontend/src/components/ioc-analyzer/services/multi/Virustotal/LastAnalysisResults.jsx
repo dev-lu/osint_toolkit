@@ -34,8 +34,7 @@ export default function LastAnalysisResults(props) {
   return (
     <Card
       key="last_analysis_results_card"
-      variant="outlined"
-      sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
+      sx={{ m: 1, p: 2, borderRadius: 1, boxShadow: 0 }}
     >
       <Grid container alignItems="center">
         <Grid mr={1} item>
@@ -51,9 +50,7 @@ export default function LastAnalysisResults(props) {
         component={Paper}
         sx={{
           boxShadow: 0,
-          borderRadius: 5,
-          border: 1,
-          borderColor: theme.palette.background.tableborder,
+          borderRadius: 1,
         }}
       >
         <Table>

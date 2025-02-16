@@ -30,17 +30,12 @@ export default function Urls(props) {
   const card_style = {
     p: 1,
     mt: 2,
-    backgroundColor: theme.palette.background.tablecell,
     boxShadow: 0,
-    borderRadius: 5,
-  };
-
-  const tableCellStyle = {
-    backgroundColor: theme.palette.background.tablecell,
+    borderRadius: 1,
   };
 
   const tableContainerStyle = {
-    borderRadius: 5,
+    borderRadius: 1,
     maxWidth: "95%",
     boxShadow: 0,
     border: 0,
@@ -66,7 +61,7 @@ export default function Urls(props) {
       return (
         <React.Fragment key="urls_fragment">
           <TableContainer component={Paper} sx={tableContainerStyle}>
-            <Table aria-label="simple table" sx={tableCellStyle}>
+            <Table aria-label="simple table" >
               <TableBody>
                 {props.result.map((row, index) => (
                   <TableRow key={index}>
@@ -102,11 +97,10 @@ export default function Urls(props) {
 
   return (
     <>
-      {/* URL card */}
       <Grow in={true}>
         <Card key={"ema_url_card"} sx={card_style}>
-        <CardActionArea onClick={() => setOpen(!open)} sx={{ padding: '4px' }}>
-            <CardContent sx={{ padding: '2px' }}>
+        <CardActionArea onClick={() => setOpen(!open)} sx={{ padding: '2px' }}>
+            <CardContent sx={{ padding: '1px' }}>
               <Box
                 display="flex"
                 alignItems="center"

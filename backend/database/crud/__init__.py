@@ -14,7 +14,12 @@ from .newsfeed_crud import (
     get_news_article_by_id,
     create_custom_feed, 
     delete_custom_feed, 
-    update_news_article
+    update_news_article,
+    get_newsfeed_retention_days,
+    set_retention_days,
+    get_recent_news_articles,
+    get_title_word_frequency,
+    get_news_articles_by_ids,
 )
 
 from .keywords_crud import (
@@ -48,4 +53,14 @@ from .general_settings_crud import (
     get_settings,
     create_settings,
     update_settings
+)
+
+from .alerts_crud import (
+    get_all_alerts,
+    get_alert_by_id,
+    create_alert,
+    mark_alert_as_read,
+    mark_all_alerts_as_read,
+    delete_alert, 
+    delete_all_alerts
 )

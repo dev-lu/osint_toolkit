@@ -54,11 +54,10 @@ export default function AnalysisStatistics(props) {
   return (
     <Card
       key={"statistics_card"}
-      variant="outlined"
       sx={{
         mb: 1,
         p: 2,
-        borderRadius: 5,
+        borderRadius: 1,
         boxShadow: 0,
         width: "calc(50% - 10px)",
       }}

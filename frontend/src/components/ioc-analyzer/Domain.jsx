@@ -22,7 +22,7 @@ import Pulsedive from "./services/multi/Pulsedive";
 import Shodan from "./services/multi/Shodan";
 import Virustotal from "./services/multi/Virustotal";
 import Safebrowsing from "./services/multi/Safebrowsing";
-import { apiKeysState } from "../../App";
+import { apiKeysState } from "../../state";
 import NoApikeys from "./NoApikeys";
 
 export default function Domain(props) {

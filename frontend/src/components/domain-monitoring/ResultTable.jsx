@@ -140,9 +140,7 @@ export default function ResultTable(props) {
           component={Paper}
           sx={{
             boxShadow: 0,
-            borderRadius: 5,
-            border: 1,
-            borderColor: theme.palette.background.tableborder,
+            borderRadius: 1,
           }}
         >
           <Table aria-label="result_table">

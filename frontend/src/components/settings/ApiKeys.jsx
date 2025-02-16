@@ -2,7 +2,7 @@ import React from "react";
 import { useRecoilValue } from "recoil";
 
 import ApiKeyInput from "./ApiKeyInput";
-import { apiKeysState } from "../../App";
+import { apiKeysState } from "../../state";
 
 import Card from "@mui/material/Card";
 import Chip from "@mui/material/Chip";
@@ -18,7 +18,7 @@ export default function ApiKeys() {
   const cardStyle = {
     m: 1,
     p: 1.5,
-    borderRadius: 5,
+    borderRadius: 1,
     backgroundColor: theme.palette.background.card,
     boxShadow: 0,
   };
@@ -297,7 +297,7 @@ Over time, Hunter grew into a comprehensive email outreach platform, offering ev
             apiKeys={apiKeys}
           />
           <Stack direction="row" spacing={1}>
-            <Chip label="For AI Assistant module" />
+            <Chip label="For AI features" />
           </Stack>
         </Stack>
       </Card>

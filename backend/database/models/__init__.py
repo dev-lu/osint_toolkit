@@ -25,3 +25,7 @@ from .cti_settings_model import (
 from .keyword_settings_model import (
     Keyword
 )
+
+from .alerts_model import (
+    Alert
+)

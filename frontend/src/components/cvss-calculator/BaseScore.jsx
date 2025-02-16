@@ -5,12 +5,13 @@ import Circle from "./Circle";
 import {
   BarChart as BarChartIcon,
   Info as InfoIcon,
+  ExpandMore as ExpandMoreIcon,
 } from "@mui/icons-material";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
-  Card,
-  Chip,
-  Divider,
   Grid,
   IconButton,
   MenuItem,
@@ -25,13 +26,12 @@ const MetricSelect = ({ label, value, options, onChange, onInfoClick }) => (
     <TextField
       select
       fullWidth
+      size="small"
       label={label}
       value={value}
       onChange={onChange}
       InputProps={{
-        sx: {
-          borderRadius: "10px",
-        },
+        sx: { borderRadius: "1" },
       }}
     >
       {options.map((option) => (
@@ -51,6 +51,7 @@ export default function BaseScore() {
   const [cvssScores, setCvssScores] = useRecoilState(cvssScoresAtom);
   const [openModal, setOpenModal] = useState(false);
   const [modalContent, setModalContent] = useState({ title: "", text: "" });
+  const [expanded, setExpanded] = useState(true);
 
   const handleOpenModal = (title, text) => {
     setModalContent({ title, text });
@@ -108,7 +109,7 @@ export default function BaseScore() {
         { value: "L", label: "Low" },
         { value: "H", label: "High" },
       ],
-      info: "This metric describes the conditions beyond the attacker’s control that must exist in order to exploit the vulnerability. The Base Score is greatest for the least complex attacks.",
+      info: "This metric describes the conditions beyond the attacker's control that must exist in order to exploit the vulnerability. The Base Score is greatest for the least complex attacks.",
     },
     {
       key: "privilegesRequired",
@@ -165,15 +166,13 @@ export default function BaseScore() {
   ];
 
   const renderScoreCard = (title, score, label) => (
-    <Card
+    <Box
       elevation={0}
       sx={{
         mb: 2,
         mt: 2,
         p: 2,
-        borderRadius: 5,
         minWidth: 0,
-        backgroundColor: theme.palette.background.cvssCard,
       }}
     >
       <Box
@@ -208,104 +207,112 @@ export default function BaseScore() {
       >
         {label}
       </Typography>
-    </Card>
+    </Box>
   );
 
   return (
-    <>
-      <Divider sx={{ mt: 1, mb: 4 }}>
-        <Chip
-          icon={<BarChartIcon />}
-          label="Base Score Metrics (required)"
-          style={{
-            fontSize: "20px",
-            padding: "10px",
-            height: "40px",
-            backgroundColor: theme.palette.background.cvssCard,
-          }}
-        />
-      </Divider>
-
-      <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
-        <Card
-          elevation={0}
-          sx={{
-            m: 2,
-            p: 2,
-            borderRadius: 5,
-            flex: 1,
-            minWidth: 0,
-            backgroundColor: theme.palette.background.cvssCard,
-          }}
-        >
-          <Typography variant="body1">
-            The Base metric group represents the intrinsic characteristics of a
-            vulnerability that are constant over time and across user
-            environments. It is composed of two sets of metrics: the
-            Exploitability metrics and the Impact metrics. The Exploitability
-            metrics reflect the ease and technical means by which the
-            vulnerability can be exploited. That is, they represent
-            characteristics of the thing that is vulnerable, which we refer to
-            formally as the vulnerable component. On the other hand, the Impact
-            metrics reflect the direct consequence of a successful exploit, and
-            represent the consequence to the thing that suffers the impact,
-            which we refer to formally as the impacted component.
-          </Typography>
-        </Card>
-        {renderScoreCard(
-          "Base Score",
-          cvssScores.base.baseScore,
-          cvssScores.base.baseScore >= 9.0
-            ? "Critical"
-            : cvssScores.base.baseScore >= 7.0
-            ? "High"
-            : cvssScores.base.baseScore >= 4.0
-            ? "Medium"
-            : cvssScores.base.baseScore === 0
-            ? "None"
-            : "Low"
-        )}
-      </Grid>
-
-      <Card
-        elevation={0}
+    <Accordion 
+    defaultExpanded
+      sx={{ 
+        borderRadius: 1,
+        backgroundColor: 'transparent',
+        '&:before': {
+          display: 'none',
+        },
+      }}
+    >
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
         sx={{
-          p: 2,
-          borderRadius: 5,
-          minWidth: 0,
           backgroundColor: theme.palette.background.cvssCard,
+          borderRadius: 1,
+          minHeight: 64,
         }}
       >
-        <Grid container spacing={2}>
-          {renderCard(
-            "Exploitability Metrics",
-            cvssScores.base.exploitabilityScore,
-            exploitabilityMetrics
-          )}
-          {renderCard(
-            "Impact Metrics",
-            cvssScores.base.impactScore,
-            impactMetrics
-          )}
-          <Box sx={{ mx: "auto", width: "40%" }}>
-            <MetricSelect
-              label="Scope (S)"
-              value={cvssScores.base.scope}
-              options={[
-                { value: "U", label: "Unchanged" },
-                { value: "C", label: "Changed" },
-              ]}
-              onChange={handleSelectChange("scope")}
-              onInfoClick={() =>
-                handleOpenModal(
-                  "Scope (S)",
-                  "The Scope metric captures whether a vulnerability in one vulnerable component impacts resources in components beyond its security scope. The Base Score is greatest when a scope change occurs."
-                )
-              }
-            />
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <BarChartIcon />
+          <Typography variant="h6" sx={{ fontSize: 20 }}>
+            Base Score Metrics (required)
+          </Typography>
+        </Box>
+      </AccordionSummary>
+      <AccordionDetails sx={{ p: 0 }}>
+        <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
+          <Box
+            elevation={0}
+            sx={{
+              m: 2,
+              p: 2,
+              flex: 1,
+              minWidth: 0,
+            }}
+          >
+            <Typography variant="body1">
+              The Base metric group represents the intrinsic characteristics of a
+              vulnerability that are constant over time and across user
+              environments. It is composed of two sets of metrics: the
+              Exploitability metrics and the Impact metrics. The Exploitability
+              metrics reflect the ease and technical means by which the
+              vulnerability can be exploited. That is, they represent
+              characteristics of the thing that is vulnerable, which we refer to
+              formally as the vulnerable component. On the other hand, the Impact
+              metrics reflect the direct consequence of a successful exploit, and
+              represent the consequence to the thing that suffers the impact,
+              which we refer to formally as the impacted component.
+            </Typography>
           </Box>
+          {renderScoreCard(
+            "Base Score",
+            cvssScores.base.baseScore,
+            cvssScores.base.baseScore >= 9.0
+              ? "Critical"
+              : cvssScores.base.baseScore >= 7.0
+              ? "High"
+              : cvssScores.base.baseScore >= 4.0
+              ? "Medium"
+              : cvssScores.base.baseScore === 0
+              ? "None"
+              : "Low"
+          )}
         </Grid>
-      </Card>
+
+        <Box
+          elevation={0}
+          sx={{
+            minWidth: 0,
+          }}
+        >
+          <Grid container spacing={2}>
+            {renderCard(
+              "Exploitability Metrics",
+              cvssScores.base.exploitabilityScore,
+              exploitabilityMetrics
+            )}
+            {renderCard(
+              "Impact Metrics",
+              cvssScores.base.impactScore,
+              impactMetrics
+            )}
+            <Box sx={{ mx: "auto", width: "40%" }}>
+              <MetricSelect
+                label="Scope (S)"
+                value={cvssScores.base.scope}
+                options={[
+                  { value: "U", label: "Unchanged" },
+                  { value: "C", label: "Changed" },
+                ]}
+                onChange={handleSelectChange("scope")}
+                onInfoClick={() =>
+                  handleOpenModal(
+                    "Scope (S)",
+                    "The Scope metric captures whether a vulnerability in one vulnerable component impacts resources in components beyond its security scope. The Base Score is greatest when a scope change occurs."
+                  )
+                }
+              />
+            </Box>
+          </Grid>
+        </Box>
+      </AccordionDetails>
       {openModal && (
         <InfoModal
           open={openModal}
@@ -314,6 +321,6 @@ export default function BaseScore() {
           text={modalContent.text}
         />
       )}
-    </>
+    </Accordion>
   );
 }

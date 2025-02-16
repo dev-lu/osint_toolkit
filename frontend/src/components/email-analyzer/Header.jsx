@@ -29,17 +29,13 @@ export default function Header(props) {
   const card_style = {
     p: 1,
     mt: 2,
-    backgroundColor: theme.palette.background.tablecell,
     boxShadow: 0,
-    borderRadius: 5,
+    borderRadius: 1,
   };
 
-  const tableCellStyle = {
-    backgroundColor: theme.palette.background.tablecell,
-  };
 
   const tableContainerStyle = {
-    borderRadius: 5,
+    borderRadius: 1,
     maxWidth: "95%",
     boxShadow: 0,
     border: 0,
@@ -52,14 +48,14 @@ export default function Header(props) {
       return (
         <>
           <TableContainer component={Paper} sx={tableContainerStyle}>
-            <Table aria-label="simple table" sx={tableCellStyle}>
+            <Table aria-label="simple table" >
               <TableHead>
                 <TableRow>
-                  <TableCell align="left" sx={tableCellStyle}>
+                  <TableCell align="left" >
                     {" "}
                     <b> Keys </b>{" "}
                   </TableCell>
-                  <TableCell align="left" sx={tableCellStyle}>
+                  <TableCell align="left" >
                     {" "}
                     <b> Value </b>{" "}
                   </TableCell>
@@ -90,8 +86,8 @@ export default function Header(props) {
       {/* Full header card */}
       <Grow in={true}>
         <Card key={"ema_file_header_card"} sx={card_style}>
-        <CardActionArea onClick={() => setOpen(!open)} sx={{ padding: '4px' }}>
-            <CardContent sx={{ padding: '2px' }}>
+        <CardActionArea onClick={() => setOpen(!open)} sx={{ padding: '2px' }}>
+            <CardContent sx={{ padding: '1px' }}>
               <Box
                 display="flex"
                 alignItems="center"

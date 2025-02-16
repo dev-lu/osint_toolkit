@@ -7,8 +7,7 @@ export default function CrowdsourcedContext(props) {
   return (
     <Card
       key="crowdsourced_context_card"
-      variant="outlined"
-      sx={{ m: 1, p: 2, borderRadius: 5, boxShadow: 0 }}
+      sx={{ m: 1, p: 2, borderRadius: 1, boxShadow: 0 }}
     >
       <Typography variant="h5" component="h2" gutterBottom>
         Crowdsourced context

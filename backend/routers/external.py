@@ -1,16 +1,17 @@
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, Depends
 from database import crud, models
 from database.database import SessionLocal, engine
-import ioc_analyzer
-from ai_assistant import ask_prompt
-import newsfeed
-import domain_monitoring
+from modules import ioc_analyzer
+from modules import newsfeed
+from modules import domain_monitoring
+from utils.dependencies import get_db
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 models.Base.metadata.create_all(bind=engine)
 
 
-@router.get("/api/ip/abuseipdb/{ip}", tags=["IP addresses"])
+@router.get("/api/ip/abuseipdb/{ip}", tags=["IOC Lookup"])
 async def abuseipdb(ip):
     '''
     Get IP reputation from AbuseIPDB
@@ -19,7 +20,7 @@ async def abuseipdb(ip):
     return ioc_analyzer.abuseipdb_ip_check(ip, apikey['key'])
 
 
-@router.get("/api/ip/alienvault", tags=["IP addresses"])
+@router.get("/api/ip/alienvault", tags=["IOC Lookup"])
 async def alienvault_ip(ioc=str()):
     '''
     Get IP reputation from AlienVault OTX
@@ -28,7 +29,7 @@ async def alienvault_ip(ioc=str()):
     return ioc_analyzer.alienvaultotx(ioc, 'ip', apikey['key'])
 
 
-@router.get("/api/hash/alienvault", tags=["Hashes"])
+@router.get("/api/hash/alienvault", tags=["IOC Lookup"])
 async def alienvault_hash(ioc=str()):
     '''
     Get Hash reputation from AlienVault OTX
@@ -37,7 +38,7 @@ async def alienvault_hash(ioc=str()):
     return ioc_analyzer.alienvaultotx(ioc, 'hash', apikey['key'])
 
 
-@router.get("/api/domain/alienvault", tags=["Domains"])
+@router.get("/api/domain/alienvault", tags=["IOC Lookup"])
 async def alienvault_domain(ioc=str()):
     '''
     Get DOMAIN reputation from AlienVault OTX
@@ -46,7 +47,7 @@ async def alienvault_domain(ioc=str()):
     return ioc_analyzer.alienvaultotx(ioc, 'domain', apikey['key'])
 
 
-@router.get("/api/ip/bgpview/{ip}", tags=["IP addresses"])
+@router.get("/api/ip/bgpview/{ip}", tags=["IOC Lookup"])
 async def bgpview(ip):
     '''
     Get IP reputation from BGPView
@@ -55,7 +56,7 @@ async def bgpview(ip):
 
 # TODO: finish
 """
-@router.get("/api/ip/blocklist_de/{ip}", tags=["IP addresses"])
+@router.get("/api/ip/blocklist_de/{ip}", tags=["IOC Lookup"])
 async def blocklistde(ip):
     '''
     Get IP reputation from Blocklist.de
@@ -64,7 +65,7 @@ async def blocklistde(ip):
 """
 
 
-@router.get("/api/ip/crowdsec/{ip}", tags=["IP addresses"])
+@router.get("/api/ip/crowdsec/{ip}", tags=["IOC Lookup"])
 async def crowdsec(ip):
     '''
     Get IP reputation from CrowdSec
@@ -73,7 +74,7 @@ async def crowdsec(ip):
     return ioc_analyzer.crowdsec(ip, apikey['key'])
 
 
-@router.get("/api/ip/ipqualityscore/{ip}", tags=["IP addresses"])
+@router.get("/api/ip/ipqualityscore/{ip}", tags=["IOC Lookup"])
 async def ipqualityscore(ip):
     '''
     Get IP reputation from IPQualityScore
@@ -82,7 +83,7 @@ async def ipqualityscore(ip):
     return ioc_analyzer.ipqualityscore_ip_check(ip, apikey['key'])
 
 
-@router.get("/api/ip/maltiverse/{ip}", tags=["IP addresses"])
+@router.get("/api/ip/maltiverse/{ip}", tags=["IOC Lookup"])
 async def maltiverse_ip(ip):
     '''
     Get IP reputation from Maltiverse
@@ -91,7 +92,7 @@ async def maltiverse_ip(ip):
     return ioc_analyzer.maltiverse_check(ip, "ip", apikey['key'])
 
 
-@router.get("/api/domain/maltiverse/{hostname}", tags=["Domains"])
+@router.get("/api/domain/maltiverse/{hostname}", tags=["IOC Lookup"])
 async def maltiverse_domain(hostname):
     '''
     Get hostname reputation from Maltiverse
@@ -100,7 +101,7 @@ async def maltiverse_domain(hostname):
     return ioc_analyzer.maltiverse_check(hostname, "hostname", apikey['key'])
 
 
-@router.get("/api/url/checkphish/{url}", tags=["URLs"])
+@router.get("/api/url/checkphish/{url}", tags=["IOC Lookup"])
 async def checkphish_url(url):
     '''
     Get URL reputation from CheckPhish
@@ -109,7 +110,7 @@ async def checkphish_url(url):
     return ioc_analyzer.checkphish_ai(url, apikey['key'])
 
 
-@router.get("/api/domain/checkphish/{domain}", tags=["Domains"])
+@router.get("/api/domain/checkphish/{domain}", tags=["IOC Lookup"])
 async def checkphish_domain(domain):
     '''
     Get URL reputation from CheckPhish
@@ -118,7 +119,7 @@ async def checkphish_domain(domain):
     return ioc_analyzer.checkphish_ai(domain, apikey['key'])
 
 
-@router.get("/api/ip/checkphish/{ip}", tags=["IP addresses"])
+@router.get("/api/ip/checkphish/{ip}", tags=["IOC Lookup"])
 async def checkphish_ip(ip):
     '''
     Get URL reputation from CheckPhish
@@ -127,7 +128,7 @@ async def checkphish_ip(ip):
     return ioc_analyzer.checkphish_ai(ip, apikey['key'])
 
 
-@router.get("/api/url/maltiverse/{url}", tags=["URLs"])
+@router.get("/api/url/maltiverse/{url}", tags=["IOC Lookup"])
 async def maltiverse_url(url):
     '''
     Get URL reputation from Maltiverse
@@ -136,7 +137,7 @@ async def maltiverse_url(url):
     return ioc_analyzer.maltiverse_check(url, "url", apikey['key'])
 
 
-@router.get("/api/hash/maltiverse/{hash}", tags=["Hashes"])
+@router.get("/api/hash/maltiverse/{hash}", tags=["IOC Lookup"])
 async def maltiverse_hash(hash):
     '''
     Get hash reputation from Maltiverse (SHA256 only)
@@ -145,7 +146,7 @@ async def maltiverse_hash(hash):
     return ioc_analyzer.maltiverse_check(hash, "sample", apikey['key'])
 
 
-@router.get("/api/hash/malwarebazaar/{hash}", tags=["Hashes"])
+@router.get("/api/hash/malwarebazaar/{hash}", tags=["IOC Lookup"])
 async def malwarebazaar(hash):
     '''
     Get hash reputation from MalwareBazaar
@@ -153,7 +154,7 @@ async def malwarebazaar(hash):
     return ioc_analyzer.malwarebazaar_hash_check(hash)
 
 
-@router.get("/api/newsfeed", tags=["OSINT Toolkit modules"])
+@router.get("/api/newsfeed", tags=["Newsfeed"])
 async def get_news():
     """
     Get news articles from the database
@@ -162,26 +163,26 @@ async def get_news():
     return news_list
 
 
-@router.post("/api/newsfeed/fetch", tags=["OSINT Toolkit modules"])
-async def fetch_news():
+@router.post("/api/newsfeed/fetch", tags=["Newsfeed"])
+async def fetch_news(db: Session = Depends(get_db)):
     """
     Fetch new news and store them in the database
     """
-    newsfeed.fetch_and_store_news()
+    await newsfeed.fetch_and_store_news(db)
     return {"message": "News fetched and stored"}
 
 
-@router.post("/api/newsfeed/fetch_and_get", tags=["OSINT Toolkit modules"])
-async def fetch_and_get_news():
+@router.post("/api/newsfeed/fetch_and_get", tags=["Newsfeed"])
+async def fetch_and_get_news(db: Session = Depends(get_db)):
     """
     Fetch new news, store them in the database, and return the latest news
     """
-    newsfeed.fetch_and_store_news()
-    news_list = newsfeed.get_news_from_db()
+    await newsfeed.fetch_and_store_news(db)
+    news_list = newsfeed.get_news_from_db(db)
     return news_list
 
 
-@router.get("/api/ip/pulsedive", tags=["IP addresses"])
+@router.get("/api/ip/pulsedive", tags=["IOC Lookup"])
 async def pulsedive_ip(ioc=str()):
     '''
     Get IP reputation from Pulsedive
@@ -190,7 +191,7 @@ async def pulsedive_ip(ioc=str()):
     return ioc_analyzer.check_pulsedive(ioc, apikey['key'])
 
 
-@router.get("/api/domain/pulsedive", tags=["Domains"])
+@router.get("/api/domain/pulsedive", tags=["IOC Lookup"])
 async def pulsedive_domain(ioc=str()):
     '''
     Get Domains reputation from Pulsedive
@@ -199,7 +200,7 @@ async def pulsedive_domain(ioc=str()):
     return ioc_analyzer.check_pulsedive(ioc, apikey['key'])
 
 
-@router.get("/api/hash/pulsedive", tags=["Hashes"])
+@router.get("/api/hash/pulsedive", tags=["IOC Lookup"])
 async def pulsedive_hash(ioc=str()):
     '''
     Get Hash reputation from Pulsedive
@@ -208,7 +209,7 @@ async def pulsedive_hash(ioc=str()):
     return ioc_analyzer.check_pulsedive(ioc, apikey['key'])
 
 
-@router.get("/api/domain/safebrowsing", tags=["Domains"])
+@router.get("/api/domain/safebrowsing", tags=["IOC Lookup"])
 async def safebrowsing_domain(ioc=str()):
     '''
     Get domain reputation from Google Safe Browsing
@@ -217,7 +218,7 @@ async def safebrowsing_domain(ioc=str()):
     return ioc_analyzer.safebrowsing_url_check(ioc, apikey['key'])
 
 
-@router.get("/api/url/safebrowsing", tags=["URLs"])
+@router.get("/api/url/safebrowsing", tags=["IOC Lookup"])
 async def safebrowsing_url(ioc=str()):
     '''
     Get URL reputation from Google Safe Browsing
@@ -226,7 +227,7 @@ async def safebrowsing_url(ioc=str()):
     return ioc_analyzer.safebrowsing_url_check(ioc, apikey['key'])
 
 
-@router.get("/api/ip/shodan", tags=["IP addresses"])
+@router.get("/api/ip/shodan", tags=["IOC Lookup"])
 async def shodan_ip(ioc=str()):
     '''
     Get information about IP from Shodan
@@ -235,7 +236,7 @@ async def shodan_ip(ioc=str()):
     return ioc_analyzer.check_shodan(ioc, 'ip', apikey['key'])
 
 
-@router.get("/api/domain/shodan", tags=["Domains"])
+@router.get("/api/domain/shodan", tags=["IOC Lookup"])
 async def shodan_domain(ioc=str()):
     '''
     Get information about a domain from Shodan
@@ -244,7 +245,7 @@ async def shodan_domain(ioc=str()):
     return ioc_analyzer.check_shodan(ioc, 'domain', apikey['key'])
 
 
-@router.get("/api/ip/threatfox/{ip}", tags=["IP addresses"])
+@router.get("/api/ip/threatfox/{ip}", tags=["IOC Lookup"])
 async def theatfox(ip):
     '''
     Get IP reputation from ThreatFox
@@ -253,7 +254,7 @@ async def theatfox(ip):
     return ioc_analyzer.threatfox_ip_check(ip, apikey['key'])
 
 
-@router.get("/api/email/hunterio/{email}", tags=["Emails"])
+@router.get("/api/email/hunterio/{email}", tags=["IOC Lookup"])
 async def hunterio(email):
     '''
     Get email reputation from Hunter.io
@@ -262,7 +263,7 @@ async def hunterio(email):
     return ioc_analyzer.hunter_email_check(email, apikey['key'])
 
 
-@router.get("/api/email/emailrepio/{email}", tags=["Emails"])
+@router.get("/api/email/emailrepio/{email}", tags=["IOC Lookup"])
 async def emailrepio(email):
     '''
     Get email reputation from emailrep.io
@@ -271,7 +272,7 @@ async def emailrepio(email):
     return ioc_analyzer.emailrep_email_check(email, apikey['key'])
 
 
-@router.get("/api/email/haveibeenpwnd/{email}", tags=["Emails"])
+@router.get("/api/email/haveibeenpwnd/{email}", tags=["IOC Lookup"])
 async def haveibeenpwnd(email):
     '''
     Get email reputation from Have I Been Pwnd
@@ -280,7 +281,7 @@ async def haveibeenpwnd(email):
     return ioc_analyzer.haveibeenpwnd_email_check(email, apikey['key'])
 
 
-@router.get("/api/cve/nist_nvd/{cve}", tags=["CVEs"])
+@router.get("/api/cve/nist_nvd/{cve}", tags=["IOC Lookup"])
 async def nistnvd(cve):
     '''
     Get information about a CVE from the NIST NVD
@@ -293,7 +294,7 @@ async def nistnvd(cve):
     return ioc_analyzer.search_nist_nvd(cve, apikey['key'])
 
 
-@router.get("/api/socialmedia/twitter/{ioc}", tags=["Social Media"])
+@router.get("/api/socialmedia/twitter/{ioc}", tags=["IOC Lookup"])
 async def twitter(ioc):
     '''
     Get latest Twitter Posts for IOC
@@ -303,7 +304,7 @@ async def twitter(ioc):
     return ioc_analyzer.search_twitter(ioc, twitter_bearer_token['key'])
 
 
-@router.get("/api/socialmedia/reddit/{ioc}", tags=["Social Media"])
+@router.get("/api/socialmedia/reddit/{ioc}", tags=["IOC Lookup"])
 async def reddit(ioc):
     '''
     Get latest Reddit Posts for IOC
@@ -313,7 +314,7 @@ async def reddit(ioc):
     return ioc_analyzer.search_reddit(ioc=ioc, client_secret=reddit_cs['key'], client_id=reddit_cid['key'])
 
 
-@router.get("/api/socialmedia/mastodon/{ioc}", tags=["Social Media"])
+@router.get("/api/socialmedia/mastodon/{ioc}", tags=["IOC Lookup"])
 async def mastodon(ioc):
     '''
     Get latest Mastodon Posts (ioc.exchange) for a specific IOC
@@ -321,7 +322,7 @@ async def mastodon(ioc):
     return ioc_analyzer.mastodon(ioc)
 
 
-@router.get("/api/url/urlhaus/{url}", tags=["URLs"])
+@router.get("/api/url/urlhaus/{url}", tags=["IOC Lookup"])
 async def urlhaus(url):
     '''
     Get URL reputation from URLhaus
@@ -329,7 +330,7 @@ async def urlhaus(url):
     return ioc_analyzer.urlhaus_url_check(url)
 
 
-@router.get("/api/url/urlscanio/{domain}", tags=["URLs"])
+@router.get("/api/url/urlscanio/{domain}", tags=["IOC Lookup"])
 async def urlscanio(domain):
     '''
     Get URL reputation from URLscan.io
@@ -337,7 +338,7 @@ async def urlscanio(domain):
     return domain_monitoring.urlscanio(domain)
 
 
-@router.get("/api/ip/virustotal", tags=["IP addresses"])
+@router.get("/api/ip/virustotal", tags=["IOC Lookup"])
 async def virustotal_ip(ioc=str()):
     '''
     Get IP reputation from VirusTotal
@@ -346,7 +347,7 @@ async def virustotal_ip(ioc=str()):
     return ioc_analyzer.virustotal(ioc, 'ip', apikey['key'])
 
 
-@router.get("/api/domain/virustotal", tags=["Domains"])
+@router.get("/api/domain/virustotal", tags=["IOC Lookup"])
 async def virustotal_domain(ioc=str()):
     '''
     Get Domain reputation from VirusTotal
@@ -355,7 +356,7 @@ async def virustotal_domain(ioc=str()):
     return ioc_analyzer.virustotal(ioc, 'domain', apikey['key'])
 
 
-@router.get("/api/url/virustotal", tags=["URLs"])
+@router.get("/api/url/virustotal", tags=["IOC Lookup"])
 async def virustotal_url(ioc=str()):
     '''
     Get URL reputation from VirusTotal
@@ -364,7 +365,7 @@ async def virustotal_url(ioc=str()):
     return ioc_analyzer.virustotal(ioc, 'url', apikey['key'])
 
 
-@router.get("/api/hash/virustotal", tags=["Hashes"])
+@router.get("/api/hash/virustotal", tags=["IOC Lookup"])
 async def virustotal_hash(ioc=str()):
     '''
     Get hash reputation from VirusTotal
@@ -373,106 +374,10 @@ async def virustotal_hash(ioc=str()):
     return ioc_analyzer.virustotal(ioc, 'hash', apikey['key'])
 
 
-@router.get("/api/multi/github", tags=["Multi"])
+@router.get("/api/multi/github", tags=["IOC Lookup"])
 async def github(ioc=str()):
     '''
     Get search results from GitHub
     '''
     apikey = crud.get_apikey(name="github", db=SessionLocal())
     return ioc_analyzer.search_github(ioc=ioc, access_token=apikey['key'])
-
-
-@router.post("/api/aiassistant/loganalysis", tags=["AI Assistant"])
-async def analyze_logs_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
-    '''
-    Analyze logdata with OpenAI
-    '''
-    inputdata = str(input["input"].encode('utf-8'))
-    apikey = crud.get_apikey(name="openai", db=SessionLocal())
-    analysis_result = ask_prompt(
-        inputdata, apikey['key'], 'loganalysis')
-    return {"analysis_result": analysis_result}
-
-
-@router.post("/api/aiassistant/mailanalysis", tags=["AI Assistant"])
-async def analyze_mail_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
-    '''
-    Analyze potential phishing mails with OpenAI
-    '''
-    inputdata = str(input["input"].encode('utf-8'))
-    apikey = crud.get_apikey(name="openai", db=SessionLocal())
-    analysis_result = ask_prompt(
-        inputdata, apikey['key'], 'emailanalysis')
-    return {"analysis_result": analysis_result}
-
-
-@router.post("/api/aiassistant/codeexpert", tags=["AI Assistant"])
-async def analyze_code_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
-    '''
-    Analyze source code with OpenAI
-    '''
-    inputdata = str(input["input"].encode('utf-8'))
-    apikey = crud.get_apikey(name="openai", db=SessionLocal())
-    analysis_result = ask_prompt(
-        inputdata, apikey['key'], 'codeexpert')
-    return {"analysis_result": analysis_result}
-
-
-@router.post("/api/aiassistant/deobfuscator", tags=["AI Assistant"])
-async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
-    '''
-    Analyze source code with OpenAI
-    '''
-    inputdata = str(input["input"].encode('utf-8'))
-    apikey = crud.get_apikey(name="openai", db=SessionLocal())
-    analysis_result = ask_prompt(
-        inputdata, apikey['key'], 'deobfuscator')
-    return {"analysis_result": analysis_result}
-
-
-@router.post("/api/aiassistant/incidentreport", tags=["AI Assistant"])
-async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
-    '''
-    Analyze source code with OpenAI
-    '''
-    inputdata = str(input["input"].encode('utf-8'))
-    apikey = crud.get_apikey(name="openai", db=SessionLocal())
-    analysis_result = ask_prompt(
-        inputdata, apikey['key'], 'incidentreport')
-    return {"analysis_result": analysis_result}
-
-
-@router.post("/api/aiassistant/configreview", tags=["AI Assistant"])
-async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
-    '''
-    Analyze source code with OpenAI
-    '''
-    inputdata = str(input["input"].encode('utf-8'))
-    apikey = crud.get_apikey(name="openai", db=SessionLocal())
-    analysis_result = ask_prompt(
-        inputdata, apikey['key'], 'configreview')
-    return {"analysis_result": analysis_result}
-
-
-@router.post("/api/aiassistant/patchanalysis", tags=["AI Assistant"])
-async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
-    '''
-    Analyze source code with OpenAI
-    '''
-    inputdata = str(input["input"].encode('utf-8'))
-    apikey = crud.get_apikey(name="openai", db=SessionLocal())
-    analysis_result = ask_prompt(
-        inputdata, apikey['key'], 'patchanalysis')
-    return {"analysis_result": analysis_result}
-
-
-@router.post("/api/aiassistant/accesscontrol", tags=["AI Assistant"])
-async def analyze_codedeobf_endpoint(input: dict = Body(..., example={"input": "YOUR_INPUT_DATA"})):
-    '''
-    Analyze source code with OpenAI
-    '''
-    inputdata = str(input["input"].encode('utf-8'))
-    apikey = crud.get_apikey(name="openai", db=SessionLocal())
-    analysis_result = ask_prompt(
-        inputdata, apikey['key'], 'accesscontrol')
-    return {"analysis_result": analysis_result}

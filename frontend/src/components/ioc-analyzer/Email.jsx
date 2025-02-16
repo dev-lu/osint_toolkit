@@ -20,7 +20,7 @@ import Hunterio from "./services/email/Hunterio";
 import Reddit from "./services/Reddit";
 import Twitter from "./services/Twitter";
 
-import { apiKeysState } from "../../App";
+import { apiKeysState } from "../../state";
 import NoApikeys from "./NoApikeys";
 
 export default function Email(props) {

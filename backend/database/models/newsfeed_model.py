@@ -2,13 +2,17 @@ from sqlalchemy import Boolean, Column, Integer, String, DateTime, Text, JSON
 from database.database import Base
 import datetime
 import json
+import uuid
 
+def generate_icon_id():
+    return str(uuid.uuid4())
 
 class NewsfeedSettings(Base):
     __tablename__ = "newsfeed_settings"
     name = Column(String, primary_key=True, index=True)
     url = Column(String)
-    icon = Column(String, default='default')
+    icon = Column(String, default='default.png')
+    icon_id = Column(String, default=generate_icon_id)
     enabled = Column(Boolean, default=True)
 
     def to_dict(self):
@@ -16,6 +20,7 @@ class NewsfeedSettings(Base):
             'name': self.name,
             'url': self.url,
             'icon': self.icon,
+            'icon_id': self.icon_id,
             'enabled': self.enabled
         }
 
@@ -26,10 +31,13 @@ class NewsArticle(Base):
     icon = Column(String)
     title = Column(String)
     summary = Column(String)
+    full_text = Column(String)
     date = Column(DateTime)
     link = Column(String, unique=True, index=True)
     fetched_at = Column(DateTime, default=datetime.datetime.utcnow)
     matches = Column(Text, nullable=True)
+    iocs = Column(Text, nullable=True)
+    relevant_iocs = Column(Text, nullable=True)
     analysis_result = Column(Text, nullable=True)
     note = Column(Text, nullable=True)
     tlp = Column(String, default="TLP:CLEAR")
@@ -45,6 +53,16 @@ class NewsArticle(Base):
                 matches_data = []
         else:
             matches_data = []
+        
+        if self.iocs:
+            try:
+                iocs_data = json.loads(self.iocs)
+                if not isinstance(iocs_data, dict):
+                    iocs_data = {}
+            except json.JSONDecodeError:
+                iocs_data = {}
+        else:
+            iocs_data = {}
 
         return {
             'id': self.id,
@@ -52,18 +70,18 @@ class NewsArticle(Base):
             'icon': self.icon,
             'title': self.title,
             'summary': self.summary,
+            'full_text': self.full_text,
             'date': self.date.isoformat() if self.date else None,
             'link': self.link,
             'fetched_at': self.fetched_at.isoformat() if self.fetched_at else None,
             'matches': matches_data,
+            'iocs': iocs_data,
+            'relevant_iocs': self.relevant_iocs,
             'analysis_result': self.analysis_result,
             'note': self.note,
             'tlp': self.tlp,
             'read': self.read
         }
-
-
-
 
 
 class NewsfeedConfig(Base):

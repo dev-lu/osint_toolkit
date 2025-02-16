@@ -16,7 +16,7 @@ const ResultCard = ({ answer }) => {
         sx={{
           m: 2,
           p: 3,
-          borderRadius: 5,
+          borderRadius: 1,
           backgroundColor: theme.palette.background.card,
           '& h2': {
             fontSize: '1.5rem',
