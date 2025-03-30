@@ -69,8 +69,19 @@ export default function NewsArticleItem(props) {
     try {
       const url = `/api/newsfeed/analyze/${item.id}?force=${!!item.analysis_result}`;
       const response = await api.post(url);
-      const analysisResult = response.data.analysis_result;
-
+      
+      // Get analysis result and ensure it's an object
+      let analysisResult = response.data.analysis_result;
+      
+      // If it's a string, try to parse it
+      if (typeof analysisResult === 'string') {
+        try {
+          analysisResult = JSON.parse(analysisResult);
+        } catch (parseError) {
+          console.error("Failed to parse analysis_result string:", parseError);
+        }
+      }
+  
       const updatedArticle = { ...item, analysis_result: analysisResult };
       updateArticle(updatedArticle);
     } catch (error) {

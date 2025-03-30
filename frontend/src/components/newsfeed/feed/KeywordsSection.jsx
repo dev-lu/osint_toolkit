@@ -40,6 +40,7 @@ export default function KeywordsSection({ item }) {
               variant="outlined" 
               sx={{
                 mb: 1, 
+                backgroundColor: indigo[300]
               }}
             />
           ))}

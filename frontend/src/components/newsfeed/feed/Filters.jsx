@@ -16,11 +16,13 @@ import {
   FormControl,
   InputLabel,
   Box,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TuneIcon from '@mui/icons-material/Tune';
-import { grey } from "@mui/material/colors";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import { grey } from "@mui/material/colors";
 
 export default function Filters({ fetchData }) {
   const [filters, setFilters] = useState({
@@ -63,18 +65,52 @@ export default function Filters({ fetchData }) {
     fetchData(resetFilters); 
   };
 
+  const handleRefresh = (event) => {
+    // Prevent the accordion from toggling when clicking the refresh button
+    event.stopPropagation();
+    fetchData();
+  };
+
   return (
     <Accordion
       variant="secondary"
-      sx={{mb: 2, borderRadius: 1}}
+      sx={{borderRadius: 1}}
     >
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Stack direction="row" alignItems="center" spacing={1}>
+      <AccordionSummary 
+        expandIcon={<ExpandMoreIcon />}
+        sx={{
+          '& .MuiAccordionSummary-content': {
+            justifyContent: 'space-between',
+            width: '100%',
+          }
+        }}
+      >
+        <Stack 
+          direction="row" 
+          alignItems="center" 
+          spacing={1}
+          sx={{ flexGrow: 1 }}
+        >
           <TuneIcon />
           <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
             Advanced Options
           </Typography>
         </Stack>
+        <Tooltip title="Refresh Feed">
+          <IconButton 
+            size="small" 
+            onClick={handleRefresh}
+            sx={{ 
+              ml: 1,
+              mr: 1,
+              '&:hover': {
+                backgroundColor: grey[200],
+              }
+            }}
+          >
+            <RefreshIcon />
+          </IconButton>
+        </Tooltip>
       </AccordionSummary>
       <AccordionDetails>
         <Grid container spacing={2}>
@@ -207,23 +243,6 @@ export default function Filters({ fetchData }) {
               >
                 Apply Filters
               </Button>
-              <Button
-                variant="contained"
-                onClick={() => fetchData()} 
-                startIcon={<RefreshIcon />}
-                sx={{ mt: 2 }}
-              >
-                Update Feed
-              </Button>
-              {/* 
-              <Button
-                variant="contained"
-                onClick={() => console.log("Recheck for IOCs triggered")}
-                sx={{ mt: 2 }}
-              >
-                Recheck for IOCs
-              </Button>
-              */}
               <Button
                 variant="contained"
                 onClick={handleReset}

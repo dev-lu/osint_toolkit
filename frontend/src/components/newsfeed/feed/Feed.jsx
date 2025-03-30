@@ -86,25 +86,9 @@ export default function Newsfeed() {
           }}
         >
           {/* Filters */}
-          <Box sx={{ flex: 1 }}>
+          <Box sx={{ flex: 1, mb: 1 }}>
             <Filters fetchData={handleFilterChange} />
           </Box>
-
-          {/* Refresh button */}
-          <Button
-            onClick={() => fetchData({ ...filters, page })}
-            variant="contained"
-            color="primary"
-            sx={{
-              minWidth: '48px',
-              height: '48px',
-              borderRadius: 1,
-              alignSelf: 'flex-start', 
-            }}
-            aria-label="Refresh Feed"
-          >
-            <RefreshIcon />
-          </Button>
         </Box>
 
         {/* Content section */}

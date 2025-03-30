@@ -6,6 +6,7 @@ import api from "./api";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
+import HealthCheck from "./HealthCheck";
 import Main from "./Main";
 import NotFound from "./components/NotFound";
 import AiAssistant from "./components/aiassistant/AiAssistant";
@@ -107,21 +108,23 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Routes>
-          <Route path="/" element={<Main />}>
-            <Route index element={<Navigate to="/newsfeed" replace />} />
-            <Route path="newsfeed/*" element={<Newsfeed />} />
-            <Route path="settings/*" element={<Settings />} />
-            <Route path="ai-templates/*" element={<AiAssistant />} />
-            <Route path="ioc-analyzer/*" element={<Analyzer />} />
-            <Route path="ioc-extractor/*" element={<Extractor />} />
-            <Route path="email-analyzer/*" element={<EmailAnalyzer />} />
-            <Route path="domain-monitoring/*" element={<Monitoring />} />
-            <Route path="cvss-calculator/*" element={<CvssCalculator />} />
-            <Route path="rules/*" element={<Rules />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
+        <HealthCheck>
+          <Routes>
+            <Route path="/" element={<Main />}>
+              <Route index element={<Navigate to="/newsfeed" replace />} />
+              <Route path="newsfeed/*" element={<Newsfeed />} />
+              <Route path="settings/*" element={<Settings />} />
+              <Route path="ai-templates/*" element={<AiAssistant />} />
+              <Route path="ioc-analyzer/*" element={<Analyzer />} />
+              <Route path="ioc-extractor/*" element={<Extractor />} />
+              <Route path="email-analyzer/*" element={<EmailAnalyzer />} />
+              <Route path="domain-monitoring/*" element={<Monitoring />} />
+              <Route path="cvss-calculator/*" element={<CvssCalculator />} />
+              <Route path="rules/*" element={<Rules />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </HealthCheck>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

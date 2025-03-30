@@ -37,7 +37,7 @@ const SearchBar = forwardRef(
 
     const SearchButton = styled(Button)({
       marginLeft: "10px",
-      borderRadius: 1,
+      borderRadius: 2,
       boxShadow: "none",
       "&:hover": {
         boxShadow: "none",

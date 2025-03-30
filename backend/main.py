@@ -8,51 +8,59 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
-from routers import external, newsfeed, ai_templates
-from routers import newsfeed as newsfeed_routes
-from routers.internal import (
-    api_key_settings, general_settings, module_settings,
-    mail_analyzer, ioc_extractor, cti_settings_routes, alerts_routes
-)
-from database import models, crud
-from database.database import SessionLocal, engine
-from database.models import Settings, ModuleSettings, NewsfeedSettings
-from database.schemas import NewsArticleSchema, ai_template_schema
-from utils import default_llm_templates
-from utils.scheduler import start_scheduler, shutdown_scheduler
-from modules import newsfeed
+import app.core.config.fastapi_config as fastapi_config
+
+from app.core import healthcheck
+from app.core.database import SessionLocal, engine, Base
+from app.core.scheduler import start_scheduler, shutdown_scheduler
+from app.core.settings.api_keys.routers import api_keys_settings_routes
+from app.core.settings.modules.routers import modules_settings_routes
+from app.core.settings.general.routers import general_settings_routes
+from app.core.settings.keywords.routers import keywords_settings_routes
+from app.core.settings.cti_profile.routers import cti_profile_settings_routes
+from app.core.settings.api_keys.crud import api_keys_settings_crud
+
+from app.features.llm_templates.routers import internal_llm_templates_routes
+from app.features.llm_templates.schemas import AITemplateCreate
+from app.features.llm_templates.models import AITemplate
+from app.features.llm_templates.crud import create_template
+from app.features.llm_templates.utils import default_llm_templates
+
+from app.features.domain_lookup.routers import external_domain_lookup_routes
+from app.features.email_analyzer.routers import internal_email_analyzer_routes
+from app.features.ioc_lookup.routers import external_ioc_lookup_routes
+from app.features.ioc_extractor.routers import internal_ioc_extractor_routes
+
+from app.features.newsfeed.routers import external_newsfeed_routes, internal_newsfeed_routes
+from app.features.newsfeed.service import newsfeed_service
+from app.features.newsfeed.models import newsfeed_models
+from app.features.newsfeed.schemas import newsfeed_schemas
+
+from app.core.settings.general.models.general_settings_models import Settings
+from app.core.settings.modules.models.modules_settings_models import ModuleSettings
+
 
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('app.log'),
+        logging.FileHandler('data/app.log'),
         logging.StreamHandler()
     ]
 )
 logger = logging.getLogger(__name__)
 
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
+
+
 # Create database tables
 try:
-    models.Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
     logger.info("Database tables created successfully")
 except Exception as e:
     logger.error(f"Failed to create database tables: {str(e)}")
     raise
 
-# API Configuration
-allowed_origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
-description = "## OSINT Toolkit interactive API documentation"
-
-tags_metadata = [
-    {"name": "AI Templates", "description": ""},
-    {"name": "Alerts", "description": ""},
-    {"name": "IOC Lookup", "description": "Services to lookup Indicators of Compromise."},
-    {"name": "IOC Extractor", "description": ""},
-    {"name": "Mail Analyzer", "description": ""},
-    {"name": "Newsfeed", "description": ""},
-    {"name": "Settings", "description": ""},
-]
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -79,43 +87,18 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.error(f"Shutdown error: {str(e)}")
 
+
 app = FastAPI(
-    title="OSINT Toolkit",
-    description=description,
-    version="0.1",
-    contact={
-        "name": "Lars Ursprung",
-        "url": "https://github.com/dev-lu",
-        "email": "larsursprung@gmail.com",
-    },
-    license_info={
-        "name": "MIT License",
-        "url": "https://mit-license.org/",
-    },
-    openapi_tags=tags_metadata,
-    swagger_ui_parameters={"docExpansion": "none"},
-    lifespan=lifespan
+    title=fastapi_config.APP_TITLE,
+    description=fastapi_config.DESCRIPTION,
+    version=fastapi_config.APP_VERSION,
+    contact=fastapi_config.CONTACT_INFO,
+    license_info=fastapi_config.LICENSE_INFO,
+    openapi_tags=fastapi_config.TAGS_METADATA,
+    swagger_ui_parameters=fastapi_config.SWAGGER_UI_PARAMETERS,
+    lifespan=lifespan 
 )
 
-# Router includes
-routers = [
-    external.router,
-    alerts_routes.router,
-    newsfeed_routes.internal.router,
-    newsfeed_routes.external.router,
-    api_key_settings.router,
-    general_settings.router,
-    module_settings.router,
-    mail_analyzer.router,
-    ioc_extractor.router,
-    cti_settings_routes.router,
-    ai_templates.router
-]
-
-for router in routers:
-    app.include_router(router)
-
-# CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
@@ -123,6 +106,30 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Router includes
+routers = [
+    healthcheck.router,
+    internal_llm_templates_routes.router,
+    external_domain_lookup_routes.router,
+    external_ioc_lookup_routes.router,
+    internal_email_analyzer_routes.router,
+    internal_ioc_extractor_routes.router,
+    #alerts_routes.router,
+    internal_newsfeed_routes.router,
+    external_newsfeed_routes.router,
+    api_keys_settings_routes.router,
+    general_settings_routes.router,
+    modules_settings_routes.router,
+    keywords_settings_routes.router,
+    cti_profile_settings_routes.router
+]
+
+for router in routers:
+    app.include_router(router)
+
+
+
 
 async def add_default_general_settings(db: Session) -> None:
     """Add default general settings if they don't exist."""
@@ -166,51 +173,18 @@ async def add_default_module_settings(db: Session) -> None:
 
 async def add_default_newsfeeds(db: Session) -> None:
     """Add default newsfeeds if they don't exist."""
-    default_newsfeeds = [
-        NewsfeedSettings(name="CyberScoop", url="https://www.cyberscoop.com/news/threats/feed",
-                         icon="cyberscoop", enabled=True),
-        NewsfeedSettings(name="Dark Reading", url="https://www.darkreading.com/rss_simple.asp",
-                         icon="darkreading", enabled=True),
-        NewsfeedSettings(name="HackerNoon", url="https://hackernoon.com/tagged/cybersecurity/feed",
-                         icon="hackernoon", enabled=True),
-        NewsfeedSettings(name="Helpnet Security", url="https://www.helpnetsecurity.com/feed/",
-                         icon="helpnetsecurity", enabled=True),
-        NewsfeedSettings(name="Krebs on Security", url="https://krebsonsecurity.com/feed/",
-                         icon="krebsonsecurity", enabled=True),
-        NewsfeedSettings(name="Security Magazine", url="https://www.securitymagazine.com/rss/topic/2236",
-                         icon="securitymagazine", enabled=True),
-        NewsfeedSettings(name="SecurityWeek", url="https://feeds.feedburner.com/securityweek",
-                         icon="securityweek", enabled=True),
-        NewsfeedSettings(name="TechCrunch", url="https://techcrunch.com/category/security/feed",
-                         icon="techcrunch", enabled=True),
-        NewsfeedSettings(name="The DFIR Report", url="https://thedfirreport.com/feed/atom",
-                         icon="thedfirreport", enabled=True),               
-        NewsfeedSettings(name="The Hacker News", url="https://feeds.feedburner.com/TheHackersNews",
-                         icon="thehackernews", enabled=True),
-        NewsfeedSettings(name="threatpost", url="https://threatpost.com/feed/",
-                         icon="threatpost", enabled=True),
-        NewsfeedSettings(
-            name="The Record", url="https://therecord.media/feed", icon="therecord", enabled=True),
-        NewsfeedSettings(name="The Register", url="https://www.theregister.co.uk/security/headlines.atom",
-                         icon="theregister", enabled=True),
-        NewsfeedSettings(
-            name="The Verge", url="https://www.theverge.com/rss/cyber-security/index.xml", icon="theverge", enabled=True),
-        NewsfeedSettings(
-            name="Wired", url="https://www.wired.com/feed/category/security/latest/rss", icon="wired", enabled=True),
-        NewsfeedSettings(
-            name="ZDNet", url="https://www.zdnet.com/topic/security/rss.xml", icon="zdnet", enabled=True)
-    ]
+    from app.features.newsfeed.utils.default_rss_feeds import DEFAULT_NEWSFEEDS
     
     try:
-        for feed in default_newsfeeds:
-            existing_feed = db.query(NewsfeedSettings).filter(
-                NewsfeedSettings.name == feed.name).first()
+        for feed_data in DEFAULT_NEWSFEEDS:
+            existing_feed = db.query(newsfeed_models.NewsfeedSettings).filter(
+                newsfeed_models.NewsfeedSettings.name == feed_data["name"]).first()
             if not existing_feed:
-                db.add(NewsfeedSettings(
-                    name=feed.name,
-                    url=feed.url,
-                    icon=feed.icon,
-                    enabled=feed.enabled
+                db.add(newsfeed_models.NewsfeedSettings(
+                    name=feed_data["name"],
+                    url=feed_data["url"],
+                    icon=feed_data["icon"],
+                    enabled=feed_data["enabled"]
                 ))
         db.commit()
         logger.info('Created default newsfeeds')
@@ -221,12 +195,12 @@ async def add_default_newsfeeds(db: Session) -> None:
 
 async def seed_default_llm_templates(db: Session) -> None:
     """Seed default LLM templates if they don't exist."""
-    try:
-        existing_templates = db.query(models.ai_template_model.AITemplate).first()
+    try: 
+        existing_templates = db.query(AITemplate).first()
         if not existing_templates:
             for temp_data in default_llm_templates.DEFAULT_TEMPLATES:
-                template_create = ai_template_schema.AITemplateCreate(**temp_data)
-                crud.ai_template_crud.create_template(db, template_create)
+                template_create = AITemplateCreate(**temp_data)
+                create_template(db, template_create)
             db.commit()
             logger.info("Default templates seeded successfully")
     except Exception as e:
