@@ -1,93 +1,95 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import dompurify from "dompurify";
-
-import CardHeader from "../styled/CardHeader";
-import OpenAi from "./ShowOpenAiAnswer.jsx";
 import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   Box,
   Button,
-  Card,
-  CardActionArea,
-  CardContent,
-  Collapse,
-  Grow,
-  IconButton,
-  useTheme,
+  Typography,
+  Divider,
 } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import OpenAi from "./ShowOpenAiAnswer.jsx";
 
 export default function MessageBody(props) {
-  const theme = useTheme();
-  const [open, setOpen] = useState(true);
-  const [expanded, setExpanded] = useState(false);
-  const card_style = {
-    p: 1,
-    mt: 2,
-    boxShadow: 0,
-    borderRadius: 1,
-  };
+  const [expanded, setExpanded] = useState(true);
+  const [contentExpanded, setContentExpanded] = useState(false);
 
-  const toggleExpanded = () => {
+  const sanitizedContent = useMemo(() => 
+    dompurify.sanitize(props.result, {
+      USE_PROFILES: { html: false, svg: false, svgFilters: false },
+    }), 
+    [props.result]
+  );
+
+  const displayContent = useMemo(() => 
+    contentExpanded ? sanitizedContent : sanitizedContent.slice(0, 700),
+    [sanitizedContent, contentExpanded]
+  );
+
+  const handleAccordionChange = () => {
     setExpanded(!expanded);
   };
 
+  const toggleContentExpanded = () => {
+    setContentExpanded(!contentExpanded);
+  };
+
+  const showReadMoreButton = sanitizedContent.length > 700;
+
   return (
-    <>
-      <Grow in={true}>
-        <Card key={"ema_message_text_card"} sx={card_style}>
-        <CardActionArea onClick={() => setOpen(!open)} sx={{ padding: '2px' }}>
-            <CardContent sx={{ padding: '1px' }}>
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-                width="100%"
-              >
-                <CardHeader
-                  text={"Message body (HTML sanitized)"}
-                  icon={<ChatIcon />}
-                />
-                <IconButton size="small">
-                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                </IconButton>
-              </Box>
-            </CardContent>
-          </CardActionArea>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            {expanded
-              ? dompurify.sanitize(props.result, {
-                  USE_PROFILES: { html: false, svg: false, svgFilters: false },
-                })
-              : dompurify
-                  .sanitize(props.result, {
-                    USE_PROFILES: {
-                      html: false,
-                      svg: false,
-                      svgFilters: false,
-                    },
-                  })
-                  .slice(0, 700)}
-            {dompurify.sanitize(props.result, {
-              USE_PROFILES: { html: false, svg: false, svgFilters: false },
-            }).length > 700 ? (
-              <Button onClick={toggleExpanded}>
-                {expanded ? "Read Less" : "Read More"}
-              </Button>
-            ) : null}
-            <br />
-            <br />
-            <div align="center">
-              <OpenAi
-                input={dompurify.sanitize(props.result, {
-                  USE_PROFILES: { html: false, svg: false, svgFilters: false },
-                })}
-              />
-            </div>
-          </Collapse>
-        </Card>
-      </Grow>
-    </>
+    <Accordion 
+      expanded={expanded} 
+      onChange={handleAccordionChange}
+      sx={{ mt: 2, borderRadius: 2, '&.MuiPaper-root': { boxShadow: 0, border: '1px solid rgba(0, 0, 0, 0.12)' } }}
+      TransitionProps={{ unmountOnExit: false }}
+    >
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="message-body-content"
+        id="message-body-header"
+        sx={{ minHeight: '48px', padding: '0 16px' }}
+      >
+        <Box display="flex" alignItems="center">
+          <ChatIcon sx={{ mr: 1 }} fontSize="small" />
+          <Typography variant="subtitle1" fontWeight="medium">
+            Message body (HTML sanitized)
+          </Typography>
+        </Box>
+      </AccordionSummary>
+      <AccordionDetails sx={{ p: 1 }}>
+        <Box 
+          ref={(node) => {
+            if (node) node.innerHTML = displayContent;
+          }}
+          sx={{ 
+            fontSize: '0.875rem',
+            maxWidth: '100%',
+            overflowWrap: 'break-word',
+            wordBreak: 'break-word'
+          }}
+        />
+        
+        {showReadMoreButton && (
+          <Box mt={1} mb={1}>
+            <Button 
+              onClick={toggleContentExpanded}
+              size="small" 
+              variant="text"
+            >
+              {contentExpanded ? "Read Less" : "Read More"}
+            </Button>
+          </Box>
+        )}
+        
+        <Divider sx={{ my: 2 }} />
+        
+        <Box display="flex" justifyContent="center" width="100%">
+          <OpenAi input={sanitizedContent} />
+        </Box>
+      </AccordionDetails>
+    </Accordion>
   );
 }

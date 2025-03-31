@@ -1,58 +1,38 @@
 import React, { useState } from "react";
-
-import CardHeader from "../styled/CardHeader";
 import Url from "../ioc-analyzer/Url.jsx";
 import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   Box,
   Button,
-  Card,
-  CardActionArea,
-  CardContent,
-  Collapse,
-  Grow,
-  IconButton,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
+  Typography,
   useTheme,
 } from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export default function Urls(props) {
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [url, setUrl] = useState(null);
+  const [showUrlAnalyse, setShowUrlAnalyse] = useState(false);
 
-  const card_style = {
-    p: 1,
-    mt: 2,
-    boxShadow: 0,
-    borderRadius: 1,
+  const handleAccordionChange = () => {
+    setExpanded(!expanded);
   };
 
-  const tableContainerStyle = {
-    borderRadius: 1,
-    maxWidth: "95%",
-    boxShadow: 0,
-    border: 0,
-    borderColor: "lightgrey",
-    m: 2,
-  };
-
-  const [url, setUrl] = React.useState(null);
-  const [showUrlAnalyse, setShowUrlAnalyse] = React.useState(false);
   function urlAnalyse(props) {
     return (
-      <>
-        <br />
-        <br />
+      <Box mt={1} mb={1}>
         <Url ioc={url} />
-        <br />
-      </>
+      </Box>
     );
   }
 
@@ -60,15 +40,36 @@ export default function Urls(props) {
     if (props.result.length > 0) {
       return (
         <React.Fragment key="urls_fragment">
-          <TableContainer component={Paper} sx={tableContainerStyle}>
-            <Table aria-label="simple table" >
+          <TableContainer 
+            component={Paper} 
+            sx={{ 
+              maxWidth: "100%",
+              boxShadow: 0,
+              borderRadius: 1
+            }}
+          >
+            <Table size="small" aria-label="urls table">
               <TableBody>
                 {props.result.map((row, index) => (
                   <TableRow key={index}>
-                    <TableCell align="left" sx={{ overflowWrap: "anywhere" }}>
+                    <TableCell 
+                      align="left" 
+                      sx={{ 
+                        overflowWrap: "anywhere", 
+                        py: 0.75,
+                        fontFamily: "monospace",
+                        fontSize: "0.75rem"
+                      }}
+                    >
                       {row}
                     </TableCell>
-                    <TableCell sx={{ overflowWrap: "anywhere" }}>
+                    <TableCell 
+                      sx={{ 
+                        overflowWrap: "anywhere", 
+                        width: "100px", 
+                        py: 0.75 
+                      }}
+                    >
                       <Button
                         variant="outlined"
                         disableElevation
@@ -77,7 +78,6 @@ export default function Urls(props) {
                           setShowUrlAnalyse(!showUrlAnalyse);
                           setUrl(row);
                         }}
-                        sx={{ float: "right", whiteSpace: "nowrap" }}
                       >
                         Analyze
                       </Button>
@@ -87,41 +87,40 @@ export default function Urls(props) {
               </TableBody>
             </Table>
           </TableContainer>
-          {showUrlAnalyse ? urlAnalyse(url) : <></>}
+          {showUrlAnalyse ? urlAnalyse(url) : null}
         </React.Fragment>
       );
     } else {
-      return <p>No URLs found...</p>;
+      return (
+        <Typography variant="body2" sx={{ px: 1 }}>
+          No URLs found
+        </Typography>
+      );
     }
   }
 
   return (
-    <>
-      <Grow in={true}>
-        <Card key={"ema_url_card"} sx={card_style}>
-        <CardActionArea onClick={() => setOpen(!open)} sx={{ padding: '2px' }}>
-            <CardContent sx={{ padding: '1px' }}>
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-                width="100%"
-              >
-                <CardHeader
-                  text={`URLs in body (${props.result.length})`}
-                  icon={<LinkIcon />}
-                />
-                <IconButton size="small">
-                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                </IconButton>
-              </Box>
-            </CardContent>
-          </CardActionArea>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            {showUrls()}
-          </Collapse>
-        </Card>
-      </Grow>
-    </>
+    <Accordion 
+      expanded={expanded} 
+      onChange={handleAccordionChange}
+      sx={{ mt: 2, borderRadius: 2, '&.MuiPaper-root': { boxShadow: 0, border: '1px solid rgba(0, 0, 0, 0.12)' } }}
+    >
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="urls-content"
+        id="urls-header"
+        sx={{ minHeight: '48px', padding: '0 16px' }}
+      >
+        <Box display="flex" alignItems="center">
+          <LinkIcon sx={{ mr: 1 }} fontSize="small" />
+          <Typography variant="subtitle1" fontWeight="medium">
+            URLs in body ({props.result.length})
+          </Typography>
+        </Box>
+      </AccordionSummary>
+      <AccordionDetails sx={{ p: 1 }}>
+        {showUrls()}
+      </AccordionDetails>
+    </Accordion>
   );
 }

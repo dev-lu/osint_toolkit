@@ -1,31 +1,21 @@
 import React, { useState } from "react";
-
-import CardHeader from "../styled/CardHeader";
 import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   Alert,
   AlertTitle,
   Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  Collapse,
-  Grow,
-  IconButton,
-  useTheme,
+  Typography,
 } from "@mui/material";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export default function SecurityCheck(props) {
-  const theme = useTheme();
-  const [open, setOpen] = useState(true);
+  const [expanded, setExpanded] = useState(true);
 
-  const card_style = {
-    p: 1,
-    mt: 2,
-    boxShadow: 0,
-    borderRadius: 1,
+  const handleAccordionChange = () => {
+    setExpanded(!expanded);
   };
 
   function showWarnings() {
@@ -45,12 +35,12 @@ export default function SecurityCheck(props) {
                   : "info"
               }
               variant="filled"
-              sx={{ m: 1, borderRadius: 1 }}
+              sx={{ m: 0.5, borderRadius: 1, '& .MuiAlert-message': { p: 0 } }}
             >
-              <AlertTitle>
-                <b>{row["warning_title"]}</b>
+              <AlertTitle sx={{ m: 0, fontSize: '0.875rem', fontWeight: 500 }}>
+                {row["warning_title"]}
               </AlertTitle>
-              {row["warning_message"]}
+              <Typography variant="body2">{row["warning_message"]}</Typography>
             </Alert>
           ))}
         </>
@@ -61,32 +51,25 @@ export default function SecurityCheck(props) {
   }
 
   return (
-    <>
-      <Grow in={true}>
-        <Card key={"ema_basic_checks_card"} sx={card_style}>
-        <CardActionArea onClick={() => setOpen(!open)} sx={{ padding: '2px' }}>
-            <CardContent sx={{ padding: '1px' }}>
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-                width="100%"
-              >
-                <CardHeader
-                  text={"Basic security checks"}
-                  icon={<VerifiedUserIcon />}
-                />
-                <IconButton size="small">
-                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                </IconButton>
-              </Box>
-            </CardContent>
-          </CardActionArea>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            {showWarnings()}
-          </Collapse>
-        </Card>
-      </Grow>
-    </>
+    <Accordion 
+      expanded={expanded} 
+      onChange={handleAccordionChange}
+      sx={{ mt: 2, borderRadius: 2, '&.MuiPaper-root': { boxShadow: 0, border: '1px solid rgba(0, 0, 0, 0.12)' } }}
+    >
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="security-checks-content"
+        id="security-checks-header"
+        sx={{ minHeight: '48px', padding: '0 16px' }}
+      >
+        <Box display="flex" alignItems="center">
+          <VerifiedUserIcon sx={{ mr: 1 }} fontSize="small" />
+          <Typography variant="subtitle1" fontWeight="medium">Basic security checks</Typography>
+        </Box>
+      </AccordionSummary>
+      <AccordionDetails sx={{ p: 1 }}>
+        {showWarnings()}
+      </AccordionDetails>
+    </Accordion>
   );
 }
