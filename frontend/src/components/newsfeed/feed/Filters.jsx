@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Accordion,
   AccordionSummary,
@@ -24,19 +24,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { grey } from "@mui/material/colors";
 
-export default function Filters({ fetchData }) {
-  const [filters, setFilters] = useState({
-    start_date: "",
-    end_date: "",
-    has_matches: null,
-    has_iocs: null,
-    has_relevant_iocs: null,
-    has_analysis: null,
-    has_note: null,
-    tlp: "",
-    read: null,
-  });
-
+export default function Filters({ filters, setFilters, applyFilters, resetFilters, refreshData }) {
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
     setFilters({
@@ -46,29 +34,17 @@ export default function Filters({ fetchData }) {
   };
 
   const handleSubmit = () => {
-    fetchData(filters); 
+    applyFilters(filters); 
   };
 
   const handleReset = () => {
-    const resetFilters = {
-      start_date: "",
-      end_date: "",
-      has_matches: null,
-      has_iocs: null,
-      has_relevant_iocs: null,
-      has_analysis: null,
-      has_note: null,
-      tlp: "",
-      read: null,
-    };
-    setFilters(resetFilters);
-    fetchData(resetFilters); 
+    resetFilters();
   };
 
   const handleRefresh = (event) => {
     // Prevent the accordion from toggling when clicking the refresh button
     event.stopPropagation();
-    fetchData();
+    refreshData();
   };
 
   return (
@@ -163,7 +139,7 @@ export default function Filters({ fetchData }) {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={filters.has_matches}
+                    checked={filters.has_matches === true}
                     onChange={handleChange}
                     name="has_matches"
                   />
@@ -173,7 +149,7 @@ export default function Filters({ fetchData }) {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={filters.has_iocs}
+                    checked={filters.has_iocs === true}
                     onChange={handleChange}
                     name="has_iocs"
                   />
@@ -184,7 +160,7 @@ export default function Filters({ fetchData }) {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={filters.has_relevant_iocs}
+                    checked={filters.has_relevant_iocs === true}
                     onChange={handleChange}
                     name="has_relevant_iocs"
                   />
@@ -201,7 +177,7 @@ export default function Filters({ fetchData }) {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={filters.has_analysis}
+                    checked={filters.has_analysis === true}
                     onChange={handleChange}
                     name="has_analysis"
                   />
@@ -211,7 +187,7 @@ export default function Filters({ fetchData }) {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={filters.has_note}
+                    checked={filters.has_note === true}
                     onChange={handleChange}
                     name="has_note"
                   />
@@ -222,7 +198,7 @@ export default function Filters({ fetchData }) {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={filters.read}
+                    checked={filters.read === true}
                     onChange={handleChange}
                     name="read"
                   />
@@ -236,13 +212,6 @@ export default function Filters({ fetchData }) {
           {/* Action Buttons */}
           <Grid item xs={12}>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Button
-                variant="contained"
-                onClick={handleSubmit}
-                sx={{ mt: 2 }}
-              >
-                Apply Filters
-              </Button>
               <Button
                 variant="contained"
                 onClick={handleReset}

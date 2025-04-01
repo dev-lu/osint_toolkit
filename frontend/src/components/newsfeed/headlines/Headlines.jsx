@@ -181,14 +181,15 @@ function Headlines() {
             {displayData().map((headline) => (
               <TableRow key={headline.id} hover>
                 <TableCell>
-                  <Chip 
-                    label={headline.feedname} 
-                    size="small"
-                    sx={{ 
-                      bgcolor: 'primary.main',
-                      color: 'primary.contrastText'
-                    }}
-                  />
+                <Chip 
+                label={headline.feedname} 
+                size="small"
+                sx={{ 
+                  bgcolor: 'primary.main',
+                  color: 'primary.contrastText',
+                  borderRadius: 1
+                }}
+              />
                 </TableCell>
                 <TableCell>{headline.title}</TableCell>
                 <TableCell align="right">{formatDate(headline.date)}</TableCell>

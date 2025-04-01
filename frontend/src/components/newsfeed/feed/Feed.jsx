@@ -5,13 +5,11 @@ import api from "../../../api";
 import { newsfeedState, apiKeysState } from "../../../state";
 
 import {
-  Button,
   Pagination,
   Typography,
   Box,
   Stack
 } from "@mui/material";
-import RefreshIcon from "@mui/icons-material/Refresh";
 import NewsArticleItem from "./NewsArticleItem";
 import NewsfeedSkeleton from "./NewsfeedSkeleton";
 import Filters from "./Filters";
@@ -23,7 +21,19 @@ export default function Newsfeed() {
   const [result, setResult] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [filters, setFilters] = useState({}); 
+  
+  const [filters, setFilters] = useState({
+    start_date: "",
+    end_date: "",
+    has_matches: null,
+    has_iocs: null,
+    has_relevant_iocs: null,
+    has_analysis: null,
+    has_note: null,
+    tlp: "",
+    read: null,
+  });
+  
   const pageSize = 15;
 
   const tlpColors = {
@@ -34,8 +44,7 @@ export default function Newsfeed() {
   };
 
   const handlePageChange = (event, value) => {
-    setPage(value); 
-    fetchData({ ...filters, page: value }); 
+    setPage(value);
     scrollToTop();
   };
 
@@ -46,13 +55,13 @@ export default function Newsfeed() {
     });
   };
 
-  const fetchData = async (params = {}) => {
+  const fetchData = async (pageToFetch = page) => {
     try {
       setLoading(true);
       setNewsfeed([]);
       const url = "/api/newsfeed/articles";
       const response = await api.get(url, {
-        params: { ...params, page_size: pageSize }, 
+        params: { ...filters, page: pageToFetch, page_size: pageSize }, 
       });
       setResult(response.data); 
       setNewsfeed(response.data.articles); 
@@ -64,13 +73,33 @@ export default function Newsfeed() {
   };
 
   useEffect(() => {
-    fetchData({ ...filters, page }); 
+    fetchData();
   }, [page, filters]);
 
-  const handleFilterChange = (newFilters) => {
-    setFilters(newFilters); 
+  const applyFilters = (newFilters) => {
+    setFilters(newFilters);
     setPage(1); 
-    fetchData({ ...newFilters, page: 1 });
+  };
+
+  // Reset filters
+  const resetFilters = () => {
+    const resetState = {
+      start_date: "",
+      end_date: "",
+      has_matches: null,
+      has_iocs: null,
+      has_relevant_iocs: null,
+      has_analysis: null,
+      has_note: null,
+      tlp: "",
+      read: null,
+    };
+    setFilters(resetState);
+    setPage(1);
+  };
+
+  const refreshData = () => {
+    fetchData();
   };
 
   return (
@@ -87,7 +116,13 @@ export default function Newsfeed() {
         >
           {/* Filters */}
           <Box sx={{ flex: 1, mb: 1 }}>
-            <Filters fetchData={handleFilterChange} />
+            <Filters 
+              filters={filters}
+              setFilters={setFilters}
+              applyFilters={applyFilters}
+              resetFilters={resetFilters}
+              refreshData={refreshData}
+            />
           </Box>
         </Box>
 
