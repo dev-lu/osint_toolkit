@@ -42,7 +42,7 @@ function Headlines() {
 
   const fetchHeadlines = async () => {
     try {
-      const response = await api.get(`/recent_articles?time_filter=${timeFilter}`);
+      const response = await api.get(`/api/recent_articles?time_filter=${timeFilter}`);
       setHeadlines(response.data);
     } catch (error) {
       console.error('Error fetching headlines:', error);

@@ -1,19 +1,25 @@
 version: "3.8"
 services:
   backend:
-    build: ./backend
+    networks:
+      - otk-network
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: backend
-    ports:
-      - "8000:8000"
     volumes:
-      - ./data:/backend/database/data
+      - ./data:/backend/data
+
   frontend:
+    networks:
+        - otk-network
     build:
       context: ./frontend
-      #args:
-      #  - BACKEND_URL=http://<IP_ADDRESS>:<PORT>  # Backend URL without trailing slash
+      dockerfile: Dockerfile
     container_name: frontend
     ports:
-      - "3000:3000"
-    stdin_open: true
-    tty: true
+      - "4000:80"
+
+networks:
+  otk-network:
+    driver: bridge

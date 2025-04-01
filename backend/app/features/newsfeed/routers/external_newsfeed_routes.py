@@ -108,7 +108,7 @@ async def get_paginated_articles_route(
 
     return articles_data
 
-@router.get("/recent_articles", tags=["Newsfeed"])
+@router.get("/api/recent_articles", tags=["Newsfeed"])
 @handle_exceptions
 async def get_recent_articles(
     db: Session = Depends(get_db),
@@ -141,7 +141,7 @@ async def fetch_and_get_news(db: Session = Depends(get_db)):
     await newsfeed_service.fetch_and_store_news(db)
     return newsfeed_service.get_news_from_db(db)
 
-@router.get("/title_word_frequency", tags=["Newsfeed"], response_model=List[Dict[str, object]])
+@router.get("/api/title_word_frequency", tags=["Newsfeed"], response_model=List[Dict[str, object]])
 @handle_exceptions
 async def get_title_word_frequency_route(
     db: Session = Depends(get_db),
@@ -177,7 +177,7 @@ async def get_title_word_frequency_route(
     
     return frequent_words
 
-@router.post("/analyze_top_articles", tags=["Newsfeed"])
+@router.post("/api/analyze_top_articles", tags=["Newsfeed"])
 @handle_exceptions
 async def post_analyze_top_articles(db: Session = Depends(get_db)):
     """Analyze and rank top 10 recent cybersecurity articles"""
@@ -185,7 +185,7 @@ async def post_analyze_top_articles(db: Session = Depends(get_db)):
     results = await asyncio.to_thread(analyze_and_rank_top_articles, db)
     return {"articles_analysis": results}
 
-@router.get("/analyze_top_articles_stream", tags=["Newsfeed"])
+@router.get("/api/analyze_top_articles_stream", tags=["Newsfeed"])
 @handle_exceptions
 async def get_analyze_top_articles_stream(db: Session = Depends(get_db)):
     """Stream analysis of top 10 articles via SSE"""

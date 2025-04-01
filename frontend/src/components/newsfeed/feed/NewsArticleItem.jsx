@@ -25,6 +25,7 @@ import AnalyzeSection from "./AnalyzeSection";
 import NotesSection from "./NotesSection";
 import IOCSection from "./IOCSection";
 import KeywordsSection from "./KeywordsSection";
+import api from "../../../api";
 
 export default function NewsArticleItem(props) {
   const {
@@ -112,10 +113,10 @@ export default function NewsArticleItem(props) {
           {/* Left side: Avatar and feedname/date */}
           <Stack direction="row" spacing={1} alignItems="center">
           <Avatar
-            alt={`${item.title} icon`}
-            src={`${api.defaults.baseURL}/api/feedicons/${item.icon}`}
-            sx={{ width: 45, height: 45 }}
-          />
+              alt={`${item.title} icon`}
+              src={`/api/feedicons/${item.icon}`}
+              sx={{ width: 45, height: 45 }}
+            />
             <Stack>
               <Typography variant="subtitle1">
                 <b>{item.feedname}</b>

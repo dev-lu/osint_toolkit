@@ -66,7 +66,7 @@ export default function Report() {
     setRanking([]);
     setAnalysisResults([]);
 
-    const url = `${api.defaults.baseURL}/analyze_top_articles_stream`; 
+    const url = `${api.defaults.baseURL}/api/analyze_top_articles_stream`; 
     const es = new EventSource(url);
     eventSourceRef.current = es;
 

@@ -54,7 +54,7 @@ const Trends = () => {
   const fetchTrendData = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/title_word_frequency?limit=20&time_range=${timeRange}`);
+      const response = await api.get(`/api/title_word_frequency?limit=20&time_range=${timeRange}`);
       setData(response.data);
     } catch (err) {
       setError(err.message);

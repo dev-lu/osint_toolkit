@@ -808,3 +808,18 @@ def search_articles_by_ioc(
         raise HTTPException(status_code=404, detail="No articles found containing the specified IOC")
     
     return [article.to_dict() for article in articles]
+
+@router.get("/api/feedicons/{icon_name}", tags=["Newsfeed"])
+async def get_feed_icon(icon_name: str):
+    """Get feed icon by icon name."""
+    # Strip .png extension if it exists
+    icon_base = icon_name.rsplit('.png', 1)[0]
+    icon_path = f"app/static/feedicons/{icon_base}.png"
+    
+    logger.debug(f"Looking for icon at path: {icon_path}")
+    
+    if os.path.exists(icon_path):
+        return FileResponse(icon_path)
+    
+    logger.debug(f"Icon not found at {icon_path}, returning default icon")
+    return FileResponse("app/static/feedicons/default.png")
