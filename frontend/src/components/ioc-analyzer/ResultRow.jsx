@@ -133,6 +133,37 @@ export default function ResultRow(props) {
     );
   }
 
+  if (props.result.error && props.result.error === 404) {
+    return (
+      <>
+        <TableRow key={props.id + "_row"}>
+          <TableCell style={cellStyle}>
+            <IconButton aria-label="expand row" size="small">
+              <KeyboardArrowDownIcon />
+            </IconButton>
+          </TableCell>
+          <TableCell style={cellStyle}>
+            <CardHeader
+              avatar={
+                <Avatar
+                  alt={`${props.icon} icon`}
+                  src={require(`./icons/${props.icon}.png`)}
+                  sx={avatarStyle}
+                />
+              }
+              title={props.name}
+              sx={{ padding: 0 }}
+            />
+          </TableCell>
+          <TableCell style={cellStyle}>
+            No intelligence information found
+          </TableCell>
+          <TableCell style={cellStyle} bgcolor="green"></TableCell>
+        </TableRow>
+      </>
+    );
+  }
+
   if (props.result.error && props.result.error === 429) {
     return (
       <>
