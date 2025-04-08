@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Accordion,
   AccordionSummary,
@@ -18,13 +18,19 @@ import {
   Box,
   IconButton,
   Tooltip,
+  CircularProgress,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TuneIcon from '@mui/icons-material/Tune';
 import RefreshIcon from "@mui/icons-material/Refresh";
+import DownloadIcon from "@mui/icons-material/Download";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { grey } from "@mui/material/colors";
+import api from "../../../api";
 
 export default function Filters({ filters, setFilters, applyFilters, resetFilters, refreshData }) {
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
     setFilters({
@@ -42,9 +48,32 @@ export default function Filters({ filters, setFilters, applyFilters, resetFilter
   };
 
   const handleRefresh = (event) => {
-    // Prevent the accordion from toggling when clicking the refresh button
+    // Prevent accordion from toggling when clicking the refresh button
     event.stopPropagation();
     refreshData();
+  };
+
+  const handleFetchAndGet = async () => {
+    setIsLoading(true);
+    try {
+      const response = await api.post("/api/newsfeed/fetch_and_get", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to fetch and get news");
+      }
+      
+      const data = await response.json();
+      refreshData();
+    } catch (error) {
+      console.error("Error fetching news:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -211,13 +240,27 @@ export default function Filters({ filters, setFilters, applyFilters, resetFilter
 
           {/* Action Buttons */}
           <Grid item xs={12}>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Box sx={{ display: "flex", gap: 2 }}>
               <Button
                 variant="contained"
+                startIcon={<RestartAltIcon />}
                 onClick={handleReset}
                 sx={{ mt: 2 }}
               >
                 Reset Filters
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={isLoading ? null : <DownloadIcon />}
+                onClick={handleFetchAndGet}
+                disabled={isLoading}
+                sx={{ mt: 2 }}
+              >
+                {isLoading ? (
+                  <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} />
+                ) : null}
+                {isLoading ? "Fetching..." : "Fetch News"}
               </Button>
             </Box>
           </Grid>
