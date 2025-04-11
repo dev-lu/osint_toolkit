@@ -6,8 +6,6 @@ from app.core.dependencies import get_db
 from sqlalchemy.orm import Session
 
 router = APIRouter()
-Base.metadata.create_all(bind=engine)
-
 
 @router.get("/api/ip/abuseipdb/{ip}", tags=["IOC Lookup"])
 async def abuseipdb(ip):
