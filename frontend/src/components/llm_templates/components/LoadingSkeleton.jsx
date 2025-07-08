@@ -1,9 +1,8 @@
-import React from 'react';
 import { Box, Card, CardContent, Skeleton } from '@mui/material';
 
-export const LoadingSkeleton = () => (
+const LoadingSkeleton = () => (
   <Box>
-    {[1, 2, 3].map((i) => (
+    {[1,2,3].map(i => (
       <Card key={i} sx={{ mb: 2 }}>
         <CardContent>
           <Skeleton variant="text" width="60%" height={32} />
@@ -16,3 +15,5 @@ export const LoadingSkeleton = () => (
     ))}
   </Box>
 );
+
+export default LoadingSkeleton;

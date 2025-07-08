@@ -54,3 +54,35 @@ def delete_template(db: Session, template_id: str) -> bool:
         db.commit()
         return True
     return False
+
+def reorder_templates(
+    db: Session,
+    template_ids: List[str],
+    start_order: int = 10,
+    increment: int = 10
+) -> List[AITemplate]:
+    """
+    Reorder a list of templates by assigning new order numbers
+    
+    Args:
+        db: Database session
+        template_ids: Ordered list of template IDs
+        start_order: Starting order number
+        increment: Amount to increment between each template
+        
+    Returns:
+        List of updated AITemplate objects
+    """
+    updated_templates = []
+    current_order = start_order
+    
+    for template_id in template_ids:
+        template = get_template(db, template_id)
+        if template:
+            template.order_number = current_order
+            db.add(template)
+            updated_templates.append(template)
+            current_order += increment
+    
+    db.commit()
+    return updated_templates

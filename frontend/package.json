@@ -23,6 +23,7 @@
     "html-to-text": "^9.0.3",
     "js-yaml": "^4.1.0",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-circle-progress-bar": "^0.1.4",
     "react-country-flag": "^3.0.2",
     "react-dom": "^18.2.0",

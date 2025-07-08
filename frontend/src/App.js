@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, createContext, useState } from "react";
+import { useEffect, useMemo, createContext, useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { Routes, Route, Navigate } from 'react-router-dom';
 import api from "./api";
@@ -9,7 +9,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import HealthCheck from "./HealthCheck";
 import Main from "./Main";
 import NotFound from "./components/NotFound";
-import AiAssistant from "./components/aiassistant/AiAssistant";
 import CvssCalculator from "./components/cvss-calculator/CvssCalculator";
 import Monitoring from "./components/domain-monitoring/Monitoring";
 import EmailAnalyzer from "./components/email-analyzer/EmailAnalyzer";
@@ -18,6 +17,7 @@ import Extractor from "./components/ioc-extractor/Extractor";
 import Newsfeed from "./components/newsfeed/Newsfeed";
 import Settings from "./components/settings/Settings";
 import Rules from "./components/rule-creator/Rules";
+import AiTemplates from "./components/llm_templates/AiTemplates";
 
 import {
   apiKeysState,
@@ -114,7 +114,7 @@ function App() {
               <Route index element={<Navigate to="/newsfeed" replace />} />
               <Route path="newsfeed/*" element={<Newsfeed />} />
               <Route path="settings/*" element={<Settings />} />
-              <Route path="ai-templates/*" element={<AiAssistant />} />
+              <Route path="ai-templates/*" element={<AiTemplates />} />
               <Route path="ioc-analyzer/*" element={<Analyzer />} />
               <Route path="ioc-extractor/*" element={<Extractor />} />
               <Route path="email-analyzer/*" element={<EmailAnalyzer />} />

@@ -1,12 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, Body
 from sqlalchemy.orm import Session
 from typing import List, Optional
+from pydantic import BaseModel
 from app.core.dependencies import get_db
 from app.features.llm_templates.crud import get_templates as crud_get_templates
 from app.features.llm_templates.crud import create_template as crud_create_template
 from app.features.llm_templates.crud import update_template as crud_update_template
 from app.features.llm_templates.crud import delete_template as crud_delete_template
 from app.features.llm_templates.crud import get_template as crud_get_template
+from app.features.llm_templates.crud import reorder_templates as crud_reorder_templates
 from app.features.llm_templates.schemas import AITemplate, AITemplateCreate, AITemplateUpdate, AITemplateExecute
 from app.features.llm_templates.service import llm_templates_service
 from app.core.settings.api_keys.crud import api_keys_settings_crud
@@ -77,47 +79,61 @@ async def execute_template(
     template = crud_get_template(db, template_id)
     if not template:
         raise HTTPException(status_code=404, detail="Template not found")
-    
-    required_fields = {field['name'] for field in template.payload_fields if field.get('required', False)}
+
+    raw_pf = template.payload_fields
+    if isinstance(raw_pf, str):
+        try:
+            payload_fields = json.loads(raw_pf)
+        except (json.JSONDecodeError, TypeError):
+            raise HTTPException(
+                status_code=500,
+                detail="Template payload_fields is invalid JSON"
+            )
+    else:
+        payload_fields = raw_pf or []
+
+    required_fields = {
+        field["name"]
+        for field in payload_fields
+        if field.get("required", False)
+    }
     provided_fields = set(execution_data.payload_data.keys())
-    
+
     if not required_fields.issubset(provided_fields):
-        missing_fields = required_fields - provided_fields
+        missing = required_fields - provided_fields
         raise HTTPException(
             status_code=400,
-            detail=f"Missing required payload fields: {', '.join(missing_fields)}"
+            detail=f"Missing required payload fields: {', '.join(missing)}"
         )
-    
+
+    # Build the prompt
     formatted_prompt = template.ai_agent_task
-    
-    # Check if each field is present in the prompt; if not, append it at the end
-    for field_name, field_value in execution_data.payload_data.items():
-        field_tag = f"<{field_name}>"
-        if field_tag not in formatted_prompt:
-            formatted_prompt += f"\n\n{field_tag}\n{field_value}\n</{field_name}>"
+    for name, value in execution_data.payload_data.items():
+        tag_open = f"<{name}>"
+        tag_close = f"</{name}>"
+        if tag_open not in formatted_prompt:
+            formatted_prompt += f"\n\n{tag_open}\n{value}\n{tag_close}"
         else:
-            # Replace existing tags with the field value
-            formatted_prompt = formatted_prompt.replace(
-                f"<{field_name}>", str(field_value)
-            ).replace(
-                f"</{field_name}>", ""
+            formatted_prompt = (
+                formatted_prompt
+                .replace(tag_open, str(value))
+                .replace(tag_close, "")
             )
-    
-    # Create LLM service
-    llm_service_instance = llm_service.create_llm_service(db)
-    
-    # Use the model specified in the request or default to gpt-3.5
-    model_id = execution_data.model_id if hasattr(execution_data, 'model_id') else "gpt-3.5"
-    
+
+    llm = llm_service.create_llm_service(db)
+    model_id = getattr(execution_data, "model_id", "gpt-3.5")
+    temperature = getattr(execution_data, "temperature", 0.7)
+    max_tokens = getattr(execution_data, "max_tokens", 1000)
+
     try:
-        response = llm_service_instance.execute_prompt(
+        result = llm.execute_prompt(
             model_id=model_id,
             system_prompt=template.ai_agent_role,
             user_prompt=formatted_prompt,
-            temperature=execution_data.temperature if hasattr(execution_data, 'temperature') else 0.7,
-            max_tokens=execution_data.max_tokens if hasattr(execution_data, 'max_tokens') else 1000
+            temperature=temperature,
+            max_tokens=max_tokens
         )
-        return {"result": response}
+        return {"result": result}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
@@ -147,7 +163,7 @@ def clean_response(response_text: str) -> str:
 async def engineer_prompt(
     title: str = Body(..., embed=True),
     description: str = Body(..., embed=True),
-    model_id: str = Body("gpt-4", embed=True),  # Default to GPT-4 for better prompt engineering
+    model_id: str = Body("gpt-4", embed=True),
     db: Session = Depends(get_db)
 ):
     """
@@ -192,7 +208,6 @@ async def engineer_prompt(
     )
 
     try:
-        # Create LLM service
         llm_service_instance = llm_service.create_llm_service(db)
         
         response_text = llm_service_instance.execute_prompt(
@@ -218,5 +233,27 @@ async def engineer_prompt(
         raise HTTPException(status_code=500, detail=f"Failed to parse LLM response as JSON: {str(e)}")
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+class TemplateOrderUpdate(BaseModel):
+    template_ids: List[str]
+
+@router.post("/api/ai-templates/reorder", tags=["AI Templates"])
+async def reorder_templates(
+    order_update: TemplateOrderUpdate,
+    db: Session = Depends(get_db)
+):
+    """Update the order of templates based on the provided list"""
+    try:
+        updated_templates = crud_reorder_templates(
+            db, 
+            order_update.template_ids
+        )
+        return {
+            "status": "success",
+            "updated_count": len(updated_templates),
+            "message": f"Successfully reordered {len(updated_templates)} templates"
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
