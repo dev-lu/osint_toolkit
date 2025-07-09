@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import {
   Box,
   Button,
@@ -13,6 +13,7 @@ import {
   MenuItem,
   Slider,
   CircularProgress,
+  FormHelperText,
 } from '@mui/material';
 import { AutoFixHigh as AutoFixHighIcon, Preview as PreviewIcon, Help as HelpIcon } from '@mui/icons-material';
 import MDEditor from '@uiw/react-md-editor';
@@ -51,47 +52,44 @@ export default function CreateTemplateForm() {
     { id: 'gpt-35-turbo', name: 'GPT-3.5 Turbo' }
   ];
 
-  const handleFieldUpdate = useCallback((i, updated) => {
+  // Payload fields handlers
+  const handleFieldUpdate = useCallback((idx, updated) => {
     setTemplate(t => ({
       ...t,
-      payload_fields: t.payload_fields.map((f, idx) => idx === i ? updated : f)
+      payload_fields: t.payload_fields.map((f, i) => i === idx ? updated : f)
     }));
   }, []);
-  const handleFieldDelete = useCallback(i => {
+  const handleFieldDelete = useCallback(idx => {
     setTemplate(t => ({
       ...t,
-      payload_fields: t.payload_fields.filter((_, idx) => idx !== i)
+      payload_fields: t.payload_fields.filter((_, i) => i !== idx)
     }));
   }, []);
-  const addField = () => {
-    setTemplate(t => ({
-      ...t,
-      payload_fields: [...t.payload_fields, { name: '', description: '', required: true }]
-    }));
-  };
+  const addField = () => setTemplate(t => ({
+    ...t,
+    payload_fields: [...t.payload_fields, { name: '', description: '', required: true }]
+  }));
 
-  const updateStatic = useCallback((i, updated) => {
+  // Static contexts handlers
+  const updateStatic = useCallback((idx, updated) => {
     setTemplate(t => ({
       ...t,
-      static_contexts: t.static_contexts.map((c, idx) => idx === i ? updated : c)
+      static_contexts: t.static_contexts.map((c, i) => i === idx ? updated : c)
     }));
   }, []);
-  const deleteStatic = useCallback(i => {
+  const deleteStatic = useCallback(idx => {
     setTemplate(t => ({
       ...t,
-      static_contexts: t.static_contexts.filter((_, idx) => idx !== i)
+      static_contexts: t.static_contexts.filter((_, i) => i !== idx)
     }));
   }, []);
-  const addStatic = () => {
-    setTemplate(t => ({
-      ...t,
-      static_contexts: [...t.static_contexts, { name: '', description: '', content: '' }]
-    }));
-  };
+  const addStatic = () => setTemplate(t => ({
+    ...t,
+    static_contexts: [...t.static_contexts, { name: '', description: '', content: '' }]
+  }));
 
-  const canEngineer = useMemo(() => {
-    return template.title.trim() && template.description.trim();
-  }, [template]);
+  // Enable prompt engineering once title and description are set
+  const canEngineer = useMemo(() => template.title.trim() && template.description.trim(), [template]);
   const handleEngineer = async () => {
     if (!canEngineer) return;
     setIsEngineering(true);
@@ -116,6 +114,7 @@ export default function CreateTemplateForm() {
     }
   };
 
+  // Validation for final submit
   const isValid = useMemo(() => {
     const okTitle = template.title.trim();
     const okRole = template.ai_agent_role.trim();
@@ -130,6 +129,7 @@ export default function CreateTemplateForm() {
     try {
       await templatesService.createTemplate(template);
       setSnackbar({ open: true, message: 'Template created!', severity: 'success' });
+      // reset form
       setTemplate({
         title: '', description: '', ai_agent_role: '', ai_agent_task: '',
         payload_fields: [], static_contexts: [], example_input_output: '',
@@ -147,9 +147,11 @@ export default function CreateTemplateForm() {
       <FormSection
         title="Basic Information"
         actions={
-          <IconButton onClick={handleEngineer} disabled={!canEngineer}>
-            {isEngineering ? <CircularProgress size={24} /> : <AutoFixHighIcon />}
-          </IconButton>
+          <Tooltip title="Generate template based on title and description" arrow>
+            <IconButton onClick={handleEngineer} disabled={!canEngineer}>
+              {isEngineering ? <CircularProgress size={24} /> : <AutoFixHighIcon />}
+            </IconButton>
+          </Tooltip>
         }
       >
         <ResizableTextField
@@ -158,15 +160,15 @@ export default function CreateTemplateForm() {
           onChange={e => setTemplate({ ...template, title: e.target.value })}
           fullWidth required
           error={!template.title.trim()}
-          helperText={!template.title.trim() ? 'Required' : ''}
+          helperText={!template.title.trim() ? 'Enter a concise template title (required)' : 'Unique name for your template.'}
         />
         <Box mt={2}>
           <ResizableTextField
             label="Description"
             value={template.description}
             onChange={e => setTemplate({ ...template, description: e.target.value })}
-            fullWidth multiline
-            minRows={2}
+            fullWidth multiline minRows={2}
+            helperText="Summarize what this template is for (optional)."
           />
         </Box>
       </FormSection>
@@ -184,6 +186,7 @@ export default function CreateTemplateForm() {
                 <MenuItem key={m.id} value={m.id}>{m.name}</MenuItem>
               ))}
             </Select>
+            <FormHelperText>Choose the AI model version for generation.</FormHelperText>
           </FormControl>
           <Box sx={{ flex: 1 }}>
             <Typography>Temperature: {template.temperature.toFixed(2)}</Typography>
@@ -192,6 +195,7 @@ export default function CreateTemplateForm() {
               onChange={(_, v) => setTemplate({ ...template, temperature: v })}
               step={0.05} min={0} max={1} valueLabelDisplay="auto"
             />
+            <FormHelperText>Higher values yield more varied responses.</FormHelperText>
           </Box>
           <Tooltip title="Higher = more random">
             <HelpIcon />
@@ -206,17 +210,17 @@ export default function CreateTemplateForm() {
           onChange={e => setTemplate({ ...template, ai_agent_role: e.target.value })}
           fullWidth multiline minRows={1}
           required error={!template.ai_agent_role.trim()}
-          helperText={!template.ai_agent_role.trim() ? 'Required' : ''}
+          helperText={!template.ai_agent_role.trim() ? 'Define the AI persona (required)' : 'E.g., Customer support expert.'}
         />
         <Box mt={2}>
           <ResizableTextField
             label="AI Agent Task"
-            value={template.ai_agent_task}
-            onChange={e => setTemplate({ ...template, ai_agent_task: e.target.value })}
-            fullWidth multiline minRows={2}
-            required error={!template.ai_agent_task.trim()}
-            helperText={!template.ai_agent_task.trim() ? 'Required' : ''}
-          />
+          value={template.ai_agent_task}
+          onChange={e => setTemplate({ ...template, ai_agent_task: e.target.value })}
+          fullWidth multiline minRows={2}
+          required error={!template.ai_agent_task.trim()}
+          helperText={!template.ai_agent_task.trim() ? 'Describe the task (required)' : 'E.g., Generate a friendly response.'}
+        />
         </Box>
       </FormSection>
 
@@ -227,6 +231,7 @@ export default function CreateTemplateForm() {
           onUpdate={handleFieldUpdate}
           onDelete={handleFieldDelete}
         />
+        <FormHelperText sx={{ mt: 1 }}>Set user-input variables and mark them as required if needed.</FormHelperText>
       </FormSection>
 
       <FormSection title="Static Contexts">
@@ -236,6 +241,7 @@ export default function CreateTemplateForm() {
           onUpdate={updateStatic}
           onDelete={deleteStatic}
         />
+        <FormHelperText sx={{ mt: 1 }}>Include fixed content like guidelines or reference info.</FormHelperText>
       </FormSection>
 
       <FormSection title="Example Usage (Markdown)">
@@ -245,6 +251,7 @@ export default function CreateTemplateForm() {
           preview="edit"
           height={200}
         />
+        <FormHelperText sx={{ mt: 1 }}>Provide example input & output to guide users.</FormHelperText>
       </FormSection>
 
       <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>

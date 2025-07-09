@@ -352,7 +352,14 @@ export default function UseTemplateView() {
                         </IconButton>
                       </Tooltip>
                     </Box>
-                    <ResultBox>
+                    <ResultBox sx={{
+                      border: 0,
+                      backgroundColor: 'background.paper',
+                      '& .wmde-markdown, & .wmde-markdown pre': {
+                        backgroundColor: 'transparent !important',
+                        padding: 0,
+                      },
+                    }}>
                       <MDEditor.Markdown source={result} />
                     </ResultBox>
                   </StyledPaper>

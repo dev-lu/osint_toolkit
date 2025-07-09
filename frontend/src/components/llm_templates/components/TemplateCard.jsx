@@ -4,6 +4,7 @@ import {
   CardActions,
   IconButton,
   Typography,
+  Tooltip,
   Box
 } from '@mui/material';
 import {
@@ -71,7 +72,9 @@ const TemplateCard = ({
           onShowExample(template);
         }}
       >
-        <InfoIcon fontSize="small" />
+        <Tooltip title="View Example" arrow>
+          <InfoIcon fontSize="small" />
+        </Tooltip>
       </IconButton>
       <IconButton
         size="small"
@@ -80,7 +83,9 @@ const TemplateCard = ({
           onEdit(template);
         }}
       >
-        <EditIcon fontSize="small" />
+        <Tooltip title="Edit Template" arrow>
+          <EditIcon fontSize="small" />
+        </Tooltip>
       </IconButton>
       <IconButton
         size="small"
@@ -89,7 +94,9 @@ const TemplateCard = ({
           onDelete(template);
         }}
       >
-        <DeleteIcon fontSize="small" />
+        <Tooltip title="Delete Template" arrow>
+          <DeleteIcon fontSize="small" />
+        </Tooltip>
       </IconButton>
     </CardActions>
   </Card>

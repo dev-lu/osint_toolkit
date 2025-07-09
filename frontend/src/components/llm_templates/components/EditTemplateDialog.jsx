@@ -184,7 +184,6 @@ export default function EditTemplateDialog({
         </Box>
 
         <Box my={2}>
-          <Typography variant="subtitle1" gutterBottom>Payload Fields</Typography>
           <PayloadFieldsEditor
             fields={tpl.payload_fields}
             onAdd={addPayloadField}
@@ -194,7 +193,6 @@ export default function EditTemplateDialog({
         </Box>
 
         <Box my={2}>
-          <Typography variant="subtitle1" gutterBottom>Static Contexts</Typography>
           <StaticContextsEditor
             contexts={tpl.static_contexts}
             onAdd={addStaticContext}

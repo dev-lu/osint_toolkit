@@ -59,7 +59,7 @@ export const PayloadFieldEditor = ({ field, onUpdate, onDelete }) => (
 export const PayloadFieldsEditor = ({ fields, onAdd, onUpdate, onDelete }) => (
   <Box>
     <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-      <Typography variant="subtitle1">Payload Fields</Typography>
+      <Typography variant="body2">Payload fields are fields the user pastes / enters the data to that will be processed by the template.</Typography>
       <Button startIcon={<AddIcon />} size="small" onClick={onAdd}>Add Field</Button>
     </Box>
     {fields.length > 0 ? (
@@ -116,7 +116,7 @@ export const StaticContextEditor = ({ ctx, onUpdate, onDelete }) => (
 export const StaticContextsEditor = ({ contexts, onAdd, onUpdate, onDelete }) => (
   <Box>
     <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-      <Typography variant="subtitle1">Static Contexts</Typography>
+      <Typography variant="body1">Add static context</Typography>
       <Button startIcon={<AddIcon />} size="small" onClick={onAdd}>Add Context</Button>
     </Box>
     {contexts.length > 0 ? (
