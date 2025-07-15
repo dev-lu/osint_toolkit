@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from app.features.newsfeed.models.newsfeed_models import NewsfeedSettings, NewsArticle, NewsfeedConfig
 from app.features.newsfeed.schemas.newsfeed_schemas import NewsfeedSettingsSchema, NewsArticleSchema, NewsfeedConfigSchema
-from typing import Optional, List, Dict
-from collections import Counter
+from typing import Optional, List, Dict, Any
+from collections import Counter, defaultdict
 from datetime import datetime, timedelta
 import json
 import re
@@ -77,6 +77,7 @@ def disable_feed(db: Session, feedName: str):
         NewsfeedSettings.name == feedName).first()
     
     if setting is None:
+        from fastapi import HTTPException
         raise HTTPException(
             status_code=404,
             detail=f"Newsfeed with name '{feedName}' not found"
@@ -103,14 +104,20 @@ def create_news_article(db: Session, news_article: NewsArticleSchema):
     
     db_news_article = NewsArticle(
         **news_article.dict(exclude={
-            'iocs', 'relevant_iocs', 'matches', 'note', 'tlp', 'read'
+            'iocs', 'relevant_iocs', 'matches', 'note', 'tlp', 'read', 'cves'
         })
     )
     logger.debug("Created NewsArticle object")
     
     db_news_article.matches = json.dumps(news_article.matches) if news_article.matches else None
-    db_news_article.iocs = json.dumps(news_article.iocs) if news_article.iocs else None
+    
+    if isinstance(news_article.iocs, dict):
+        db_news_article.iocs = json.dumps(news_article.iocs)
+    else:
+        db_news_article.iocs = None
+
     db_news_article.relevant_iocs = json.dumps(news_article.relevant_iocs) if news_article.relevant_iocs else None
+    
     db_news_article.note = news_article.note
     db_news_article.tlp = news_article.tlp
     db_news_article.read = news_article.read
@@ -118,9 +125,7 @@ def create_news_article(db: Session, news_article: NewsArticleSchema):
     try:
         logger.debug("Adding article to database session")
         db.add(db_news_article)
-        logger.debug("Committing database session")
         db.commit()
-        logger.debug("Refreshing article object")
         db.refresh(db_news_article)
         logger.debug("Successfully created article with ID: %s", db_news_article.id)
         return db_news_article
@@ -137,7 +142,7 @@ def update_news_article(db: Session, article_id: int, note: Optional[str] = None
     if note is not None:
         db_news_article.note = note
     if tlp is not None:
-        print(f"Updating TLP to: {tlp}")
+        logger.info(f"Updating TLP to: {tlp}")
         db_news_article.tlp = tlp
     if read is not None:
         db_news_article.read = read
@@ -145,7 +150,6 @@ def update_news_article(db: Session, article_id: int, note: Optional[str] = None
     db.commit()
     db.refresh(db_news_article)
     return db_news_article
-
 
 
 def delete_old_news_articles(db: Session, retention_days: int):
@@ -251,15 +255,13 @@ def delete_custom_feed(db: Session, name: str):
 
 def get_recent_news_articles(db: Session, time_filter: str = "7d"):
     """Retrieve articles filtered by time range."""
-    time_filters = {
-        "8h": timedelta(hours=8),
-        "24h": timedelta(days=1),
-        "2d": timedelta(days=2),
-        "7d": timedelta(days=7),
-        "30d": timedelta(days=30)
-    }
-    
-    cutoff_date = datetime.utcnow() - time_filters.get(time_filter, timedelta(days=99999))
+    try:
+        cutoff_date = parse_time_range(time_filter)
+    except ValueError:
+        cutoff_date = datetime.utcnow() - timedelta(days=99999)
+
+    if cutoff_date is None:
+        cutoff_date = datetime.utcnow() - timedelta(days=99999)
     
     recent_articles = db.query(
         NewsArticle.id,
@@ -280,24 +282,28 @@ def get_recent_news_articles(db: Session, time_filter: str = "7d"):
     ]
 
 
-def parse_time_range(time_range: str) -> datetime:
+def parse_time_range(time_range: str) -> Optional[datetime]:
     """
     Parse a relative time range string and return the corresponding cutoff date.
-    Supports formats like '24h', '2d', '7d', '14d', '30d'
+    Supports formats like '24h', '2d', '7d', '14d', '30d'.
+    Returns None for invalid formats instead of raising an error directly.
     """
     if not time_range:
         return None
         
     time_range = time_range.lower()
     
-    if time_range.endswith('h'):
-        hours = int(time_range[:-1])
-        return datetime.utcnow() - timedelta(hours=hours)
-    elif time_range.endswith('d'):
-        days = int(time_range[:-1])
-        return datetime.utcnow() - timedelta(days=days)
-    else:
-        raise ValueError("Invalid time range format. Use '24h' for hours or '7d' for days")
+    try:
+        if time_range.endswith('h'):
+            hours = int(time_range[:-1])
+            return datetime.utcnow() - timedelta(hours=hours)
+        elif time_range.endswith('d'):
+            days = int(time_range[:-1])
+            return datetime.utcnow() - timedelta(days=days)
+        else:
+            return None
+    except ValueError:
+        return None
 
 def get_title_word_frequency(
     db: Session, 
@@ -305,19 +311,9 @@ def get_title_word_frequency(
     time_range: Optional[str] = None,
     start_date: Optional[datetime] = None,
     end_date: Optional[datetime] = None
-) -> List[Dict[str, object]]:
+) -> List[Dict[str, Any]]:
     """
     Analyze word frequency in article titles and return top occurring words.
-    
-    Args:
-        db: Database session
-        limit: Maximum number of words to return
-        time_range: Relative time range (e.g., '24h', '7d', '30d')
-        start_date: Absolute start date for filtering
-        end_date: Absolute end date for filtering (defaults to current time if not provided)
-    
-    Returns:
-        List of dictionaries containing word frequencies and related article IDs
     """
     query = db.query(
         NewsArticle.id,
@@ -327,7 +323,8 @@ def get_title_word_frequency(
     
     if time_range:
         cutoff_date = parse_time_range(time_range)
-        query = query.filter(NewsArticle.date >= cutoff_date)
+        if cutoff_date:
+            query = query.filter(NewsArticle.date >= cutoff_date)
     elif start_date:
         query = query.filter(NewsArticle.date >= start_date)
         if end_date:
@@ -335,21 +332,33 @@ def get_title_word_frequency(
     
     articles = query.all()
     
-    word_articles = {}  # word -> set of article IDs
-    word_counts = Counter()  # word -> total count
+    word_articles = {}
+    word_counts = Counter()
     
-    stop_words = {'your', 'day', 'out', 'users', 'vpn', 'time', 'was', 'that', 'hacking', 
-                 'code', 'over', 'after', 'not', 'hackers', 'could', 'secure', 'attacks', 
-                 'what', 'launches', 'newsletter', 'trust', 'the', 'a', 'an', 'and', 'or', 
-                 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'data', 'new', 
-                 'security', 'cybersecurity', 'how', 'cyber', 'from', 'year', 'why', 'you', 
-                 'attack', 'its', 'says', 'are'}
+    stop_words = {
+        "the", "and", "for", "with", "from", "that", "this", "have", "been", "has", "are",
+        "was", "not", "but", "all", "its", "new", "more", "also", "into", "they", "their",
+        "which", "could", "would", "should", "can", "will", "a", "an", "is", "of", "to", "in",
+        "on", "at", "by", "be", "as", "or", "from", "it", "he", "she", "we", "you", "my",
+        "your", "our", "us", "him", "her", "them", "his", "her", "its", "up", "down", "out",
+        "about", "then", "there", "when", "where", "why", "how", "what", "who", "whom",
+        "whose", "if", "than", "through", "before", "after", "while", "though", "even",
+        "because", "until", "unless", "since", "about", "above", "across", "after", "against",
+        "along", "among", "around", "at", "before", "behind", "below", "beneath", "beside",
+        "between", "beyond", "but", "by", "concerning", "considering", "despite", "down",
+        "during", "except", "for", "from", "in", "inside", "into", "like", "near", "of",
+        "off", "on", "onto", "out", "outside", "over", "past", "regarding", "respecting",
+        "round", "save", "since", "through", "throughout", "to", "toward", "towards", "under",
+        "underneath", "until", "unto", "up", "upon", "with", "within", "without", "via", "re", 
+        "hackers", "cyber", "attack", "attacks", "data", "security", "says", "cybersecurity",
+        "cve", "threat", "unveils", "group", "spread", "globe", "threats", "four"
+    }
     
     for article in articles:
-        words = re.findall(r'\b[a-zA-Z]{3,}\b', article.title.lower())
+        words = re.findall(r'\b[a-zA-Z]+\b', article.title.lower())
         
         for word in words:
-            if word not in stop_words:
+            if word not in stop_words and len(word) > 2:
                 if word not in word_articles:
                     word_articles[word] = set()
                 
@@ -367,4 +376,157 @@ def get_title_word_frequency(
         for word, count in top_words
     ]
     
+    return result
+
+
+def get_top_iocs(db: Session, ioc_type: str, limit: int = 10, time_range: Optional[str] = None) -> List[Dict[str, Any]]:
+    """
+    Retrieves the most frequent IOCs of a specific type (e.g., IPs, Domains, Hashes)
+    by parsing the 'iocs' JSON field within NewsArticle.
+    """
+    query = db.query(
+        NewsArticle.id,
+        NewsArticle.date,
+        NewsArticle.iocs
+    )
+
+    if time_range:
+        cutoff_date = parse_time_range(time_range)
+        if cutoff_date:
+            query = query.filter(NewsArticle.date >= cutoff_date)
+    
+    articles = query.all()
+    
+    ioc_articles = defaultdict(set)
+    ioc_counts = Counter()
+    
+    for article in articles:
+        iocs_json_str = article.iocs
+        if iocs_json_str:
+            try:
+                iocs_data = json.loads(iocs_json_str)
+                if ioc_type in iocs_data and isinstance(iocs_data[ioc_type], list):
+                    for ioc_value in iocs_data[ioc_type]:
+                        if isinstance(ioc_value, str) and ioc_value.strip():
+                            ioc_articles[ioc_value].add(article.id)
+                            ioc_counts[ioc_value] += 1
+            except json.JSONDecodeError:
+                logger.warning(f"Malformed JSON in 'iocs' column for article ID {article.id}: {iocs_json_str}")
+                continue
+            except TypeError as e:
+                logger.warning(f"Unexpected data structure in 'iocs' column for article ID {article.id}. Error: {e}")
+                continue
+                
+    top_iocs = ioc_counts.most_common(limit)
+    
+    result = [
+        {
+            "value": ioc_value,
+            "count": count,
+            "article_ids": list(ioc_articles[ioc_value])
+        }
+        for ioc_value, count in top_iocs
+    ]
+    
+    return result
+
+
+def get_top_cves(db: Session, limit: int = 10, time_range: Optional[str] = None) -> List[Dict[str, Any]]:
+    """
+    Retrieves the most frequent CVEs by parsing the 'iocs' JSON field within NewsArticle.
+    """
+    query = db.query(
+        NewsArticle.id,
+        NewsArticle.date,
+        NewsArticle.iocs
+    )
+
+    if time_range:
+        cutoff_date = parse_time_range(time_range)
+        if cutoff_date:
+            query = query.filter(NewsArticle.date >= cutoff_date)
+    
+    articles = query.all()
+    
+    cve_articles = defaultdict(set)
+    cve_counts = Counter()
+    
+    for article in articles:
+        iocs_json_str = article.iocs
+        if iocs_json_str:
+            try:
+                iocs_data = json.loads(iocs_json_str)
+                if 'cves' in iocs_data and isinstance(iocs_data['cves'], list):
+                    for cve_value in iocs_data['cves']:
+                        if isinstance(cve_value, str) and cve_value.strip():
+                            cve_articles[cve_value].add(article.id)
+                            cve_counts[cve_value] += 1
+            except json.JSONDecodeError:
+                logger.warning(f"Malformed JSON in 'iocs' column for article ID {article.id}: {iocs_json_str}")
+                continue
+            except TypeError as e:
+                logger.warning(f"Unexpected data structure in 'iocs' column for article ID {article.id}. Error: {e}")
+                continue
+
+    top_cves = cve_counts.most_common(limit)
+    
+    result = [
+        {
+            "value": cve_value,
+            "count": count,
+            "article_ids": list(cve_articles[cve_value])
+        }
+        for cve_value, count in top_cves
+    ]
+    
+    return result
+
+
+def get_ioc_type_distribution(db: Session, time_range: Optional[str] = None) -> List[Dict[str, Any]]:
+    """
+    Retrieves the distribution (total count) of each IOC type within a specified time range.
+    """
+    query = db.query(
+        NewsArticle.id,
+        NewsArticle.date,
+        NewsArticle.iocs
+    )
+
+    if time_range:
+        cutoff_date = parse_time_range(time_range)
+        if cutoff_date:
+            query = query.filter(NewsArticle.date >= cutoff_date)
+    
+    articles = query.all()
+    
+    ioc_type_counts = Counter()
+    
+    for article in articles:
+        iocs_json_str = article.iocs
+        if iocs_json_str:
+            try:
+                iocs_data = json.loads(iocs_json_str)
+                
+                valid_ioc_types = ['ips', 'md5', 'sha1', 'sha256', 'urls', 'domains', 'emails', 'cves']
+                
+                for ioc_type in valid_ioc_types:
+                    if ioc_type in iocs_data and isinstance(iocs_data[ioc_type], list):
+                        ioc_type_counts[ioc_type] += len(iocs_data[ioc_type])
+            except json.JSONDecodeError:
+                logger.warning(f"Malformed JSON in 'iocs' column for article ID {article.id}: {iocs_json_str}")
+                continue
+            except TypeError as e:
+                logger.warning(f"Unexpected data structure in 'iocs' column for article ID {article.id}. Error: {e}")
+                continue
+
+    result = [
+        {
+            "id": ioc_type,
+            "label": ioc_type.replace('_', ' ').title(),
+            "value": count
+        }
+        for ioc_type, count in ioc_type_counts.items()
+    ]
+    
+    result.sort(key=lambda x: x['value'], reverse=True)
     return result

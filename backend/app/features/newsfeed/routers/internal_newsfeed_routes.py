@@ -37,6 +37,9 @@ from app.features.newsfeed.crud.newsfeed_crud import (
     get_recent_news_articles,
     get_title_word_frequency,
     get_news_articles_by_ids,
+    get_top_iocs,
+    get_top_cves,
+    get_ioc_type_distribution
 )
 from app.features.newsfeed.models.newsfeed_models import (
     NewsfeedSettings, 
@@ -211,7 +214,6 @@ async def analyze_news_article(
     # Get CTI settings
     cti_settings = None
     try:
-        # Import the CRUD function
         from app.core.settings.cti_profile.crud.cti_profile_settings_crud import get_cti_settings
         cti_settings = get_cti_settings(db=db)
         if not cti_settings or not cti_settings.settings:
@@ -222,10 +224,8 @@ async def analyze_news_article(
 
     logger.info("Starting analysis for article ID %d using model %s.", article_id, model_id)
     try:
-        # Get article attributes
         title = getattr(news_article_record, "title", "No title available")
         
-        # Get content from appropriate field
         content = None
         for content_attr in ["full_text", "content", "body", "text", "article_content"]:
             if hasattr(news_article_record, content_attr) and getattr(news_article_record, content_attr):
@@ -233,7 +233,6 @@ async def analyze_news_article(
                 break
         
         if content is None:
-            # Fall back to summary if available
             if hasattr(news_article_record, "summary") and news_article_record.summary:
                 content = news_article_record.summary
                 logger.warning(f"Using 'summary' as fallback for content in article {article_id}")
@@ -242,7 +241,6 @@ async def analyze_news_article(
         
         source = getattr(news_article_record, "source", getattr(news_article_record, "feedname", "Unknown source"))
         
-        # Get date from appropriate field
         published_date = None
         for date_attr in ["date", "published_date", "publication_date", "created_at"]:
             if hasattr(news_article_record, date_attr) and getattr(news_article_record, date_attr):
@@ -252,7 +250,6 @@ async def analyze_news_article(
         if published_date is None:
             published_date = "Unknown date"
         
-        # Create the news article object for the prompt
         newsfeed_item = {
             "title": title,
             "source": source,
@@ -260,50 +257,38 @@ async def analyze_news_article(
             "content": content
         }
         
-        # Format CTI settings for prompt (if available)
         cti_profile_text = "Default CTI Profile: General cybersecurity monitoring with focus on critical vulnerabilities, active threats, and major security incidents."
         if cti_settings and cti_settings.settings:
-            # Convert JSON settings to markdown
             try:
-                # Parse the JSON settings
                 settings_dict = json.loads(cti_settings.settings)
                 
-                # Convert settings to markdown format
                 markdown_sections = []
                 
                 def dict_to_markdown(data, level=0):
-                    """Recursively convert a dictionary to markdown with proper indentation"""
                     markdown_lines = []
                     indent = "  " * level
                     
                     for key, value in data.items():
-                        # Skip disabled items (if they have an 'enabled' key set to False)
                         if isinstance(value, dict) and 'enabled' in value and value['enabled'] is False:
                             continue
                             
-                        # Format the key as a header or list item
-                        if level == 0:  # Top-level keys as headers
+                        if level == 0:
                             markdown_lines.append(f"## {key.title()}")
-                        else:  # Nested keys as list items with bold
+                        else:
                             markdown_lines.append(f"{indent}- **{key.title()}**:")
                         
-                        # Process the value based on its type
                         if isinstance(value, dict):
-                            # If it has 'enabled' and 'details', handle specially
                             if 'enabled' in value and 'details' in value and value['enabled']:
                                 markdown_lines[-1] += f" {value['details']}"
                             else:
-                                # Remove 'enabled' key if it exists to avoid cluttering the markdown
                                 value_copy = value.copy()
                                 if 'enabled' in value_copy:
                                     del value_copy['enabled']
                                     
-                                # Process the remaining dictionary
                                 if value_copy:
                                     nested_md = dict_to_markdown(value_copy, level + 1)
                                     markdown_lines.extend(nested_md)
                         elif isinstance(value, list):
-                            # Format lists
                             for item in value:
                                 if isinstance(item, dict):
                                     nested_md = dict_to_markdown(item, level + 1)
@@ -311,26 +296,20 @@ async def analyze_news_article(
                                 else:
                                     markdown_lines.append(f"{indent}  - {item}")
                         elif isinstance(value, bool):
-                            # For boolean values, only include if True and don't show the value
                             if value:
-                                # Replace the last line to make it cleaner (without the colon)
                                 markdown_lines[-1] = f"{indent}- **{key.title()}**"
                             else:
-                                # Remove the line with False value
                                 markdown_lines.pop()
                         else:
-                            # For simple values, add them inline
                             markdown_lines[-1] += f" {value}"
                     
                     return markdown_lines
                 
-                # Generate markdown
                 markdown_lines = dict_to_markdown(settings_dict)
                 
-                # Add a header if there's content
                 if markdown_lines:
                     markdown_lines.insert(0, "# CTI Profile")
-                    markdown_lines.append("")  # Add trailing newline
+                    markdown_lines.append("")
                     cti_profile_text = "\n".join(markdown_lines)
                     
                     logger.debug("Generated CTI profile markdown:\n%s", cti_profile_text)
@@ -341,14 +320,12 @@ async def analyze_news_article(
                 logger.error(f"Error converting CTI settings to markdown: {str(e)}")
                 logger.warning("Using default CTI profile")
         
-        # System prompt - cybersecurity focus
         system_prompt = """
         You are an expert cybersecurity analyst specializing in threat intelligence, vulnerability analysis, and security operations. 
         Your task is to analyze cybersecurity news articles and determine their relevance and implications.
         Provide clear, concise, and actionable insights that security teams can use to improve their security posture.
         """
         
-        # Build the user prompt using the CTI format
         user_prompt = f"""
         You are an AI assistant that analyzes a news article based on a user's Cyber Threat Intelligence (CTI) profile. Below you will find the CTI profile, the news article and instructions for your analysis.
         
@@ -381,13 +358,10 @@ async def analyze_news_article(
         Provide only the JSON response without any additional text, markdown formatting, or explanations.
         """
         
-        # Import here to avoid circular imports
         from app.utils.llm_service import create_llm_service
         
-        # Create LLM service - passing db explicitly
         llm_service_instance = create_llm_service(db)
         
-        # Execute the prompt
         analysis_text = llm_service_instance.execute_prompt(
             model_id=model_id,
             system_prompt=system_prompt,
@@ -396,15 +370,11 @@ async def analyze_news_article(
             max_tokens=max_tokens
         )
         
-        # Process the response
         try:
-            # Try to parse as JSON directly
             analysis_json = json.loads(analysis_text)
             
-            # Convert the JSON to markdown for frontend rendering
             markdown_content = []
             
-            # Add relevance with appropriate styling
             relevance = analysis_json.get("relevance", "Unknown")
             relevance_color = {
                 "None": "🟢", 
@@ -416,65 +386,54 @@ async def analyze_news_article(
             markdown_content.append(f"**Relevance:** {relevance_color} {relevance}")
             markdown_content.append("")
             
-            # Add reason
             if "reason" in analysis_json:
                 markdown_content.append(f"**Reason:**")
                 markdown_content.append(f"{analysis_json['reason']}")
                 markdown_content.append("")
             
-            # Add summary
             if "summary" in analysis_json:
                 markdown_content.append(f"**Summary:**")
                 markdown_content.append(f"{analysis_json['summary']}")
                 markdown_content.append("")
             
-            # Add key points as a list
             if "key_points" in analysis_json and analysis_json["key_points"]:
                 markdown_content.append(f"**Key Points:**")
                 for point in analysis_json["key_points"]:
                     markdown_content.append(f"- {point}")
                 markdown_content.append("")
             
-            # Add action items as a list
             if "action_items" in analysis_json and analysis_json["action_items"]:
                 markdown_content.append(f"**Action Items:**")
                 for item in analysis_json["action_items"]:
                     markdown_content.append(f"- {item}")
                 markdown_content.append("")
             
-            # Add affected systems as a list
             if "affected_systems" in analysis_json and analysis_json["affected_systems"]:
                 markdown_content.append(f"**Affected Systems:**")
                 for system in analysis_json["affected_systems"]:
                     markdown_content.append(f"- {system}")
             
-            # Join all markdown content with line breaks
             markdown_result = "\n".join(markdown_content)
             
-            # Create a new JSON structure with the markdown content
             formatted_json = {
                 "markdown": markdown_result,
-                "raw": analysis_json  # Keep the original JSON for reference
+                "raw": analysis_json
             }
             
-            # Save the formatted JSON to the database
             news_article_record.analysis_result = json.dumps(formatted_json)
             db.commit()
             
-            # Return the analysis result
             response = {
                 "message": "Analysis completed", 
                 "analysis_result": formatted_json
             }
             
-            # Add information about CTI settings used
             if use_cti_settings and cti_settings:
                 response["cti_settings_used"] = True
                 
             return response
             
         except json.JSONDecodeError:
-            # If direct parsing fails, try to extract JSON from text
             logger.warning("Failed to parse response as JSON directly, attempting to extract JSON")
             import re
             json_match = re.search(r'(\{.*\})', analysis_text, re.DOTALL)
@@ -482,10 +441,8 @@ async def analyze_news_article(
                 try:
                     analysis_json = json.loads(json_match.group(1))
                     
-                    # Convert the JSON to markdown format (same as above)
                     markdown_content = []
                     
-                    # Add relevance with appropriate styling
                     relevance = analysis_json.get("relevance", "Unknown")
                     relevance_color = {
                         "None": "🟢", 
@@ -497,58 +454,48 @@ async def analyze_news_article(
                     markdown_content.append(f"**Relevance:** {relevance_color} {relevance}")
                     markdown_content.append("")
                     
-                    # Add reason
                     if "reason" in analysis_json:
                         markdown_content.append(f"**Reason:**")
                         markdown_content.append(f"{analysis_json['reason']}")
                         markdown_content.append("")
                     
-                    # Add summary
                     if "summary" in analysis_json:
                         markdown_content.append(f"**Summary:**")
                         markdown_content.append(f"{analysis_json['summary']}")
                         markdown_content.append("")
                     
-                    # Add key points as a list
                     if "key_points" in analysis_json and analysis_json["key_points"]:
                         markdown_content.append(f"**Key Points:**")
                         for point in analysis_json["key_points"]:
                             markdown_content.append(f"- {point}")
                         markdown_content.append("")
                     
-                    # Add action items as a list
                     if "action_items" in analysis_json and analysis_json["action_items"]:
                         markdown_content.append(f"**Action Items:**")
                         for item in analysis_json["action_items"]:
                             markdown_content.append(f"- {item}")
                         markdown_content.append("")
                     
-                    # Add affected systems as a list
                     if "affected_systems" in analysis_json and analysis_json["affected_systems"]:
                         markdown_content.append(f"**Affected Systems:**")
                         for system in analysis_json["affected_systems"]:
                             markdown_content.append(f"- {system}")
                     
-                    # Join all markdown content with line breaks
                     markdown_result = "\n".join(markdown_content)
                     
-                    # Create a new JSON structure with the markdown content
                     formatted_json = {
                         "markdown": markdown_result,
-                        "raw": analysis_json  # Keep the original JSON for reference
+                        "raw": analysis_json
                     }
                     
-                    # Save the formatted JSON to the database
                     news_article_record.analysis_result = json.dumps(formatted_json)
                     db.commit()
                     
-                    # Return the analysis result
                     response = {
                         "message": "Analysis completed", 
                         "analysis_result": formatted_json
                     }
                     
-                    # Add information about CTI settings used
                     if use_cti_settings and cti_settings:
                         response["cti_settings_used"] = True
                         
@@ -568,8 +515,6 @@ async def analyze_news_article(
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
 
 
-
-
 # Get article by ID
 @router.get("/api/newsfeed/article/{article_id}", response_model=NewsArticleSchema, tags=["Newsfeed"])
 def get_article(article_id: int, db: Session = Depends(get_db)):
@@ -585,13 +530,6 @@ def get_article(article_id: int, db: Session = Depends(get_db)):
 def get_articles_bulk(article_ids: List[int], db: Session = Depends(get_db)):
     """
     Retrieve multiple articles by their IDs in a single request.
-    
-    Args:
-        article_ids: List of article IDs to fetch
-        db: Database session
-        
-    Returns:
-        List of articles matching the provided IDs
     """
     try:
         articles = get_news_articles_by_ids(db=db, article_ids=article_ids)
@@ -610,8 +548,6 @@ def get_articles_bulk(article_ids: List[int], db: Session = Depends(get_db)):
             status_code=500,
             detail="An error occurred while fetching articles"
         )
-
-
 
 
 @router.post("/api/settings/modules/newsfeed/validate", tags=["Newsfeed"])
@@ -635,8 +571,8 @@ async def add_custom_feed(feed_data: NewsfeedSettingsSchema, db: Session = Depen
     if not is_valid:
         raise HTTPException(status_code=400, detail=error_msg)
 
-    existing_feed = db.query(models.NewsfeedSettings).filter(
-        models.NewsfeedSettings.name == feed_data.name
+    existing_feed = db.query(NewsfeedSettings).filter(
+        NewsfeedSettings.name == feed_data.name
     ).first()
 
     if existing_feed:
@@ -678,13 +614,13 @@ async def upload_feed_icon(
         processed_image, icon_id = processed_data
         logger.info(f"Icon processed successfully, generated ID: {icon_id}")
 
-        save_success, save_error = await newsfeed.save_icon(processed_image, icon_id)
+        save_success, save_error = await newsfeed_service.save_icon(processed_image, icon_id)
         if not save_success:
             logger.error(f"Failed to save icon: {save_error}")
             raise HTTPException(status_code=500, detail=save_error)
 
-        feed = db.query(models.NewsfeedSettings).filter(
-            models.NewsfeedSettings.name == decoded_feed_name
+        feed = db.query(NewsfeedSettings).filter(
+            NewsfeedSettings.name == decoded_feed_name
         ).first()
 
         if not feed:
@@ -692,7 +628,7 @@ async def upload_feed_icon(
             raise HTTPException(status_code=404, detail="Feed not found")
 
         feed.icon = f"{icon_id}"
-        feed.icon_id = icon_id
+        feed.icon_id = icon_id 
         db.commit()
         
         logger.info(f"Successfully updated icon for feed: {decoded_feed_name}")
@@ -715,7 +651,7 @@ async def upload_feed_icon(
 
 
 @router.delete("/api/settings/modules/newsfeed/", tags=["Newsfeed"])
-async def delete_custom_feed(feedName: str = Query(...), db: Session = Depends(get_db)):
+async def delete_custom_feed_route(feedName: str = Query(...), db: Session = Depends(get_db)): 
     """Delete a custom feed and its icon."""
     feed = db.query(NewsfeedSettings).filter(
         NewsfeedSettings.name == feedName
@@ -742,7 +678,6 @@ async def delete_custom_feed(feedName: str = Query(...), db: Session = Depends(g
 @router.get("/api/feedicons/{icon_name}", tags=["Newsfeed"])
 async def get_feed_icon(icon_name: str):
     """Get feed icon by icon name."""
-    # Strip .png extension if it exists
     icon_base = icon_name.rsplit('.png', 1)[0]
     icon_path = f"app/static/feedicons/{icon_base}.png"
     
@@ -775,51 +710,75 @@ def get_article_iocs(article_id: int, db: Session = Depends(get_db)):
     if not article:
         raise HTTPException(status_code=404, detail="Article not found")
     
+    iocs_data = json.loads(article.iocs) if article.iocs else {}
+
     iocs = {
-        'ips': json.loads(article.ips) if article.ips else [],
-        'md5_hashes': json.loads(article.md5_hashes) if article.md5_hashes else [],
-        'sha1_hashes': json.loads(article.sha1_hashes) if article.sha1_hashes else [],
-        'sha256_hashes': json.loads(article.sha256_hashes) if article.sha256_hashes else [],
-        'urls': json.loads(article.urls) if article.urls else [],
-        'domains': json.loads(article.domains) if article.domains else [],
-        'emails': json.loads(article.emails) if article.emails else [],
-        'cves': json.loads(article.cves) if article.cves else []
+        'ips': iocs_data.get('ips', []),
+        'md5_hashes': iocs_data.get('md5_hashes', []),
+        'sha1_hashes': iocs_data.get('sha1_hashes', []),
+        'sha256_hashes': iocs_data.get('sha256_hashes', []),
+        'urls': iocs_data.get('urls', []),
+        'domains': iocs_data.get('domains', []),
+        'emails': iocs_data.get('emails', []),
+        'cves': iocs_data.get('cves', [])
     }
     
     return iocs
 
 
-@router.get("/api/newsfeed/iocs/search", tags=["Newsfeed"])
-def search_articles_by_ioc(
-    ioc_type: str = Query(..., description="Type of IOC to search for (e.g., ips, md5_hashes)"),
-    ioc_value: str = Query(..., description="Value of the IOC to search for"),
+@router.get("/api/newsfeed/iocs/top", tags=["Newsfeed"])
+def get_top_iocs_route(
+    ioc_type: str = Query(..., description="Type of IOC (e.g., ips, md5_hashes, domains)"),
+    limit: int = Query(10, ge=1, le=50),
+    time_range: str = Query("7d", description="Time range for data (e.g., 8h, 24h, 2d, 7d, 14d, 30d)"),
     db: Session = Depends(get_db)
 ):
-    valid_ioc_types = ['ips', 'md5_hashes', 'sha1_hashes', 'sha256_hashes', 'urls', 'domains', 'emails', 'cves']
+    """
+    Get top N most frequent IOCs of a specific type within a given time range.
+    """
+    valid_ioc_types = ['ips', 'md5_hashes', 'sha1_hashes', 'sha256_hashes', 'urls', 'domains', 'emails']
     if ioc_type not in valid_ioc_types:
         raise HTTPException(status_code=400, detail=f"Invalid IOC type. Valid types are: {', '.join(valid_ioc_types)}")
     
-    # Fetch articles where the specified IOC type contains the IOC value
-    articles = db.query(models.NewsArticle).filter(
-        getattr(models.NewsArticle, ioc_type).like(f'%"{ioc_value}"%')
-    ).all()
-    
-    if not articles:
-        raise HTTPException(status_code=404, detail="No articles found containing the specified IOC")
-    
-    return [article.to_dict() for article in articles]
+    try:
+        iocs_data = get_top_iocs(db, ioc_type, limit, time_range)
+        logger.info(f"Retrieved top {limit} {ioc_type} IOCs for time range {time_range}.")
+        return iocs_data
+    except Exception as e:
+        logger.error(f"Error fetching top IOCs for type {ioc_type}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve top IOCs: {str(e)}")
 
-@router.get("/api/feedicons/{icon_name}", tags=["Newsfeed"])
-async def get_feed_icon(icon_name: str):
-    """Get feed icon by icon name."""
-    # Strip .png extension if it exists
-    icon_base = icon_name.rsplit('.png', 1)[0]
-    icon_path = f"app/static/feedicons/{icon_base}.png"
-    
-    logger.debug(f"Looking for icon at path: {icon_path}")
-    
-    if os.path.exists(icon_path):
-        return FileResponse(icon_path)
-    
-    logger.debug(f"Icon not found at {icon_path}, returning default icon")
-    return FileResponse("app/static/feedicons/default.png")
+
+@router.get("/api/newsfeed/cves/top", tags=["Newsfeed"])
+def get_top_cves_route(
+    limit: int = Query(10, ge=1, le=50),
+    time_range: str = Query("7d", description="Time range for data (e.g., 8h, 24h, 2d, 7d, 14d, 30d)"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get top N most frequent CVEs within a given time range.
+    """
+    try:
+        cves_data = get_top_cves(db, limit, time_range)
+        logger.info(f"Retrieved top {limit} CVEs for time range {time_range}.")
+        return cves_data
+    except Exception as e:
+        logger.error(f"Error fetching top CVEs: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve top CVEs: {str(e)}")
+
+
+@router.get("/api/newsfeed/iocs/distribution", tags=["Newsfeed"])
+def get_ioc_distribution_route(
+    time_range: str = Query("7d", description="Time range for data (e.g., 8h, 24h, 2d, 7d, 14d, 30d)"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get the distribution of different IOC types within a given time range.
+    """
+    try:
+        distribution_data = get_ioc_type_distribution(db, time_range)
+        logger.info(f"Retrieved IOC type distribution for time range {time_range}.")
+        return distribution_data
+    except Exception as e:
+        logger.error(f"Error fetching IOC type distribution: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve IOC distribution: {str(e)}")
