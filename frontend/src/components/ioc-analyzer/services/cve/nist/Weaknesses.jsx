@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import SourceIcon from "@mui/icons-material/Source";
 import Typography from "@mui/material/Typography";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 export default function Weaknesses(props) {
   const theme = useTheme();

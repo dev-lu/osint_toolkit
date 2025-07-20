@@ -23,7 +23,7 @@ import {
   CardContent,
   TableContainer,
 } from "@mui/material";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 export default function Extractor(props) {
   const theme = useTheme();

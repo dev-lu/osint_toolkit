@@ -17,7 +17,7 @@ import {
   Paper,
   TablePagination,
 } from "@mui/material";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 import Typography from "@mui/material/Typography";
 
 import ResultRow from "../../ResultRow";

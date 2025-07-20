@@ -15,7 +15,7 @@ import {
   TablePagination,
 } from "@mui/material";
 import { Typography } from "@mui/material";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 export default function CrowdsourcedIDSRules(props) {
   const [page, setPage] = useState(0);

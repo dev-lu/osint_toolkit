@@ -9,7 +9,7 @@ import {
   Paper,
   TablePagination,
 } from "@mui/material";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 export default function ConfTable(props) {
   const theme = useTheme();

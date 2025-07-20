@@ -4,7 +4,7 @@ import Card from "@mui/material/Card";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import Stack from "@mui/material/Stack";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 import liberapay from "./images/donate_liberapay.png";
 import kofi from "./images/donate_kofi.png";

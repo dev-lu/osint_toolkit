@@ -12,7 +12,7 @@ import {
   TableCell,
   Paper,
 } from "@mui/material";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 import Github from "./services/multi/Github";
 import Reddit from "./services/Reddit";

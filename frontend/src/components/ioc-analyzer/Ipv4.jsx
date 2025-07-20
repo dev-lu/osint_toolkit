@@ -11,7 +11,7 @@ import {
   TableCell,
   Paper,
 } from "@mui/material";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 import AbuseIpdbData from "./services/ipv4/AbuseIpdb.jsx";
 import Alienvault from "./services/multi/Alienvault.jsx";

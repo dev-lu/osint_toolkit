@@ -21,7 +21,7 @@ import {
   TablePagination,
   Paper,
 } from "@mui/material";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 import Details from "./Details";
 import NoResults from "./NoResults";
 

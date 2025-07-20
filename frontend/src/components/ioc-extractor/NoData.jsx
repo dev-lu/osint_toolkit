@@ -5,7 +5,7 @@ import Divider from "@mui/material/Divider";
 import MuiGrid from "@mui/material/Grid";
 import NotInterestedIcon from "@mui/icons-material/NotInterested";
 import { styled } from "@mui/material/styles";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 
 export default function NoData() {

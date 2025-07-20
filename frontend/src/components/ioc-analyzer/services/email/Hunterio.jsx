@@ -21,7 +21,7 @@ import {
   TablePagination,
 } from "@mui/material";
 import { Typography } from "@mui/material";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 import NoDetails from "../NoDetails";
 import ResultRow from "../../ResultRow";

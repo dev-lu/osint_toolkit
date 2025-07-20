@@ -26,7 +26,7 @@ import {
   Paper,
 } from "@mui/material";
 import { Stack } from "@mui/system";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 export default function ResultRows(props) {
     const [open, setOpen] = useState(false);

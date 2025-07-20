@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import { Typography } from "@mui/material";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 export default function ELFInformation(props) {
   const [page, setPage] = useState(0);

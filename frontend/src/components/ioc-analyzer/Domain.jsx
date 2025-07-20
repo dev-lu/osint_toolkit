@@ -11,7 +11,7 @@ import {
   TableCell,
   Paper,
 } from "@mui/material";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 import Checkphish from "./services/multi/Checkphish";
 import Github from "./services/multi/Github";

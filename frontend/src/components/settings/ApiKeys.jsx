@@ -9,7 +9,7 @@ import Chip from "@mui/material/Chip";
 import PaidIcon from "@mui/icons-material/Paid";
 import Stack from "@mui/material/Stack";
 import { Tooltip, Typography } from "@mui/material";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 export default function ApiKeys() {
   const apiKeys = useRecoilValue(apiKeysState);

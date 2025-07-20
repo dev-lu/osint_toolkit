@@ -3,7 +3,7 @@ import React, { forwardRef } from "react";
 import { TextField, Button, InputAdornment } from "@mui/material";
 import { styled } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 const SearchBar = forwardRef(
   (

@@ -12,7 +12,7 @@ import twitter_logo_small from "../icons/twitter_logo_small.png";
 import NoDetails from "./NoDetails";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 export default function Twitter(props) {
   const propsRef = useRef(props);

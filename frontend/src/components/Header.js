@@ -1,7 +1,7 @@
 import React from 'react';
 import ot_logo_light from '../images/ot_logo_light.png';
 import ot_logo_dark from '../images/ot_logo_dark.png';
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 function Header() {
   const theme = useTheme();

@@ -12,7 +12,7 @@ import Card from "@mui/material/Card";
 import { LinearProgress } from "@mui/material";
 import Grow from "@mui/material/Grow";
 import Stack from "@mui/material/Stack";
-import useTheme from "@mui/material/styles/useTheme";
+import { useTheme } from '@mui/material/styles';
 
 
 export default function ShowOpenAiAnswer(props) {
