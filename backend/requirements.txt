@@ -18,3 +18,4 @@ SQLAlchemy==2.0.36
 tweepy==4.9.0
 uvicorn==0.34.0
 lxml[html_clean]
+html2text==2025.4.15

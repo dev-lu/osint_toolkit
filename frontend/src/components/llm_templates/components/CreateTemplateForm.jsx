@@ -24,7 +24,8 @@ import {
   FormSection,
   ResizableTextField,
   PayloadFieldsEditor,
-  StaticContextsEditor
+  StaticContextsEditor,
+  WebContextsEditor
 } from '../common/TemplateFormComponents';
 
 export default function CreateTemplateForm() {
@@ -35,6 +36,7 @@ export default function CreateTemplateForm() {
     ai_agent_task: '',
     payload_fields: [],
     static_contexts: [],
+    web_contexts: [],
     example_input_output: '',
     is_public: true,
     temperature: 0.7,
@@ -88,6 +90,24 @@ export default function CreateTemplateForm() {
     static_contexts: [...t.static_contexts, { name: '', description: '', content: '' }]
   }));
 
+  // Web contexts handlers
+  const updateWeb = useCallback((idx, updated) => {
+    setTemplate(t => ({
+      ...t,
+      web_contexts: t.web_contexts.map((c, i) => i === idx ? updated : c)
+    }));
+  }, []);
+  const deleteWeb = useCallback(idx => {
+    setTemplate(t => ({
+      ...t,
+      web_contexts: t.web_contexts.filter((_, i) => i !== idx)
+    }));
+  }, []);
+  const addWeb = () => setTemplate(t => ({
+    ...t,
+    web_contexts: [...t.web_contexts, { name: '', description: '', url: '' }]
+  }));
+
   // Enable prompt engineering once title and description are set
   const canEngineer = useMemo(() => template.title.trim() && template.description.trim(), [template]);
   const handleEngineer = async () => {
@@ -132,7 +152,7 @@ export default function CreateTemplateForm() {
       // reset form
       setTemplate({
         title: '', description: '', ai_agent_role: '', ai_agent_task: '',
-        payload_fields: [], static_contexts: [], example_input_output: '',
+        payload_fields: [], static_contexts: [], web_contexts: [], example_input_output: '',
         is_public: true, temperature: 0.7, model: 'gpt-4o',
       });
     } catch (err) {
@@ -242,6 +262,16 @@ export default function CreateTemplateForm() {
           onDelete={deleteStatic}
         />
         <FormHelperText sx={{ mt: 1 }}>Include fixed content like guidelines or reference info.</FormHelperText>
+      </FormSection>
+
+      <FormSection title="Web Contexts">
+        <WebContextsEditor
+          contexts={template.web_contexts}
+          onAdd={addWeb}
+          onUpdate={updateWeb}
+          onDelete={deleteWeb}
+        />
+        <FormHelperText sx={{ mt: 1 }}>Add websites whose content will be fetched and included when the template is executed.</FormHelperText>
       </FormSection>
 
       <FormSection title="Example Usage (Markdown)">

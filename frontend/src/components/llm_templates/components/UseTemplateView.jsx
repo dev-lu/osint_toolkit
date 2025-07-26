@@ -26,12 +26,13 @@ import {
 import MDEditor from '@uiw/react-md-editor';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-import { templatesService } from '../service/api';
+import { templatesService, TemplateAPIError } from '../service/api';
 import TemplateCard from './TemplateCard';
 import TemplateExampleDialog from '../common/TemplateExampleDialog';
 import EditTemplateDialog from './EditTemplateDialog';
 import LoadingSkeleton from './LoadingSkeleton';
 
+// Styled components
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2.5),
   marginBottom: theme.spacing(2),
@@ -50,14 +51,156 @@ const ResultBox = styled(Box)(({ theme }) => ({
   border: `1px solid ${alpha(theme.palette.divider, 0.8)}`,
 }));
 
+const SidebarContainer = styled(Box)(({ theme }) => ({
+  flex: '0 0 350px',
+  overflowY: 'auto',
+  paddingRight: theme.spacing(1),
+  position: 'sticky',
+  top: 0,
+  maxHeight: '90%',
+}));
+
+const MainContent = styled(Box)(({ theme }) => ({
+  flex: 1,
+  overflowY: 'auto',
+  paddingLeft: theme.spacing(1),
+  paddingRight: theme.spacing(1),
+}));
+
+/**
+ * Custom hook for managing template state and operations
+ */
+const useTemplateManager = () => {
+  const [templates, setTemplates] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchTemplates = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const data = await templatesService.getTemplates();
+      setTemplates(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error('Failed to fetch templates:', err);
+      setError(err instanceof TemplateAPIError ? err.message : 'Failed to load templates');
+      setTemplates([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const reorderTemplates = useCallback(async (sourceIndex, destinationIndex) => {
+    const items = Array.from(templates);
+    const [moved] = items.splice(sourceIndex, 1);
+    items.splice(destinationIndex, 0, moved);
+    
+    // Optimistically update UI
+    setTemplates(items);
+    
+    try {
+      await templatesService.reorderTemplates(items.map(t => t.id));
+    } catch (err) {
+      console.error('Failed to reorder templates:', err);
+      // Revert on failure
+      fetchTemplates();
+      throw err;
+    }
+  }, [templates, fetchTemplates]);
+
+  const deleteTemplate = useCallback(async (templateId) => {
+    try {
+      await templatesService.deleteTemplate(templateId);
+      setTemplates(prev => prev.filter(t => t.id !== templateId));
+    } catch (err) {
+      console.error('Failed to delete template:', err);
+      throw err;
+    }
+  }, []);
+
+  return {
+    templates,
+    setTemplates,
+    loading,
+    error,
+    fetchTemplates,
+    reorderTemplates,
+    deleteTemplate
+  };
+};
+
+/**
+ * Custom hook for managing template execution
+ */
+const useTemplateExecution = () => {
+  const [executing, setExecuting] = useState(false);
+  const [result, setResult] = useState('');
+
+  const executeTemplate = useCallback(async (template, payload) => {
+    setExecuting(true);
+    setResult('');
+
+    try {
+      const execPayload = {
+        template_id: template.id,
+        payload_data: payload,
+      };
+
+      if (template.model) {
+        execPayload.override_model = template.model;
+      }
+      if (template.temperature !== undefined) {
+        execPayload.override_temperature = template.temperature;
+      }
+
+      const data = await templatesService.executeTemplate(template.id, execPayload);
+      setResult(data.result || '');
+      return data;
+    } finally {
+      setExecuting(false);
+    }
+  }, []);
+
+  const clearResult = useCallback(() => {
+    setResult('');
+  }, []);
+
+  return {
+    executing,
+    result,
+    executeTemplate,
+    clearResult
+  };
+};
+
+/**
+ * Main UseTemplateView component
+ */
 export default function UseTemplateView() {
   const theme = useTheme();
-  const [templates, setTemplates] = useState([]);
+  
+  // State management hooks
+  const {
+    templates,
+    setTemplates,
+    loading,
+    error: templatesError,
+    fetchTemplates,
+    reorderTemplates,
+    deleteTemplate
+  } = useTemplateManager();
+  
+  const {
+    executing,
+    result,
+    executeTemplate,
+    clearResult
+  } = useTemplateExecution();
+
+  // Local state
   const [selected, setSelected] = useState(null);
   const [payload, setPayload] = useState({});
-  const [result, setResult] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [executing, setExecuting] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [showExample, setShowExample] = useState(false);
   const [exampleTpl, setExampleTpl] = useState(null);
@@ -65,31 +208,91 @@ export default function UseTemplateView() {
   const [tplToEdit, setTplToEdit] = useState(null);
   const [search, setSearch] = useState('');
 
-  const fetchTemplates = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = await templatesService.getTemplates();
-      setTemplates(Array.isArray(data) ? data : []);
-    } catch (err) {
-      setSnackbar({ open: true, message: err.message, severity: 'error' });
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
+  // Effects
   useEffect(() => {
     fetchTemplates();
   }, [fetchTemplates]);
 
-  const handleSelect = tpl => {
+  // Event handlers
+  const handleSelect = useCallback((tpl) => {
     setSelected(tpl);
     setPayload({});
-    setResult('');
-  };
+    clearResult();
+  }, [clearResult]);
 
-  const handlePayloadChange = (name, value) => {
+  const handlePayloadChange = useCallback((name, value) => {
     setPayload(prev => ({ ...prev, [name]: value }));
-  };
+  }, []);
+
+  const handleExecute = useCallback(async () => {
+    if (!selected) return;
+
+    try {
+      await executeTemplate(selected, payload);
+      showSnackbar('Template executed successfully!', 'success');
+    } catch (err) {
+      console.error('Template execution failed:', err);
+      const message = err instanceof TemplateAPIError 
+        ? err.message 
+        : 'Template execution failed';
+      showSnackbar(message, 'error');
+    }
+  }, [selected, payload, executeTemplate]);
+
+  const handleDragEnd = useCallback(async (result) => {
+    if (!result.destination) return;
+
+    try {
+      await reorderTemplates(result.source.index, result.destination.index);
+    } catch (err) {
+      showSnackbar('Failed to reorder templates', 'error');
+    }
+  }, [reorderTemplates]);
+
+  const handleTemplateDelete = useCallback(async (tpl) => {
+    if (!window.confirm(`Delete "${tpl.title}"? This cannot be undone.`)) return;
+
+    try {
+      await deleteTemplate(tpl.id);
+      if (selected?.id === tpl.id) setSelected(null);
+      showSnackbar('Template deleted successfully!', 'success');
+    } catch (err) {
+      console.error('Failed to delete template:', err);
+      const message = err instanceof TemplateAPIError 
+        ? err.message 
+        : 'Failed to delete template';
+      showSnackbar(message, 'error');
+    }
+  }, [deleteTemplate, selected]);
+
+  const handleCopyResult = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(result);
+      showSnackbar('Result copied to clipboard!', 'success');
+    } catch (err) {
+      console.error('Failed to copy to clipboard:', err);
+      showSnackbar('Failed to copy to clipboard', 'error');
+    }
+  }, [result]);
+
+  // Utility functions
+  const showSnackbar = useCallback((message, severity = 'success') => {
+    setSnackbar({ open: true, message, severity });
+  }, []);
+
+  const closeSnackbar = useCallback(() => {
+    setSnackbar(prev => ({ ...prev, open: false }));
+  }, []);
+
+  // Computed values
+  const filtered = useMemo(() => {
+    if (!search.trim()) return templates;
+    const term = search.toLowerCase().trim();
+    return templates.filter(t =>
+      t.title.toLowerCase().includes(term) ||
+      (t.description && t.description.toLowerCase().includes(term))
+    );
+  }, [templates, search]);
 
   const isPayloadValid = useMemo(() => {
     if (!selected) return false;
@@ -99,79 +302,27 @@ export default function UseTemplateView() {
     );
   }, [selected, payload]);
 
-  const handleExecute = async () => {
-    if (!selected) return;
-    setExecuting(true);
-
-    const execPayload = {
-      template_id: selected.id,
-      payload_data: payload,
-    };
-
-    if (selected.model) {
-      execPayload.model_id = selected.model;
-    }
-    if (selected.temperature !== undefined) {
-      execPayload.temperature = selected.temperature;
-    }
-
-    try {
-      const data = await templatesService.executeTemplate(selected.id, execPayload);
-      setResult(data.result);
-      setSnackbar({
-        open: true,
-        message: 'Template executed!',
-        severity: 'success'
-      });
-    } catch (err) {
-      const detail = err.response?.data?.detail || err.message;
-      setSnackbar({
-        open: true,
-        message: `Execution failed: ${JSON.stringify(detail)}`,
-        severity: 'error'
-      });
-    } finally {
-      setExecuting(false);
-    }
-  };
-
-
-  const filtered = useMemo(() => {
-    if (!search.trim()) return templates;
-    const term = search.toLowerCase().trim();
-    return templates.filter(t =>
-      t.title.toLowerCase().includes(term) ||
-      t.description.toLowerCase().includes(term)
+  // Error handling
+  if (templatesError) {
+    return (
+      <Container maxWidth={false} sx={{ p: 2 }}>
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {templatesError}
+          <Button 
+            size="small" 
+            onClick={fetchTemplates} 
+            sx={{ ml: 2 }}
+          >
+            Retry
+          </Button>
+        </Alert>
+      </Container>
     );
-  }, [templates, search]);
-
-  const onDragEnd = async result => {
-    if (!result.destination) return;
-    const items = Array.from(templates);
-    const [moved] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, moved);
-    setTemplates(items);
-    try {
-      await templatesService.reorderTemplates(items.map(t => t.id));
-    } catch {
-      setSnackbar({ open: true, message: 'Failed to reorder', severity: 'error' });
-    }
-  };
-
-  const handleTemplateDelete = async tpl => {
-    if (!window.confirm(`Delete "${tpl.title}"? This cannot be undone.`)) return;
-    try {
-      await templatesService.deleteTemplate(tpl.id);
-      setTemplates(prev => prev.filter(t => t.id !== tpl.id));
-      if (selected?.id === tpl.id) setSelected(null);
-      setSnackbar({ open: true, message: 'Template deleted!', severity: 'success' });
-    } catch (err) {
-      setSnackbar({ open: true, message: err.message, severity: 'error' });
-    }
-  };
+  }
 
   return (
     <Container maxWidth={false} sx={{ p: 0 }}>
+      {/* Header */}
       <Box display="flex" justifyContent="space-between" alignItems="center" p={1}>
         <Typography variant="subtitle1" color="text.secondary">
           {filtered.length} {filtered.length === 1 ? 'template' : 'templates'}
@@ -191,6 +342,7 @@ export default function UseTemplateView() {
         </Stack>
       </Box>
 
+      {/* Main Content */}
       {loading ? (
         <LoadingSkeleton />
       ) : filtered.length === 0 ? (
@@ -200,20 +352,12 @@ export default function UseTemplateView() {
       ) : (
         <Box display="flex" sx={{ height: 'calc(100vh - 80px)' }}>
           {/* Sidebar */}
-          <DragDropContext onDragEnd={onDragEnd}>
+          <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="templateList">
               {provided => (
-                <Box
+                <SidebarContainer
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  sx={{
-                    flex: '0 0 350px',
-                    overflowY: 'auto',
-                    pr: 1,
-                    position: 'sticky',
-                    top: 0,
-                    maxHeight: '90%',
-                  }}
                 >
                   {filtered.map((tpl, idx) => (
                     <Draggable key={tpl.id} draggableId={tpl.id} index={idx}>
@@ -253,15 +397,16 @@ export default function UseTemplateView() {
                     </Draggable>
                   ))}
                   {provided.placeholder}
-                </Box>
+                </SidebarContainer>
               )}
             </Droppable>
           </DragDropContext>
 
-          {/* Main Content */}
-          <Box flex={1} sx={{ overflowY: 'auto', px: 1 }}>
+          {/* Main Content Area */}
+          <MainContent>
             {selected ? (
               <Box>
+                {/* Template Header */}
                 <StyledPaper elevation={2}>
                   <Box display="flex" justifyContent="space-between" alignItems="center">
                     <Typography variant="h6" fontWeight={600}>
@@ -287,12 +432,15 @@ export default function UseTemplateView() {
                     </Stack>
                   </Box>
 
-                  <Typography variant="body2" color="text.secondary" paragraph sx={{ mt: 1 }}>
-                    {selected.description}
-                  </Typography>
+                  {selected.description && (
+                    <Typography variant="body2" color="text.secondary" paragraph sx={{ mt: 1 }}>
+                      {selected.description}
+                    </Typography>
+                  )}
 
                   <Divider sx={{ my: 2 }} />
 
+                  {/* Payload Fields */}
                   <Stack spacing={2} mt={1}>
                     {Array.isArray(selected.payload_fields) && selected.payload_fields.length > 0 ? (
                       selected.payload_fields.map(field => (
@@ -326,6 +474,7 @@ export default function UseTemplateView() {
                     )}
                   </Stack>
 
+                  {/* Execute Button */}
                   <Box display="flex" justifyContent="flex-end" mt={3}>
                     <Button
                       variant="contained"
@@ -339,15 +488,13 @@ export default function UseTemplateView() {
                   </Box>
                 </StyledPaper>
 
+                {/* Results */}
                 {result && (
                   <StyledPaper elevation={2} sx={{ mt: 2 }}>
                     <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                       <Typography variant="h6" fontWeight={600}>Result</Typography>
                       <Tooltip title="Copy result">
-                        <IconButton onClick={() => {
-                          navigator.clipboard.writeText(result);
-                          setSnackbar({ open: true, message: 'Copied!', severity: 'success' });
-                        }}>
+                        <IconButton onClick={handleCopyResult}>
                           <CopyIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
@@ -377,10 +524,11 @@ export default function UseTemplateView() {
                 )}
               </StyledPaper>
             )}
-          </Box>
+          </MainContent>
         </Box>
       )}
 
+      {/* Dialogs */}
       <TemplateExampleDialog
         open={showExample}
         template={exampleTpl}
@@ -394,26 +542,27 @@ export default function UseTemplateView() {
           onSave={updated => {
             setTemplates(prev => prev.map(t => t.id === updated.id ? updated : t));
             if (selected?.id === updated.id) setSelected(updated);
-            setSnackbar({ open: true, message: 'Template updated!', severity: 'success' });
+            showSnackbar('Template updated successfully!', 'success');
           }}
           onDelete={deletedId => {
             setTemplates(prev => prev.filter(t => t.id !== deletedId));
             if (selected?.id === deletedId) setSelected(null);
-            setSnackbar({ open: true, message: 'Template deleted!', severity: 'success' });
+            showSnackbar('Template deleted successfully!', 'success');
           }}
           onClose={() => setEditOpen(false)}
         />
       )}
 
+      {/* Snackbar */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={4000}
-        onClose={() => setSnackbar(s => ({ ...s, open: false }))}
+        onClose={closeSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
         <Alert
           severity={snackbar.severity}
-          onClose={() => setSnackbar(s => ({ ...s, open: false }))}
+          onClose={closeSnackbar}
           variant="filled"
           elevation={6}
         >

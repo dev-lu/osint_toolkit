@@ -2,6 +2,7 @@ import logging
 import os
 from typing import List
 import asyncio
+import json
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -195,18 +196,42 @@ async def add_default_newsfeeds(db: Session) -> None:
 
 async def seed_default_llm_templates(db: Session) -> None:
     """Seed default LLM templates if they don't exist."""
-    try: 
+    try:
+        # Check if templates already exist
         existing_templates = db.query(AITemplate).first()
         if not existing_templates:
-            for temp_data in default_llm_templates.DEFAULT_TEMPLATES:
-                template_create = AITemplateCreate(**temp_data)
-                create_template(db, template_create)
+            logger.info("No existing templates found. Seeding default templates...")
+            
+            for template_data in default_llm_templates.DEFAULT_TEMPLATES:
+                # Make a copy to avoid modifying the original
+                template = dict(template_data)
+                
+                # Convert dictionaries to JSON strings for SQLite
+                if "payload_fields" in template:
+                    if not isinstance(template["payload_fields"], str):
+                        template["payload_fields"] = json.dumps(template["payload_fields"])
+                
+                if "static_contexts" in template:
+                    if not isinstance(template["static_contexts"], str):
+                        template["static_contexts"] = json.dumps(template["static_contexts"])
+                
+                if "web_contexts" in template:
+                    if not isinstance(template["web_contexts"], str):
+                        template["web_contexts"] = json.dumps(template["web_contexts"])
+                
+                # Create model instance directly
+                new_template = AITemplate(**template)
+                db.add(new_template)
+            
+            # Commit all template insertions at once
             db.commit()
             logger.info("Default templates seeded successfully")
+        else:
+            logger.info("Templates already exist, skipping seed")
     except Exception as e:
         logger.error(f"Failed to seed default templates: {str(e)}")
         db.rollback()
-        raise HTTPException(status_code=500, detail="Failed to seed default templates")
+        raise HTTPException(status_code=500, detail=f"Failed to seed default templates: {str(e)}")
 
 async def initialize_defaults(db: Session) -> None:
     """Initialize all default settings concurrently."""

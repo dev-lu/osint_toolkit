@@ -20,7 +20,8 @@ import { templatesService } from '../service/api';
 import {
   ResizableTextField,
   PayloadFieldsEditor,
-  StaticContextsEditor
+  StaticContextsEditor,
+  WebContextsEditor
 } from '../common/TemplateFormComponents';
 
 export default function EditTemplateDialog({
@@ -40,6 +41,7 @@ export default function EditTemplateDialog({
         ...template,
         payload_fields: Array.isArray(template.payload_fields) ? template.payload_fields : [],
         static_contexts: Array.isArray(template.static_contexts) ? template.static_contexts : [],
+        web_contexts: Array.isArray(template.web_contexts) ? template.web_contexts : [],
       });
     }
   }, [open, template]);
@@ -48,7 +50,6 @@ export default function EditTemplateDialog({
     setTpl(prev => ({ ...prev, [key]: value }));
   }, []);
 
-  // payload fields handlers
   const addPayloadField = () =>
     setTpl(prev => ({
       ...prev,
@@ -80,6 +81,23 @@ export default function EditTemplateDialog({
     setTpl(prev => ({
       ...prev,
       static_contexts: prev.static_contexts.filter((_, i) => i !== idx),
+    }));
+
+  // web contexts handlers
+  const addWebContext = () =>
+    setTpl(prev => ({
+      ...prev,
+      web_contexts: [...prev.web_contexts, { name: '', description: '', url: '' }],
+    }));
+  const updateWebContext = (idx, ctx) =>
+    setTpl(prev => ({
+      ...prev,
+      web_contexts: prev.web_contexts.map((c, i) => (i === idx ? ctx : c)),
+    }));
+  const deleteWebContext = idx =>
+    setTpl(prev => ({
+      ...prev,
+      web_contexts: prev.web_contexts.filter((_, i) => i !== idx),
     }));
 
   const handleSave = async () => {
@@ -198,6 +216,15 @@ export default function EditTemplateDialog({
             onAdd={addStaticContext}
             onUpdate={updateStaticContext}
             onDelete={deleteStaticContext}
+          />
+        </Box>
+
+        <Box my={2}>
+          <WebContextsEditor
+            contexts={tpl.web_contexts}
+            onAdd={addWebContext}
+            onUpdate={updateWebContext}
+            onDelete={deleteWebContext}
           />
         </Box>
 

@@ -1,6 +1,6 @@
 import { Paper, Box, Typography, Button, TextField, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { Add as AddIcon, Delete as DeleteIcon, Language as LanguageIcon } from '@mui/icons-material';
 
 
 export const ResizableTextField = styled(TextField)({
@@ -130,6 +130,75 @@ export const StaticContextsEditor = ({ contexts, onAdd, onUpdate, onDelete }) =>
       ))
     ) : (
       <Typography color="text.secondary">No static contexts defined.</Typography>
+    )}
+  </Box>
+);
+
+// Single web context editor
+export const WebContextEditor = ({ ctx, onUpdate, onDelete }) => (
+  <Paper sx={{ mb: 1.5, p: 1.5 }}>
+    <Box display="flex" flexDirection="column" gap={1.5}>
+      <Box display="flex" gap={2} alignItems="center">
+        <ResizableTextField
+          label="Context Name"
+          value={ctx.name}
+          onChange={e => onUpdate({ ...ctx, name: e.target.value })}
+          size="small"
+          sx={{ flex: 1 }}
+          required
+          error={!ctx.name.trim()}
+          helperText={!ctx.name.trim() ? 'Required' : ''}
+        />
+        <ResizableTextField
+          label="Description"
+          value={ctx.description}
+          onChange={e => onUpdate({ ...ctx, description: e.target.value })}
+          size="small"
+          sx={{ flex: 2 }}
+          placeholder="Optional description of what this website provides"
+        />
+        <IconButton color="error" onClick={onDelete}>
+          <DeleteIcon />
+        </IconButton>
+      </Box>
+      <ResizableTextField
+        label="Website URL"
+        value={ctx.url}
+        onChange={e => onUpdate({ ...ctx, url: e.target.value })}
+        fullWidth
+        required
+        error={!ctx.url.trim()}
+        helperText={!ctx.url.trim() ? 'Required - Enter a valid HTTP/HTTPS URL' : 'The website content will be fetched when the template is executed'}
+        placeholder="https://example.com/page"
+        InputProps={{
+          startAdornment: <LanguageIcon sx={{ mr: 1, color: 'text.secondary' }} />
+        }}
+      />
+    </Box>
+  </Paper>
+);
+
+// List of web contexts with add control
+export const WebContextsEditor = ({ contexts, onAdd, onUpdate, onDelete }) => (
+  <Box>
+    <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+      <Typography variant="body1">Add web context</Typography>
+      <Button startIcon={<AddIcon />} size="small" onClick={onAdd}>Add Website</Button>
+    </Box>
+    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+      Web contexts allow you to fetch content from websites when the template is executed. The content will be automatically extracted and included in the prompt.
+    </Typography>
+    {contexts.length > 0 ? (
+      contexts.map((c, i) => (
+        <WebContextEditor
+          key={i}
+          ctx={c}
+          onUpdate={updated => onUpdate(i, updated)}
+          onDelete={() => onDelete(i)}
+        />
+      ))
+    ) : (
+      <Typography color="text.secondary">No web contexts defined.</Typography>
     )}
   </Box>
 );
