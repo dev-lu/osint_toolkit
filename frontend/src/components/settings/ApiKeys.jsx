@@ -1,521 +1,410 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
-
 import ApiKeyInput from "./ApiKeyInput";
 import { apiKeysState } from "../../state";
+import api from "../../api";
 
-import Card from "@mui/material/Card";
-import Chip from "@mui/material/Chip";
-import PaidIcon from "@mui/icons-material/Paid";
-import Stack from "@mui/material/Stack";
-import { Tooltip, Typography } from "@mui/material";
-import { useTheme } from '@mui/material/styles';
+import {
+  Card,
+  CardContent,
+  Chip,
+  Stack,
+  Typography,
+  Box,
+  Grid,
+  Paper,
+  Alert,
+  AlertTitle,
+  LinearProgress,
+  TextField,
+  InputAdornment,
+  Switch,
+  FormControlLabel,
+  Divider,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
+import SecurityIcon from "@mui/icons-material/Security";
+import InfoIcon from "@mui/icons-material/Info";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import SearchIcon from "@mui/icons-material/Search";
+import ErrorIcon from "@mui/icons-material/Error";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useTheme } from "@mui/material/styles";
 
 export default function ApiKeys() {
   const apiKeys = useRecoilValue(apiKeysState);
   const theme = useTheme();
+  const [searchFilter, setSearchFilter] = useState("");
+  const [showOnlyConfigured, setShowOnlyConfigured] = useState(false);
+  const [servicesConfig, setServicesConfig] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [headerExpanded, setHeaderExpanded] = useState(false);
 
-  const cardStyle = {
-    m: 1,
-    p: 1.5,
-    borderRadius: 1,
-    backgroundColor: theme.palette.background.card,
-    boxShadow: 0,
+  useEffect(() => {
+    const fetchServicesConfig = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get("/api/services/config");
+        setServicesConfig(response.data);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching services config:", err);
+        setError("Failed to load service configuration");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServicesConfig();
+  }, [apiKeys]);
+
+  const getConfiguredCount = () => {
+    return Object.values(servicesConfig).reduce((count, service) => {
+      return count + (service.available ? 1 : 0);
+    }, 0);
   };
 
+  const getCompletionPercentage = () => {
+    const totalServices = Object.keys(servicesConfig).length;
+    if (totalServices === 0) return 0;
+    const configuredServices = getConfiguredCount();
+    return Math.round((configuredServices / totalServices) * 100);
+  };
+
+  const filteredServices = Object.entries(servicesConfig).filter(([key, service]) => {
+    const matchesSearch = service.name.toLowerCase().includes(searchFilter.toLowerCase());
+    const matchesFilter = !showOnlyConfigured || service.available;
+    return matchesSearch && matchesFilter;
+  });
+
+  const getCapabilityColor = (capability) => {
+    const colors = {
+      IPv4: "#1976d2",
+      IPv6: "#1976d2",
+      Domains: "#388e3c",
+      URLs: "#f57c00",
+      Hashes: "#7b1fa2",
+      Email: "#d32f2f",
+      CVEs: "#e64a19",
+      "AI Features": "#5e35b1",
+      ASN: "#795548",
+      Domain: "#388e3c",
+      URL: "#f57c00",
+      MD5: "#7b1fa2",
+      SHA1: "#7b1fa2",
+      SHA256: "#7b1fa2",
+      CVE: "#e64a19",
+    };
+    return colors[capability] || "#616161";
+  };
+
+  const getTierColor = (tier) => {
+    const colors = {
+      free: "#4caf50",
+      paid: "#f44336",
+      freemium: "#ff9800",
+    };
+    return colors[tier] || "#616161";
+  };
+
+  const getTierLabel = (tier) => {
+    const labels = {
+      free: "Free",
+      paid: "Paid",
+      freemium: "Freemium",
+    };
+    return labels[tier] || tier;
+  };
+
+  if (loading) {
+    return (
+      <Box sx={{ maxWidth: 1200, mx: "auto", p: 3, display: "flex", justifyContent: "center", alignItems: "center", minHeight: "400px" }}>
+        <Stack spacing={2} alignItems="center">
+          <CircularProgress size={48} />
+          <Typography variant="h6" color="text.secondary">
+            Loading service configuration...
+          </Typography>
+        </Stack>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ maxWidth: 1200, mx: "auto", p: 3 }}>
+        <Alert severity="error" icon={<ErrorIcon />}>
+          <AlertTitle>Configuration Error</AlertTitle>
+          {error}
+        </Alert>
+      </Box>
+    );
+  }
+
   return (
-    <>
-      <Card sx={cardStyle}>
-      <Typography variant="h5">
-      API keys
-      </Typography>
-        <Typography>
-          In order to use the full potential of this tool, you have to generate
-          quiete a lot of API keys.
-        </Typography>
-        <Typography>It is some initial work, but it is worth it.</Typography>
-      </Card>
-      {/* Abuseipdb */}
-      <Card sx={cardStyle}>
-        <Stack spacing={2}>
-          <Typography variant="h6" component="div">
-            AbuseIPDB
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            AbuseIPDB is a project managed by Marathon Studios Inc. Our mission
-            is to help make Web safer by providing a central repository for
-            webmasters, system administrators, and other interested parties to
-            report and identify IP addresses that have been associated with
-            malicious activity online. We're committed to keeping AbuseIPDB
-            fast, available and free for all of our users and contributors.
-          </Typography>
-          <ApiKeyInput
-            name="abuseipdb"
-            description="ABUSE IPDB"
-            link="https://www.abuseipdb.com/api"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" />
-            <Chip label="IPv6" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* Alienvault */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-          Alienvault
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Open Threat Exchange is the neighborhood watch of the global
-            intelligence community. It enables private companies, independent
-            security researchers, and government agencies to openly collaborate
-            and share the latest information about emerging threats, attack
-            methods, and malicious actors, promoting greater security across the
-            entire community.
-          </Typography>
-          <ApiKeyInput
-            name="alienvault"
-            description="Alienvault"
-            link="https://otx.alienvault.com/api"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" />
-            <Chip label="IPv6" />
-            <Chip label="Domains" />
-            <Chip label="URLs" />
-            <Chip label="Hashes" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* Checkphish */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-          Checkphish.ai
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            CheckPhish is a FREE tool designed to safeguard your web and email
-            domains against typosquatting attacks. With its powerful features of
-            domain monitoring, email link protection, and a phishing scanner,
-            you get one place that delivers protection against typosquats, all
-            for free!
-          </Typography>
-          <ApiKeyInput
-            name="checkphishai"
-            description="Checkphish"
-            link="https://checkphish.ai/docs/checkphish-api/"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" />
-            <Chip label="Domains" />
-            <Chip label="URLs" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* CrowdSec */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-            CrowdSec
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            CrowdSec Cyber Threat Intelligence is the largest and most diverse
-            CTI network on earth, delivering key contextualized and curated
-            benchmarking insights from real users across the globe.
-          </Typography>
-          <ApiKeyInput
-            name="crowdsec"
-            description="CrowdSec"
-            link="https://app.crowdsec.net/settings/api-keys"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* emailrep.io */}
-        <Stack spacing={1}>
-        <Typography variant="h6">
-          Emailrep.io
-        </Typography>
-          <Typography variant="body2" color="text.secondary">
-            EmailRep uses hundreds of factors like domain age, traffic rankings,
-            presence on social media sites, professional networking sites,
-            personal connections, public records, deliverability, data breaches,
-            dark web credential leaks, phishing emails, threat actor emails, and
-            more to answer these types of questions: Is this email risky? Is
-            this a throwaway account? What kind of online presence does this
-            email have? Is this a trustworthy sender?
-          </Typography>
-          <ApiKeyInput
-            name="emailrepio"
-            description="emailrep.io"
-            link="https://emailrep.io/key"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="Email" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* GitHub */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-            GitHub
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-          GitHub is a developer platform that allows developers to create, store, manage and share their code. It uses Git software, providing the distributed version control of Git plus access control, bug tracking, software feature requests, task management, continuous integration, and wikis for every project. 
-          </Typography>
-          <ApiKeyInput
-            name="github"
-            description="GitHub"
-            link="https://docs.github.com/de/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="CVEs" />
-            <Chip label="Domains" />
-            <Chip label="Email" />
-            <Chip label="Hashes" />
-            <Chip label="IPv4" />
-            <Chip label="IPv6" />
-            <Chip label="URLs" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* Google Safe Browsing */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-            Google Safe Browsing
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-          Google Safe Browsing helps protect over five billion devices every day by showing warnings to users when they attempt to navigate to dangerous sites or download dangerous files. Safe Browsing also notifies webmasters when their websites are compromised by malicious actors and helps them diagnose and resolve the problem so that their visitors stay safer. Safe Browsing protections work across Google products and power safer browsing experiences across the Internet.
-          </Typography>
-          <ApiKeyInput
-            name="safebrowsing"
-            description="Google Safe Browsing"
-            link="https://developers.google.com/safe-browsing/v4/get-started"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="Domains" />
-            <Chip label="URLs" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* IPQualityScore */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-            IPQualityScore
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-          At IPQS, we're dedicated to enhancing businesses' fraud prevention and security efforts. Our goal is simple. To provide instant, impactful protection that safeguards you and your customers. With advanced tools, we measure various risk signals, helping your business to stay ahead of any threats.
-          </Typography>
-          <ApiKeyInput
-            name="ipqualityscore"
-            description="IPQualityScore"
-            link="https://www.ipqualityscore.com/documentation/overview"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" />
-            <Chip label="IPv6" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* HaveIBeenPWND */}
-        <Stack spacing={1}>
-          <Stack direction="row" alignItems="center">
-            <Tooltip title="Paid service">
-              <PaidIcon sx={{ mr: 1 }} />
-            </Tooltip>
-            <Typography variant="h6">
-              Have I Been Pwned
+    <Box sx={{ maxWidth: 1200, mx: "auto", p: 3 }}>
+      {/* Header Section */}
+      <Accordion
+        expanded={headerExpanded}
+        onChange={() => setHeaderExpanded(!headerExpanded)}
+        sx={{
+          mb: 3,
+          background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.secondary.main}15 100%)`,
+          border: `1px solid ${theme.palette.divider}`,
+          borderRadius: 1,
+          '&:before': {
+            display: 'none',
+          },
+          '&.Mui-expanded': {
+            margin: '0 0 32px 0',
+          },
+        }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          sx={{
+            p: 2,
+            '& .MuiAccordionSummary-content': {
+              margin: 0,
+            },
+            '& .MuiAccordionSummary-content.Mui-expanded': {
+              margin: 0,
+            },
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <SecurityIcon sx={{ fontSize: 32, color: theme.palette.primary.main }} />
+            <Box>
+              <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                API Key Management
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {getConfiguredCount()}/{Object.keys(servicesConfig).length} services configured ({getCompletionPercentage()}% complete)
+              </Typography>
+            </Box>
+          </Box>
+        </AccordionSummary>
+        
+        <AccordionDetails sx={{ px: 2, pb: 2, pt: 0 }}>
+          <Stack spacing={3}>
+            <Typography variant="body1" color="text.secondary">
+              Configure your threat intelligence and security API keys to unlock the full potential of this platform.
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-            Have I Been Pwned allows you to search across multiple data breaches to see if your email address or phone number has been compromised.
-            </Typography>
-          </Stack>
-          <ApiKeyInput
-            name="hibp"
-            description="Have I Been Pwned"
-            link="https://haveibeenpwned.com/API/v3#Authorisation"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="Email" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* Hunter */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-            Hunter.io
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-          Hunter was created by Antoine Finkelstein and François Grante in 2015. Freshly graduated, they saw the untapped potential of cold emails and wanted to address the challenges of prospecting and finding contact information. To achieve great success rate while complying with privacy regulations, they decided to use emails found on the public web. Email Hunter was born.
 
-Soon rebranded as Hunter, the tool quickly became a game-changer in business intelligence. Within weeks, it attracted thousands of users thanks to its user-friendly interface, handy browser extension, affordable pricing, and data accuracy. Unlike its peers, Hunter aimed not at large enterprises but at making cold emailing accessible to all.
+            {/* Progress Overview */}
+            <Box>
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
+                <Typography variant="body2" color="text.secondary">
+                  Configuration Progress ({getConfiguredCount()}/{Object.keys(servicesConfig).length} services)
+                </Typography>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  {getCompletionPercentage()}% Complete
+                </Typography>
+              </Box>
+              <LinearProgress
+                variant="determinate"
+                value={getCompletionPercentage()}
+                sx={{
+                  height: 8,
+                  borderRadius: 4,
+                  backgroundColor: theme.palette.grey[200],
+                  "& .MuiLinearProgress-bar": {
+                    borderRadius: 4,
+                  },
+                }}
+              />
+            </Box>
 
-Over time, Hunter grew into a comprehensive email outreach platform, offering everything from finding contact information to sending cold emails. Antoine and François, with a focused team, continued to empower professionals with simple, powerful tools.
-          </Typography>
-          <ApiKeyInput
-            name="hunterio"
-            description="Hunter.io"
-            link="https://hunter.io/api"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="Email" />
+            <Alert severity="info" icon={<InfoIcon />}>
+              <AlertTitle>Getting Started</AlertTitle>
+              While initial setup requires generating multiple API keys, the enhanced security and intelligence capabilities make it worthwhile. Most services offer free tiers to get you started.
+            </Alert>
           </Stack>
+        </AccordionDetails>
+      </Accordion>
+
+      {/* Filters */}
+      <Paper
+        elevation={0}
+        sx={{
+          p: 3,
+          mb: 3,
+          border: `1px solid ${theme.palette.divider}`,
+          borderRadius: 1,
+        }}
+      >
+        <Stack direction="row" spacing={3} alignItems="center">
+          <TextField
+            placeholder="Search services..."
+            value={searchFilter}
+            onChange={(e) => setSearchFilter(e.target.value)}
+            variant="outlined"
+            size="small"
+            sx={{ flex: 1 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon color="action" />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={showOnlyConfigured}
+                onChange={(e) => setShowOnlyConfigured(e.target.checked)}
+                color="primary"
+                sx={{mr: 1}}
+              />
+            }
+            label="Show only configured"
+          />
         </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* OpenAI */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-            OpenAI
+      </Paper>
+
+      {/* API Services Grid */}
+      <Grid container spacing={3}>
+        {filteredServices.map(([serviceKey, service]) => {
+          const isFullyConfigured = service.available;
+          const hasMultipleKeys = service.required_keys.length > 1;
+
+          return (
+            <Grid item xs={12} lg={6} key={serviceKey}>
+              <Card
+                variant="outlined"
+                sx={{
+                  height: "100%",
+                  transition: "all 0.2s ease-in-out",
+                  "&:hover": {
+                    boxShadow: theme.shadows[4],
+                    transform: "translateY(-2px)",
+                  },
+                  border: isFullyConfigured
+                    ? `2px solid ${theme.palette.success.main}`
+                    : `1px solid ${theme.palette.divider}`,
+                }}
+              >
+                <CardContent sx={{ p: 3 }}>
+                  <Stack spacing={2}>
+                    {/* Provider Header */}
+                    <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
+                      <Box sx={{ flex: 1 }}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+                          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                            {service.name}
+                          </Typography>
+                          <Chip
+                            label={getTierLabel(service.tier)}
+                            size="small"
+                            sx={{
+                              backgroundColor: `${getTierColor(service.tier)}15`,
+                              color: getTierColor(service.tier),
+                              fontWeight: 500,
+                            }}
+                          />
+                        </Box>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ lineHeight: 1.5, mb: 2 }}
+                        >
+                          {service.description}
+                        </Typography>
+                      </Box>
+                      {isFullyConfigured && (
+                        <CheckCircleIcon sx={{ color: theme.palette.success.main }} />
+                      )}
+                    </Box>
+
+                    {/* Capabilities */}
+                    <Box>
+                      <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: "block" }}>
+                        Supported IoC Types
+                      </Typography>
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                        {service.supported_ioc_types.map((capability) => (
+                          <Chip
+                            key={capability}
+                            label={capability}
+                            size="small"
+                            sx={{
+                              backgroundColor: `${getCapabilityColor(capability)}15`,
+                              color: getCapabilityColor(capability),
+                              fontWeight: 500,
+                              fontSize: "0.75rem",
+                            }}
+                          />
+                        ))}
+                      </Box>
+                    </Box>
+
+                    <Divider />
+
+                    {/* API Key Inputs */}
+                    {service.required_keys.length === 0 ? (
+                      <Box sx={{ p: 2, backgroundColor: theme.palette.success.main + "08", borderRadius: 1 }}>
+                        <Typography variant="body2" color="success.main" sx={{ fontWeight: 500 }}>
+                          ✓ No API key required - Ready to use
+                        </Typography>
+                      </Box>
+                    ) : (
+                      service.required_keys.map((keyName, index) => {
+                        // Generate display name for the key
+                        let keyDisplayName = keyName
+                          .replace(/_/g, ' ')
+                          .replace(/\b\w/g, l => l.toUpperCase());
+                        
+                        // Handle special cases
+                        if (keyName.includes('client_id')) keyDisplayName = `${service.name} Client ID`;
+                        if (keyName.includes('client_secret')) keyDisplayName = `${service.name} Client Secret`;
+                        if (keyName.includes('api_key')) keyDisplayName = `${service.name} API Key`;
+                        if (keyName.includes('pat')) keyDisplayName = `${service.name} Personal Access Token`;
+                        if (keyName.includes('bearer')) keyDisplayName = `${service.name} Bearer Token`;
+
+                        const relatedKeys = service.required_keys.filter(k => k !== keyName);
+
+                        return (
+                          <ApiKeyInput
+                            key={keyName}
+                            name={keyName}
+                            description={keyDisplayName}
+                            link={service.documentation_url}
+                            apiKeys={apiKeys}
+                            relatedKeys={relatedKeys}
+                          />
+                        );
+                      })
+                    )}
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Grid>
+          );
+        })}
+      </Grid>
+
+      {filteredServices.length === 0 && (
+        <Paper
+          elevation={0}
+          sx={{
+            p: 4,
+            textAlign: "center",
+            border: `1px solid ${theme.palette.divider}`,
+            borderRadius: 2,
+          }}
+        >
+          <Typography variant="h6" color="text.secondary" gutterBottom>
+            No services found
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Provides access to large language models.
+            Try adjusting your search or filter criteria.
           </Typography>
-          <ApiKeyInput
-            name="openai"
-            description="OpenAI"
-            link="https://platform.openai.com/account/api-keys"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="For AI features" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* Maltiverse */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-            Maltiverse
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-          Maltiverse works as a broker for Threat intelligence sources that are aggregated from more than a hundred different Public, Private and Community sources. Once the data is ingested, the IoC Scoring Algorithm applies a qualitative classification to the IoC that changes. Finally this data can be queried in a Threat Intelligence feed that can be delivered to your Firewalls, SOAR, SIEM, EDR or any other technology.
-          </Typography>
-          <ApiKeyInput
-            name="maltiverse"
-            description="Maltiverse"
-            link="https://app.swaggerhub.com/apis-docs/maltiverse/api/1.1"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" />
-            <Chip label="IPv6" />
-            <Chip label="Domains" />
-            <Chip label="URLs" />
-            <Chip label="Hashes" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* NIST NVD */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-            NIST NVD
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-          The NVD is the U.S. government repository of standards based vulnerability management data represented using the Security Content Automation Protocol (SCAP).
-          </Typography>
-          <ApiKeyInput
-            name="nist_nvd"
-            description="NIST NVD"
-            link="https://nvd.nist.gov/developers/request-an-api-key"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="CVEs" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* Pulsedive */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-            Pulsedive
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-          Pulsedive is a free threat intelligence platform. Search, scan, and enrich IPs, URLs, domains and other IOCs from OSINT feeds or submit your own.
-          </Typography>
-          <ApiKeyInput
-            name="pulsedive"
-            description="PulseDive"
-            link="https://pulsedive.com/api/"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" />
-            <Chip label="IPv6" />
-            <Chip label="Domains" />
-            <Chip label="URLs" />
-            <Chip label="Hashes" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* Reddit */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-            Reddit
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-          Reddit is a network of communities where people can dive into their interests, hobbies and passions. There's a community for whatever you're interested in ...
-          </Typography>
-          <ApiKeyInput
-            name="reddit_cid"
-            description="Reddit client ID"
-            link="https://www.reddit.com/dev/api/"
-            apiKeys={apiKeys}
-          />
-          <ApiKeyInput
-            name="reddit_cs"
-            description="Reddit client secret"
-            link="https://www.reddit.com/dev/api/"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" />
-            <Chip label="IPv6" />
-            <Chip label="Domains" />
-            <Chip label="URLs" />
-            <Chip label="Hashes" />
-            <Chip label="Email" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* Shodan */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-            Shodan
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-          Shodan is the world's first search engine for Internet-connected devices. Discover how Internet intelligence can help you make better decisions.
-          </Typography>
-          <ApiKeyInput
-            name="shodan"
-            description="Shodan"
-            link="https://developer.shodan.io/api/requirements"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" />
-            <Chip label="IPv6" />
-            <Chip label="Domains" />
-            <Chip label="URLs" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* ThreatFox */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-            ThreatFox
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-          ThreatFox is a project of abuse.ch with the goal of sharing indicators of compromise (IOCs)
-          </Typography>
-          <ApiKeyInput
-            name="threatfox"
-            description="ThreatFox"
-            link="https://threatfox.abuse.ch/api/"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" />
-            <Chip label="IPv6" />
-            <Chip label="Domains" />
-            <Chip label="URLs" />
-            <Chip label="Hashes" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* Twitter */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-            Twitter bearer
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-          From breaking news and entertainment to sports and politics, get the full story with all the live commentary.
-          </Typography>
-          <ApiKeyInput
-            name="twitter_bearer"
-            description="Twitter"
-            link="https://developer.twitter.com/en/docs"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" />
-            <Chip label="IPv6" />
-            <Chip label="Domains" />
-            <Chip label="URLs" />
-            <Chip label="Hashes" />
-            <Chip label="Email" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* URLScan */}
-        <Stack spacing={1}>
-          <Typography variant="h6">
-            URLScan
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-          urlscan.io - Website scanner for suspicious and malicious URLs.
-          </Typography>
-          <ApiKeyInput
-            name="urlscan"
-            description="urlscan.io"
-            link="https://urlscan.io/docs/api/"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="Domains" />
-            <Chip label="URLs" />
-          </Stack>
-        </Stack>
-      </Card>
-      <Card sx={cardStyle}>
-        {/* Virustotal */}
-        <Stack spacing={1}>
-        <Typography variant="h6">
-          Virustotal
-        </Typography>
-          <Typography variant="body2" color="text.secondary">
-          VirusTotal inspects items with over 70 antivirus scanners and URL/domain blocklisting services, in addition to a myriad of tools to extract signals from the studied content. Any user can select a file from their computer using their browser and send it to VirusTotal. VirusTotal offers a number of file submission methods, including the primary public web interface, desktop uploaders, browser extensions and a programmatic API.
-          </Typography>
-          <ApiKeyInput
-            name="virustotal"
-            description="Virustotal"
-            link="https://developers.virustotal.com/reference/overview"
-            apiKeys={apiKeys}
-          />
-          <Stack direction="row" spacing={1}>
-            <Chip label="IPv4" />
-            <Chip label="Domains" />
-            <Chip label="URLs" />
-            <Chip label="Hashes" />
-          </Stack>
-        </Stack>
-      </Card>
-    </>
+        </Paper>
+      )}
+    </Box>
   );
 }

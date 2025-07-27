@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Email from "../ioc-analyzer/Email";
-import Hash from "../ioc-analyzer/Hash";
+import ResultTable from "../ioc-tools/ioc-lookup/single-lookup/components/ui/ResultTable";
 import {
   Accordion,
   AccordionSummary,
@@ -36,9 +35,18 @@ export default function GeneralInfo(props) {
 
   function hashAnalysisEml(props) {
     const ioc = props;
+    const getHashType = (ioc) => {
+      if (!ioc) return "MD5";
+      
+      const hashLength = ioc.length;
+      if (hashLength === 32) return "MD5";
+      if (hashLength === 40) return "SHA1";
+      if (hashLength === 64) return "SHA256";
+      return "MD5"; // Default
+    };
     return (
       <Box mt={2}>
-        <Hash ioc={ioc} />
+        <ResultTable ioc={ioc} iocType={getHashType(ioc)} />
       </Box>
     );
   }
@@ -47,7 +55,7 @@ export default function GeneralInfo(props) {
     const ioc = props;
     return (
       <Box mt={2}>
-        <Email ioc={ioc} />
+        <ResultTable ioc={ioc} iocType="Email" />
       </Box>
     );
   }

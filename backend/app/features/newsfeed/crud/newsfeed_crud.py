@@ -218,7 +218,7 @@ def get_news_articles_by_ids(db: Session, article_ids: List[int]) -> List[NewsAr
     ).all()
 
 
-def create_custom_feed(db: Session, settings: NewsfeedSettingsSchema):
+async def create_custom_feed(db: Session, settings: NewsfeedSettingsSchema):
     """Add or update a custom newsfeed entry."""
     existing_feed = db.query(NewsfeedSettings).filter(
         NewsfeedSettings.name == settings.name).first()
@@ -240,6 +240,77 @@ def create_custom_feed(db: Session, settings: NewsfeedSettingsSchema):
         db.commit()
         db.refresh(db_feed)
         return db_feed
+
+
+async def create_custom_feed_with_favicon(db: Session, settings: NewsfeedSettingsSchema):
+    """Add or update a custom newsfeed entry with favicon download if no icon provided."""
+    from app.features.newsfeed.utils.favicon_downloader import FaviconDownloader
+    
+    if not settings.icon or settings.icon == "default.png":
+        logger.info(f"No icon provided for feed {settings.name}, attempting to download favicon from {settings.url}")
+        
+        try:
+            success, icon_filename, error = await FaviconDownloader.download_and_save_favicon(settings.url)
+            if success and icon_filename:
+                settings.icon = icon_filename
+                settings.icon_id = icon_filename
+                logger.info(f"Successfully downloaded favicon for {settings.name}: {icon_filename}")
+            else:
+                logger.warning(f"Failed to download favicon for {settings.name}: {error or 'Unknown error'}")
+                settings.icon = "default.png"
+                settings.icon_id = None
+        except Exception as e:
+            logger.warning(f"Exception during favicon download for {settings.name}: {str(e)}")
+            settings.icon = "default.png"
+            settings.icon_id = None
+    
+    return await create_custom_feed(db, settings)
+
+
+async def delete_feed_icon_with_favicon_fallback(db: Session, feed_name: str):
+    """Delete a feed's icon and try to download favicon before using default."""
+    from app.features.newsfeed.utils.favicon_downloader import FaviconDownloader
+    import os
+    
+    feed = db.query(NewsfeedSettings).filter(
+        NewsfeedSettings.name == feed_name).first()
+    
+    if not feed:
+        return False, "Feed not found"
+    
+    if feed.icon_id and feed.icon != "default.png":
+        icon_path = os.path.join("app/static/feedicons", feed.icon_id)
+        if os.path.exists(icon_path):
+            try:
+                os.remove(icon_path)
+                logger.info(f"Removed existing icon file: {icon_path}")
+            except Exception as e:
+                logger.warning(f"Failed to remove icon file {icon_path}: {str(e)}")
+    
+    logger.info(f"Attempting to download favicon for {feed_name} from {feed.url}")
+    try:
+        success, icon_filename, error = await FaviconDownloader.download_and_save_favicon(feed.url)
+        if success and icon_filename:
+            feed.icon = icon_filename
+            feed.icon_id = icon_filename
+            db.commit()
+            db.refresh(feed)
+            logger.info(f"Successfully downloaded favicon for {feed_name}: {icon_filename}")
+            return True, f"Icon deleted and favicon downloaded: {icon_filename}"
+        else:
+            logger.warning(f"Failed to download favicon for {feed_name}: {error}")
+            feed.icon = "default.png"
+            feed.icon_id = None
+            db.commit()
+            db.refresh(feed)
+            return True, "Icon deleted, favicon download failed, using default icon"
+    except Exception as e:
+        logger.error(f"Error downloading favicon for {feed_name}: {str(e)}")
+        feed.icon = "default.png"
+        feed.icon_id = None
+        db.commit()
+        db.refresh(feed)
+        return True, "Icon deleted, favicon download error, using default icon"
 
 
 def delete_custom_feed(db: Session, name: str):

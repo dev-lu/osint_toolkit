@@ -16,6 +16,7 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { ColorModeContext } from "./App";
 import SidebarTabs from "./components/SidebarTabs";
+import { iocToolsTabs } from "./sidebarConfig";
 import {
   mainMenuItems,
   aiTemplatesTabs,
@@ -49,6 +50,9 @@ export default function Main() {
         tab.path !== "/newsfeed/report" || apiKeys.openai
       );
       return <SidebarTabs title="" tabs={filteredTabs} />;
+    }
+    if (location.pathname.startsWith("/ioc-tools")) {
+      return <SidebarTabs title="" tabs={iocToolsTabs} />;
     }
     if (location.pathname.startsWith("/settings")) {
       return <SidebarTabs title="" tabs={settingsTabs} />;

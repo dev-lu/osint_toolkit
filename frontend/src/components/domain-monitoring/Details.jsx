@@ -1,7 +1,6 @@
 import React from "react";
 
-import Domain from "../ioc-analyzer/Domain";
-import Ipv4 from "../ioc-analyzer/Ipv4";
+import ResultTable from "../ioc-tools/ioc-lookup/single-lookup/components/ui/ResultTable";
 
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import Box from "@mui/material/Box";
@@ -38,7 +37,7 @@ export default function Details(props) {
         <Paper sx={{ MdRoundedCorner: true, borderRadius: 5 }}>
           <Table sx={{ size: "small" }}>
             <TableBody sx={{ width: "100%" }}>
-              <Ipv4 ioc={ioc} />
+              <ResultTable ioc={ioc} iocType="IPv4" />
             </TableBody>
           </Table>
         </Paper>
@@ -56,7 +55,7 @@ export default function Details(props) {
         <Paper sx={{ MdRoundedCorner: true, borderRadius: 5 }}>
           <Table sx={{ size: "small" }}>
             <TableBody sx={{ width: "100%" }}>
-              <Domain ioc={ioc} />
+              <ResultTable ioc={ioc} iocType="Domain" />
             </TableBody>
           </Table>
         </Paper>

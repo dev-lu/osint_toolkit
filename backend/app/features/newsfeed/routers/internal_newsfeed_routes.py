@@ -11,7 +11,7 @@ import base64
 from app.core.dependencies import get_db
 from app.core.scheduler import update_scheduler
 
-from app.features.ioc_extractor.service.ioc_extractor_service import extract_iocs
+from app.features.ioc_tools.ioc_extractor.service.ioc_extractor_service import extract_iocs
 from app.features.newsfeed.utils.validation import validate_feed, validate_and_process_icon
 from app.features.newsfeed.service import newsfeed_service
 from app.features.newsfeed.schemas.newsfeed_schemas import NewsArticleSchema, UpdateArticleRequest, NewsAnalysisParams
@@ -30,7 +30,9 @@ from app.features.newsfeed.crud.newsfeed_crud import (
     news_article_exists,
     get_news_article_by_id,
     create_custom_feed, 
+    create_custom_feed_with_favicon,
     delete_custom_feed, 
+    delete_feed_icon_with_favicon_fallback,
     update_news_article,
     get_newsfeed_retention_days,
     set_retention_days,
@@ -68,9 +70,7 @@ def safe_decode_filename(encoded_name: str) -> str:
     Safely decode a base64 encoded filename.
     """
     try:
-        # Decode base64 to bytes
         decoded_bytes = base64.b64decode(encoded_name)
-        # Convert bytes to string
         decoded_str = decoded_bytes.decode('utf-8')
         return decoded_str
     except Exception as e:
@@ -192,13 +192,11 @@ async def analyze_news_article(
         article_id, model_id, force, use_cti_settings
     )
     
-    # Get the news article
     news_article_record = get_news_article_by_id(db=db, article_id=article_id)
     if not news_article_record:
         logger.error("Article with ID %d not found.", article_id)
         raise HTTPException(status_code=404, detail="Article not found")
 
-    # Check if analysis already exists and force is not set
     if news_article_record.analysis_result and not force:
         logger.info("Analysis already completed for article ID %d", article_id)
         try:
@@ -209,9 +207,7 @@ async def analyze_news_article(
             }
         except json.JSONDecodeError:
             logger.warning("Could not parse stored analysis result as JSON, forcing reanalysis")
-            # Continue with analysis if JSON parsing fails
 
-    # Get CTI settings
     cti_settings = None
     try:
         from app.core.settings.cti_profile.crud.cti_profile_settings_crud import get_cti_settings
@@ -515,7 +511,6 @@ async def analyze_news_article(
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
 
 
-# Get article by ID
 @router.get("/api/newsfeed/article/{article_id}", response_model=NewsArticleSchema, tags=["Newsfeed"])
 def get_article(article_id: int, db: Session = Depends(get_db)):
     article = get_news_article_by_id(db=db, article_id=article_id)
@@ -566,7 +561,7 @@ async def validate_feed_url(feed_data: NewsfeedSettingsSchema, db: Session = Dep
 
 @router.post("/api/settings/modules/newsfeed/add", tags=["Newsfeed"])
 async def add_custom_feed(feed_data: NewsfeedSettingsSchema, db: Session = Depends(get_db)):
-    """Add a new custom feed after validation."""
+    """Add a new custom feed after validation with automatic favicon download."""
     is_valid, error_msg, feed_info = validate_feed(feed_data.url)
     if not is_valid:
         raise HTTPException(status_code=400, detail=error_msg)
@@ -579,7 +574,7 @@ async def add_custom_feed(feed_data: NewsfeedSettingsSchema, db: Session = Depen
         raise HTTPException(status_code=400, detail="Feed name already exists")
 
     try:
-        new_feed = create_custom_feed(db, feed_data)
+        new_feed = await create_custom_feed_with_favicon(db, feed_data)
         return new_feed.to_dict()
     except Exception as e:
         logger.error(f"Error creating feed: {str(e)}")
@@ -648,6 +643,26 @@ async def upload_feed_icon(
             status_code=500,
             detail="An unexpected error occurred while processing the icon"
         )
+
+
+@router.delete("/api/settings/modules/newsfeed/icon/{feed_name}", tags=["Newsfeed"])
+async def delete_feed_icon(feed_name: str, db: Session = Depends(get_db)):
+    """Delete a feed's icon and try to download favicon before using default."""
+    try:
+        decoded_feed_name = safe_decode_filename(feed_name)
+        success, message = await delete_feed_icon_with_favicon_fallback(db, decoded_feed_name)
+        
+        if success:
+            return {"message": message}
+        else:
+            raise HTTPException(status_code=404, detail=message)
+            
+    except ValueError as ve:
+        logger.error(f"Validation error: {str(ve)}")
+        raise HTTPException(status_code=400, detail=str(ve))
+    except Exception as e:
+        logger.error(f"Error deleting feed icon: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.delete("/api/settings/modules/newsfeed/", tags=["Newsfeed"])

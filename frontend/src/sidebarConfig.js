@@ -18,6 +18,8 @@ import FindInPageIcon from "@mui/icons-material/FindInPage";
 import ViewHeadlineIcon from "@mui/icons-material/ViewHeadline";
 import CreateIcon from "@mui/icons-material/Create";
 import ViewListIcon from "@mui/icons-material/ViewList";
+import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
+import NetworkCheckIcon from "@mui/icons-material/NetworkCheck";
 
 export const mainMenuItems = [
   {
@@ -27,21 +29,15 @@ export const mainMenuItems = [
     enabled: true,
   },
   {
-    name: "IOC Lookup",
+    name: "IOC Tools",
     icon: <SearchIcon />,
-    path: "/ioc-analyzer",
+    path: "/ioc-tools",
     enabled: true,
   },
   {
     name: "Email Analyzer",
     icon: <MailIcon />,
     path: "/email-analyzer",
-    enabled: true,
-  },
-  {
-    name: "IOC Extractor",
-    icon: <DocumentScannerIcon />,
-    path: "/ioc-extractor",
     enabled: true,
   },
   {
@@ -65,7 +61,7 @@ export const mainMenuItems = [
   {
     name: "Detection Rules",
     icon: <RuleIcon />,
-    path: "/rules/sigma",
+    path: "/rules",
     enabled: true,
   },
 ];
@@ -80,6 +76,29 @@ export const aiTemplatesTabs = [
     label: "Create Template",
     path: "/ai-templates/create-template",
     icon: <CreateIcon />,
+  },
+];
+
+export const iocToolsTabs = [
+  {
+    label: "Single Lookup",
+    path: "/ioc-tools/lookup",
+    icon: <SearchIcon />,
+  },
+  {
+    label: "Bulk Lookup",
+    path: "/ioc-tools/bulk",
+    icon: <ManageSearchIcon />,
+  },
+  {
+    label: "Extractor",
+    path: "/ioc-tools/extractor",
+    icon: <DocumentScannerIcon />,
+  },
+  {
+    label: "Defang/Fang",
+    path: "/ioc-tools/defanger",
+    icon: <HealthAndSafetyIcon />,
   },
 ];
 
@@ -109,7 +128,6 @@ export const newsfeedTabs = [
     path: "/newsfeed/settings",
     icon: <SettingsIcon />,
     children: [
-      { label: "General", path: "/newsfeed/settings" },
       {
         label: "Manage Feeds",
         path: "/newsfeed/settings/feeds",
@@ -138,4 +156,5 @@ export const settingsTabs = [
 export const rulesTabs = [
   { label: "Sigma", path: "/rules/sigma", icon: <ManageSearchIcon /> },
   { label: "Yara", path: "/rules/yara", icon: <FindInPageIcon /> },
+  { label: "Snort", path: "/rules/snort", icon: <NetworkCheckIcon /> },
 ];

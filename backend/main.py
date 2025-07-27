@@ -14,7 +14,7 @@ import app.core.config.fastapi_config as fastapi_config
 from app.core import healthcheck
 from app.core.database import SessionLocal, engine, Base
 from app.core.scheduler import start_scheduler, shutdown_scheduler
-from app.core.settings.api_keys.routers import api_keys_settings_routes
+from app.core.settings.api_keys.routers import api_keys_settings_routes, service_config_routes
 from app.core.settings.modules.routers import modules_settings_routes
 from app.core.settings.general.routers import general_settings_routes
 from app.core.settings.keywords.routers import keywords_settings_routes
@@ -26,11 +26,14 @@ from app.features.llm_templates.schemas import AITemplateCreate
 from app.features.llm_templates.models import AITemplate
 from app.features.llm_templates.crud import create_template
 from app.features.llm_templates.utils import default_llm_templates
+from app.core.settings.api_keys.config.create_defaults import add_default_api_keys
 
 from app.features.domain_lookup.routers import external_domain_lookup_routes
 from app.features.email_analyzer.routers import internal_email_analyzer_routes
-from app.features.ioc_lookup.routers import external_ioc_lookup_routes
-from app.features.ioc_extractor.routers import internal_ioc_extractor_routes
+from app.features.ioc_tools.ioc_extractor.routers import internal_ioc_extractor_routes
+from app.features.ioc_tools.ioc_defanger.routers import internal_defang_routes
+from app.features.ioc_tools.ioc_lookup.bulk_lookup.routers import bulk_ioc_lookup_routes
+from app.features.ioc_tools.ioc_lookup.single_lookup.routers import single_ioc_lookup_routes
 
 from app.features.newsfeed.routers import external_newsfeed_routes, internal_newsfeed_routes
 from app.features.newsfeed.service import newsfeed_service
@@ -113,17 +116,20 @@ routers = [
     healthcheck.router,
     internal_llm_templates_routes.router,
     external_domain_lookup_routes.router,
-    external_ioc_lookup_routes.router,
     internal_email_analyzer_routes.router,
     internal_ioc_extractor_routes.router,
+    internal_defang_routes.router,
     #alerts_routes.router,
     internal_newsfeed_routes.router,
     external_newsfeed_routes.router,
     api_keys_settings_routes.router,
+    service_config_routes.router,
     general_settings_routes.router,
     modules_settings_routes.router,
     keywords_settings_routes.router,
-    cti_profile_settings_routes.router
+    cti_profile_settings_routes.router,
+    bulk_ioc_lookup_routes.router,
+    single_ioc_lookup_routes.router
 ]
 
 for router in routers:
@@ -150,9 +156,8 @@ async def add_default_module_settings(db: Session) -> None:
     """Add default module settings if they don't exist."""
     default_modules = [
         ("Newsfeed", True),
-        ("IOC Lookup", True),
+        ("IOC Tools", True),
         ("Email Analyzer", True),
-        ("IOC Extractor", True),
         ("Domain Finder", True),
         ("AI Templates", True),
         ("CVSS Calculator", True),
@@ -240,7 +245,8 @@ async def initialize_defaults(db: Session) -> None:
             add_default_general_settings(db),
             add_default_module_settings(db),
             add_default_newsfeeds(db),
-            seed_default_llm_templates(db)
+            seed_default_llm_templates(db),
+            add_default_api_keys(db)
         )
     except Exception as e:
         logger.error(f"Failed to initialize defaults: {str(e)}")

@@ -97,6 +97,13 @@ async def get_paginated_articles_route(
         **filters, tlp=tlp, read=read
     )
 
+    if "total_count" not in articles_data:
+        total_count = await asyncio.to_thread(
+            newsfeed_service.get_total_articles_count,
+            db, start_date, end_date, **filters, tlp=tlp, read=read
+        )
+        articles_data["total_count"] = total_count
+
     if not articles_data["articles"]:
         logger.info("No articles found for the given filters")
         return {
@@ -106,7 +113,12 @@ async def get_paginated_articles_route(
             "articles": []
         }
 
-    return articles_data
+    return {
+        "total_count": articles_data.get("total_count", 0),
+        "page": page,
+        "page_size": page_size,
+        "articles": articles_data["articles"]
+    }
 
 @router.get("/api/recent_articles", tags=["Newsfeed"])
 @handle_exceptions
@@ -141,7 +153,7 @@ async def fetch_and_get_news(db: Session = Depends(get_db)):
     await newsfeed_service.fetch_and_store_news(db)
     return newsfeed_service.get_news_from_db(db)
 
-@router.get("/api/title_word_frequency", tags=["Newsfeed"], response_model=List[Dict[str, object]])
+@router.get("/api/newsfeed/title_word_frequency", tags=["Newsfeed"], response_model=List[Dict[str, object]])
 @handle_exceptions
 async def get_title_word_frequency_route(
     db: Session = Depends(get_db),

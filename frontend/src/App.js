@@ -12,8 +12,7 @@ import NotFound from "./components/NotFound";
 import CvssCalculator from "./components/cvss-calculator/CvssCalculator";
 import Monitoring from "./components/domain-monitoring/Monitoring";
 import EmailAnalyzer from "./components/email-analyzer/EmailAnalyzer";
-import Analyzer from "./components/ioc-analyzer/Analyzer";
-import Extractor from "./components/ioc-extractor/Extractor";
+import IocTools from "./components/ioc-tools/IocTools";
 import Newsfeed from "./components/newsfeed/Newsfeed";
 import Settings from "./components/settings/Settings";
 import Rules from "./components/rule-creator/Rules";
@@ -115,8 +114,7 @@ function App() {
               <Route path="newsfeed/*" element={<Newsfeed />} />
               <Route path="settings/*" element={<Settings />} />
               <Route path="ai-templates/*" element={<AiTemplates />} />
-              <Route path="ioc-analyzer/*" element={<Analyzer />} />
-              <Route path="ioc-extractor/*" element={<Extractor />} />
+              <Route path="ioc-tools/*" element={<IocTools />} />
               <Route path="email-analyzer/*" element={<EmailAnalyzer />} />
               <Route path="domain-monitoring/*" element={<Monitoring />} />
               <Route path="cvss-calculator/*" element={<CvssCalculator />} />

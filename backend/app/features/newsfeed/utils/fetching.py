@@ -1,6 +1,6 @@
 import feedparser
 from newspaper import Article
-from app.features.ioc_extractor.service.ioc_extractor_service import extract_iocs
+from app.features.ioc_tools.ioc_extractor.service.ioc_extractor_service import extract_iocs
 import logging
 import re
 
@@ -25,7 +25,21 @@ def parse_feed(feed_url: str):
     Parse a feed URL and return its entries.
     """
     try:
-        feed = feedparser.parse(feed_url)
+        import warnings
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", message=".*document declared as.*")
+            warnings.filterwarnings("ignore", message=".*encoding.*")
+            feed = feedparser.parse(feed_url)
+        
+        if feed.get('bozo', 0) == 1:
+            exception = feed.get('bozo_exception')
+            if exception:
+                error_msg = str(exception)
+                if "encoding" in error_msg.lower() or "declared as" in error_msg.lower():
+                    logger.debug(f"Feed encoding warning for {feed_url}: {error_msg}")
+                else:
+                    logger.warning(f"Feed parsing warning for {feed_url}: {error_msg}")
+        
         return feed
     except Exception as e:
         logger.error(f"Error parsing feed {feed_url}: {str(e)}")

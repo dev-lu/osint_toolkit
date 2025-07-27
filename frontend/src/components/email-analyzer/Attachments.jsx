@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Hash from "../ioc-analyzer/Hash.jsx";
+import ResultTable from "../ioc-tools/ioc-lookup/single-lookup/components/ui/ResultTable";
 import {
   Accordion,
   AccordionSummary,
@@ -29,9 +29,20 @@ export default function Attachments(props) {
 
   function hashAnalysis(props) {
     const ioc = props;
+    const getHashType = (ioc) => {
+      if (!ioc) return "MD5";
+      
+      const hashLength = ioc.length;
+      if (hashLength === 32) return "MD5";
+      if (hashLength === 40) return "SHA1";
+      if (hashLength === 64) return "SHA256";
+      return "MD5"; // Default
+    };
     return (
       <Box mt={1} mb={1}>
-        <Hash ioc={ioc} />
+        
+
+        <ResultTable ioc={ioc} iocType={getHashType(ioc)} />
       </Box>
     );
   }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Url from "../ioc-analyzer/Url.jsx";
+import ResultTable from "../ioc-tools/ioc-lookup/single-lookup/components/ui/ResultTable";
 import {
   Accordion,
   AccordionSummary,
@@ -31,7 +31,7 @@ export default function Urls(props) {
   function urlAnalyse(props) {
     return (
       <Box mt={1} mb={1}>
-        <Url ioc={url} />
+        <ResultTable ioc={url} iocType="URL" />
       </Box>
     );
   }

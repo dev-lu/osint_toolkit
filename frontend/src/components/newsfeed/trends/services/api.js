@@ -2,7 +2,7 @@ import api from '../../../../api';
 
 const apiService = {
   getTitleWordFrequency: async (limit, timeRange) => {
-    const response = await api.get(`/api/title_word_frequency?limit=${limit}&time_range=${timeRange}`);
+    const response = await api.get(`/api/newsfeed/title_word_frequency?limit=${limit}&time_range=${timeRange}`);
     return response.data;
   },
   getTopIocs: async (iocType, limit, timeRange) => {
