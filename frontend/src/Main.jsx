@@ -75,20 +75,6 @@ export default function Main() {
 
   const drawer = showSidebar ? (
     <div>
-      <Toolbar>
-        <Box
-          component="img"
-          sx={{
-            height: 40,
-            mr: 2,
-          }}
-          alt="Logo"
-          src={ot_logo_dark}
-        />
-        <Typography variant="h6" noWrap>
-          Dashboard
-        </Typography>
-      </Toolbar>
       <Divider />
       {sidebarContent}
     </div>
@@ -192,6 +178,7 @@ export default function Main() {
               [`& .MuiDrawer-paper`]: {
                 width: drawerWidth,
                 boxSizing: "border-box",
+                marginTop: "64px",
               },
               display: { xs: "none", md: "block" },
             }}
