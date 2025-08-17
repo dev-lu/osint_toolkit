@@ -28,20 +28,16 @@ OSINT Toolkit is a self-hostable, on-demand analysis platform designed for secur
 ## Features
 ### Newsfeed
 The Newsfeed module keeps you up to date about the latest cybersecurity news by aggregating articles from trusted sources such as Wired, The Hacker News, Security Magazine, Threatpost, TechCrunch Security, and Dark Reading. Stay up-to-date with industry trends and potential threats without having to visit multiple websites or subscribe to numerous newsletters. The module extracts IOCs automatically from the news articles and lets you analyze news in no time using AI.
-<img width="1313" alt="newsfeed" src="https://github.com/user-attachments/assets/6f21865d-d201-42f3-8a1c-b0673c197e2e" />
+<img width="1679" height="1084" alt="newsfeed" src="https://github.com/user-attachments/assets/0c23cc14-4a1a-4c34-9fb8-5064a0f23889" />
 
 
-### IOC Lookup
-The IOC Lookup module helps you analyze different types of indicators of compromise (IOCs) such as IP addresses, hashes, email addresses, domains, and URLs. It leverages services like VirusTotal, AlienVault, AbuseIPDB, and social media platforms like Reddit and Twitter to gather information about the IOCs. The module automatically detects the type of IOC being analyzed and utilizes the appropriate services to provide relevant information, enabling you to identify potential threats and take necessary actions to protect your organization.
-<img width="1313" alt="ioc_lookup" src="https://github.com/user-attachments/assets/d43b84c9-0cc1-436e-b63a-87b7aaa5e78d" />
+### IOC Tools
+The IOC Tools module helps you analyze different types of indicators of compromise (IOCs) such as IP addresses, hashes, email addresses, domains, and URLs. It leverages services like VirusTotal, AlienVault, AbuseIPDB, and social media platforms like Reddit and Twitter to gather information about the IOCs. The module automatically detects the type of IOC being analyzed and utilizes the appropriate services to provide relevant information, enabling you to identify potential threats and take necessary actions to protect your organization. Analysis can be done individual per IOC or in bulk. Also fanging and defanging is possible for sharing IOCs safely.
+<img width="1679" height="1102" alt="ioc_lookup" src="https://github.com/user-attachments/assets/40b1e656-ba6c-4f36-b8dd-beee0dca3fdd" />
 
 
 ### Email Analyzer
 The Email Analyzer module allows you to analyze .eml files for potential threats. Simply drag and drop an .eml file into the module, and it will parse the file, perform basic security checks, extract indicators of compromise (IOCs), and analyze messages with the help of AI. Analyze the IOCs using various open-source intelligence (OSINT) services, and enhance your organization's email security.
-
-
-### IOC Extractor
-The IOC Extractor module allows you to extract and organize IOCs from unstructured files using regular expressions (Regex). It automatically removes duplicates, saving you the effort of sorting through the same IOCs multiple times. Simply drop your file containing the IOCs into the tool, and analyze each detected IOC with a single click.
 
 
 ### Domain Finder
@@ -50,6 +46,7 @@ The Domain Finder module helps you to protect your organization from phishing at
 
 ### AI Templates
 The AI Templates module provides powerful AI-based solutions for log data analysis, email text analysis, and source code explanation. It lets you create templates for AI tasks and supports you in the prompt engineering process.
+<img width="1679" height="1102" alt="ai_templates" src="https://github.com/user-attachments/assets/42c52c8c-7d2d-4b70-b25c-666d6993832c" />
 
 
 ### CVSS Calculator
@@ -57,7 +54,7 @@ The CVSS Calculator module allows you to calculate the CVSS 3.1 score of a vulne
 
 
 ### Detection Rules
-The Detection Rules module is a GUI for creating Sigma and Yara rules.
+The Detection Rules module is a GUI for creating Sigma, Yara and Snort/Suricate rules.
 
 
 
