@@ -1,4 +1,5 @@
 name: "CLA Assistant"
+
 on:
   issue_comment:
     types: [created]
@@ -16,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "CLA Assistant"
-        if: (github.event.comment.body == 'recheck') || github.event_name == 'pull_request_target'
-        uses: contributor-assistant/github-action@v1
+        if: github.event_name == 'pull_request_target' || github.event.comment.body == 'recheck'
+        uses: contributor-assistant/github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
