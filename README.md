@@ -171,7 +171,6 @@ Install the following software:
 - uv
 - Node.js 20+
 - npm
-- Git
 
 ---
 
